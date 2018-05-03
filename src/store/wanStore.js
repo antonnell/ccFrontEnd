@@ -1,4 +1,8 @@
 import fetch from 'node-fetch';
+var crypto = require('crypto');
+var bip39 = require('bip39');
+var sha256 = require('sha256');
+var mnemonic = require('mnemonic')
 
 let Dispatcher = require('flux').Dispatcher
 let Emitter = require('events').EventEmitter
@@ -26,7 +30,7 @@ var Store = () => {
   }.bind(this))
 
   this.getEthAddress = function(payload) {
-    var url = '/wanchain/getUserAddresses/'+payload.content.username
+    var url = 'wanchain/getUserAddresses/'+payload.content.username
 
     this.callApi(url,
       'GET',
@@ -92,7 +96,7 @@ var Store = () => {
   this.callApi = function(url, method, postData, payload) {
     var call = apiUrl+url
 
-    const signJson = JSON.stringify(postData);
+    /*const signJson = JSON.stringify(postData);
     const signMnemonic = bip39.generateMnemonic();
     const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
     const signEncrypted = cipher.update(signJson, 'utf8', 'base64') + cipher.final('base64');
@@ -105,14 +109,28 @@ var Store = () => {
     }
     const signSeed = JSON.stringify(signData)
     const signSignature = sha256(signSeed)
-    signData.s = signSignature
+    signData.s = signSignature*/
+
+    if(method == 'GET') {
+      postData = null
+    } else {
+      postData = JSON.stringify(postData)
+    }
 
     fetch(call, {
         method: method,
-        body: JSON.stringify(signData),
+        body: postData,
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
     })
-    .then(res => res.json())
+    .then((res) => {
+      try {
+        JSON.parse(res);
+      } catch (e) {
+        return res;
+      }
+
+      return res.json();
+    })
     .then((res) => {
       emitter.emit(payload.type, null, res)
     })

@@ -66,7 +66,7 @@ let Welcome = createReactClass({
     }
     if(this.state.password == '') {
       this.setState({passwordError: true});
-        error = true;
+      error = true;
     }
 
     if(!error) {
@@ -77,6 +77,8 @@ let Welcome = createReactClass({
   },
 
   loginReturned(error, data) {
+    console.log(error)
+    console.log(data)
     this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
@@ -88,6 +90,7 @@ let Welcome = createReactClass({
         token: data.token
       };
       this.props.setUser(user);
+      console.log(user)
       window.location.hash = 'account';
     } else {
       this.setState({error: data.errorMsg});

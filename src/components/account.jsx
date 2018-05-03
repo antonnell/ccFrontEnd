@@ -24,7 +24,7 @@ class Account extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Create Etherium Address
+            Create Ethereum Address
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -53,7 +53,7 @@ class Account extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Import Etherium Address
+            Import Ethereum Address
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -185,7 +185,7 @@ class Account extends Component {
             {this.props.tabValue === 1 && this.renderImport()}
           </Grid>
         </Grid>
-        <Tooltip title='Create Etherium Address'>
+        <Tooltip title='Create Ethereum Address'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.loading} onClick={this.props.createImportClicked}>
             +
           </Button>

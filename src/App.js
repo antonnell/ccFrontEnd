@@ -15,14 +15,23 @@ import RegisterAccount from './containers/registerAccount.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import ResetPassword from './containers/resetPassword.jsx';
-import OnBoarding from './containers/onboarding.jsx';
 import Account from './containers/account.jsx';
 import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
+import Onboarding from './containers/onboarding.jsx';
 
-let emitter = require('./store/accountStore.js').default.emitter
-let dispatcher = require('./store/accountStore.js').default.dispatcher
+let accountEmitter = require('./store/accountStore.js').default.emitter
+let accountDispatcher = require('./store/accountStore.js').default.dispatcher
+
+let contactsEmitter = require('./store/contactsStore.js').default.emitter
+let contactsDispatcher = require('./store/contactsStore.js').default.dispatcher
+
+let ethEmitter = require('./store/ethStore.js').default.emitter
+let ethDispatcher = require('./store/ethStore.js').default.dispatcher
+
+let wanEmitter = require('./store/wanStore.js').default.emitter
+let wanDispatcher = require('./store/wanStore.js').default.dispatcher
 
 const theme = createMuiTheme({
   palette: {
@@ -64,6 +73,68 @@ class App extends Component {
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.navClicked = this.navClicked.bind(this);
+
+    this.getContactsReturned = this.getContactsReturned.bind(this);
+    this.getEthAddressReturned = this.getEthAddressReturned.bind(this);
+    this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
+
+    contactsEmitter.on('getContacts', this.getContactsReturned);
+    ethEmitter.on('getEthAddress', this.getEthAddressReturned);
+    wanEmitter.on('getWanAddress', this.getWanAddressReturned);
+  };
+
+  getContactsReturned(error, data) {
+
+    console.log(error)
+    console.log(data)
+
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({contacts: data.contacts})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getEthAddressReturned(error, data) {
+
+    console.log(error)
+    console.log(data)
+
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({ethAddresses: data.ethAddresses})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getWanAddressReturned(error, data) {
+
+    console.log(error)
+    console.log(data)
+
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({wanAddresses: data.wanAddresses})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   };
 
   componentWillMount() {
@@ -72,6 +143,12 @@ class App extends Component {
       if(this.state.user == null) {
         window.location.hash = 'welcome';
       }
+    }
+
+    var userString = sessionStorage.getItem('cc_user');
+    if(userString) {
+      var user = JSON.parse(userString);
+      this.setUser(user);
     }
   };
 
@@ -106,8 +183,18 @@ class App extends Component {
   };
 
   setUser(user) {
+    console.log(user)
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
+
+    var contenta = {username: user.username};
+    contactsDispatcher.dispatch({type: 'getContacts', content:contenta});
+
+    var contentb = {username: user.username};
+    ethDispatcher.dispatch({type: 'getEthAddress', content:contentb});
+
+    var contentc = {username: user.username};
+    wanDispatcher.dispatch({type: 'getWanAddress', content:contentc});
   };
 
   locationHashChanged() {
@@ -179,7 +266,7 @@ class App extends Component {
         return (<Welcome setUser={this.setUser} />);
         break;
       case 'registerAccount':
-        return (<RegisterAccount />);
+        return (<RegisterAccount setUser={this.setUser} />);
         break;
       case 'forgotPassword':
         return (<ForgotPassword />);
@@ -189,6 +276,9 @@ class App extends Component {
         break;
       case 'resetPassword':
         return (<ResetPassword />);
+        break;
+      case 'onboarding':
+        return (<Onboarding user={this.state.user} />);
         break;
       case 'account':
         return (<Account user={this.state.user} />);
