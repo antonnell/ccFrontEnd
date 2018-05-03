@@ -30,6 +30,7 @@ let ForgotPassword = createReactClass({
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
         error={this.state.error}
+        loading={this.state.loading}
         />
     )
   },
@@ -59,11 +60,12 @@ let ForgotPassword = createReactClass({
     if(!error) {
       this.setState({loading: true});
       var content = { emailAddress: this.state.emailAddress };
-      dispatcher.dispatch({type: 'resetPassword', content});
+      dispatcher.dispatch({type: 'sendResetPasswordEmail', content});
     }
   },
 
   sendResetPasswordEmailReturned(error, data) {
+    this.setState({loading: false})
     if(error) {
       return this.setState({error: error.toString()});
     }

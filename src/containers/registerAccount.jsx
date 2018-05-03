@@ -45,6 +45,7 @@ let RegisterAccount = createReactClass({
         confirmPassword={this.state.confirmPassword}
         confirmPasswordError={this.state.confirmPasswordError}
         error={this.state.error}
+        loading={this.state.loading}
         />
     );
   },
@@ -95,6 +96,7 @@ let RegisterAccount = createReactClass({
   },
 
   registerReturned(error, data) {
+    this.setState({loading: false})
     if(error) {
       return this.setState({error: error.toString()});
     }

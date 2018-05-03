@@ -1,8 +1,4 @@
 import fetch from 'node-fetch';
-var crypto = require('crypto');
-var bip39 = require('bip39');
-var sha256 = require('sha256');
-var mnemonic = require('mnemonic')
 
 let Dispatcher = require('flux').Dispatcher
 let Emitter = require('events').EventEmitter
@@ -17,107 +13,53 @@ var Store = () => {
   dispatcher.register(function(payload) {
     console.log(payload)
     switch (payload.type) {
-    case 'testEncryption':
-      this.testEncryption(payload);
+    case 'getContacts':
+      this.getContacts(payload);
       break;
-    case 'login':
-      this.login(payload);
+    case 'addContact':
+      this.addContact(payload);
       break;
-    case 'register':
-      this.register(payload);
-      break;
-    case 'updatePassword':
-      this.updatePassword(payload);
-      break;
-    case 'resetPassword':
-      this.resetPassword(payload);
-      break;
-    case 'sendResetPasswordEmail':
-      this.sendResetPasswordEmail(payload);
+    case 'updateContact':
+      this.updateContact(payload);
       break;
     }
   }.bind(this))
 
-  this.testEncryption = function(payload) {
-    var url = 'test/encryptionWithUserPass'
-
-    var postJson = {
-      hello: 'world',
-      testing: 123,
-      wrong: false,
-      rigth: true
-    }
+  this.getContacts = function(payload) {
+    var url = 'contacts/getUserContacts/'+payload.content.username
 
     this.callApi(url,
-      'POST',
-      postJson,
+      'GET',
+      null,
       payload)
-
   }
 
-  this.login = function(payload) {
-    var url = 'account/login'
+  this.addContact = function(payload) {
+    var url = 'contacts/AddUserContact'
     var postJson = {
-      usernameOrEmail: payload.content.username,
-      password: payload.content.password
+      emailOrUsername: payload.content.username,
+      displayName: payload.content.displayName,
+      notes: payload.content.notes,
+      ownerUsername: payload.content.ownerUsername
     }
 
     this.callApi(url,
-      'POST',
+      'PUT',
       postJson,
       payload)
   }
 
-  this.register = function(payload) {
-    var url = 'account/register'
+  this.updateContact = function(payload) {
+    var url = 'contacts/UpdateUserContact'
     var postJson = {
-      username: payload.content.username,
-      email: payload.content.emailAddress,
-      password: payload.content.password
+      emailOrUsername: payload.content.username,
+      displayName: payload.content.displayName,
+      notes: payload.content.notes,
+      ownerUsername: payload.content.ownerUsername
     }
 
     this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.updatePassword = function(payload) {
-    var url = 'account/updatePassword'
-    var postJson = {
-      username: payload.content.username,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.resetPassword = function(payload) {
-    var url = 'account/resetPassword'
-    var postJson = {
-      code: payload.content.code,
-      email: payload.content.emailAddress,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.sendResetPasswordEmail = function(payload) {
-    var url = 'account/sendResetPasswordEmail'
-    var postJson = {
-      email: payload.content.emailAddress,
-      callbackUrl: "http://localhost:3000/#resetPassword" //change this at some stage. He needs to define the URL.
-    }
-
-    this.callApi(url,
-      'POST',
+      'PUT',
       postJson,
       payload)
   }
@@ -155,6 +97,8 @@ var Store = () => {
   }
 }
 
+var store = new Store()
+
 String.prototype.hexEncode = function(){
     var hex, i;
     var result = "";
@@ -174,8 +118,6 @@ String.prototype.hexDecode = function(){
 
     return back;
 }
-
-var store = new Store()
 
 export default ({
   store: store,

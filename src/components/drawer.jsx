@@ -13,10 +13,17 @@ import Divider from 'material-ui/Divider';
 
 const styles = {};
 
-function AccountIcon(props) {
+function ContactIcon(props) {
   return (
     <SvgIcon {...props}>
       <path d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" />
+    </SvgIcon>
+  );
+}
+function AccountIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M12,1.75L5.75,12.25L12,16L18.25,12.25L12,1.75M5.75,13.5L12,22.25L18.25,13.5L12,17.25L5.75,13.5Z" />
     </SvgIcon>
   );
 }
@@ -99,13 +106,20 @@ class AppDrawer extends Component {
                   <ListItemIcon>
                     <WanchainIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Wanchain" />
+                  <ListItemText primary="Wan Accounts" />
                 </ListItem>
                 <ListItem button onClick={(event) => { this.props.navClicked(event, 'sendWan'); }}>
                   <ListItemIcon>
                     <WanchainIcon />
                   </ListItemIcon>
                   <ListItemText primary="Send Wan" />
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={(event) => { this.props.navClicked(event, 'account'); }}>
+                  <ListItemIcon>
+                    <AccountIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Eth Accounts" />
                 </ListItem>
                 <ListItem button onClick={(event) => { this.props.navClicked(event, 'sendEth'); }}>
                   <ListItemIcon>
@@ -133,11 +147,11 @@ class AppDrawer extends Component {
                   <ListItemText primary="Pool Contributions" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'account'); }}>
+                <ListItem button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
                   <ListItemIcon>
-                    <AccountIcon />
+                    <ContactIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Account" />
+                  <ListItemText primary="Contacts" />
                 </ListItem>
                 <ListItem button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>
                   <ListItemIcon>

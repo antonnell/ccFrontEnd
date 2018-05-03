@@ -19,25 +19,6 @@ class Account extends Component {
     super(props);
   };
 
-  /*renderRows() {
-    if(this.props.addresses == null) {
-      return (null);
-    }
-
-    return (<TableBody>
-      {this.props.addresses.map((address) => {
-        return (
-          <TableRow key={address.name}>
-            <TableCell>{address.address}</TableCell>
-            <TableCell>{address.name}</TableCell>
-            <TableCell numeric>{address.balance}</TableCell>
-            <TableCell>{address.primary?'Yes':''}</TableCell>
-          </TableRow>
-        );
-      })}
-    </TableBody>)
-  };*/
-
   renderCreate() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
@@ -178,20 +159,6 @@ class Account extends Component {
   };
 
   render() {
-    /*
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Address</TableCell>
-          <TableCell>Name</TableCell>
-          <TableCell>Balance (Eth)</TableCell>
-          <TableCell>Primary</TableCell>
-        </TableRow>
-      </TableHead>
-      {this.renderRows()}
-    </Table>
-    */
-
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>

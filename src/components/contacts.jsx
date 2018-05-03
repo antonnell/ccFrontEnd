@@ -28,21 +28,15 @@ class Account extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.loading}
-            id="addressName" label="Address Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChange(event, 'primary'); }}
-                value="primary"
-              />
-            }
-            label="Make this my primary address"
-          />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.usernameError} disabled={this.props.loading}
+            id="username" label="Contact Username" value={this.props.username}
+            onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.displayNameError} disabled={this.props.loading}
+            id="displayName" label="Display Name" value={this.props.displayName}
+            onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.notesError} disabled={this.props.loading}
+            id="notes" label="Notes" value={this.props.notes}
+            onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
         </Grid>
       </Grid>
     );
@@ -147,8 +141,8 @@ class Account extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat">Make Primary</Button>
-                    <Button size="small" variant="flat" color="secondary">Transfer</Button>
+                    <Button size="small" variant="flat" onClick={this.props.updateClicked}>Make Primary</Button>
+                    <Button size="small" variant="flat" color="secondary" onClick={this.props.updateClicked}>Update</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -179,14 +173,12 @@ class Account extends Component {
               indicatorColor="secondary"
               textColor="secondary" >
               <Tab label="Create contact" />
-              <Tab label="Import contact" />
             </Tabs>
-            {this.props.tabValue === 0 && this.renderCreate()}
-            {this.props.tabValue === 1 && this.renderImport()}
+            {this.renderCreate()}
           </Grid>
         </Grid>
         <Tooltip title='Create Contact'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.loading} onClick={this.props.createImportClicked}>
+          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.loading} onClick={this.props.createClicked}>
             +
           </Button>
         </Tooltip>

@@ -15,10 +15,14 @@ import RegisterAccount from './containers/registerAccount.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import ResetPassword from './containers/resetPassword.jsx';
+import OnBoarding from './containers/onboarding.jsx';
 import Account from './containers/account.jsx';
 import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
+
+let emitter = require('./store/accountStore.js').default.emitter
+let dispatcher = require('./store/accountStore.js').default.dispatcher
 
 const theme = createMuiTheme({
   palette: {
@@ -77,6 +81,9 @@ class App extends Component {
 
     window.onhashchange = this.locationHashChanged;
     this.locationHashChanged();
+
+    var loader = document.getElementById("loader")
+    document.body.removeChild(loader);
   };
 
   componentWillUnmount() {
@@ -156,7 +163,7 @@ class App extends Component {
         {this.renderAppBar()}
         {this.renderDrawer()}
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '585px', position: 'relative'}}>
+        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '584px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
           </Grid>

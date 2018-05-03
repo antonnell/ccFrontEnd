@@ -1,8 +1,4 @@
 import fetch from 'node-fetch';
-var crypto = require('crypto');
-var bip39 = require('bip39');
-var sha256 = require('sha256');
-var mnemonic = require('mnemonic')
 
 let Dispatcher = require('flux').Dispatcher
 let Emitter = require('events').EventEmitter
@@ -17,49 +13,33 @@ var Store = () => {
   dispatcher.register(function(payload) {
     console.log(payload)
     switch (payload.type) {
-    case 'testEncryption':
-      this.testEncryption(payload);
+    case 'getWanAddress':
+      this.getEthAddress(payload);
       break;
-    case 'login':
-      this.login(payload);
+    case 'createWanAddress':
+      this.createWanAddress(payload);
       break;
-    case 'register':
-      this.register(payload);
-      break;
-    case 'updatePassword':
-      this.updatePassword(payload);
-      break;
-    case 'resetPassword':
-      this.resetPassword(payload);
-      break;
-    case 'sendResetPasswordEmail':
-      this.sendResetPasswordEmail(payload);
+    case 'sendWan':
+      this.sendWan(payload);
       break;
     }
   }.bind(this))
 
-  this.testEncryption = function(payload) {
-    var url = 'test/encryptionWithUserPass'
-
-    var postJson = {
-      hello: 'world',
-      testing: 123,
-      wrong: false,
-      rigth: true
-    }
+  this.getEthAddress = function(payload) {
+    var url = '/wanchain/getUserAddresses/'+payload.content.username
 
     this.callApi(url,
-      'POST',
-      postJson,
+      'GET',
+      null,
       payload)
-
   }
 
-  this.login = function(payload) {
-    var url = 'account/login'
+  this.createWanAddress = function(payload) {
+    var url = 'ethereum/createAddress'
     var postJson = {
-      usernameOrEmail: payload.content.username,
-      password: payload.content.password
+      userName: payload.content.username,
+      isPrimary: payload.content.isPrimary,
+      name: payload.content.name
     }
 
     this.callApi(url,
@@ -68,12 +48,10 @@ var Store = () => {
       payload)
   }
 
-  this.register = function(payload) {
-    var url = 'account/register'
+  this.importAddress = function(payload) {
+    var url = 'ethereum/importAddress'
     var postJson = {
-      username: payload.content.username,
-      email: payload.content.emailAddress,
-      password: payload.content.password
+      //no documentation on this?
     }
 
     this.callApi(url,
@@ -82,11 +60,15 @@ var Store = () => {
       payload)
   }
 
-  this.updatePassword = function(payload) {
-    var url = 'account/updatePassword'
+  this.sendEther = function(payload) {
+    var url = 'ethereum/sendEther'
     var postJson = {
-      username: payload.content.username,
-      password: payload.content.password
+      address: payload.content.address,
+      contactUserName: payload.content.contactUserName,
+      ethAddressID: payload.content.ethAddressID,
+      password: payload.content.password,
+      amount: payload.content.amount,
+      gwei: payload.content.gwei
     }
 
     this.callApi(url,
@@ -95,25 +77,10 @@ var Store = () => {
       payload)
   }
 
-  this.resetPassword = function(payload) {
-    var url = 'account/resetPassword'
+  this.createPoolingContract = function(payload) {
+    var url = 'ethereum/createPoolingContract'
     var postJson = {
-      code: payload.content.code,
-      email: payload.content.emailAddress,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.sendResetPasswordEmail = function(payload) {
-    var url = 'account/sendResetPasswordEmail'
-    var postJson = {
-      email: payload.content.emailAddress,
-      callbackUrl: "http://localhost:3000/#resetPassword" //change this at some stage. He needs to define the URL.
+      //no documentation on this?
     }
 
     this.callApi(url,

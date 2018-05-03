@@ -5,7 +5,10 @@ const createReactClass = require('create-react-class')
 let Manage2FA = createReactClass({
   getInitialState() {
     return {
-      code: ''
+      code: '',
+      codeError: false,
+      loading: false,
+      error: null
     }
   },
   render() {
@@ -16,6 +19,8 @@ let Manage2FA = createReactClass({
         codeError={this.state.codeError}
         onCodeKeyDown={this.onCodeKeyDown}
         submitEnable={this.submitEnable}
+        loading={this.state.loading}
+        error={this.state.error}
       />
     )
   },

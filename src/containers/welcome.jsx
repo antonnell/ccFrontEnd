@@ -38,6 +38,7 @@ let Welcome = createReactClass({
         password={this.state.password}
         passwordError={this.state.passwordError}
         error={this.state.error}
+        loading={this.state.loading}
       />
   );
   },
@@ -76,6 +77,7 @@ let Welcome = createReactClass({
   },
 
   loginReturned(error, data) {
+    this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }

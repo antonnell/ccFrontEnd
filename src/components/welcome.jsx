@@ -43,6 +43,7 @@ class Welcome extends Component {
               </Typography>
             </Grid>
           </Grid>
+          {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
             <Grid item xs={12} align='center'>
               <Typography style={{color: '#f44336'}} >

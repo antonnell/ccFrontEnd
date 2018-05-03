@@ -31,6 +31,7 @@ let UpdatePassword = createReactClass({
         confirmPassword={this.state.confirmPassword}
         confirmPasswordError={this.state.confirmPasswordError}
         error={this.state.error}
+        loading={this.state.loading}
       />
     )
   },
@@ -60,14 +61,12 @@ let UpdatePassword = createReactClass({
     if(!error) {
       this.setState({loading: true});
       var content = {username: this.props.user.username, password: this.state.password};
-
-      console.log(this.props.user.token)
-
       dispatcher.dispatch({type: 'updatePassword', content, token: this.props.user.token});
     }
   },
 
   updatePasswordReturned(error, data) {
+    this.setState({loading: false})
     if(error) {
       return this.setState({error: error.toString()});
     }
