@@ -54,14 +54,14 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='secondary' onClick={this.props.submitLogin}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitLogin} disabled={this.props.loading}>
                 LOGIN
               </Button>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Typography color="inherit" style={{fontSize: '12px', width:'90px', display: 'inline-block'}}>
+              <Typography color="inherit" style={{fontSize: '12px', width:'75px', display: 'inline-block'}}>
                 No account yet?
               </Typography>
               <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer', width: '60px', display: 'inline-block'}} onClick={this.props.submitRegisterNavigate}>

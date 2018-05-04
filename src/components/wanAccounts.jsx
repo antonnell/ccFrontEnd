@@ -3,17 +3,16 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Tooltip from 'material-ui/Tooltip';
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
+import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, { CardContent } from 'material-ui/Card';
 
 const styles = {};
 
-class Account extends Component {
+class WanAccounts extends Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +23,7 @@ class Account extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Create Ethereum Address
+            Create Wanchain Address
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -53,7 +52,7 @@ class Account extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Import Ethereum Address
+            Import Wanchain Address
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -70,16 +69,6 @@ class Account extends Component {
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.loading}
             id="addressName" label="Address Name" value={this.props.addressName}
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.passwordError} disabled={this.props.loading}
-            id="password" label="Password" value={this.props.password}
-            onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.confirmPasswordError} disabled={this.props.loading}
-            id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
-            onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <FormControlLabel
@@ -147,8 +136,8 @@ class Account extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat">Make Primary</Button>
-                    <Button size="small" variant="flat" color="secondary">Transfer</Button>
+                    <Button size="small" variant="flat">Update</Button>
+                    <Button size="small" variant="flat" color="secondary">Send Wan</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -165,7 +154,7 @@ class Account extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='left'>
               <Typography variant="headline" color="inherit">
-                Your Saved Addresses
+                Your Wanchain Addresses
               </Typography>
             </Grid>
             {this.renderAddresses()}
@@ -176,8 +165,8 @@ class Account extends Component {
             <Tabs
               value={this.props.tabValue}
               onChange={this.props.handleTabChange}
-              indicatorColor="secondary"
-              textColor="secondary" >
+              indicatorColor="primary"
+              textColor="primary" >
               <Tab label="Create Address" />
               <Tab label="Import Address" />
             </Tabs>
@@ -195,4 +184,4 @@ class Account extends Component {
   }
 }
 
-export default withStyles(styles)(Account);
+export default withStyles(styles)(WanAccounts);

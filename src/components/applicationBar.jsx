@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -30,9 +29,7 @@ class ApplicationBar extends Component {
           {this.props.menuClicked != null ? (<IconButton color="inherit" aria-label="Menu" onClick={this.props.menuClicked}>
             <MenuIcon />
           </IconButton>) : null}
-          <Typography variant="title" color="inherit" style={{flex: 1}}>
-            CRYPTOCURVE.IO
-          </Typography>
+          <img src="./cryptocurve-logo-white2.png" alt="CryptoCurve.io" heigth="43px" width="164px" />
         </Toolbar>
       </AppBar>
     );

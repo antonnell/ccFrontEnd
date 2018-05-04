@@ -72,8 +72,10 @@ let ForgotPassword = createReactClass({
 
     if(data.success) {
       window.location.hash = 'forgotPasswordDone'; //or show 'Your password has been updated'
-    } else {
+    } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
     }
   },
 

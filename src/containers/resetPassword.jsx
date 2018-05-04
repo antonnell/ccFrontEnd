@@ -82,8 +82,10 @@ let ResetPassword = createReactClass({
 
     if(data.success) {
       window.location.hash = 'account'; //or show 'Your password has been updated'
-    } else {
+    } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
     }
   },
 

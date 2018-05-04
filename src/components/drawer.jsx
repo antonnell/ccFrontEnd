@@ -69,6 +69,13 @@ function LogoutIcon(props) {
     </SvgIcon>
   );
 }
+function WhitelistIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z" />
+    </SvgIcon>
+  );
+}
 
 class AppDrawer extends Component {
 
@@ -91,75 +98,82 @@ class AppDrawer extends Component {
       <Drawer open={this.props.open} onClose={this.props.closeDrawer}>
         <Grid container alignItems="flex-start" spacing={0}>
           <Grid item xs={12}>
-            <div style={{width: '100%', height: '150px', padding: '24px', background: '#424242'}} color='secondary'>
-              <Avatar style={{marginTop: '16px', marginBottom: '12px', backgroundColor: '#2ad4dc', color: '#000000'}} alt="">J</Avatar>
+            <div style={{width: '100%', height: '150px', padding: '24px', background: '#2c2c2c'}} color='secondary'>
+              <Avatar style={{marginTop: '16px', marginBottom: '12px', backgroundColor: '#2ad4dc', color: '#000000'}} alt="">{this.props.user.username.charAt(0)}</Avatar>
               <Typography variant="body2" style={{color: '#FFFFFF '}}>
                 {this.props.user.username}
               </Typography>
               <Typography variant="body1" style={{color: '#FFFFFF '}}>
-                {this.props.user.emailAddress}
+                {this.props.user.email}
               </Typography>
             </div>
             <div>
               <List>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'wanchain'); }}>
+                <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
+                  <ListItemIcon>
+                    <WhitelistIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Join Whitelist" />
+                </ListItem>
+                <Divider />
+                <ListItem style={this.props.currentScreen=='wanAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
                   <ListItemIcon>
                     <WanchainIcon />
                   </ListItemIcon>
                   <ListItemText primary="Wan Accounts" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'sendWan'); }}>
+                <ListItem style={this.props.currentScreen=='sendWan'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWan'); }}>
                   <ListItemIcon>
                     <WanchainIcon />
                   </ListItemIcon>
                   <ListItemText primary="Send Wan" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'account'); }}>
+                <ListItem style={this.props.currentScreen=='ethAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
                   <ListItemIcon>
                     <AccountIcon />
                   </ListItemIcon>
                   <ListItemText primary="Eth Accounts" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'sendEth'); }}>
+                <ListItem style={this.props.currentScreen=='sendEth'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEth'); }}>
                   <ListItemIcon>
                     <SendEthIcon />
                   </ListItemIcon>
                   <ListItemText primary="Send Eth" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
+                <ListItem style={this.props.currentScreen=='manageEthPools'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
                   <ListItemIcon>
                     <PoolIcon />
                   </ListItemIcon>
                   <ListItemText primary="Manage Eth Pool" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'createPool'); }}>
+                <ListItem style={this.props.currentScreen=='createPool'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'createPool'); }}>
                   <ListItemIcon>
                     <PoolIcon />
                   </ListItemIcon>
                   <ListItemText primary="Create Pool" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'poolContributions'); }}>
+                <ListItem style={this.props.currentScreen=='poolContributions'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'poolContributions'); }}>
                   <ListItemIcon>
                     <PoolIcon />
                   </ListItemIcon>
                   <ListItemText primary="Pool Contributions" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
+                <ListItem style={this.props.currentScreen=='contacts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
                   <ListItemIcon>
                     <ContactIcon />
                   </ListItemIcon>
                   <ListItemText primary="Contacts" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>
+                <ListItem style={this.props.currentScreen=='updatePassword'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>
                   <ListItemIcon>
                     <PasswordIcon />
                   </ListItemIcon>
                   <ListItemText primary="Update Password" />
                 </ListItem>
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'manage2FA'); }}>
+                <ListItem style={this.props.currentScreen=='manage2FA'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manage2FA'); }}>
                   <ListItemIcon>
                     <Manage2FAIcon />
                   </ListItemIcon>

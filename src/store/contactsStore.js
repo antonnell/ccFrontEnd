@@ -2,7 +2,6 @@ import fetch from 'node-fetch';
 var crypto = require('crypto');
 var bip39 = require('bip39');
 var sha256 = require('sha256');
-var mnemonic = require('mnemonic')
 
 let Dispatcher = require('flux').Dispatcher
 let Emitter = require('events').EventEmitter

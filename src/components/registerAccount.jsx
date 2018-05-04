@@ -57,7 +57,7 @@ class RegisterAccount extends Component {
               </Button>
             </Grid>
               <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='secondary' onClick={this.props.submitRegister}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitRegister}>
                 Register
               </Button>
             </Grid>

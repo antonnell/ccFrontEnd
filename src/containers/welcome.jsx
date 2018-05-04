@@ -77,23 +77,18 @@ let Welcome = createReactClass({
   },
 
   loginReturned(error, data) {
-    console.log(error)
-    console.log(data)
     this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
-      var user = {
-        username: this.state.username,
-        token: data.token
-      };
-      this.props.setUser(user);
-      console.log(user)
-      window.location.hash = 'account';
-    } else {
+      this.props.setUser(data.user);
+      window.location.hash = 'whitelist';
+    } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
     }
   },
 

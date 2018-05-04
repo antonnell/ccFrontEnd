@@ -1,8 +1,8 @@
 import React from 'react'
-import AccountComponent from '../components/account'
+import EthAccountsComponent from '../components/ethAccounts'
 const createReactClass = require('create-react-class')
 
-let Account = createReactClass({
+let EthAccounts = createReactClass({
   getInitialState() {
     return {
       loading: false,
@@ -12,7 +12,7 @@ let Account = createReactClass({
   },
   render() {
     return (
-      <AccountComponent
+      <EthAccountsComponent
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}
@@ -49,4 +49,4 @@ let Account = createReactClass({
 
 })
 
-export default (Account);
+export default (EthAccounts);

@@ -15,11 +15,12 @@ import RegisterAccount from './containers/registerAccount.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import ResetPassword from './containers/resetPassword.jsx';
-import Account from './containers/account.jsx';
+import EthAccounts from './containers/ethAccounts.jsx';
+import WanAccounts from './containers/wanAccounts.jsx';
 import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
-import Onboarding from './containers/onboarding.jsx';
+import Whitelist from './containers/whitelist.jsx';
 
 let accountEmitter = require('./store/accountStore.js').default.emitter
 let accountDispatcher = require('./store/accountStore.js').default.dispatcher
@@ -34,11 +35,29 @@ let wanEmitter = require('./store/wanStore.js').default.emitter
 let wanDispatcher = require('./store/wanStore.js').default.dispatcher
 
 const theme = createMuiTheme({
+  overrides: {
+    MuiInput: {
+      underline: {
+        '&:before': { //underline color when textfield is inactive
+          backgroundColor: 'black',
+          height: '2px'
+        },
+        '&:hover:not($disabled):before': { //underline color when hovered
+          backgroundColor: 'black',
+          height: '2px'
+        },
+      }
+    },
+  },
+  typography: {
+    // Use the system font over Roboto.
+    fontFamily: 'Abel, sans-serif',
+  },
   palette: {
     primary: {
-      light: '#5c5c5c',
-      main: '#333333',
-      dark: '#0c0c0c',
+      light: '#2c2c2c',
+      main: '#000000',
+      dark: '#000000',
       contrastText: '#ffffff',
     },
     secondary: {
@@ -168,7 +187,19 @@ class App extends Component {
   };
 
   updateWindowDimensions() {
-    this.setState({ width: window.innerWidth, height: window.innerHeight });
+
+    var size = 'sm'
+    if(window.innerWidth <= 360) {
+      size = 'xs'
+    } else if (window.innerWidth <= 640) {
+      size = 'sm'
+    } else if (window.innerWidth <= 960) {
+      size = 'md'
+    } else {
+      size = 'lg'
+    }
+
+    this.setState({ width: window.innerWidth, height: window.innerHeight, size });
   };
 
   closeDrawer() {
@@ -183,18 +214,17 @@ class App extends Component {
   };
 
   setUser(user) {
-    console.log(user)
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
 
-    var contenta = {username: user.username};
+    /*var contenta = {username: user.username};
     contactsDispatcher.dispatch({type: 'getContacts', content:contenta});
 
     var contentb = {username: user.username};
     ethDispatcher.dispatch({type: 'getEthAddress', content:contentb});
 
     var contentc = {username: user.username};
-    wanDispatcher.dispatch({type: 'getWanAddress', content:contentc});
+    wanDispatcher.dispatch({type: 'getWanAddress', content:contentc});*/
   };
 
   locationHashChanged() {
@@ -230,6 +260,7 @@ class App extends Component {
     if(this.state.user != null) {
       drawer = (<AppDrawer
         navClicked={this.navClicked}
+        currentScreen={this.state.currentScreen}
         closeDrawer={this.closeDrawer}
         user={this.state.user}
         open={this.state.drawerOpen}
@@ -264,58 +295,42 @@ class App extends Component {
     switch (this.state.currentScreen) {
       case 'welcome':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'registerAccount':
         return (<RegisterAccount setUser={this.setUser} />);
-        break;
       case 'forgotPassword':
         return (<ForgotPassword />);
-        break;
       case 'forgotPasswordDone':
         return (<ForgotPasswordDone />);
-        break;
       case 'resetPassword':
         return (<ResetPassword />);
-        break;
-      case 'onboarding':
-        return (<Onboarding user={this.state.user} />);
-        break;
-      case 'account':
-        return (<Account user={this.state.user} />);
-        break;
+      case 'whitelist':
+        return (<Whitelist user={this.state.user} size={this.state.size} />);
+      case 'ethAccounts':
+        return (<EthAccounts user={this.state.user} />);
+      case 'wanAccounts':
+        return (<WanAccounts user={this.state.user} />);
       case 'updatePassword':
         return (<UpdatePassword user={this.state.user} />);
-        break;
       case 'manage2FA':
         return (<Manage2FA user={this.state.user} />);
-        break;
       case 'contacts':
         return (<Contacts user={this.state.user} />);
-        break;
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
-        break;
       case 'about':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'press':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'contactUs':
         return (<ContactUs />);
-        break;
       case 'bugBounty':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'blog':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'faq':
         return (<Welcome setUser={this.setUser} />);
-        break;
       case 'fees':
         return (<Welcome setUser={this.setUser} />);
-        break;
       default:
         return (<Welcome setUser={this.setUser} />);
     }

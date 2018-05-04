@@ -51,7 +51,7 @@ class ResetPassword extends Component {
               </Button>
             </Grid>
             <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='secondary' onClick={this.props.submitReset}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitReset}>
                 Reset
               </Button>
             </Grid>

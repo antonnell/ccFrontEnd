@@ -3,9 +3,7 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import TextField from 'material-ui/TextField';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, {  CardContent } from 'material-ui/Card';
 
 const styles = {};
 
@@ -20,16 +18,22 @@ class HaveWanAddress extends Component {
       <Card>
         <CardContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+            <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
+              <Typography variant="title">
+                Great! We need to know your Wanchain address.
+              </Typography>
+            </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1">
-                Do you have a Wanchain Address?
+              <Typography variant="body2">
+                This will be the address that we deposit the Wanchain into after the presale. Do you already have a Wanchain Address, or would you like us to create one for you?
               </Typography>
             </Grid>
             <Grid item xs={6} align='left' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" onClick={this.props.navigateImportWanAddress}>I have one</Button>
+              <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
             </Grid>
             <Grid item xs={6} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" color="secondary" onClick={this.props.navigateCreateWanAddress}>I would like to make one</Button>
+              <Button size="small" variant="raised" onClick={this.props.navigateExistingWanAddress} style={{marginRight: '12px'}}>I have one</Button>
+              <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateWanAddress}>Create Wanchain Address</Button>
             </Grid>
           </Grid>
         </CardContent>

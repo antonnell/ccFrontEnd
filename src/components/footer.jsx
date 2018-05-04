@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
 import Grid from 'material-ui/Grid';
 
 const styles = {};
-
-function MenuIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
-    </SvgIcon>
-  );
-}
 
 class Footer extends Component {
 
@@ -28,7 +16,7 @@ class Footer extends Component {
     var headingStyle = {color: '#FFFFFF', marginBottom: '12px'}
 
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px', backgroundColor: '#333333', color: '#FFFFFF', position: 'relative'}}>
+      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px', backgroundColor: '#000000', color: '#FFFFFF', position: 'relative'}}>
         <Grid item xs={12} sm={4} md={4} lg={4} align='center' style={{padding: '40px'}}>
           <img src="footer-logo.png" alt="" width="150px" height="166px" />
         </Grid>
@@ -55,9 +43,11 @@ class Footer extends Component {
             </Grid>
           </Grid>
         </Grid>
-        <Typography color='secondary' style={{position: 'absolute', bottom: '12px'}}>
-          © 2018 Cryptocurve All Rights Reserved
-        </Typography>
+        <Grid item xs={12} align='center'>
+          <Typography style={{color:'#FFFFFF'}}>
+            © 2018 Cryptocurve All Rights Reserved
+          </Typography>
+        </Grid>
       </Grid>
     );
   };
