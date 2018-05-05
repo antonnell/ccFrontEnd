@@ -2,10 +2,14 @@ import React from 'react'
 import ContactsComponent from '../components/contacts'
 const createReactClass = require('create-react-class')
 
+let contactsEmitter = require('../store/contactsStore.js').default.emitter
+let contactsDispatcher = require('../store/contactsStore.js').default.dispatcher
+
 let Contacts = createReactClass({
   getInitialState() {
     return {
-      loading: false,
+      dataLoading: true,
+      createLoading: false,
       error: null,
       username: "",
       usernameError: false,
@@ -15,9 +19,33 @@ let Contacts = createReactClass({
       displayNameErrorText: "",
       notes: "",
       notesError: false,
-      notesErrorText: ""
+      notesErrorText: "",
+      contacts: []
     }
   },
+
+  componentWillMount() {
+    contactsEmitter.on('getContacts', this.getContactsReturned);
+
+    var content = {username: this.props.user.username};
+    contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
+  },
+
+  getContactsReturned(error, data) {
+    this.setState({dataLoading: false})
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({contacts: data.contacts})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
   render() {
     return (
       <ContactsComponent
@@ -34,9 +62,10 @@ let Contacts = createReactClass({
         notes={this.state.notes}
         notesError={this.state.notesError}
         notesErrorText={this.state.notesErrorText}
-        loading={this.state.loading}
+        dataLoading={this.state.dataLoading}
+        createLoading={this.state.createLoading}
         error={this.state.error}
-        contacts={[{displayName: 'Andre Cronje', primaryAddress: '0xb258aD4125e84068F3A47fbBC4F6aCeD2bC148EC', notes: 'This is Andre that works with me', userName: 'andreCronje'}, {displayName: 'Mom', primaryAddress: '0xc2s8yD2125e84068F3A47fbBC4F6a3fJ2bD188LT', notes: 'She gave me life, i will give her eth', userName: 'momNell'}]}
+        contacts={this.state.contacts}
       />
     )
   },

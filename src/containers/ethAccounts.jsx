@@ -2,12 +2,17 @@ import React from 'react'
 import EthAccountsComponent from '../components/ethAccounts'
 const createReactClass = require('create-react-class')
 
+let ethEmitter = require('../store/ethStore.js').default.emitter
+let ethDispatcher = require('../store/ethStore.js').default.dispatcher
+
 let EthAccounts = createReactClass({
   getInitialState() {
     return {
-      loading: false,
+      dataLoading: true,
+      createLoading: false,
       error: null,
-      tabValue: 0
+      tabValue: 0,
+      ethAccounts: []
     }
   },
   render() {
@@ -18,11 +23,34 @@ let EthAccounts = createReactClass({
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
         tabValue={this.state.tabValue}
-        loading={this.state.loading}
+        dataLoading={this.state.dataLoading}
+        createLoading={this.state.createLoading}
         error={this.state.error}
-        addresses={[{name: 'My Primary Address', address: '0xb258aD4125e84068F3A47fbBC4F6aCeD2bC148EC', balance: 1.245547891, isPrimary: true}, {name: 'Moms Address', address: '0xc2s8yD2125e84068F3A47fbBC4F6a3fJ2bD188LT', balance: 0.6546312, isPrimary: false}]}
+        addresses={this.state.ethAddresses}
       />
     )
+  },
+
+  componentWillMount() {
+    ethEmitter.on('getEthAddress', this.getEthAddressReturned);
+
+    var content = {id: this.props.user.id};
+    ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+  },
+
+  getEthAddressReturned(error, data) {
+    this.setState({dataLoading: false});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({ethAddresses: data.ethAddresses})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   },
 
   onCreateImportKeyDown(event) {

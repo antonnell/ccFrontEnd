@@ -41,13 +41,6 @@ function WanchainIcon(props) {
     </SvgIcon>
   );
 }
-function SendEthIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,1.75L5.75,12.25L12,16L18.25,12.25L12,1.75M5.75,13.5L12,22.25L18.25,13.5L12,17.25L5.75,13.5Z" />
-    </SvgIcon>
-  );
-}
 function Manage2FAIcon(props) {
   return (
     <SvgIcon {...props}>
@@ -122,24 +115,17 @@ class AppDrawer extends Component {
                   </ListItemIcon>
                   <ListItemText primary="Wan Accounts" />
                 </ListItem>
-                <ListItem style={this.props.currentScreen=='sendWan'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWan'); }}>
-                  <ListItemIcon>
-                    <WanchainIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Send Wan" />
-                </ListItem>
-                <Divider />
                 <ListItem style={this.props.currentScreen=='ethAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
                   <ListItemIcon>
                     <AccountIcon />
                   </ListItemIcon>
                   <ListItemText primary="Eth Accounts" />
                 </ListItem>
-                <ListItem style={this.props.currentScreen=='sendEth'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEth'); }}>
+                <ListItem style={this.props.currentScreen=='contacts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
                   <ListItemIcon>
-                    <SendEthIcon />
+                    <ContactIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Send Eth" />
+                  <ListItemText primary="Contacts" />
                 </ListItem>
                 <Divider />
                 <ListItem style={this.props.currentScreen=='manageEthPools'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
@@ -161,12 +147,6 @@ class AppDrawer extends Component {
                   <ListItemText primary="Pool Contributions" />
                 </ListItem>
                 <Divider />
-                <ListItem style={this.props.currentScreen=='contacts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
-                  <ListItemIcon>
-                    <ContactIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Contacts" />
-                </ListItem>
                 <ListItem style={this.props.currentScreen=='updatePassword'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>
                   <ListItemIcon>
                     <PasswordIcon />

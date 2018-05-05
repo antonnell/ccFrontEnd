@@ -3,6 +3,7 @@ import Stepper, { Step, StepButton, StepLabel, StepContent } from 'material-ui/S
 import MobileStepper from 'material-ui/MobileStepper';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
+import Card, {  CardContent } from 'material-ui/Card';
 
 import AcceptTermsAndConditions from '../components/acceptTermsAndConditions.jsx';
 import TermsModal from '../components/termsModal.jsx';
@@ -223,18 +224,22 @@ let Whitelist = createReactClass({
   renderStepper() {
     if(['xs', 'sm'].includes(this.props.size)) {
       return (
-        <Stepper orientation="vertical" steps={this.state.steps.length} activeStep={this.state.activeStep} style={{background: 'inherit'}}>
-          {this.state.steps.map((label, index) => {
-            return (
-              <Step key={label}>
-                <StepLabel completed={this.state.completed[index]}>{label}</StepLabel>
-                <StepContent>
-                  {this.renderScreen()}
-                </StepContent>
-              </Step>
-            );
-          })}
-        </Stepper>
+        <Card>
+          <CardContent>
+            <Stepper orientation="vertical" steps={this.state.steps.length} activeStep={this.state.activeStep} style={{background: 'inherit'}}>
+              {this.state.steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <StepLabel completed={this.state.completed[index]}>{label}</StepLabel>
+                    <StepContent>
+                      {this.renderScreen()}
+                    </StepContent>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </CardContent>
+        </Card>
       )
     } else {
       return (
@@ -248,7 +253,11 @@ let Whitelist = createReactClass({
               );
             })}
           </Stepper>
-          {this.renderScreen()}
+            <Card>
+              <CardContent>
+                {this.renderScreen()}
+              </CardContent>
+            </Card>
         </div>)
     }
   },
@@ -342,7 +351,7 @@ let Whitelist = createReactClass({
         return (<CreateWanAddress
           handleChange={this.handleChange}
           createWanAddress={this.createWanAddress}
-          navigateImportWanAddress={this.navigateImportWanAddress}
+          navigateBack={this.navigateHaveWanAddress}
           onCreateKeyDown={this.createWanAddressKeyDown}
           />)
       case 'kycIDDOcument':

@@ -41,43 +41,39 @@ class KYCIDDOcument extends Component {
       imagePreview = <img src={this.state.imagePreviewUrl} style={{width: '100%', height: '100%', margin: 'auto'}} alt="upload" />;
     }
     return (
-      <Card>
-        <CardContent>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-            <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
-              <Typography variant="title">
-                You're almost done.
-              </Typography>
-            </Grid>
-            <Grid item xs={12} align='center'>
-              <Typography variant="body2">
-                Please upload a copy of your ID Document or Passport.
-              </Typography>
-            </Grid>
-            <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
-              <input
-                accept="image/*"
-                style={{display: 'none'}}
-                id="raised-button-file"
-                type="file"
-                onChange={this._handleImageChange}
-              />
-              <label htmlFor="raised-button-file">
-                <Button size="small" variant="raised" color="primary" component="span" onClick={this.props.uploadIDDocument}>Upload Document</Button>
-              </label>
-            </Grid>
-            <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
-              {imagePreview}
-            </Grid>
-            <Grid item xs={6} align='left' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
-            </Grid>
-            <Grid item xs={6} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+        <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
+          <Typography variant="title">
+            You're almost done.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <Typography variant="body2">
+            Please upload a copy of your ID Document or Passport.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
+          <input
+            accept="image/*"
+            style={{display: 'none'}}
+            id="raised-button-file"
+            type="file"
+            onChange={this._handleImageChange}
+          />
+          <label htmlFor="raised-button-file">
+            <Button size="small" variant="raised" color="primary" component="span" onClick={this.props.uploadIDDocument}>Upload Document</Button>
+          </label>
+        </Grid>
+        <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
+          {imagePreview}
+        </Grid>
+        <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
+          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+        </Grid>
+        <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
+          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
+        </Grid>
+      </Grid>
     );
   }
 }

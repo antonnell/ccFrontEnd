@@ -83,6 +83,7 @@ let Welcome = createReactClass({
     }
 
     if(data.success) {
+      data.user.token = data.token;
       this.props.setUser(data.user);
       window.location.hash = 'whitelist';
     } else if (data.errorMsg) {
