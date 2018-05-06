@@ -15,34 +15,26 @@ class HaveEthAddress extends Component {
 
     this.renderMessage = this.renderMessage.bind(this);
     this.renderAddresses = this.renderAddresses.bind(this);
+
+    if (this.props.ethAddresses.length > 0) {
+      this.state = {
+        renderMessage: 'Do you have an Ethereum Address, or would you like us to create one for you?'
+      }
+    } else {
+      this.state = {
+        renderMessage: 'We noticed you had the following addresses, would you like to use one of them?'
+      }
+    }
+
   };
 
   renderMessage() {
     if(this.props.ethAddresses.length > 0) {
-      return (<Grid item xs={12} align='center'>
-      <div style={{border: '1px solid #000', padding: '12px'}}>
-        <Typography variant="title" noWrap>
-          We will only accept ETH deposits from registered Ethereum addresses.
-        </Typography>
-      </div>
-      <Typography variant="body2">
-        Do you have an Ethereum Address, or would you like us to create one for you?
-      </Typography>
-        <List component="nav">
-          {this.renderAddresses()}
-        </List>
-      </Grid>)
+      return (<List component="nav">
+        {this.renderAddresses()}
+      </List>)
     } else {
-      return (<Grid item xs={12} align='center'>
-      <div style={{border: '1px solid #000', padding: '12px'}}>
-        <Typography variant="title" noWrap>
-          We will only accept ETH deposits from registered Ethereum addresses.
-        </Typography>
-      </div>
-      <Typography variant="body2">
-        Do you have an Ethereum Address, or would you like us to create one for you?
-      </Typography>
-      </Grid>)
+      return (<div></div>)
     }
   };
 
@@ -64,13 +56,31 @@ class HaveEthAddress extends Component {
             Great! We need to whitelist your Ethereum address.
           </Typography>
         </Grid>
-        {this.renderMessage()}
-        <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+        <Grid item xs={12} align='center'>
+          <div style={{border: '1px solid #000', padding: '12px'}}>
+            <Typography variant="title">
+              We will only accept ETH deposits from registered Ethereum addresses.
+            </Typography>
+          </div>
         </Grid>
-        <Grid item xs={9} align='right' style={{marginTop: '24px'}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
+        <Grid item xs={12} align='center'>
+          <Typography variant="body2">
+            Do you have an Ethereum Address, or would you like us to create one for you?
+          </Typography>
+        </Grid>
+        {this.renderMessage()}
+        <Grid item xs={12}>
+          <Grid container xs={12} spacing={0}>
+            <Grid item xs={12} md={3} align='center'>
+              <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+            </Grid>
+            <Grid item xs={12} md={3} align='center'>
+              <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
+            </Grid>
+            <Grid item xs={12} md={3} align='center'>
+              <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
