@@ -103,9 +103,16 @@ class App extends Component {
   };
 
   componentWillMount() {
+    var user = null;
+    var userString = sessionStorage.getItem('cc_user');
+    if(userString) {
+      user = JSON.parse(userString);
+      this.setUser(user);
+    }
+
     var currentScreen = window.location.hash.substring(1);
     if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
-      if(this.state.user == null) {
+      if(user == null) {
         window.location.hash = 'welcome';
       }
     }
@@ -129,12 +136,6 @@ class App extends Component {
 
     var loader = document.getElementById("loader")
     document.body.removeChild(loader);
-
-    var userString = sessionStorage.getItem('cc_user');
-    if(userString) {
-      var user = JSON.parse(userString);
-      this.setUser(user);
-    }
   };
 
   componentWillUnmount() {
