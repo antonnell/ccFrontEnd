@@ -32,6 +32,8 @@ const createReactClass = require('create-react-class')
 let emitter = require('../store/accountStore.js').default.emitter
 let dispatcher = require('../store/accountStore.js').default.dispatcher
 
+const isEthereumAddress  = require('is-ethereum-address');
+
 let Whitelist = createReactClass({
   getInitialState() {
     return {
@@ -41,8 +43,85 @@ let Whitelist = createReactClass({
       whitelistScreen: 'acceptTermsAndConditions',
       activeStep: 0,
       steps: ['Accept Terms and Conditions', 'Setup Ethereum Address', 'Setup Wanchain Address', 'KYC', 'Join the Whitelist'],
-      completed: {}
+      completed: {},
+      ethereumAddress: '',
+      ethereumAddressError: false,
+      ethereumAddressErrorMessage: '',
+      ethereumAddressValid: false,
+      wanchainAddress: '',
+      wanchainAddressError: false,
+      wanchainAddressErrorMessage: '',
+      termsOpened: false,
+      ethereumAddressName: '',
+      ethereumAddressNameError: false,
+      ethereumAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
+      ethereumAddressNameValid: false,
+      wanchainAddressName: '',
+      wanchainAddressNameError: false,
+      wanchainAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
+      wanchainAddressNameValid: false,
+      cryptocurveWallet: false,
+      allocation: 1000,
+      loadingAddress: true,
+      contributionAddress: '	0x4a48c693B100775d66C8E0Cf9B32663Cf1996838'
     };
+  },
+
+  validateETHAddress(ethereumAddress) {
+    if (!ethereumAddress) {
+      ethereumAddress = this.state.ethereumAddress
+    }
+    this.setState({ ethereumAddressError: false, ethereumAddressErrorMessage: '' });
+    if (!isEthereumAddress(ethereumAddress)) {
+      this.setState({ ethereumAddressError: true, ethereumAddressErrorMessage: 'Invalid Ethereum Address' });
+      return false
+    } else {
+      this.setState({ ethereumAddressValid: true })
+    }
+    return true
+  },
+  validateETHAddressName(ethereumAddressName) {
+    if (!ethereumAddressName) {
+      ethereumAddressName = this.state.ethereumAddressName
+    }
+    this.setState({ ethereumAddressNameError: false, ethereumAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
+    if (ethereumAddressName === '') {
+      this.setState({ ethereumAddressNameError: true, ethereumAddressNameErrorMessage: 'Invalid Ethereum Address Name' });
+      return false
+    } else {
+      this.setState({ ethereumAddressNameValid: true })
+    }
+    return true
+  },
+  validateWANAddress(wanchainAddress) {
+    if (!wanchainAddress) {
+      wanchainAddress = this.state.wanchainAddress
+    }
+    this.setState({ wanchainAddressError: false, wanchainAddressErrorMessage: '' });
+    const isEthereumValid = isEthereumAddress(wanchainAddress)
+    if (!isEthereumValid) {
+      this.setState({ wanchainAddressError: true, wanchainAddressErrorMessage: 'Invalid Wanchain Address' });
+      return false
+    } else if (isEthereumValid) {
+      this.setState({ wanchainAddressValid: true, wanchainAddressError: true, wanchainAddressErrorMessage: 'This address is not compatible with the official wanchain wallet, are you sure you want to proceed?' });
+      return true
+    } else {
+      this.setState({ wanchainAddressValid: true })
+    }
+    return true
+  },
+  validateWANAddressName(wanchainAddressName) {
+    if (!wanchainAddressName) {
+      wanchainAddressName = this.state.wanchainAddressName
+    }
+    this.setState({ wanchainAddressNameError: false, wanchainAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
+    if (wanchainAddressName === '') {
+      this.setState({ wanchainAddressNameError: true, wanchainAddressNameErrorMessage: 'Invalid Wanchain Address Name' });
+      return false
+    } else {
+      this.setState({ wanchainAddressNameValid: true })
+    }
+    return true
   },
 
   acceptTerms() {
@@ -52,11 +131,11 @@ let Whitelist = createReactClass({
   },
 
   navigateHaveEthAddress() {
-    this.setState({whitelistScreen: 'haveEthAddress', activeStep: 1})
+    this.setState({whitelistScreen: 'haveEthAddress', activeStep: 1, cryptocurveWallet:false})
   },
 
   readTerms() {
-    this.setState({termsOpen: true})
+    this.setState({termsOpen: true, termsOpened: true})
   },
 
   navigateTermsAndConditions() {
@@ -84,15 +163,19 @@ let Whitelist = createReactClass({
   },
 
   createEthAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+    if (this.validateETHAddressName()) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+      this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed, cryptocurveWallet:true})
+    }
   },
 
   importPublicEthAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+    if (this.validateETHAddress()) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+      this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+    }
   },
 
   importPrivateEthAddress() {
@@ -130,15 +213,19 @@ let Whitelist = createReactClass({
   },
 
   createWanAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+    if (this.validateWANAddressName()) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+      this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+    }
   },
 
   importPublicWanAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+    if (this.validateWANAddress()) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+      this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+    }
   },
 
   importPrivateWanAddress() {
@@ -221,6 +308,10 @@ let Whitelist = createReactClass({
     }
   },
 
+  sendFromMEW() {
+    window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.state.allocation+'#send-transaction')
+  },
+
   renderStepper() {
     if(['xs', 'sm'].includes(this.props.size)) {
       return (
@@ -279,6 +370,7 @@ let Whitelist = createReactClass({
         return (<AcceptTermsAndConditions
           acceptTerms={this.acceptTerms}
           readTerms={this.readTerms}
+          termsOpened={this.state.termsOpened}
         />);
       case 'haveEthAddress':
         return (<HaveEthAddress
@@ -295,6 +387,11 @@ let Whitelist = createReactClass({
       case 'importPublicEthAddress':
         return (<ImportPublicEthAddress
           navigateBack={this.navigateExistingEthAddress}
+          handleChange={this.handleChange}
+          ethereumAddress={this.state.ethereumAddress}
+          ethereumAddressError={this.state.ethereumAddressError}
+          ethereumAddressErrorMessage={this.state.ethereumAddressErrorMessage}
+          ethereumAddressValid={this.state.ethereumAddressValid}
           importPublicEthAddress={this.importPublicEthAddress}
           importPublicEthAddressKeyDown={this.importPublicEthAddressKeyDown}
           />);
@@ -316,6 +413,10 @@ let Whitelist = createReactClass({
           createEthAddress={this.createEthAddress}
           navigateBack={this.navigateHaveEthAddress}
           onCreateKeyDown={this.createEthAddressKeyDown}
+          ethereumAddressName={this.state.ethereumAddressName}
+          ethereumAddressNameError={this.state.ethereumAddressNameError}
+          ethereumAddressNameErrorMessage={this.state.ethereumAddressNameErrorMessage}
+          ethereumAddressNameValid={this.state.ethereumAddressNameValid}
           />);
       case 'haveWanAddress':
         return (<HaveWanAddress
@@ -334,6 +435,11 @@ let Whitelist = createReactClass({
           navigateBack={this.navigateExistingWanAddress}
           importPublicWanAddress={this.importPublicWanAddress}
           importPublicWanAddressKeyDown={this.importPublicWanAddressKeyDown}
+          handleChange={this.handleChange}
+          wanchainAddress={this.state.wanchainAddress}
+          wanchainAddressError={this.state.wanchainAddressError}
+          wanchainAddressErrorMessage={this.state.wanchainAddressErrorMessage}
+          wanchainAddressValid={this.state.wanchainAddressValid}
           />)
       case 'importPrivateTypeWanAddress':
         return (<ImportPrivateTypeWanAddress
@@ -353,6 +459,10 @@ let Whitelist = createReactClass({
           createWanAddress={this.createWanAddress}
           navigateBack={this.navigateHaveWanAddress}
           onCreateKeyDown={this.createWanAddressKeyDown}
+          wanchainAddressName={this.state.wanchainAddressName}
+          wanchainAddressNameError={this.state.wanchainAddressNameError}
+          wanchainAddressNameErrorMessage={this.state.wanchainAddressNameErrorMessage}
+          wanchainAddressNameValid={this.state.wanchainAddressNameValid}
           />)
       case 'kycIDDOcument':
         return (<KYCIDDocument
@@ -373,14 +483,29 @@ let Whitelist = createReactClass({
           notNow={this.notNow}
           />)
       case 'whitelistJoined':
+        var that = this
+        setTimeout(function() {
+          that.setState({loadingAddress:false})
+        },2000)
         return (<WhitelistJoined
+          ethereumAddress={this.state.ethereumAddress}
+          ethereumAddressName={this.state.ethereumAddressName}
+          wanchainAddress={this.state.wanchainAddress}
+          wanchainAddressName={this.state.wanchainAddressName}
+          allocation={this.state.allocation}
+          loadingAddress={this.state.loadingAddress}
+          contributionAddress={this.state.contributionAddress}
           handleChange={this.handleChange}
+          onwWallet={this.state.cryptocurveWallet}
           done={this.done}
+          sendFromMEW={this.sendFromMEW}
+          cryptocurveWallet={this.state.cryptocurveWallet}
           />)
       default:
         return (<AcceptTermsAndConditions
           acceptTerms={this.acceptTerms}
           readTerms={this.readTerms}
+          termsOpened={this.state.termsOpened}
         />)
     }
   },
@@ -390,6 +515,15 @@ let Whitelist = createReactClass({
       this.setState({
         [name]: event.target.value
       });
+      if (name==="ethereumAddress") {
+        this.validateETHAddress(event.target.value)
+      } if (name==="wanchainAddress") {
+        this.validateWANAddress(event.target.value)
+      } else if  (name==="ethereumAddressName") {
+        this.validateETHAddressName(event.target.value)
+      } else if  (name==="wanchainAddressName") {
+        this.validateWANAddressName(event.target.value)
+      }
     }
   },
 

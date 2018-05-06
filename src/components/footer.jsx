@@ -14,7 +14,7 @@ class Footer extends Component {
   render() {
     var linkStyle = {cursor: 'pointer', marginBottom: '6px'}
     var headingStyle = {color: '#FFFFFF', marginBottom: '12px'}
-
+    //onClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px', backgroundColor: '#000000', color: '#FFFFFF', position: 'relative'}}>
         <Grid item xs={12} sm={4} md={4} lg={4} align='center' style={{padding: '40px'}}>
@@ -25,7 +25,7 @@ class Footer extends Component {
             <Grid item xs={3} align='left'>
               <Typography variant='subheading' style={headingStyle}>ACCOUNT</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'welcome'); }}>Login</Typography>
-              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}>Register</Typography>
+              <Typography color="inherit" variant='body1' style={{marginBottom: '6px', textDecoration: 'line-through'}} >Register</Typography>
             </Grid>
             <Grid item xs={3} align='left'>
               <Typography variant='subheading' style={headingStyle}>ABOUT</Typography>

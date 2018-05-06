@@ -48,6 +48,15 @@ const theme = createMuiTheme({
         },
       }
     },
+    MuiButton: {
+      root: {
+        transition: "1s ease",
+        '&:hover:not($disabled)' : {
+          backgroundColor: "#2ad4dc",
+          color: 'black'
+        }
+      }
+    }
   },
   typography: {
     // Use the system font over Roboto.

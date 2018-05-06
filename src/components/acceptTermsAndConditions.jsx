@@ -14,22 +14,22 @@ class AcceptTermsAndConditions extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
-            Welcome to CryptoCurve! We'll quickly take you through a few steps to set up your account for whitelisting.
+            Congratulations on being selected for the CryptoCurve presale! Just a few steps to make sure we have everything we need.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
           <Typography variant="body2">
-            Firstly, we need you to read through our terms and conditions. Do you accept our terms and conditions?
+            First, we need you to read through our terms and conditions. Do you accept our terms and conditions?
           </Typography>
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" onClick={this.props.readTerms}>T's & C's</Button>
+          <Button size="small" variant={this.props.termsOpened?"flat":"raised"} color={this.props.termsOpened?"default":"primary"} onClick={this.props.readTerms}>T's & C's</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.acceptTerms}>I Accept</Button>
+          <Button size="small" variant={this.props.termsOpened?"raised":"flat"} disabled={!this.props.termsOpened} color="primary" onClick={this.props.acceptTerms}>I Accept</Button>
         </Grid>
       </Grid>
     );

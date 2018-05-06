@@ -15,7 +15,7 @@ class JoinWhitelist extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             You're almost done.

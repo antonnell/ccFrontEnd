@@ -15,22 +15,29 @@ class HaveEthAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
-            Great! We need to know your Ethereum address.
+            Great! We need to whitelist your Ethereum address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
+          <div style={{border: '1px solid #000', padding: '12px'}}>
+            <Typography variant="title" noWrap>
+              We will only accept ETH deposits from registered Ethereum addresses.
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12} align='center'>
           <Typography variant="body2">
-            We will only accept Ethereum deposits for our whitelist from registered Ethereum addresses. Do you have an Ethereum Address, or would you like us to create one for you?
+            Do you have an Ethereum Address, or would you like us to create one for you?
           </Typography>
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px'}}>
-          <Button size="small" variant="raised" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I have one</Button>
+          <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
           <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
         </Grid>
       </Grid>
