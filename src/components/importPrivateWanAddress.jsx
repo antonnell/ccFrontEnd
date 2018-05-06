@@ -15,23 +15,33 @@ class ImportPrivateWanAddress extends Component {
   };
 
   render() {
-
     var input = null
+    var password = null
+    var unlockButton = null
+    if(this.props.passwordRequired === true) {
+      password = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPasswordError} disabled={this.props.loading}
+        id="wanPassword" placeholder="Password" value={this.props.wanPassword} type='password'
+        onChange={(event) => { this.props.handleChange(event, 'wanPassword'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} helperText='Your key is password protected. Please provide us with the password.'/>
+      unlockButton = <Button size="small" variant={this.props.wanPasswordValid?"raised":"flat"} disabled={!(this.props.wanPasswordValid||this.props.unlockLoading)} color="primary" onClick={this.props.unlockPrivateWanAddress}>Unlock</Button>
+    }
+
     switch (this.props.keyType) {
       case 'mnemonic':
         input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanMnemonicError} disabled={this.props.loading}
           id="wanMnemonic" placeholder="Mnemonic String" value={this.props.wanMnemonic}
-          onChange={(event) => { this.props.handleChange(event, 'wanMnemonic'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+          onChange={(event) => { this.props.handleChange(event, 'wanMnemonic'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} helperText={this.props.wanMnemonicErrorMessage}/>
         break;
       case 'jsonV3':
         input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanJSONV3Error} disabled={this.props.loading}
           id="wanJSONV3" placeholder="Enter your JSON" value={this.props.wanJSONV3}
-          onChange={(event) => { this.props.handleChange(event, 'wanJSONV3'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+          onChange={(event) => { this.props.handleChange(event, 'wanJSONV3'); }} margin="normal" onKeyDown={this.props.onImportKeyDown}
+          helperText={this.props.wanMnemonicErrorMessage}/>
         break;
       default:
         input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPrivateKeyError} disabled={this.props.loading}
           id="wanPrivateKey" placeholder="Private Key" value={this.props.wanPrivateKey}
-          onChange={(event) => { this.props.handleChange(event, 'wanPrivateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+          onChange={(event) => { this.props.handleChange(event, 'wanPrivateKey'); }} onBlur={this.props.validateWANAddress} margin="normal" onKeyDown={this.props.onImportKeyDown}
+          helperText={this.props.wanMnemonicErrorMessage}/>
         break;
     }
 
@@ -48,16 +58,19 @@ class ImportPrivateWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanchainAddressError} disabled={this.props.loading}
-            id="wanchainAddress" placeholder="Wanchain Public Address" value={this.props.wanchainAddress}
-            onChange={(event) => { this.props.handleChange(event, 'wanchainAddress'); }} onBlur={this.props.validateWANAddress} margin="normal" onKeyDown={this.props.importPublicWanAddressKeyDown}
-            helperText={this.props.wanchainAddressErrorMessage} />
+          {input}
+        </Grid>
+        <Grid item xs={12} align='center'>
+          {password}
+        </Grid>
+        <Grid item xs={12} align='center'>
+          {unlockButton}
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanchainAddressValid?"raised":"flat"} disabled={!this.props.wanchainAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.wanPrivateAddressValid&&this.props.passwordCorrect?"raised":"flat"} disabled={!this.props.wanPrivateAddressValid&&this.props.passwordCorrect} color="primary" onClick={this.props.importPrivateWanAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

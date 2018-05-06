@@ -49,41 +49,38 @@ let Whitelist = createReactClass({
       activeStep: 0,
       steps: ['Accept Terms and Conditions', 'Setup Ethereum Address', 'Setup Wanchain Address', 'KYC', 'Join the Whitelist'],
       completed: {},
-      ethereumAddress: '',
-      ethereumAddressError: false,
-      ethereumAddressErrorMessage: '',
-      ethereumAddressValid: false,
-      wanchainAddress: '',
-      wanchainAddressError: false,
-      wanchainAddressErrorMessage: '',
+
       termsOpened: false,
-      ethereumAddressName: '',
-      ethereumAddressNameError: false,
-      ethereumAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
-      ethereumAddressNameValid: false,
-      wanchainAddressName: '',
-      wanchainAddressNameError: false,
-      wanchainAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
-      wanchainAddressNameValid: false,
       cryptocurveWallet: false,
       allocation: 1000,
       loadingAddress: true,
       contributionAddress: '	0x4a48c693B100775d66C8E0Cf9B32663Cf1996838',
+
       ethAddressName: '',
       ethAddressNameError: false,
+      ethAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
+      ethAddressNameValid: false,
       ethPublicAddress: '',
       ethPublicAddressError: false,
+      ethPublicAddressErrorMessage: '',
+      ethPublicAddressValid: false,
       ethPrivateKey: '',
       ethPrivateKeyError: false,
+      ethPrivateKeyErrorMessage: '',
       ethMnemonic: '',
       ethMnemonicError: false,
+      ethMnemonicErrorMessage: '',
       ethJSONV3: '',
       ethJSONV3Error: false,
+      ethJSONV3ErrorMessage: '',
 
       wanAddressName: '',
       wanAddressNameError: false,
+      wanAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
+      wanAddressNameValid: false,
       wanPublicAddress: '',
       wanPublicAddressError: false,
+      wanPublicAddressErrorMessage: '',
       wanPrivateKey: '',
       wanPrivateKeyError: false,
       wanMnemonic: '',
@@ -98,18 +95,42 @@ let Whitelist = createReactClass({
       photoImagePreviewUrl: null,
 
       whitelistObjet: {
+        user: {
+          emailAddress: '',
+          maxAllocation: '',
+          remainingAllocation: '',
+          totalAllocation: '',
+          whitelisted: true/false,
+          canWhitelist: true/false
+        },
         termsAndConditions: {
-
+          accepted: true,
         },
         ethAddress: {
-          
+          publicAddress: '',
+          publicAddressName: '',
+          privateKey: '',
+          privateKeyPassword: '',
+          mnemonic:'',
+          mnemonicPassword: '',
+          jsonv3: '',
+          jsonv3Password: ''
         },
         wanAddress: {
-
+          publicAddress: '',
+          publicAddressName: '',
+          privateKey: '',
+          privateKeyPassword: '',
+          mnemonic:'',
+          mnemonicPassword: '',
+          jsonv3: '',
+          jsonv3Password: ''
         },
         kyc: {
-
-        }
+          idDocumentUuid: '',
+          photoUuid: ''
+        },
+        currentScreen: ''
       }
     };
   },
@@ -119,61 +140,127 @@ let Whitelist = createReactClass({
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
   },
 
-  validateETHAddress(ethereumAddress) {
-    if (!ethereumAddress) {
-      ethereumAddress = this.state.ethereumAddress
+  validateEthPassword() {
+    this.setState({ ethPasswordValid: true })
+  },
+  validateWanPassword() {
+    this.setState({ wanPasswordValid: true })
+  },
+
+  validateETHAddress(ethPublicAddress) {
+    this.setState({ ethPublicAddressValid: false })
+    if (!ethPublicAddress) {
+      ethPublicAddress = this.state.ethPublicAddress
     }
-    this.setState({ ethereumAddressError: false, ethereumAddressErrorMessage: '' });
-    if (!isEthereumAddress(ethereumAddress)) {
-      this.setState({ ethereumAddressError: true, ethereumAddressErrorMessage: 'Invalid Ethereum Address' });
+    this.setState({ ethPublicAddressError: false, ethPublicAddressErrorMessage: '' });
+    if (!isEthereumAddress(ethPublicAddress)) {
+      this.setState({ ethPublicAddressError: true, ethPublicAddressErrorMessage: 'Invalid Ethereum Address' });
       return false
     } else {
-      this.setState({ ethereumAddressValid: true })
+      this.setState({ ethPublicAddressValid: true })
     }
     return true
   },
-  validateETHAddressName(ethereumAddressName) {
-    if (!ethereumAddressName) {
-      ethereumAddressName = this.state.ethereumAddressName
+  validateETHAddressName(ethAddressName) {
+    this.setState({ ethAddressNameValid: false })
+    if (!ethAddressName) {
+      ethAddressName = this.state.ethAddressName
     }
-    this.setState({ ethereumAddressNameError: false, ethereumAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
-    if (ethereumAddressName === '') {
-      this.setState({ ethereumAddressNameError: true, ethereumAddressNameErrorMessage: 'Invalid Ethereum Address Name' });
+    this.setState({ ethAddressNameError: false, ethAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
+    if (ethAddressName === '') {
+      this.setState({ ethAddressNameError: true, ethAddressNameErrorMessage: 'Invalid Ethereum Address Name' });
       return false
     } else {
-      this.setState({ ethereumAddressNameValid: true })
+      this.setState({ ethAddressNameValid: true })
     }
     return true
   },
-  validateWANAddress(wanchainAddress) {
-    if (!wanchainAddress) {
-      wanchainAddress = this.state.wanchainAddress
+  validateWANAddress(wanPublicAddress) {
+    this.setState({ wanPublicAddressValid: false })
+    if (!wanPublicAddress) {
+      wanPublicAddress = this.state.wanPublicAddress
     }
-    this.setState({ wanchainAddressError: false, wanchainAddressErrorMessage: '' });
-    const isEthereumValid = isEthereumAddress(wanchainAddress)
+    this.setState({ wanPublicAddressError: false, wanPublicAddressErrorMessage: '' });
+    /*const isEthereumValid = isEthereumAddress(wanPublicAddress)
     if (!isEthereumValid) {
-      this.setState({ wanchainAddressError: true, wanchainAddressErrorMessage: 'Invalid Wanchain Address' });
+      this.setState({ wanPublicAddressError: true, wanPublicAddressErrorMessage: 'Invalid Wanchain Address' });
       return false
     } else if (isEthereumValid) {
-      this.setState({ wanchainAddressValid: true, wanchainAddressError: true, wanchainAddressErrorMessage: 'This address is not compatible with the official wanchain wallet, are you sure you want to proceed?' });
+      this.setState({ wanPublicAddressValid: true, wanPublicAddressError: true, wanPublicAddressErrorMessage: 'This address is not compatible with the official wanchain wallet, are you sure you want to proceed?' });
       return true
+    } else {*/
+      this.setState({ wanPublicAddressValid: true })
+    //}
+    return true
+  },
+  validateWANAddressName(wanAddressName) {
+    this.setState({ wanAddressNameValid: false })
+    if (!wanAddressName) {
+      wanAddressName = this.state.wanAddressName
+    }
+    this.setState({ wanAddressNameError: false, wanAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
+    if (wanAddressName === '') {
+      this.setState({ wanAddressNameError: true, wanAddressNameErrorMessage: 'Invalid Wanchain Address Name' });
+      return false
     } else {
-      this.setState({ wanchainAddressValid: true })
+      this.setState({ wanAddressNameValid: true })
     }
     return true
   },
-  validateWANAddressName(wanchainAddressName) {
-    if (!wanchainAddressName) {
-      wanchainAddressName = this.state.wanchainAddressName
+  validateEthPrivateAddress(address) {
+    this.setState({ ethPrivateKeyError: false, ethPrivateKeyErrorMessage: '', ethPrivateAddressValid: false });
+    switch (this.state.ethPrivateKeyType) {
+      case 'privateKey':
+        if (address === '') {
+          this.setState({ ethPrivateKeyError: true, ethPrivateKeyErrorMessage: 'Invalid Private Key' });
+          return false
+        }
+        break;
+      case 'mnemonic':
+        if (address === '') {
+          this.setState({ ethPrivateKeyError: true, ethPrivateKeyErrorMessage: 'Invalid Mnemonic' });
+          return false
+        }
+        break;
+      case 'jsonV3':
+        if (address === '') {
+          this.setState({ ethPrivateKeyError: true, ethPrivateKeyErrorMessage: 'Invalid JSON' });
+          return false
+        }
+        break;
+      default:
+
     }
-    this.setState({ wanchainAddressNameError: false, wanchainAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts' });
-    if (wanchainAddressName === '') {
-      this.setState({ wanchainAddressNameError: true, wanchainAddressNameErrorMessage: 'Invalid Wanchain Address Name' });
-      return false
-    } else {
-      this.setState({ wanchainAddressNameValid: true })
+
+    this.setState({ ethPrivateKeyError: false, ethPrivateKeyErrorMessage: '', ethPrivateAddressValid: true })
+
+  },
+  validateWanPrivateAddress(address) {
+    this.setState({ wanPrivateKeyError: false, wanPrivateKeyErrorMessage: '', wanPrivateAddressValid: false });
+    switch (this.state.wanPrivateKeyType) {
+      case 'privateKey':
+        if (address === '') {
+          this.setState({ wanPrivateKeyError: true, wanPrivateKeyErrorMessage: 'Invalid Private Key' });
+          return false
+        }
+        break;
+      case 'mnemonic':
+        if (address === '') {
+          this.setState({ wanPrivateKeyError: true, wanPrivateKeyErrorMessage: 'Invalid Mnemonic' });
+          return false
+        }
+        break;
+      case 'jsonV3':
+        if (address === '') {
+          this.setState({ wanPrivateKeyError: true, wanPrivateKeyErrorMessage: 'Invalid JSON' });
+          return false
+        }
+        break;
+      default:
+
     }
-    return true
+
+    this.setState({ wanPrivateKeyError: false, wanPrivateKeyErrorMessage: '', wanPrivateAddressValid: true })
   },
 
   acceptTerms() {
@@ -486,10 +573,90 @@ let Whitelist = createReactClass({
     window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.state.allocation+'#send-transaction')
   },
 
+  checkIfEthPasswordProtected(value) {
+    var isEthPasswordProtected = false;
+    var isEthPasswordCorrect = false;
+    switch (this.state.ethPrivateKeyType) {
+      case 'privateKey':
+        if(value.length == 128 || value.length == 132) {
+          isEthPasswordProtected = true;
+        } else {
+          isEthPasswordCorrect = true;
+        }
+        break;
+      case 'mnemonic':
+        isEthPasswordProtected = true;
+        break;
+      case 'jsonV3':
+        isEthPasswordProtected = true;
+        break;
+      default:
+
+    }
+
+    this.setState({isEthPasswordProtected, isEthPasswordCorrect})
+  },
+
+  checkIfWanPasswordProtected(value) {
+    var isWanPasswordProtected = false;
+    var isWanPasswordCorrect = false;
+    switch (this.state.wanPrivateKeyType) {
+      case 'privateKey':
+        if(value.length == 128 || value.length == 132) {
+          isWanPasswordProtected = true;
+        } else {
+          isWanPasswordCorrect = true;
+        }
+        break;
+      case 'mnemonic':
+        isWanPasswordProtected = true;
+        break;
+      case 'jsonV3':
+        isWanPasswordProtected = true;
+        break;
+      default:
+
+    }
+
+    this.setState({isWanPasswordProtected, isWanPasswordCorrect})
+  },
+
+  unlockPrivateEthAddress() {
+    switch (this.state.ethPrivateKeyType) {
+      case 'privateKey':
+        this.setState({isEthPasswordCorrect: true})
+        break;
+      case 'mnemonic':
+        this.setState({isEthPasswordCorrect: true})
+        break;
+      case 'jsonV3':
+        this.setState({isEthPasswordCorrect: true})
+        break;
+      default:
+
+    }
+  },
+
+  unlockPrivateWanAddress() {
+    switch (this.state.wanPrivateKeyType) {
+      case 'privateKey':
+        this.setState({isWanPasswordCorrect: true})
+        break;
+      case 'mnemonic':
+        this.setState({isWanPasswordCorrect: true})
+        break;
+      case 'jsonV3':
+        this.setState({isWanPasswordCorrect: true})
+        break;
+      default:
+
+    }
+  },
+
   renderStepper() {
     if(['xs', 'sm'].includes(this.props.size)) {
       return (
-        <Card>
+        <Card style={{padding: '0px'}}>
           <CardContent>
             <Stepper orientation="vertical" steps={this.state.steps.length} activeStep={this.state.activeStep} style={{background: 'inherit'}}>
               {this.state.steps.map((label, index) => {
@@ -565,15 +732,13 @@ let Whitelist = createReactClass({
         return (<ImportPublicEthAddress
           navigateBack={this.navigateExistingEthAddress}
           handleChange={this.handleChange}
-          ethereumAddress={this.state.ethereumAddress}
-          ethereumAddressError={this.state.ethereumAddressError}
-          ethereumAddressErrorMessage={this.state.ethereumAddressErrorMessage}
-          ethereumAddressValid={this.state.ethereumAddressValid}
+          ethPublicAddress={this.state.ethPublicAddress}
+          ethPublicAddressError={this.state.ethPublicAddressError}
+          ethPublicAddressErrorMessage={this.state.ethPublicAddressErrorMessage}
+          ethPublicAddressValid={this.state.ethPublicAddressValid}
           importPublicEthAddress={this.importPublicEthAddress}
           importPublicEthAddressKeyDown={this.importPublicEthAddressKeyDown}
           handleChange={this.handleChange}
-          ethPublicAddress={this.state.ethPublicAddress}
-          ethPublicAddressError={this.state.ethPublicAddressError}
           />);
       case 'importPrivateTypeEthAddress':
         return (<ImportPrivateTypeEthAddress
@@ -591,8 +756,18 @@ let Whitelist = createReactClass({
           ethPrivateKeyError={this.state.ethPrivateKeyError}
           ethMnemonic={this.state.ethMnemonic}
           ethMnemonicError={this.state.ethMnemonicError}
+          ethMnemonicErrorMessage={this.state.ethMnemonicErrorMessage}
           ethJSONV3={this.state.ethJSONV3}
           ethJSONV3Error={this.state.ethJSONV3Error}
+          ethJSONV3ErrorMessage={this.state.ethJSONV3ErrorMessage}
+          checkIfEthPasswordProtected={this.checkIfEthPasswordProtected}
+          isEthPasswordProtected={this.state.isEthPasswordProtected}
+          passwordRequired={this.state.isEthPasswordProtected}
+          passwordCorrect={this.state.isEthPasswordCorrect}
+          ethPassword={this.state.ethPassword}
+          unlockPrivateEthAddress={this.unlockPrivateEthAddress}
+          ethPrivateAddressValid={this.state.ethPrivateAddressValid}
+          ethPasswordValid={this.state.ethPasswordValid}
           />);
       case 'createEthAddress':
         return (<CreateEthAddres
@@ -603,10 +778,8 @@ let Whitelist = createReactClass({
           onCreateKeyDown={this.createEthAddressKeyDown}
           ethAddressName={this.state.ethAddressName}
           ethAddressNameError={this.state.ethAddressNameError}
-          ethereumAddressName={this.state.ethereumAddressName}
-          ethereumAddressNameError={this.state.ethereumAddressNameError}
-          ethereumAddressNameErrorMessage={this.state.ethereumAddressNameErrorMessage}
-          ethereumAddressNameValid={this.state.ethereumAddressNameValid}
+          ethAddressNameErrorMessage={this.state.ethAddressNameErrorMessage}
+          ethAddressNameValid={this.state.ethAddressNameValid}
           />);
       case 'haveWanAddress':
         return (<HaveWanAddress
@@ -630,10 +803,8 @@ let Whitelist = createReactClass({
           handleChange={this.handleChange}
           wanPublicAddress={this.state.wanPublicAddress}
           wanPublicAddressError={this.state.wanPublicAddressError}
-          wanchainAddress={this.state.wanchainAddress}
-          wanchainAddressError={this.state.wanchainAddressError}
-          wanchainAddressErrorMessage={this.state.wanchainAddressErrorMessage}
-          wanchainAddressValid={this.state.wanchainAddressValid}
+          wanPublicAddressErrorMessage={this.state.wanPublicAddressErrorMessage}
+          wanPublicAddressValid={this.state.wanPublicAddressValid}
           />)
       case 'importPrivateTypeWanAddress':
         return (<ImportPrivateTypeWanAddress
@@ -649,10 +820,20 @@ let Whitelist = createReactClass({
           keyType={this.state.wanPrivateKeyType}
           wanPrivateKey={this.state.wanPrivateKey}
           wanPrivateKeyError={this.state.wanPrivateKeyError}
+          wanPrivateKeyErrorMessage={this.state.wanPrivateKeyErrorMessage}
           wanMnemonic={this.state.wanMnemonic}
           wanMnemonicError={this.state.wanMnemonicError}
+          wanMnemonicErrorMessage={this.state.wanMnemonicErrorMessage}
           wanJSONV3={this.state.wanJSONV3}
           wanJSONV3Error={this.state.wanJSONV3Error}
+          wanJSONV3ErrorMessage={this.state.wanJSONV3ErrorMessage}
+          passwordRequired={this.state.isWanPasswordProtected}
+          isWanPasswordProtected={this.state.isWanPasswordProtected}
+          passwordCorrect={this.state.isWanPasswordCorrect}
+          wanPassword={this.state.wanPassword}
+          unlockPrivateWanAddress={this.unlockPrivateWanAddress}
+          wanPrivateAddressValid={this.state.wanPrivateAddressValid}
+          wanPasswordValid={this.state.wanPasswordValid}
           />)
       case 'createWanAddress':
         return (<CreateWanAddress
@@ -661,10 +842,10 @@ let Whitelist = createReactClass({
           createWanAddress={this.createWanAddress}
           navigateBack={this.navigateHaveWanAddress}
           onCreateKeyDown={this.createWanAddressKeyDown}
-          wanchainAddressName={this.state.wanchainAddressName}
-          wanchainAddressNameError={this.state.wanchainAddressNameError}
-          wanchainAddressNameErrorMessage={this.state.wanchainAddressNameErrorMessage}
-          wanchainAddressNameValid={this.state.wanchainAddressNameValid}
+          wanAddressName={this.state.wanAddressName}
+          wanAddressNameError={this.state.wanAddressNameError}
+          wanAddressNameErrorMessage={this.state.wanAddressNameErrorMessage}
+          wanAddressNameValid={this.state.wanAddressNameValid}
           />)
       case 'kycIDDOcument':
         return (<KYCIDDocument
@@ -694,10 +875,10 @@ let Whitelist = createReactClass({
           that.setState({loadingAddress:false})
         },2000)
         return (<WhitelistJoined
-          ethereumAddress={this.state.ethereumAddress}
-          ethereumAddressName={this.state.ethereumAddressName}
-          wanchainAddress={this.state.wanchainAddress}
-          wanchainAddressName={this.state.wanchainAddressName}
+          ethPublicAddress={this.state.ethPublicAddress}
+          ethAddressName={this.state.ethAddressName}
+          wanPublicAddress={this.state.wanPublicAddress}
+          wanAddressName={this.state.wanAddressName}
           allocation={this.state.allocation}
           loadingAddress={this.state.loadingAddress}
           contributionAddress={this.state.contributionAddress}
@@ -721,14 +902,24 @@ let Whitelist = createReactClass({
       this.setState({
         [name]: event.target.value
       });
-      if (name==="ethereumAddress") {
+      if (name==="ethPublicAddress") {
         this.validateETHAddress(event.target.value)
-      } if (name==="wanchainAddress") {
+      } if (name==="wanPublicAddress") {
         this.validateWANAddress(event.target.value)
-      } else if  (name==="ethereumAddressName") {
+      } else if  (name==="ethAddressName") {
         this.validateETHAddressName(event.target.value)
-      } else if  (name==="wanchainAddressName") {
+      } else if  (name==="wanAddressName") {
         this.validateWANAddressName(event.target.value)
+      } else if (['ethPrivateKey', 'ethMnemonic', 'ethJSONV3'].includes(name)) {
+        this.validateEthPrivateAddress(event.target.value)
+        this.checkIfEthPasswordProtected(event.target.value)
+      } else if (['wanPrivateKey', 'wanMnemonic', 'wanJSONV3'].includes(name)) {
+        this.validateWanPrivateAddress(event.target.value)
+        this.checkIfWanPasswordProtected(event.target.value)
+      } else if (name==='ethPassword') {
+        this.validateEthPassword(event.target.value)
+      } else if (name==='wanPassword') {
+        this.validateWanPassword(event.target.value)
       }
     }
   },

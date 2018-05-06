@@ -68,19 +68,15 @@ class HaveEthAddress extends Component {
             Do you have an Ethereum Address, or would you like us to create one for you?
           </Typography>
         </Grid>
-        {this.renderMessage()}
-        <Grid item xs={12}>
-          <Grid container xs={12} spacing={0}>
-            <Grid item xs={12} md={3} align='center'>
-              <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
-            </Grid>
-            <Grid item xs={12} md={3} align='center'>
-              <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
-            </Grid>
-            <Grid item xs={12} md={3} align='center'>
-              <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
-            </Grid>
-          </Grid>
+        <Grid item xs={12} align='center'>
+          {this.renderMessage()}
+        </Grid>
+        <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
+          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+        </Grid>
+        <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
+          <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
+          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
         </Grid>
       </Grid>
     );

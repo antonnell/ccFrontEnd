@@ -59,7 +59,9 @@ class HaveWanAddress extends Component {
             Next, we need to know your Wanchain address.
           </Typography>
         </Grid>
-        {this.renderMessage()}
+        <Grid item xs={12} align='center'>
+          {this.renderMessage()}
+        </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>

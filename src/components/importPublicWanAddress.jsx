@@ -28,16 +28,16 @@ class ImportPublicWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanchainAddressError} disabled={this.props.loading}
-            id="wanchainAddress" placeholder="Wanchain Public Address" value={this.props.wanchainAddress}
-            onChange={(event) => { this.props.handleChange(event, 'wanchainAddress'); }} margin="normal" onKeyDown={this.props.onImportKeyDown}
-            helperText={this.props.wanchainAddressErrorMessage} />
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPublicAddressAddressError} disabled={this.props.loading}
+            id="wanPublicAddress" placeholder="Wanchain Public Address" value={this.props.wanPublicAddress}
+            onChange={(event) => { this.props.handleChange(event, 'wanPublicAddress'); }} margin="normal" onKeyDown={this.props.onImportKeyDown}
+            helperText={this.props.wanPublicAddressAddressErrorMessage} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanchainAddressValid?"raised":"flat"} disabled={!this.props.wanchainAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.wanPublicAddressValid?"raised":"flat"} disabled={!this.props.wanPublicAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

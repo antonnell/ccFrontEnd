@@ -34,17 +34,17 @@ class CreateEthAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethereumAddressNameError} disabled={this.props.loading}
-            id="ethereumAddressName" placeholder="Ethereum Address Name" value={this.props.ethereumAddressName}
-            onChange={(event) => { this.props.handleChange(event, 'ethereumAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
-            helperText={this.props.ethereumAddressNameErrorMessage} />
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethAddressNameError} disabled={this.props.loading}
+            id="ethAddressName" placeholder="Ethereum Address Name" value={this.props.ethAddressName}
+            onChange={(event) => { this.props.handleChange(event, 'ethAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
+            helperText={this.props.ethAddressNameErrorMessage} />
         </Grid>
         {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethereumAddressNameValid?"raised":"flat"} disabled={(!this.props.ethereumAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create address</Button>
+          <Button size="small" variant={this.props.ethAddressNameValid?"raised":"flat"} disabled={(!this.props.ethAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create address</Button>
         </Grid>
       </Grid>
     );

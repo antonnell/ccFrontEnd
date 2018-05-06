@@ -34,17 +34,17 @@ class CreateWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanchainAddressNameError} disabled={this.props.loading}
-            id="wanchainAddressName" placeholder="Wanchain Address Name" value={this.props.wanchainAddressName}
-            onChange={(event) => { this.props.handleChange(event, 'wanchainAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
-            helperText={this.props.wanchainAddressNameErrorMessage} />
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanAddressNameError} disabled={this.props.loading}
+            id="wanAddressName" placeholder="Wanchain Address Name" value={this.props.wanAddressName}
+            onChange={(event) => { this.props.handleChange(event, 'wanAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
+            helperText={this.props.wanAddressNameErrorMessage} />
         </Grid>
         {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanchainAddressNameValid?"raised":"flat"} disabled={(!this.props.wanchainAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
+          <Button size="small" variant={this.props.wanAddressNameValid?"raised":"flat"} disabled={(!this.props.wanAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
         </Grid>
       </Grid>
     );

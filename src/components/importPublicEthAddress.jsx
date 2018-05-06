@@ -28,16 +28,16 @@ class ImportPublicEthAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethereumAddressError} disabled={this.props.loading}
-            id="ethereumAddress" placeholder="Ethereum Public Address" value={this.props.ethereumAddress}
-            onChange={(event) => { this.props.handleChange(event, 'ethereumAddress'); }} onBlur={this.props.validateETHAddress} margin="normal" onKeyDown={this.props.importPublicEthAddressKeyDown}
-            helperText={this.props.ethereumAddressErrorMessage} />
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethPublicAddressError} disabled={this.props.loading}
+            id="ethPublicAddress" placeholder="Ethereum Public Address" value={this.props.ethPublicAddress}
+            onChange={(event) => { this.props.handleChange(event, 'ethPublicAddress'); }} onBlur={this.props.validateETHAddress} margin="normal" onKeyDown={this.props.importPublicEthAddressKeyDown}
+            helperText={this.props.ethPublicAddressErrorMessage} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethereumAddressValid?"raised":"flat"} disabled={!this.props.ethereumAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.ethPublicAddressValid?"raised":"flat"} disabled={!this.props.ethPublicAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

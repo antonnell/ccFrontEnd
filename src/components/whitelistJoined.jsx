@@ -53,7 +53,7 @@ class WhitelistJoined extends Component {
         <Grid item xs={12} align='center' style={{ marginTop: '24px' }}>
           <div style={{border: '1px solid #000', padding: '12px'}}>
             <Typography variant="title" noWrap>
-              Whitelisted Address: {this.props.ethereumAddress}
+              Whitelisted Address: {this.props.ethPublicAddress}
             </Typography>
           </div>
         </Grid>
@@ -77,7 +77,7 @@ class WhitelistJoined extends Component {
         <Grid item xs={12} align='center' style={{ marginTop: '24px' }}>
           <div style={{border: '1px solid #000', padding: '12px'}}>
             <Typography variant="title" noWrap>
-              Wanchain Address: {this.props.wanchainAddress}
+              Wanchain Address: {this.props.wanPublicAddress}
             </Typography>
           </div>
         </Grid>
