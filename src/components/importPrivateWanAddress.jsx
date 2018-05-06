@@ -36,25 +36,28 @@ class ImportPrivateWanAddress extends Component {
     }
 
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
-            Great! We need to know your Wanchain address.
+            No problems! Then we just need to know your Wanchain address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
           <Typography variant="body2">
-            Please provide us with the details of your Wanchain Address. We will store them safely on our system and you will be able to interact with your address later on.
+            Please provide us with your Wanchain Address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          {input}
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanchainAddressError} disabled={this.props.loading}
+            id="wanchainAddress" placeholder="Wanchain Public Address" value={this.props.wanchainAddress}
+            onChange={(event) => { this.props.handleChange(event, 'wanchainAddress'); }} onBlur={this.props.validateWANAddress} margin="normal" onKeyDown={this.props.importPublicWanAddressKeyDown}
+            helperText={this.props.wanchainAddressErrorMessage} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="secondary" onClick={this.props.importPrivateWanAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.wanchainAddressValid?"raised":"flat"} disabled={!this.props.wanchainAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

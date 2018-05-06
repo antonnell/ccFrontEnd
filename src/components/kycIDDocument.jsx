@@ -19,7 +19,7 @@ class KYCIDDOcument extends Component {
       imagePreview = <img src={this.props.idDocumentImagePreviewUrl} style={{width: '100%', height: '100%', margin: 'auto'}} alt="upload" />;
     }
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             You're almost done.
@@ -49,7 +49,7 @@ class KYCIDDOcument extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
+          <Button size="small" variant={this.state.imagePreviewUrl?"raised":"flat"} disabled={!this.state.imagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
         </Grid>
       </Grid>
     );
