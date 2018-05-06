@@ -9,7 +9,7 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'http://18.221.173.171:81/';
+let apiUrl = 'https://api.cryptocurve.network/';
 
 var Store = () => {
 
@@ -38,7 +38,7 @@ var Store = () => {
   }
 
   this.createWanAddress = function(payload) {
-    var url = 'ethereum/createAddress'
+    var url = 'wanchain/createAddress'
     var postJson = {
       username: payload.content.username,
       isPrimary: payload.content.isPrimary,
@@ -51,39 +51,15 @@ var Store = () => {
       payload)
   }
 
-  this.importAddress = function(payload) {
-    var url = 'ethereum/importAddress'
-    var postJson = {
-      //no documentation on this?
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
   this.sendEther = function(payload) {
-    var url = 'ethereum/sendEther'
+    var url = 'wanchain/sendWan'
     var postJson = {
       address: payload.content.address,
       contactUserName: payload.content.contactUserName,
-      ethAddressID: payload.content.ethAddressID,
+      wanAddressID: payload.content.wanAddressID,
       password: payload.content.password,
       amount: payload.content.amount,
       gwei: payload.content.gwei
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.createPoolingContract = function(payload) {
-    var url = 'ethereum/createPoolingContract'
-    var postJson = {
-      //no documentation on this?
     }
 
     this.callApi(url,
@@ -119,6 +95,17 @@ var Store = () => {
         method: method,
         body: postData,
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+    })
+    .then(res => {
+      if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+
+      if (res.ok) {
+        return res;
+      } else {
+        throw Error(res.statusText);
+      }
     })
     .then(res => res.json())
     .then((res) => {

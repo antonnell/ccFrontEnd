@@ -5,6 +5,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Card, {  CardContent } from 'material-ui/Card';
+import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
@@ -38,11 +39,12 @@ class CreateWanAddress extends Component {
             onChange={(event) => { this.props.handleChange(event, 'wanchainAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
             helperText={this.props.wanchainAddressNameErrorMessage} />
         </Grid>
+        {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanchainAddressNameValid?"raised":"flat"} disabled={!this.props.wanchainAddressNameValid} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
+          <Button size="small" variant={this.props.wanchainAddressNameValid?"raised":"flat"} disabled={(!this.props.wanchainAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
         </Grid>
       </Grid>
     );

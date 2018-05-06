@@ -5,6 +5,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Card, {  CardContent } from 'material-ui/Card';
+import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
@@ -16,7 +17,7 @@ class CreateEthAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{position: 'relative'}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Good choice! Let use create an address for you.
@@ -38,11 +39,12 @@ class CreateEthAddress extends Component {
             onChange={(event) => { this.props.handleChange(event, 'ethereumAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
             helperText={this.props.ethereumAddressNameErrorMessage} />
         </Grid>
+        {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethereumAddressNameValid?"raised":"flat"} disabled={!this.props.ethereumAddressNameValid} color="primary" onClick={this.props.createEthAddress}>Create address</Button>
+          <Button size="small" variant={this.props.ethereumAddressNameValid?"raised":"flat"} disabled={(!this.props.ethereumAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create address</Button>
         </Grid>
       </Grid>
     );

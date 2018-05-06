@@ -41,14 +41,13 @@ class Account extends Component {
   }
 
   renderContacts() {
-
-    if((this.props.contacts == null || this.props.contacts.length == 0) && this.props.dataLoading == true) {
+    if(this.props.contacts == null) {
       return (<Grid item xs={12} xl={12} align='left' style={{minHeight: '190px', position: 'relative'}}>
-        {this.props.dataLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
+        <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
       </Grid>);
     }
 
-    if(this.props.contacts == null || this.props.contacts.length == 0) {
+    if(this.props.contacts.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
         <Typography variant="display1" >Oh no, we couldn't find any contacts for you. Why don't you create one?</Typography>
       </Grid>);
@@ -123,8 +122,9 @@ class Account extends Component {
             {this.renderContacts()}
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center'>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '500px'}}>
           {this.renderCreate()}
+          {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>
         <Tooltip title='Create Contact'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createClicked}>

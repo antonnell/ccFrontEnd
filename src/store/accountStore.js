@@ -148,6 +148,17 @@ var Store = () => {
         body: postData,
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
     })
+    .then(res => {
+      if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+
+      if (res.ok) {
+        return res;
+      } else {
+        throw Error(res.statusText);
+      }
+    })
     .then(res => res.json())
     .then((res) => {
       emitter.emit(payload.type, null, res)

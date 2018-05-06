@@ -8,11 +8,17 @@ let ethDispatcher = require('../store/ethStore.js').default.dispatcher
 let EthAccounts = createReactClass({
   getInitialState() {
     return {
-      dataLoading: true,
       createLoading: false,
       error: null,
       tabValue: 0,
-      ethAccounts: []
+      addressName: '',
+      addressNameError: false,
+      primary: false,
+      primaryError: false,
+      privateKey: '',
+      privateKeyError: false,
+      publicAddress: '',
+      publicAddressError: false
     }
   },
   render() {
@@ -23,29 +29,69 @@ let EthAccounts = createReactClass({
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
         tabValue={this.state.tabValue}
-        dataLoading={this.state.dataLoading}
         createLoading={this.state.createLoading}
         error={this.state.error}
-        addresses={this.state.ethAddresses}
+        addresses={this.props.ethAddresses}
+        addressName={this.state.addressName}
+        addressNameError={this.state.addressNameError}
+        primary={this.state.primary}
+        privateKey={this.state.privateKey}
+        privateKeyError={this.state.privateKeyError}
+        publicAddress={this.state.publicAddress}
+        publicAddressError={this.state.publicAddressError}
       />
     )
   },
 
   componentWillMount() {
-    ethEmitter.on('getEthAddress', this.getEthAddressReturned);
-
-    var content = {id: this.props.user.id};
-    ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
+    ethEmitter.on('importEthAddress', this.importEthAddressReturned);
   },
 
-  getEthAddressReturned(error, data) {
-    this.setState({dataLoading: false});
+  resetInputs() {
+    this.setState({
+      addressName: '',
+      addressNameError: false,
+      primary: false,
+      primaryError: false,
+      privateKey: '',
+      privateKeyError: false,
+      publicAddress: '',
+      publicAddressError: false
+    })
+  },
+
+  createEthAddressReturned(error, data) {
+    this.setState({createLoading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
-      this.setState({ethAddresses: data.ethAddresses})
+      this.resetInputs();
+      var content = {id: this.props.user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+
+      //show sncakbar?
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
+  importEthAddressReturned(error, data) {
+    this.setState({createLoading: false});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.resetInputs();
+      var content = {id: this.props.user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+
+      //show sncakbar?
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -60,7 +106,23 @@ let EthAccounts = createReactClass({
   },
 
   createImportClicked() {
-    //ok?
+    if(this.state.tabValue === 0) {
+      this.createEthAddress();
+    } else {
+      this.importEthAddress();
+    }
+  },
+
+  createEthAddress() {
+    this.setState({createLoading: true});
+    var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
+    ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+  },
+
+  importEthAddress() {
+    this.setState({createLoading: true});
+    var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
+    ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
   },
 
   handleTabChange(event, tabValue) {
@@ -74,6 +136,10 @@ let EthAccounts = createReactClass({
       });
     }
   },
+
+  handleChecked (event, name) {
+    this.setState({ [name]: event.target.checked });
+  }
 
 })
 

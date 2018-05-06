@@ -90,17 +90,25 @@ class App extends Component {
 
     this.state = {
       drawerOpen: false,
-      user: user
+      user: user,
+      ethAddresses: null,
+      wanAddresses: null,
+      contacts: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.locationHashChanged = this.locationHashChanged.bind(this);
 
     this.setUser = this.setUser.bind(this);
+    this.logUserOut = this.logUserOut.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.navClicked = this.navClicked.bind(this);
+
+    this.getEthAddressReturned = this.getEthAddressReturned.bind(this);
+    this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
+    this.getContactsReturned = this.getContactsReturned.bind(this);
   };
 
   componentWillMount() {
@@ -111,11 +119,14 @@ class App extends Component {
       }
     }
 
-    var userString = sessionStorage.getItem('cc_user');
-    if(userString) {
-      var user = JSON.parse(userString);
-      this.setUser(user);
-    }
+    contactsEmitter.on('Unauthorised', this.logUserOut);
+    ethEmitter.on('Unauthorised', this.logUserOut);
+    wanEmitter.on('Unauthorised', this.logUserOut);
+    accountEmitter.on('Unauthorised', this.logUserOut);
+
+    ethEmitter.on('getEthAddress', this.getEthAddressReturned);
+    wanEmitter.on('getWanAddress', this.getWanAddressReturned);
+    contactsEmitter.on('getContacts', this.getContactsReturned);
   };
 
   componentDidMount() {
@@ -127,10 +138,67 @@ class App extends Component {
 
     var loader = document.getElementById("loader")
     document.body.removeChild(loader);
+
+    var userString = sessionStorage.getItem('cc_user');
+    if(userString) {
+      var user = JSON.parse(userString);
+      this.setUser(user);
+    }
   };
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
+  };
+
+  getUserDetails(user) {
+    var content = {id: user.id};
+    ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
+    wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
+
+    var contactsContent = {username: user.username};
+    contactsDispatcher.dispatch({type: 'getContacts', content: contactsContent, token: user.token });
+  };
+
+  getEthAddressReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({ethAddresses: data.ethAddresses})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getWanAddressReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({wanAddresses: data.wanAddresses})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getContactsReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({contacts: data.contacts})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   };
 
   updateWindowDimensions() {
@@ -160,15 +228,22 @@ class App extends Component {
     window.location.hash=currentScreen;
   };
 
+  logUserOut() {
+    sessionStorage.removeItem('cc_user');
+    window.location.hash = 'welcome';
+  };
+
   setUser(user) {
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
+    this.getUserDetails(user);
   };
 
   locationHashChanged() {
     var currentScreen = window.location.hash.substring(1);
-    if(['', 'welcome'].includes(currentScreen)) {
-      this.setState({drawerOpen: false, user: null})
+    if(['', 'welcome', 'logOut'].includes(currentScreen)) {
+      sessionStorage.removeItem('cc_user');
+      this.setState({drawerOpen: false, user: null});
       this.setState({currentScreen: 'welcome'});
     } else {
       if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
@@ -219,7 +294,7 @@ class App extends Component {
         {this.renderAppBar()}
         {this.renderDrawer()}
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '584px', position: 'relative'}}>
+        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '564px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
           </Grid>
@@ -242,17 +317,17 @@ class App extends Component {
       case 'resetPassword':
         return (<ResetPassword />);
       case 'whitelist':
-        return (<Whitelist user={this.state.user} size={this.state.size} />);
+        return (<Whitelist user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} />);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} />);
+      case 'contacts':
+        return (<Contacts user={this.state.user} contacts={this.state.contacts} />);
       case 'updatePassword':
         return (<UpdatePassword user={this.state.user} />);
       case 'manage2FA':
         return (<Manage2FA user={this.state.user} />);
-      case 'contacts':
-        return (<Contacts user={this.state.user} />);
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
       case 'about':
@@ -268,6 +343,8 @@ class App extends Component {
       case 'faq':
         return (<Welcome setUser={this.setUser} />);
       case 'fees':
+        return (<Welcome setUser={this.setUser} />);
+      case 'logOut':
         return (<Welcome setUser={this.setUser} />);
       default:
         return (<Welcome setUser={this.setUser} />);

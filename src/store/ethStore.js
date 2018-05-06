@@ -9,7 +9,7 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'http://18.221.173.171:81/';
+let apiUrl = 'https://api.cryptocurve.network/';
 
 var Store = () => {
 
@@ -127,6 +127,17 @@ var Store = () => {
       method: method,
       body: postData,
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+    })
+    .then(res => {
+      if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+
+      if (res.ok) {
+        return res;
+      } else {
+        throw Error(res.statusText);
+      }
     })
     .then(res => res.json())
     .then((res) => {
