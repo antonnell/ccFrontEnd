@@ -102,7 +102,7 @@ let Whitelist = createReactClass({
 
         },
         ethAddress: {
-
+          
         },
         wanAddress: {
 

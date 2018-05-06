@@ -49,7 +49,7 @@ class KYCIDDOcument extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.state.imagePreviewUrl?"raised":"flat"} disabled={!this.state.imagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
+          <Button size="small" variant={this.props.idDocumentImagePreviewUrl?"raised":"flat"} disabled={!this.props.idDocumentImagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Done</Button>
         </Grid>
       </Grid>
     );
