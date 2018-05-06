@@ -16,7 +16,12 @@ class Welcome extends Component {
   };
 
   render() {
-    var that = this
+    var forgotPasswordClicked = this.props.submitForgotPasswordNavigate
+    var registerClicked = this.props.submitRegisterNavigate
+    if(this.props.loading) {
+      forgotPasswordClicked = null
+      registerClicked = null
+    }
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '100px'}}>
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
@@ -39,7 +44,7 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='right'>
-              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer'}} onClick={this.props.submitForgotPasswordNavigate}>
+              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer'}} onClick={forgotPasswordClicked}>
                 Forgot Password
               </Typography>
             </Grid>
@@ -64,7 +69,7 @@ class Welcome extends Component {
               <Typography color="inherit" style={{fontSize: '12px', width:'75px', display: 'inline-block'}}>
                 No account yet?
               </Typography>
-              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer', width: '60px', display: 'inline-block'}} onClick={this.props.submitRegisterNavigate}>
+              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer', width: '60px', display: 'inline-block'}} onClick={registerClicked}>
                 Create one
               </Typography>
             </Grid>

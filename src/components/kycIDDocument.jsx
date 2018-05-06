@@ -11,34 +11,12 @@ class KYCIDDOcument extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      file: null,
-      imagePreviewUrl: null
-    };
-
-    this._handleImageChange = this._handleImageChange.bind(this);
-  };
-
-  _handleImageChange(e) {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    }
-
-    reader.readAsDataURL(file)
   };
 
   render() {
     var imagePreview = null
-    if(this.state.imagePreviewUrl != null) {
-      imagePreview = <img src={this.state.imagePreviewUrl} style={{width: '100%', height: '100%', margin: 'auto'}} alt="upload" />;
+    if(this.props.idDocumentImagePreviewUrl != null) {
+      imagePreview = <img src={this.props.idDocumentImagePreviewUrl} style={{width: '100%', height: '100%', margin: 'auto'}} alt="upload" />;
     }
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
@@ -58,10 +36,10 @@ class KYCIDDOcument extends Component {
             style={{display: 'none'}}
             id="raised-button-file"
             type="file"
-            onChange={this._handleImageChange}
+            onChange={this.props.uploadIDDocument}
           />
           <label htmlFor="raised-button-file">
-            <Button size="small" variant="raised" color="primary" component="span" onClick={this.props.uploadIDDocument}>Upload Document</Button>
+            <Button size="small" variant="raised" color="primary" component="span">Upload Document</Button>
           </label>
         </Grid>
         <Grid item xs={12} align='center' style={{marginTop: '24px '}}>

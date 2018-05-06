@@ -16,28 +16,23 @@ class ImportPrivateWanAddress extends Component {
 
   render() {
 
-    var input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.loading}
-      id="privateKey" placeholder="Private Key" value={this.props.addressName}
-      onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
-
+    var input = null
     switch (this.props.keyType) {
-      case 'privateKey':
-        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.loading}
-          id="privateKey" placeholder="Private Key" value={this.props.addressName}
-          onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
-        break;
       case 'mnemonic':
-        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.loading}
-          id="privateKey" placeholder="Mnemonic String" value={this.props.addressName}
-          onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanMnemonicError} disabled={this.props.loading}
+          id="wanMnemonic" placeholder="Mnemonic String" value={this.props.wanMnemonic}
+          onChange={(event) => { this.props.handleChange(event, 'wanMnemonic'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
         break;
       case 'jsonV3':
-        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.loading}
-          id="privateKey" placeholder="Enter your JSON" value={this.props.addressName}
-          onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanJSONV3Error} disabled={this.props.loading}
+          id="wanJSONV3" placeholder="Enter your JSON" value={this.props.wanJSONV3}
+          onChange={(event) => { this.props.handleChange(event, 'wanJSONV3'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
         break;
       default:
-
+        input = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPrivateKeyError} disabled={this.props.loading}
+          id="wanPrivateKey" placeholder="Private Key" value={this.props.wanPrivateKey}
+          onChange={(event) => { this.props.handleChange(event, 'wanPrivateKey'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+        break;
     }
 
     return (

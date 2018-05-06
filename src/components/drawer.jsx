@@ -160,7 +160,7 @@ class AppDrawer extends Component {
                   <ListItemText primary="Manage 2FA" />
                 </ListItem>
                 <Divider />
-                <ListItem button onClick={(event) => { this.props.navClicked(event, 'welcome'); }}>
+                <ListItem button onClick={(event) => { this.props.navClicked(event, 'logOut'); }}>
                   <ListItemIcon>
                     <LogoutIcon />
                   </ListItemIcon>

@@ -8,7 +8,6 @@ let contactsDispatcher = require('../store/contactsStore.js').default.dispatcher
 let Contacts = createReactClass({
   getInitialState() {
     return {
-      dataLoading: true,
       createLoading: false,
       error: null,
       username: "",
@@ -19,26 +18,40 @@ let Contacts = createReactClass({
       displayNameErrorText: "",
       notes: "",
       notesError: false,
-      notesErrorText: "",
-      contacts: []
+      notesErrorText: ""
     }
   },
 
   componentWillMount() {
-    contactsEmitter.on('getContacts', this.getContactsReturned);
-
-    var content = {username: this.props.user.username};
-    contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
+    contactsEmitter.on('createContact', this.createContactReturned);
   },
 
-  getContactsReturned(error, data) {
-    this.setState({dataLoading: false})
+  resetInputs() {
+    this.setState({
+      username: "",
+      usernameError: false,
+      usernameErrorText: "",
+      displayName: "",
+      displayNameError: false,
+      displayNameErrorText: "",
+      notes: "",
+      notesError: false,
+      notesErrorText: "",
+    })
+  },
+
+  createContactReturned(error, data) {
+    this.setState({createLoading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
-      this.setState({contacts: data.contacts})
+      this.resetInputs();
+      var content = {username: this.props.user.username};
+      contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
+
+      //show sncakbar?
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -62,10 +75,9 @@ let Contacts = createReactClass({
         notes={this.state.notes}
         notesError={this.state.notesError}
         notesErrorText={this.state.notesErrorText}
-        dataLoading={this.state.dataLoading}
         createLoading={this.state.createLoading}
         error={this.state.error}
-        contacts={this.state.contacts}
+        contacts={this.props.contacts}
       />
     )
   },
@@ -77,7 +89,9 @@ let Contacts = createReactClass({
   },
 
   createClicked() {
-    //ok?
+    this.setState({createLoading: true});
+    var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
+    contactsDispatcher.dispatch({type: 'createContact', content, token: this.props.user.token });
   },
 
   updateNavigateClicked() {

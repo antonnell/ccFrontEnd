@@ -38,7 +38,7 @@ class EthAccounts extends Component {
               <Checkbox
                 disabled={this.props.createLoading}
                 checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChange(event, 'primary'); }}
+                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
                 value="primary"
               />
             }
@@ -58,13 +58,13 @@ class EthAccounts extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressError} disabled={this.props.createLoading}
-            id="address" label="Address" value={this.props.address}
-            onChange={(event) => { this.props.handleChange(event, 'address'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.publicAddressError} disabled={this.props.createLoading}
+            id="publicAddress" label="Public Address" value={this.props.publicAddress}
+            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.createLoading}
-            id="privateKey" label="Private Key" value={this.props.addressName}
+            id="privateKey" label="Private Key" value={this.props.privateKey}
             onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -78,7 +78,7 @@ class EthAccounts extends Component {
               <Checkbox
                 disabled={this.props.createLoading}
                 checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChange(event, 'primary'); }}
+                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
                 value="primary"
               />
             }
@@ -91,13 +91,13 @@ class EthAccounts extends Component {
 
   renderAddresses() {
 
-    if((this.props.addresses == null || this.props.addresses.length == 0) && this.props.dataLoading == true) {
+    if(this.props.addresses == null) {
       return (<Grid item xs={12} xl={12} align='left' style={{minHeight: '190px', position: 'relative'}}>
-        {this.props.dataLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
+        <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
       </Grid>);
     }
 
-    if(this.props.addresses == null || this.props.addresses.length == 0) {
+    if(this.props.addresses.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
         <Typography variant="display1" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>
       </Grid>);
@@ -172,7 +172,7 @@ class EthAccounts extends Component {
             {this.renderAddresses()}
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center'>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '500px'}}>
           <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0} style={{padding: '24px'}}>
             <Tabs
               value={this.props.tabValue}
@@ -184,6 +184,7 @@ class EthAccounts extends Component {
             </Tabs>
             {this.props.tabValue === 0 && this.renderCreate()}
             {this.props.tabValue === 1 && this.renderImport()}
+            {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
         </Grid>
         <Tooltip title='Create Ethereum Address'>

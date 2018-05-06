@@ -29,8 +29,13 @@ import JoinWhitelist from '../components/joinWhitelist.jsx';
 import WhitelistJoined from '../components/whitelistJoined.jsx';
 
 const createReactClass = require('create-react-class')
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+
+let ethEmitter = require('../store/ethStore.js').default.emitter
+let ethDispatcher = require('../store/ethStore.js').default.dispatcher
+
+let wanEmitter = require('../store/wanStore.js').default.emitter
+let wanDispatcher = require('../store/wanStore.js').default.dispatcher
+
 
 let Whitelist = createReactClass({
   getInitialState() {
@@ -41,14 +46,66 @@ let Whitelist = createReactClass({
       whitelistScreen: 'acceptTermsAndConditions',
       activeStep: 0,
       steps: ['Accept Terms and Conditions', 'Setup Ethereum Address', 'Setup Wanchain Address', 'KYC', 'Join the Whitelist'],
-      completed: {}
+      completed: {},
+
+      ethAddressName: '',
+      ethAddressNameError: false,
+      ethPublicAddress: '',
+      ethPublicAddressError: false,
+      ethPrivateKey: '',
+      ethPrivateKeyError: false,
+      ethMnemonic: '',
+      ethMnemonicError: false,
+      ethJSONV3: '',
+      ethJSONV3Error: false,
+
+      wanAddressName: '',
+      wanAddressNameError: false,
+      wanPublicAddress: '',
+      wanPublicAddressError: false,
+      wanPrivateKey: '',
+      wanPrivateKeyError: false,
+      wanMnemonic: '',
+      wanMnemonicError: false,
+      wanJSONV3: '',
+      wanJSONV3Error: false,
+
+      idDocumentFile: null,
+      idDocumentImagePreviewUrl: null,
+
+      photoFile: null,
+      photoImagePreviewUrl: null,
+
+      whitelistObjet: {
+        termsAndConditions: {
+
+        },
+        ethAddress: {
+
+        },
+        wanAddress: {
+
+        },
+        kyc: {
+
+        }
+      }
     };
+  },
+
+  componentWillMount() {
+    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
+    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
   },
 
   acceptTerms() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveEthAddress', activeStep: 1, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.termsAndConditions.accepted = true;
+
+    this.setState({whitelistScreen: 'haveEthAddress', activeStep: 1, completed, whitelistObjet})
   },
 
   navigateHaveEthAddress() {
@@ -61,6 +118,16 @@ let Whitelist = createReactClass({
 
   navigateTermsAndConditions() {
     this.setState({whitelistScreen: 'acceptTermsAndConditions', activeStep: 0})
+  },
+
+  selectEthAddress(address) {
+    var completed = this.state.completed;
+    completed[this.state.activeStep] = true;
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.ethAddress = address;
+
+    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed, whitelistObjet})
   },
 
   navigateExistingEthAddress() {
@@ -83,26 +150,71 @@ let Whitelist = createReactClass({
     this.setState({whitelistScreen: 'createEthAddress'})
   },
 
+  onCreateEthAddressKeyDown(event) {
+    if (event.which == 13) {
+      this.createEthAddress()
+    }
+  },
+
   createEthAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+    this.setState({loading: true});
+    var content = { username: this.props.user.username, name: this.state.ethAddressName, isPrimary: true };
+    ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+  },
+
+  createEthAddressReturned(error, data) {
+    this.setState({loading: false});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+
+      var whitelistObjet = this.state.whitelistObjet;
+      whitelistObjet.ethAddress = { name: this.state.ethAddressName };
+
+      this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed, whitelistObjet})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   },
 
   importPublicEthAddress() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.ethAddress = { publicAddress: this.state.ethPublicAddress };
+
+    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed, whitelistObjet})
   },
 
   importPrivateEthAddress() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.wanAddress = { privateKey: this.state.wanPrivateKey, mnemonic: this.state.wanMnemonic, jsonV3: this.state.jsonV3 };
+
+    this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2, completed, whitelistObjet})
   },
 
   navigateHaveWanAddress() {
     this.setState({whitelistScreen: 'haveWanAddress', activeStep: 2})
+  },
+
+  selectWanAddress(address) {
+    var completed = this.state.completed;
+    completed[this.state.activeStep] = true;
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.wanAddress = address;
+
+    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed, whitelistObjet})
   },
 
   navigateImportPublicWanAddress() {
@@ -129,44 +241,107 @@ let Whitelist = createReactClass({
     this.setState({whitelistScreen: 'createWanAddress'})
   },
 
+  onCreateWanAddressKeyDown(event) {
+    if (event.which == 13) {
+      this.createWanAddress()
+    }
+  },
+
   createWanAddress() {
-    var completed = this.state.completed;
-    completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+    this.setState({loading: true});
+    var content = { username: this.props.user.username, name: this.state.wanAddressName, isPrimary: true };
+    wanDispatcher.dispatch({type: 'createWanAddress', content, token: this.props.user.token });
+  },
+
+  createWanAddressReturned(error, data) {
+    this.setState({loading: false});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var completed = this.state.completed;
+      completed[this.state.activeStep] = true;
+
+      var whitelistObjet = this.state.whitelistObjet;
+      whitelistObjet.wanAddress = { name: this.state.wanAddressName };
+
+      this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed, whitelistObjet})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   },
 
   importPublicWanAddress() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.wanAddress = { publicAddress: this.state.wanPublicAddress };
+
+    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed, whitelistObjet})
   },
 
   importPrivateWanAddress() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.wanAddress = { privateKey: this.state.wanPrivateKey, mnemonic: this.state.wanMnemonic, jsonV3: this.state.jsonV3 };
+
+    this.setState({whitelistScreen: 'kycIDDOcument', activeStep: 3, completed, whitelistObjet})
   },
 
   navigateKYCIDDocument() {
     this.setState({whitelistScreen: 'kycIDDOcument'})
   },
 
-  uploadIDDocument() {
-    //something should happen
+  uploadIDDocument(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        idDocumentFile: file,
+        idDocumentImagePreviewUrl: reader.result
+      });
+    }
+
+    reader.readAsDataURL(file)
   },
 
   navigateUploadPhoto() {
     this.setState({whitelistScreen: 'kycPhoto'})
   },
 
-  uploadPhoto() {
-    //something should happen
+  uploadPhoto(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        photoFile: file,
+        photoImagePreviewUrl: reader.result
+      });
+    }
+
+    reader.readAsDataURL(file)
   },
 
   navigateJoinWhitelist() {
     var completed = this.state.completed;
     completed[this.state.activeStep] = true;
-    this.setState({whitelistScreen: 'whitelistJoined', activeStep: 4, completed})
+
+    var whitelistObjet = this.state.whitelistObjet;
+    whitelistObjet.kyc = { idDocument: this.state.idDocumentFile, photo: this.state.photoFile };
+
+    this.setState({whitelistScreen: 'whitelistJoined', activeStep: 4, completed, whitelistObjet})
   },
 
   joinWhitelist() {
@@ -274,6 +449,7 @@ let Whitelist = createReactClass({
   },
 
   renderScreen() {
+    console.log(this.state.whitelistObjet)
     switch (this.state.whitelistScreen) {
       case 'acceptTermsAndConditions':
         return (<AcceptTermsAndConditions
@@ -282,6 +458,8 @@ let Whitelist = createReactClass({
         />);
       case 'haveEthAddress':
         return (<HaveEthAddress
+          ethAddresses={this.props.ethAddresses}
+          selectAddress={this.selectEthAddress}
           navigateBack={this.navigateTermsAndConditions}
           navigateExistingEthAddress={this.navigateExistingEthAddress}
           navigateCreateEthAddress={this.navigateCreateEthAddress}
@@ -297,6 +475,9 @@ let Whitelist = createReactClass({
           navigateBack={this.navigateExistingEthAddress}
           importPublicEthAddress={this.importPublicEthAddress}
           importPublicEthAddressKeyDown={this.importPublicEthAddressKeyDown}
+          handleChange={this.handleChange}
+          ethPublicAddress={this.state.ethPublicAddress}
+          ethPublicAddressError={this.state.ethPublicAddressError}
           />);
       case 'importPrivateTypeEthAddress':
         return (<ImportPrivateTypeEthAddress
@@ -305,20 +486,32 @@ let Whitelist = createReactClass({
           />);
       case 'importPrivateEthAddress':
         return (<ImportPrivateEthAddress
+          handleChange={this.handleChange}
           navigateBack={this.navigateImportPrivateTypeEthAddress}
           importPrivateEthAddress={this.importPrivateEthAddress}
           onImportKeyDown={this.importPrivateEthAddressKeyDown}
           keyType={this.state.ethPrivateKeyType}
+          ethPrivateKey={this.state.ethPrivateKey}
+          ethPrivateKeyError={this.state.ethPrivateKeyError}
+          ethMnemonic={this.state.ethMnemonic}
+          ethMnemonicError={this.state.ethMnemonicError}
+          ethJSONV3={this.state.ethJSONV3}
+          ethJSONV3Error={this.state.ethJSONV3Error}
           />);
       case 'createEthAddress':
         return (<CreateEthAddres
+          loading={this.state.loading}
           handleChange={this.handleChange}
           createEthAddress={this.createEthAddress}
           navigateBack={this.navigateHaveEthAddress}
           onCreateKeyDown={this.createEthAddressKeyDown}
+          ethAddressName={this.state.ethAddressName}
+          ethAddressNameError={this.state.ethAddressNameError}
           />);
       case 'haveWanAddress':
         return (<HaveWanAddress
+          wanAddresses={this.props.wanAddresses}
+          selectAddress={this.selectWanAddress}
           navigateBack={this.navigateHaveEthAddress}
           navigateExistingWanAddress={this.navigateExistingWanAddress}
           navigateCreateWanAddress={this.navigateCreateWanAddress}
@@ -334,6 +527,9 @@ let Whitelist = createReactClass({
           navigateBack={this.navigateExistingWanAddress}
           importPublicWanAddress={this.importPublicWanAddress}
           importPublicWanAddressKeyDown={this.importPublicWanAddressKeyDown}
+          handleChange={this.handleChange}
+          wanPublicAddress={this.state.wanPublicAddress}
+          wanPublicAddressError={this.state.wanPublicAddressError}
           />)
       case 'importPrivateTypeWanAddress':
         return (<ImportPrivateTypeWanAddress
@@ -342,13 +538,21 @@ let Whitelist = createReactClass({
           />)
       case 'importPrivateWanAddress':
         return (<ImportPrivateWanAddress
+          handleChange={this.handleChange}
           navigateBack={this.navigateImportPrivateTypeWanAddress}
           importPrivateWanAddress={this.importPrivateWanAddress}
           onImportKeyDown={this.importPrivateWanAddressKeyDown}
           keyType={this.state.wanPrivateKeyType}
+          wanPrivateKey={this.state.wanPrivateKey}
+          wanPrivateKeyError={this.state.wanPrivateKeyError}
+          wanMnemonic={this.state.wanMnemonic}
+          wanMnemonicError={this.state.wanMnemonicError}
+          wanJSONV3={this.state.wanJSONV3}
+          wanJSONV3Error={this.state.wanJSONV3Error}
           />)
       case 'createWanAddress':
         return (<CreateWanAddress
+          loading={this.state.loading}
           handleChange={this.handleChange}
           createWanAddress={this.createWanAddress}
           navigateBack={this.navigateHaveWanAddress}
@@ -359,12 +563,16 @@ let Whitelist = createReactClass({
           navigateBack={this.navigateHaveWanAddress}
           uploadIDDocument={this.uploadIDDocument}
           navigateUploadPhoto={this.navigateUploadPhoto}
+          idDocumentFile={this.state.idDocumentFile}
+          idDocumentImagePreviewUrl={this.state.idDocumentImagePreviewUrl}
           />)
       case 'kycPhoto':
         return (<KYCPhoto
           navigateBack={this.navigateKYCIDDocument}
           uploadPhoto={this.uploadPhoto}
           navigateJoinWhitelist={this.navigateJoinWhitelist}
+          photoFile={this.state.photoFile}
+          photoImagePreviewUrl={this.state.photoImagePreviewUrl}
           />)
       case 'joinWhitelist':
         return (<JoinWhitelist

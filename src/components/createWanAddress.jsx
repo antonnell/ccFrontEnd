@@ -5,6 +5,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Card, {  CardContent } from 'material-ui/Card';
+import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
@@ -32,11 +33,12 @@ class CreateWanAddress extends Component {
             id="addressName" placeholder="Address Name" value={this.props.addressName}
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
         </Grid>
+        {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.createWanAddress}>Create address</Button>
+          <Button size="small" variant="raised" color="primary" onClick={this.props.createWanAddress} disabled={this.props.loading}>Create address</Button>
         </Grid>
       </Grid>
     );

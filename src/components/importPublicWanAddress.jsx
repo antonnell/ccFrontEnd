@@ -28,9 +28,9 @@ class ImportPublicWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.addressError} disabled={this.props.loading}
-            id="address" placeholder="Wanchain Public Address" value={this.props.address}
-            onChange={(event) => { this.props.handleChange(event, 'address'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPublicAddressError} disabled={this.props.loading}
+            id="wanPublicAddress" placeholder="Wanchain Public Address" value={this.props.wanPublicAddress}
+            onChange={(event) => { this.props.handleChange(event, 'wanPublicAddress'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
