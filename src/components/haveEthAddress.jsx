@@ -40,9 +40,10 @@ class HaveEthAddress extends Component {
 
   renderAddresses() {
     return this.props.ethAddresses.map((address) => {
+      console.log(address)
       return (
         <ListItem key={address.address} button onClick={(event) => { this.props.selectAddress(address); }}>
-          <ListItemText primary={address.name} secondary={address.address} />
+          <ListItemText primary={address.name} secondary={address.address + ": " + address.balance + " ETH"} />
         </ListItem>
       )
     })
@@ -50,7 +51,7 @@ class HaveEthAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Next, we need to know your Ethereum address.

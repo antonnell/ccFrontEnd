@@ -16,7 +16,7 @@ class ImportPublicWanAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Perfect! Then we just need to know your Wanchain address.
@@ -28,10 +28,10 @@ class ImportPublicWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPublicAddressAddressError} disabled={this.props.loading}
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPublicAddressError} disabled={this.props.loading}
             id="wanPublicAddress" placeholder="Wanchain Public Address" value={this.props.wanPublicAddress}
             onChange={(event) => { this.props.handleChange(event, 'wanPublicAddress'); }} margin="normal" onKeyDown={this.props.onImportKeyDown}
-            helperText={this.props.wanPublicAddressAddressErrorMessage} />
+            helperText={this.props.wanPublicAddressErrorMessage} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>

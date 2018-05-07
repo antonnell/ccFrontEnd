@@ -22,7 +22,7 @@ class HaveWanAddress extends Component {
       }
     } else {
       this.state = {
-        renderMessage: 'Do you have an Wanchain Address, or would you like us to create one for you?'
+        renderMessage: 'Do you have a Wanchain Address, or would you like us to create one for you?'
       }
     }
   };
@@ -49,7 +49,7 @@ class HaveWanAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Next, we need to know your Wanchain address.

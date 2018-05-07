@@ -17,7 +17,7 @@ class CreateWanAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Good choice! Let create a new Wanchain account.
