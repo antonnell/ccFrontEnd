@@ -210,7 +210,7 @@ var Store = () => {
       method: 'POST',
       body: payload.content.data,
       headers: { 'Authorization': 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx' },
-    }) 
+    })
     .then(res => res.json())
     .then(json => console.log(json));*/
 
@@ -224,8 +224,8 @@ var Store = () => {
       contentType: false,
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx' )
-        xhr.setRequestHeader( 'x-access-token': payload.token )
-        xhr.setRequestHeader( 'x-key': payload.tokenKey )
+        xhr.setRequestHeader('x-access-token', payload.token )
+        xhr.setRequestHeader('x-key', payload.tokenKey )
       },
       success: (res) => { emitter.emit(func, null, res) },
       error: (err) => { emitter.emit(func, err, null) },

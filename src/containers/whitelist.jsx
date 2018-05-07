@@ -580,7 +580,8 @@ let Whitelist = createReactClass({
     var data = new FormData()
     data.append('id', file)
 
-    whitelistDispatcher.dispatch({ type: 'uploadFile', content:{ data:data, fileType: 'ID', emailAddress: this.props.user.email } })
+    console.log(this.props.user)
+    whitelistDispatcher.dispatch({ type: 'uploadFile', content:{ data:data, fileType: 'ID', emailAddress: this.props.user.email }, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey })
   },
 
   uploadFileIDReturned(error, data) {
@@ -623,7 +624,7 @@ let Whitelist = createReactClass({
     var data = new FormData()
     data.append('kyc', file)
 
-    whitelistDispatcher.dispatch({ type: 'uploadFile', content:{ data:data, fileType: 'KYC', emailAddress: this.props.user.email } })
+    whitelistDispatcher.dispatch({ type: 'uploadFile', content:{ data:data, fileType: 'KYC', emailAddress: this.props.user.email }, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey })
   },
 
   uploadFileKYCReturned(error, data) {
