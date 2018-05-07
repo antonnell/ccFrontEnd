@@ -14,7 +14,7 @@ class AcceptTermsAndConditions extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Congratulations on being selected for the CryptoCurve presale! Just a few steps to make sure we have everything we need.
