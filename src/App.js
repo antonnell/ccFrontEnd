@@ -43,6 +43,14 @@ const theme = createMuiTheme({
   overrides: {
     MuiStepIcon: {
       root: {
+        '&-active': {
+          color: "#2ad4dc"
+        }
+      },
+      active: {
+        color: "#2ad4dc !important"
+      },
+      completed: {
         color: "#2ad4dc !important"
       }
     },
