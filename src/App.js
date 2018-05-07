@@ -41,6 +41,11 @@ let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatche
 
 const theme = createMuiTheme({
   overrides: {
+    MuiStepIcon: {
+      root: {
+        color: "#2ad4dc !important"
+      }
+    },
     MuiInput: {
       underline: {
         '&:before': { //underline color when textfield is inactive

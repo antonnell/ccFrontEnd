@@ -4,7 +4,7 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import Card, {  CardContent } from 'material-ui/Card';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 
 const styles = {};
 
@@ -30,7 +30,7 @@ class HaveEthAddress extends Component {
 
   renderMessage() {
     if(this.props.ethAddresses != null && this.props.ethAddresses.length > 0) {
-      return (<List component="nav">
+      return (<List component="nav" style={{maxWidth:400}}>
         {this.renderAddresses()}
       </List>)
     } else {
@@ -43,7 +43,10 @@ class HaveEthAddress extends Component {
       console.log(address)
       return (
         <ListItem key={address.address} button onClick={(event) => { this.props.selectAddress(address); }}>
-          <ListItemText primary={address.name} secondary={address.address + ": " + address.balance + " ETH"} />
+          <ListItemText primary={address.name} secondary={address.address} />
+            <ListItemSecondaryAction>
+              {address.balance+" ETH"}
+            </ListItemSecondaryAction>
         </ListItem>
       )
     })
