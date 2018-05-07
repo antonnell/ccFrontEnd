@@ -7,9 +7,6 @@ import TheAppBar from './containers/applicationBar.jsx';
 import AppDrawer from './containers/drawer.jsx';
 import AppFooter from './containers/footer.jsx';
 
-import PrivacyPolicy from './components/privacyPolicy.jsx';
-import ContactUs from './components/contactUs.jsx';
-
 import Welcome from './containers/welcome.jsx';
 import RegisterAccount from './containers/registerAccount.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
@@ -22,6 +19,11 @@ import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
 
+import ComingSoon from './components/comingSoon.jsx';
+import PrivacyPolicy from './components/privacyPolicy.jsx';
+import ContactUs from './components/contactUs.jsx';
+var sha256 = require('sha256');
+
 let accountEmitter = require('./store/accountStore.js').default.emitter
 let accountDispatcher = require('./store/accountStore.js').default.dispatcher
 
@@ -33,6 +35,9 @@ let ethDispatcher = require('./store/ethStore.js').default.dispatcher
 
 let wanEmitter = require('./store/wanStore.js').default.emitter
 let wanDispatcher = require('./store/wanStore.js').default.dispatcher
+
+let whitelistEmitter = require('./store/whitelistStore.js').default.emitter
+let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatcher
 
 const theme = createMuiTheme({
   overrides: {
@@ -93,13 +98,15 @@ class App extends Component {
       user: user,
       ethAddresses: null,
       wanAddresses: null,
-      contacts: null
+      contacts: null,
+      whitelistState: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.locationHashChanged = this.locationHashChanged.bind(this);
 
     this.setUser = this.setUser.bind(this);
+    this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
@@ -134,6 +141,8 @@ class App extends Component {
     ethEmitter.on('getEthAddress', this.getEthAddressReturned);
     wanEmitter.on('getWanAddress', this.getWanAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
+
+    whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
   };
 
   componentDidMount() {
@@ -149,6 +158,14 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
+    contactsEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('Unauthorised');
+    wanEmitter.removeAllListeners('Unauthorised');
+    accountEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('getEthAddress');
+    wanEmitter.removeAllListeners('getWanAddress');
+    contactsEmitter.removeAllListeners('getContacts');
+    whitelistEmitter.removeAllListeners('whitelistCheck');
   };
 
   getUserDetails(user) {
@@ -158,6 +175,17 @@ class App extends Component {
 
     var contactsContent = {username: user.username};
     contactsDispatcher.dispatch({type: 'getContacts', content: contactsContent, token: user.token });
+
+    if(this.state.whitelistState == null) {
+      //maybe get whitelistState from here if whitelistState is null
+      var whitelistContent = { emailAddress: user.email };
+      whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent });
+    }
+  };
+
+  whitelistCheckReturned(error, data) {
+    console.log(error)
+    console.log(data)
   };
 
   getEthAddressReturned(error, data) {
@@ -240,6 +268,23 @@ class App extends Component {
     this.getUserDetails(user);
   };
 
+  setWhitelistState(whitelistState) {
+    if(whitelistState != null && whitelistState.activeStep == null) {
+      whitelistState.activeStep = 0;
+      whitelistState.completed = {};
+    } else if (whitelistState != null) {
+      var user = this.state.user;
+      user.whitelistToken = whitelistState.jwt.token;
+      user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
+
+      delete whitelistState.jwt;
+
+      this.setState({user});
+      sessionStorage.setItem('cc_user', JSON.stringify(user));
+    }
+    this.setState({whitelistState});
+  };
+
   locationHashChanged() {
     var currentScreen = window.location.hash.substring(1);
     if(['', 'welcome', 'logOut'].includes(currentScreen)) {
@@ -273,6 +318,7 @@ class App extends Component {
     var drawer = null
     if(this.state.user != null) {
       drawer = (<AppDrawer
+        canWhitelist={this.state.whitelistState != null}
         navClicked={this.navClicked}
         currentScreen={this.state.currentScreen}
         closeDrawer={this.closeDrawer}
@@ -285,6 +331,7 @@ class App extends Component {
 
   renderFooter() {
     return <AppFooter
+      user={this.state.user}
       navClicked={this.navClicked} />
   };
 
@@ -308,9 +355,9 @@ class App extends Component {
   renderScreen() {
     switch (this.state.currentScreen) {
       case 'welcome':
-        return (<Welcome setUser={this.setUser} />);
+        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       case 'registerAccount':
-        return (<RegisterAccount setUser={this.setUser} />);
+        return (<RegisterAccount setUser={this.setUser} setWhitelistState={this.setWhitelistState}/>);
       case 'forgotPassword':
         return (<ForgotPassword />);
       case 'forgotPasswordDone':
@@ -318,7 +365,7 @@ class App extends Component {
       case 'resetPassword':
         return (<ResetPassword />);
       case 'whitelist':
-        return (<Whitelist user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
+        return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} />);
       case 'wanAccounts':
@@ -331,24 +378,26 @@ class App extends Component {
         return (<Manage2FA user={this.state.user} />);
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
+      case 'manageEthPools':
+        return (<ComingSoon />);
       case 'about':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'press':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'contactUs':
         return (<ContactUs />);
       case 'bugBounty':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'blog':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'faq':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'fees':
-        return (<Welcome setUser={this.setUser} />);
+        return (<ComingSoon />);
       case 'logOut':
-        return (<Welcome setUser={this.setUser} />);
+        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:
-        return (<Welcome setUser={this.setUser} />);
+        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
     }
   }
 }

@@ -3,6 +3,12 @@ import RegisterAccountComponent from '../components/registerAccount'
 const createReactClass = require('create-react-class')
 let emitter = require('../store/accountStore.js').default.emitter
 let dispatcher = require('../store/accountStore.js').default.dispatcher
+let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
+let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
+var crypto = require('crypto');
+var bip39 = require('bip39');
+var sha256 = require('sha256');
+var crypto = require('crypto');
 
 const email = require("email-validator");
 
@@ -11,7 +17,6 @@ let RegisterAccount = createReactClass({
     return {
       loading: false,
       error: null,
-
       username: '',
       usernameError: false,
       emailAddress: '',
@@ -28,10 +33,14 @@ let RegisterAccount = createReactClass({
 
   componentWillMount() {
     emitter.on('register', this.registerReturned);
+    whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
+    whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
   },
 
   componentWillUnmount() {
     emitter.removeAllListeners('register');
+    whitelistEmitter.removeAllListeners('whitelistCheck');
+    whitelistEmitter.removeAllListeners('Unauthorised');
   },
 
   render() {
@@ -81,8 +90,6 @@ let RegisterAccount = createReactClass({
 
       } else if (!email.validate(that.state.emailAddress)) {
         //that.setState({emailAddressError: true, emailAddressErrorMessage: "Email address provided is not a valid email address"});
-      } else if (that.state.emailAddress !== 'andre@cryptocurve.io') {
-        that.setState({emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"});
       } else {
         that.setState({emailAddressError: false, emailAddressErrorMessage: "The email address that is approved for Presale participation"})
       }
@@ -110,9 +117,6 @@ let RegisterAccount = createReactClass({
     } else if (!email.validate(this.state.emailAddress)) {
       this.setState({emailAddressError: true, emailAddressErrorMessage: "Email address provided is not a valid email address"});
       error = true;
-    } else if (this.state.emailAddress !== 'andre@cryptocurve.io') {
-      this.setState({emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"});
-      error = true;
     }
     if(this.state.password == '') {
       this.setState({passwordError: true, passwordErrorMessage: "Your password is a required field"});
@@ -132,13 +136,56 @@ let RegisterAccount = createReactClass({
 
     if(!error) {
       this.setState({loading: true});
-      var content = {username: this.state.emailAddress, emailAddress: this.state.emailAddress, password: this.state.password};
-      dispatcher.dispatch({type: 'register', content});
+
+      var whitelistContent = { emailAddress: this.state.emailAddress };
+      whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent});
     }
   },
 
+  whitelistCheckReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    console.log(data)
+
+    if(data.success) {
+      var decodedData = this.decodeWhitelistResponse(data.message);
+
+      console.log(decodedData)
+
+      if(decodedData) {
+        if(decodedData.canWhitelist != null) {
+          var content = {username: this.state.emailAddress, emailAddress: this.state.emailAddress, password: this.state.password};
+          dispatcher.dispatch({type: 'register', content});
+        } else if (decodedData.user != null) {
+          this.props.setWhitelistState(decodedData);
+          this.setState({loading: false});
+
+          if(decodedData.user.canWhitelist === true && decodedData.user.whitelisted !== true) {
+            window.location.hash = 'whitelist';
+          } else {
+            window.location.hash = 'ethAccounts';
+          }
+        } else {
+          this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
+        }
+      } else {
+        this.setState({loading: false, error: "An unexpected error has occurred"})
+      }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, loading: false});
+    } else {
+      this.setState({error: data.statusText, loading: false})
+    }
+  },
+
+  whitelistUnauthorisedReturned(error, data) {
+    this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
+  },
+
   registerReturned(error, data) {
-    this.setState({loading: false})
+    this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -154,6 +201,37 @@ let RegisterAccount = createReactClass({
     }
   },
 
+  decodeWhitelistResponse(message) {
+    const mnemonic = message.m.hexDecode()
+    const encrypted = message.e.hexDecode()
+    const time = message.t
+    const signature = message.s
+
+    const sig = {
+      e: message.e,
+      m: message.m,
+      u: message.u,
+      p: message.p,
+      t: message.t
+    }
+    const seed = JSON.stringify(sig)
+    const compareSignature = sha256(seed)
+
+    if (compareSignature !== signature) {
+      return null
+    }
+
+    const payload = decrypt(encrypted, mnemonic)
+    var data = null
+    try {
+      data = JSON.parse(payload)
+    } catch (ex) {
+      return null
+    }
+
+    return data;
+  },
+
   submitLoginNavigate() {
     window.location.hash = 'welcome';
   },
@@ -164,5 +242,23 @@ let RegisterAccount = createReactClass({
     }
   }
 })
+
+function decrypt(text,seed){
+  var decipher = crypto.createDecipher('aes-256-cbc', seed)
+  var dec = decipher.update(text,'base64','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+
+String.prototype.hexDecode = function(){
+    var j;
+    var hexes = this.match(/.{1,4}/g) || [];
+    var back = "";
+    for(j = 0; j<hexes.length; j++) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+
+    return back;
+}
 
 export default (RegisterAccount);

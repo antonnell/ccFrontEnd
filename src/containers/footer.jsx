@@ -9,6 +9,7 @@ let Footer = createReactClass({
   render() {
     return (
       <FooterComponent
+        user={this.props.user}
         navClicked={this.props.navClicked}
       />
     )

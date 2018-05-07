@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
+import Typography from 'material-ui/Typography';
 
 const styles = {};
 
@@ -13,16 +14,9 @@ class PrivacyPolicy extends Component {
   render() {
     var styles = {
       ppBody: {
-        fontSize:'11pt',
         width:'100%',
         margin:'0 auto',
         textAlign:'justify'
-      },
-      ppHeader: {
-        fontFamily:'verdana',
-        fontSize:'21pt',
-        width:'100%',
-        margin:'0 auto'
       },
       ppConsistencies: {
         display:'none'
@@ -30,9 +24,9 @@ class PrivacyPolicy extends Component {
     }
 
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '100px'}}>
-        <Grid item xs={10} sm={10} md={10} lg={10} align='center'>
-          <div style={styles.ppHeader}>cryptocurve.io Privacy Policy</div>
+      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
+        <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
+          <Typography variant='headline'>Privacy Policy</Typography>
           <div style={styles.ppBody}>
              <div style={styles.ppConsistencies}>
                 <div class='col-2'>
@@ -169,15 +163,17 @@ class PrivacyPolicy extends Component {
              <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Follow the instructions at the bottom of each email.</div>
              and we will promptly remove you from <strong>ALL</strong> correspondence.
           </div>
-          <br /><span id='ourCon'></span><br />
-          <div class='blueText'><strong>Contacting Us</strong></div>
           <br />
-          <div class='innerText'>If there are any questions regarding this privacy policy, you may contact us using the information below.<br /><br /></div>
-          <div class='innerText'>cryptopcurve.io</div>
-          <div class='innerText'>1600 Amphitheatre Parkway</div>
-          Mountain View, California 1111
-          <div class='innerText'>United States</div>
-          <div class='innerText'>support@cryptopcurve.io</div>
+          <br />
+          <Typography variant='headline'>Contact Us</Typography>
+          <br />
+          <Typography variant='Subheading' style={{fontWeight: 'bold'}}>CryptopCurve</Typography>
+          <br />
+          <Typography variant='Subheading'>1600 Amphitheatre Parkway</Typography>
+          <Typography variant='Subheading'>Mountain View, California 1111</Typography>
+          <Typography variant='Subheading'>United States</Typography>
+          <br />
+          <Typography variant='Subheading'>support@cryptopcurve.io</Typography>
         </Grid>
       </Grid>
     );

@@ -14,7 +14,6 @@ let apiUrl = 'https://api.cryptocurve.network/';
 var Store = () => {
 
   dispatcher.register(function(payload) {
-    console.log(payload)
     switch (payload.type) {
     case 'getWanAddress':
       this.getEthAddress(payload);

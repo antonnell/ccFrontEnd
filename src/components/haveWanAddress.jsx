@@ -15,29 +15,25 @@ class HaveWanAddress extends Component {
 
     this.renderMessage = this.renderMessage.bind(this);
     this.renderAddresses = this.renderAddresses.bind(this);
+
+    if (this.props.ethAddresses != null && this.props.ethAddresses.length > 0) {
+      this.state = {
+        renderMessage: 'We noticed you had the following addresses, would you like to use one of them?'
+      }
+    } else {
+      this.state = {
+        renderMessage: 'Do you have an Wanchain Address, or would you like us to create one for you?'
+      }
+    }
   };
 
   renderMessage() {
-    if(this.props.wanAddresses.length > 0) {
-      return (<Grid item xs={12} align='center'>
-      <div style={{border: '1px solid #000', padding: '12px'}}>
-        <Typography variant="title" noWrap>
-          This will be the address that receives your Curve tokens.
-        </Typography>
-      </div>
-      <Typography variant="body2">
-         Do you already have a Wanchain Address, or would you like us to create one for you?
-      </Typography>
-        <List component="nav">
-          {this.renderAddresses()}
-        </List>
-      </Grid>)
+    if(this.props.wanAddresses != null && this.props.wanAddresses.length > 0) {
+      return (<List component="nav">
+        {this.renderAddresses()}
+      </List>)
     } else {
-      return (<Grid item xs={12} align='center'>
-        <Typography variant="body2">
-          This will be the address that we deposit the Wanchain into after the presale. Do you already have a Wanchain Address, or would you like us to create one for you?
-        </Typography>
-      </Grid>)
+      return (<div></div>)
     }
   };
 
@@ -57,6 +53,16 @@ class HaveWanAddress extends Component {
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Next, we need to know your Wanchain address.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <Typography variant="body2" noWrap>
+            This will be the address that receives your Curve tokens.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <Typography variant="body2">
+            {this.state.renderMessage}
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>

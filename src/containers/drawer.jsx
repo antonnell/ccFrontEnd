@@ -9,6 +9,7 @@ let Drawer = createReactClass({
   render() {
     return (
       <DrawerComponent
+        canWhitelist={this.props.canWhitelist}
         currentScreen={this.props.currentScreen}
         navClicked={this.props.navClicked}
         closeDrawer={this.props.closeDrawer}

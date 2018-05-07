@@ -55,12 +55,12 @@ class RegisterAccount extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={6} align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={this.props.submitLoginNavigate}>
+              <Button variant="flat" size='large' color='primary' onClick={this.props.submitLoginNavigate} disabled={this.props.loading}>
                 Back
               </Button>
             </Grid>
               <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitRegister}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitRegister} disabled={this.props.loading}>
                 Register
               </Button>
             </Grid>

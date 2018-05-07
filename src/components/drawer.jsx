@@ -102,13 +102,13 @@ class AppDrawer extends Component {
             </div>
             <div>
               <List>
-                <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
+                {this.props.canWhitelist && <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
                   <ListItemIcon>
                     <WhitelistIcon />
                   </ListItemIcon>
                   <ListItemText primary="Join Whitelist" />
-                </ListItem>
-                <Divider />
+                </ListItem>}
+                {this.props.canWhitelist && <Divider />}
                 <ListItem style={this.props.currentScreen=='wanAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
                   <ListItemIcon>
                     <WanchainIcon />
@@ -127,24 +127,11 @@ class AppDrawer extends Component {
                   </ListItemIcon>
                   <ListItemText primary="Contacts" />
                 </ListItem>
-                <Divider />
                 <ListItem style={this.props.currentScreen=='manageEthPools'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
                   <ListItemIcon>
                     <PoolIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Manage Eth Pool" />
-                </ListItem>
-                <ListItem style={this.props.currentScreen=='createPool'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'createPool'); }}>
-                  <ListItemIcon>
-                    <PoolIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Create Pool" />
-                </ListItem>
-                <ListItem style={this.props.currentScreen=='poolContributions'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'poolContributions'); }}>
-                  <ListItemIcon>
-                    <PoolIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Pool Contributions" />
+                  <ListItemText primary="Ethereum Pools" />
                 </ListItem>
                 <Divider />
                 <ListItem style={this.props.currentScreen=='updatePassword'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>

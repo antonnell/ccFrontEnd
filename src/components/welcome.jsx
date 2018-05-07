@@ -35,8 +35,8 @@ class Welcome extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" error={this.props.usernameError} disabled={this.props.loading}
-                id="username" label="Username" value={this.props.username}
-                onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onLoginKeyDown} />
+                id="username" label="Email Address" value={this.props.username}
+                onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onLoginKeyDown} helperText={this.props.usernameErrorMessage}  />
               <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
                 id="password" label="Password" value={this.props.password}
                 onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onLoginKeyDown} />

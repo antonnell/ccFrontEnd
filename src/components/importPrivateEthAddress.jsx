@@ -14,11 +14,15 @@ class ImportPrivateEthAddress extends Component {
     super(props);
   };
 
+  componentDidMount() {
+    this.props.checkIfEthPasswordProtected(this.props.ethPrivateKey)
+  };
+
   render() {
     var input = null
     var password = null
     var unlockButton = null
-    if(this.props.passwordRequired) {
+    if(this.props.passwordRequired === true) {
       password = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethPasswordError} disabled={this.props.loading}
         id="ethPassword" placeholder="Password" value={this.props.ethPassword} type='password'
         onChange={(event) => { this.props.handleChange(event, 'ethPassword'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} helperText='Your key is password protected. Please provide us with the password.'/>
