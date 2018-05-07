@@ -317,10 +317,10 @@ let Whitelist = createReactClass({
     completed[this.props.whitelistObject.activeStep] = true;
     whitelistObject.completed = completed;
     whitelistObject.activeStep = 2;
-
     whitelistObject.ethAddress = address;
     whitelistObject.currentScreen = 'haveWanAddress';
 
+    this.setState({ethPublicAddress: address.address})
     this.props.setWhitelistState(whitelistObject);
   },
 
@@ -443,6 +443,7 @@ let Whitelist = createReactClass({
     whitelistObject.wanAddress = address;
     whitelistObject.currentScreen = 'kycIDDOcument';
 
+    this.setState({wanPublicAddress: address.publicAddress})
     this.props.setWhitelistState(whitelistObject);
   },
 
@@ -713,7 +714,7 @@ let Whitelist = createReactClass({
   },
 
   sendFromMEW() {
-    window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.state.allocation+'#send-transaction')
+    window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.props.whitelistObject.user.remainingAllocation+'#send-transaction')
   },
 
   checkIfEthPasswordProtected(value) {
@@ -1029,7 +1030,7 @@ let Whitelist = createReactClass({
           ethAddressName={this.state.ethAddressName}
           wanPublicAddress={this.state.wanPublicAddress}
           wanAddressName={this.state.wanAddressName}
-          allocation={this.props.whitelistObject.remainingAllocation}
+          allocation={this.props.whitelistObject.user.remainingAllocation}
           loadingAddress={this.state.loadingAddress}
           contributionAddress={this.state.contributionAddress}
           handleChange={this.handleChange}
