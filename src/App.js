@@ -274,11 +274,11 @@ class App extends Component {
       whitelistState.completed = {};
     } else if (whitelistState != null) {
       var user = this.state.user;
-      user.whitelistToken = whitelistState.jwt.token;
-      user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
-
-      delete whitelistState.jwt;
-
+      if(whitelistState.jwt) {
+        user.whitelistToken = whitelistState.jwt.token;
+        user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
+        delete whitelistState.jwt;
+      }
       this.setState({user});
       sessionStorage.setItem('cc_user', JSON.stringify(user));
     }

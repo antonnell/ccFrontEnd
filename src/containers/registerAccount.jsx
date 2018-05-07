@@ -147,26 +147,14 @@ let RegisterAccount = createReactClass({
       return this.setState({error: error.toString()});
     }
 
-    console.log(data)
-
     if(data.success) {
       var decodedData = this.decodeWhitelistResponse(data.message);
 
-      console.log(decodedData)
-
       if(decodedData) {
-        if(decodedData.canWhitelist != null) {
+        if(decodedData.canWhitelist === true) {
           var content = {username: this.state.emailAddress, emailAddress: this.state.emailAddress, password: this.state.password};
           dispatcher.dispatch({type: 'register', content});
-        } else if (decodedData.user != null) {
-          this.props.setWhitelistState(decodedData);
-          this.setState({loading: false});
-
-          if(decodedData.user.canWhitelist === true && decodedData.user.whitelisted !== true) {
-            window.location.hash = 'whitelist';
-          } else {
-            window.location.hash = 'ethAccounts';
-          }
+          console.log('registering')
         } else {
           this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
         }
@@ -185,7 +173,6 @@ let RegisterAccount = createReactClass({
   },
 
   registerReturned(error, data) {
-    this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -195,9 +182,9 @@ let RegisterAccount = createReactClass({
       this.props.setUser(data.user);
       window.location.hash = 'whitelist';
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({error: data.errorMsg, loading: false});
     } else {
-      this.setState({error: data.statusText})
+      this.setState({error: data.statusText, loading: false})
     }
   },
 
