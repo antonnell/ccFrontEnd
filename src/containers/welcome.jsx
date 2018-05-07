@@ -116,7 +116,6 @@ let Welcome = createReactClass({
     if(data.success) {
       var whitelistState = this.decodeWhitelistResponse(data.message)
       if(whitelistState) {
-        console.log(whitelistState)
         this.props.setWhitelistState(whitelistState);
 
         if(whitelistState.user.canWhitelist === true /*&& whitelistState.user.whitelisted !== true*/) {

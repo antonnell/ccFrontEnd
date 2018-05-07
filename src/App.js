@@ -93,13 +93,19 @@ class App extends Component {
       user = JSON.parse(userString)
     }
 
+    var whitelistString = sessionStorage.getItem('cc_whiteliststate')
+    var whitelistState = null;
+    if (whitelistString != null) {
+      whitelistState = JSON.parse(whitelistString)
+    }
+
     this.state = {
       drawerOpen: false,
       user: user,
       ethAddresses: null,
       wanAddresses: null,
       contacts: null,
-      whitelistState: null
+      whitelistState: whitelistState
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -116,6 +122,7 @@ class App extends Component {
     this.getEthAddressReturned = this.getEthAddressReturned.bind(this);
     this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
     this.getContactsReturned = this.getContactsReturned.bind(this);
+    this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
   };
 
   componentWillMount() {
@@ -142,7 +149,7 @@ class App extends Component {
     wanEmitter.on('getWanAddress', this.getWanAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
 
-    whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
+    whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
   };
 
   componentDidMount() {
@@ -178,14 +185,32 @@ class App extends Component {
 
     if(this.state.whitelistState == null) {
       //maybe get whitelistState from here if whitelistState is null
-      var whitelistContent = { emailAddress: user.email };
-      whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent });
+      if(user.whitelistToken != null && user.whitelistTokenKey != null) {
+        var whitelistContent = { emailAddress: user.email };
+        whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
+      }
     }
   };
 
-  whitelistCheckReturned(error, data) {
+  getWhitelistStateReturned(error, data) {
     console.log(error)
     console.log(data)
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var whitelistState = this.decodeWhitelistResponse(data.message)
+      if(whitelistState) {
+        this.setWhitelistState(whitelistState);
+      } else {
+        this.setState({error: "An unexpected error has occurred"})
+      }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   };
 
   getEthAddressReturned(error, data) {
@@ -273,16 +298,19 @@ class App extends Component {
       whitelistState.activeStep = 0;
       whitelistState.completed = {};
     } else if (whitelistState != null) {
-      var user = this.state.user;
       if(whitelistState.jwt) {
+        var user = this.state.user;
+
         user.whitelistToken = whitelistState.jwt.token;
         user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
         delete whitelistState.jwt;
+
+        this.setState({user});
+        sessionStorage.setItem('cc_user', JSON.stringify(user));
       }
-      this.setState({user});
-      sessionStorage.setItem('cc_user', JSON.stringify(user));
     }
     this.setState({whitelistState});
+    sessionStorage.setItem('cc_whiteliststate', JSON.stringify(whitelistState));
   };
 
   locationHashChanged() {

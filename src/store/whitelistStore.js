@@ -73,7 +73,6 @@ var Store = () => {
     var postJson = {
       emailAddress: payload.content.emailAddress
     }
-    console.log(postJson)
     this.callApi(url,
       version,
       'POST',
@@ -87,7 +86,7 @@ var Store = () => {
     var postJson = {
       emailAddress: payload.content.emailAddress
     }
-
+    console.log(payload)
     this.callApi(url,
       version,
       'POST',
@@ -106,18 +105,6 @@ var Store = () => {
       'POST',
       postJson,
       payload)*/
-  }
-
-  this.setWhitelistState = function(payload) {
-    var url = 'whitelistState'
-    var version = 'api/v1/'
-    var postJson = payload.content
-
-    this.callApi(url,
-      version,
-      'POST',
-      postJson,
-      payload)
   }
 
   this.ethPrivateKeyUnlock = function(payload) {
@@ -223,7 +210,7 @@ var Store = () => {
       method: 'POST',
       body: payload.content.data,
       headers: { 'Authorization': 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx' },
-    })
+    }) 
     .then(res => res.json())
     .then(json => console.log(json));*/
 
