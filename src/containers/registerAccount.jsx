@@ -35,12 +35,14 @@ let RegisterAccount = createReactClass({
     emitter.on('register', this.registerReturned);
     whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
     whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
+    whitelistEmitter.on('whitelistLogin', this.whitelistLoginReturned);
   },
 
   componentWillUnmount() {
     emitter.removeAllListeners('register');
     whitelistEmitter.removeAllListeners('whitelistCheck');
     whitelistEmitter.removeAllListeners('Unauthorised');
+    whitelistEmitter.removeAllListeners('whitelistLogin');
   },
 
   render() {
@@ -151,10 +153,9 @@ let RegisterAccount = createReactClass({
       var decodedData = this.decodeWhitelistResponse(data.message);
 
       if(decodedData) {
-        if(decodedData.canWhitelist === true) {
+        if(decodedData.user.canWhitelist === true) {
           var content = {username: this.state.emailAddress, emailAddress: this.state.emailAddress, password: this.state.password};
           dispatcher.dispatch({type: 'register', content});
-          console.log('registering')
         } else {
           this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
         }
@@ -180,11 +181,40 @@ let RegisterAccount = createReactClass({
     if(data.success) {
       data.user.token = data.token;
       this.props.setUser(data.user);
-      window.location.hash = 'whitelist';
+
+      var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
+      whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, loading: false});
     } else {
       this.setState({error: data.statusText, loading: false})
+    }
+  },
+
+  whitelistLoginReturned(error, data) {
+    this.setState({loading: false});
+
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var whitelistState = this.decodeWhitelistResponse(data.message)
+      if(whitelistState) {
+        this.props.setWhitelistState(whitelistState);
+
+        if(whitelistState.user.canWhitelist === true /*&& whitelistState.user.whitelisted !== true*/) {
+          window.location.hash = 'whitelist';
+        } else {
+          window.location.hash = 'ethAccounts';
+        }
+      } else {
+        this.setState({error: "An unexpected error has occurred"})
+      }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
     }
   },
 
