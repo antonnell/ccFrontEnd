@@ -13,7 +13,10 @@ let ResetPassword = createReactClass({
   },
 
   componentWillMount() {
-    emitter.on('resetPassword', this.resetPasswordReturned);
+    if(this.props.uriParameters.token == null || this.props.uriParameters.code == null) {
+      window.location.hash = 'welcome';
+    }
+    return emitter.on('resetPassword', this.resetPasswordReturned);
   },
 
   componentWillUnmount() {
@@ -69,7 +72,7 @@ let ResetPassword = createReactClass({
 
     if(!error) {
       this.setState({loading: true});
-      var content = {emailAddress: this.state.user.email, code: this.state.code, password: this.state.password};
+      var content = { token: this.props.uriParameters.token, code: this.props.uriParameters.code, password: this.state.password};
       dispatcher.dispatch({type: 'resetPassword', content});
     }
   },

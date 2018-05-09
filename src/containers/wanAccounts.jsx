@@ -48,6 +48,10 @@ let WanAccounts = createReactClass({
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
   },
+  componentWillUnmount() {
+    wanEmitter.removeAllListeners('createWanAddress');
+    wanEmitter.removeAllListeners('importWanAddress');
+  },
 
   resetInputs() {
     this.setState({

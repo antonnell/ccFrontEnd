@@ -18,6 +18,7 @@ import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
+import SendEther from './containers/sendEther.jsx';
 
 import ComingSoon from './components/comingSoon.jsx';
 import PrivacyPolicy from './components/privacyPolicy.jsx';
@@ -105,7 +106,9 @@ class App extends Component {
       ethAddresses: null,
       wanAddresses: null,
       contacts: null,
-      whitelistState: whitelistState
+      whitelistState: whitelistState,
+      uriParameters: {},
+      sendEtherModalOpen: false
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -114,6 +117,8 @@ class App extends Component {
     this.setUser = this.setUser.bind(this);
     this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
+    this.openSendEther = this.openSendEther.bind(this);
+    this.closeSendEther = this.closeSendEther.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -134,6 +139,10 @@ class App extends Component {
     }
 
     var currentScreen = window.location.hash.substring(1);
+    var paramsIndex = window.location.hash.indexOf('?')
+    if(paramsIndex > -1) {
+      currentScreen = window.location.hash.substring(1, paramsIndex)
+    }
     if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
@@ -179,12 +188,9 @@ class App extends Component {
     var content = {id: user.id};
     ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
     wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
-
-    var contactsContent = {username: user.username};
-    contactsDispatcher.dispatch({type: 'getContacts', content: contactsContent, token: user.token });
+    contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
 
     if(this.state.whitelistState == null) {
-      //maybe get whitelistState from here if whitelistState is null
       if(user.whitelistToken != null && user.whitelistTokenKey != null) {
         var whitelistContent = { emailAddress: user.email };
         whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
@@ -193,8 +199,6 @@ class App extends Component {
   };
 
   getWhitelistStateReturned(error, data) {
-    console.log(error)
-    console.log(data)
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -221,9 +225,9 @@ class App extends Component {
     if(data.success) {
       this.setState({ethAddresses: data.ethAddresses})
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({error: data.errorMsg, ethAddresses: []});
     } else {
-      this.setState({error: data.statusText})
+      this.setState({error: data.statusText, ethAddresses: []})
     }
   };
 
@@ -235,9 +239,9 @@ class App extends Component {
     if(data.success) {
       this.setState({wanAddresses: data.wanAddresses})
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({error: data.errorMsg, wanAddresses: []});
     } else {
-      this.setState({error: data.statusText})
+      this.setState({error: data.statusText, wanAddresses: []})
     }
   };
 
@@ -249,9 +253,9 @@ class App extends Component {
     if(data.success) {
       this.setState({contacts: data.contacts})
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({error: data.errorMsg, contacts: []});
     } else {
-      this.setState({error: data.statusText})
+      this.setState({error: data.statusText, contacts: []})
     }
   };
 
@@ -313,8 +317,32 @@ class App extends Component {
     sessionStorage.setItem('cc_whiteliststate', JSON.stringify(whitelistState));
   };
 
+  openSendEther(sendEtherContact, sendEtherAccount) {
+    this.setState({ sendEtherModalOpen: true, sendEtherContact, sendEtherAccount})
+  };
+
+  closeSendEther() {
+    this.setState({ sendEtherModalOpen: false, sendEtherContact: null, sendEtherAccount: null})
+  };
+
   locationHashChanged() {
-    var currentScreen = window.location.hash.substring(1);
+    var uriParameters = {}
+    var currentScreen = ''
+    var paramsIndex = window.location.hash.indexOf('?')
+    if(paramsIndex > -1) {
+      var params = window.location.hash.substring(paramsIndex+1)
+      params.split('&').forEach((pair) => {
+        var arr = pair.split('=')
+        var val = decodeURIComponent(arr[1])
+        if(val.indexOf("'>here</a") > -1) {
+          val = val.substring(0, val.length - 9)
+        }
+        uriParameters[decodeURIComponent(arr[0])] = val
+      })
+      currentScreen = window.location.hash.substring(1, paramsIndex)
+    } else {
+      currentScreen = window.location.hash.substring(1);
+    }
     if(['', 'welcome', 'logOut'].includes(currentScreen)) {
       sessionStorage.removeItem('cc_user');
       this.setState({drawerOpen: false, user: null});
@@ -326,7 +354,7 @@ class App extends Component {
         }
       }
 
-      this.setState({currentScreen});
+      this.setState({currentScreen, uriParameters});
     }
   };
 
@@ -363,6 +391,15 @@ class App extends Component {
       navClicked={this.navClicked} />
   };
 
+  renderSendEtherModal() {
+    return(<SendEther
+      isOpen={this.state.sendEtherModalOpen}
+      sendEtherContact={this.state.sendEtherContact}
+      sendEtherAccount={this.state.sendEtherAccount}
+      closeSendEther={this.closeSendEther}
+      ethAddresses={this.state.ethAddresses}/>)
+  };
+
   render() {
 
     return (
@@ -373,6 +410,7 @@ class App extends Component {
         <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '564px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
+            {this.renderSendEtherModal()}
           </Grid>
         </Grid>
         {this.renderFooter()}
@@ -391,7 +429,7 @@ class App extends Component {
       case 'forgotPasswordDone':
         return (<ForgotPasswordDone />);
       case 'resetPassword':
-        return (<ResetPassword />);
+        return (<ResetPassword uriParameters={this.state.uriParameters} />);
       case 'whitelist':
         return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
@@ -399,11 +437,11 @@ class App extends Component {
       case 'wanAccounts':
         return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} />);
       case 'contacts':
-        return (<Contacts user={this.state.user} contacts={this.state.contacts} />);
+        return (<Contacts user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} />);
       case 'updatePassword':
         return (<UpdatePassword user={this.state.user} />);
       case 'manage2FA':
-        return (<Manage2FA user={this.state.user} />);
+        return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
       case 'manageEthPools':

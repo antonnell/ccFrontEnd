@@ -47,6 +47,10 @@ let EthAccounts = createReactClass({
     ethEmitter.on('createEthAddress', this.createEthAddressReturned);
     ethEmitter.on('importEthAddress', this.importEthAddressReturned);
   },
+  componentWillUnmount() {
+    ethEmitter.removeAllListeners('createEthAddress');
+    ethEmitter.removeAllListeners('importEthAddress');
+  },
 
   resetInputs() {
     this.setState({

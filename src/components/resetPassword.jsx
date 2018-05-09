@@ -30,10 +30,10 @@ class ResetPassword extends Component {
             <Grid item xs={12} style={{marginTop: '50px'}}>
             <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
               id="password" label="Password" value={this.props.password}
-              onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onRegisterKeyDown} />
+              onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onResetKeyDown} />
             <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.confirmPasswordError} disabled={this.props.loading}
               id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
-              onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onRegisterKeyDown} />
+              onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onResetKeyDown} />
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -46,12 +46,12 @@ class ResetPassword extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={6} align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={this.props.submitLoginNavigate}>
+              <Button variant="flat" size='large' color='primary' onClick={this.props.submitLoginNavigate} disabled={this.props.loading}>
                 Back
               </Button>
             </Grid>
             <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitReset}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitReset} disabled={this.props.loading}>
                 Reset
               </Button>
             </Grid>

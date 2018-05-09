@@ -6,34 +6,12 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { CircularProgress } from 'material-ui/Progress';
 
-var QRCode = require('qrcode');
-var authenticator = require('authenticator');
-
 const styles = {};
 
 class Enable2FA extends Component {
 
   constructor(props) {
     super(props);
-  };
-
-  componentDidMount() {
-
-    var formattedKey = authenticator.generateKey();
-    var formattedToken = authenticator.generateToken(formattedKey);
-
-    authenticator.verifyToken(formattedKey, formattedToken);
-    authenticator.verifyToken(formattedKey, '000 000');
-
-    var emailAddress = 'john.doe@email.com';
-    var company = 'CryptoCurve';
-
-    var text = authenticator.generateTotpUri(formattedKey, emailAddress, company, 'SHA1', 6, 30);
-
-    var canvas = document.getElementById('canvas')
-    QRCode.toCanvas(canvas, text, function (error) {
-      if (error) console.error(error)
-    })
   };
 
   render() {
@@ -64,8 +42,9 @@ class Enable2FA extends Component {
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
-            <Grid item xs={12} style={{marginTop: '50px'}}>
-              <canvas id='canvas'></canvas>
+            <Grid item xs={12} style={{marginTop: '50px'}} style={{position: 'relative', minHeight: '228px'}}>
+              <canvas id='canvas' style={{minHeight: '228px'}}></canvas>
+              {this.props.QRCodeLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
@@ -85,7 +64,7 @@ class Enable2FA extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitEnable}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitEnable} disabled={this.props.loading}>
                 Enable
               </Button>
             </Grid>

@@ -73,10 +73,9 @@ var Store = () => {
   this.sendEther = function(payload) {
     var url = 'ethereum/sendEther'
     var postJson = {
-      address: payload.content.address,
+      fromAddress: payload.content.fromAddress,
+      toAddress: payload.content.toAddress,
       contactUserName: payload.content.contactUserName,
-      ethAddressID: payload.content.ethAddressID,
-      password: payload.content.password,
       amount: payload.content.amount,
       gwei: payload.content.gwei
     }
@@ -90,7 +89,8 @@ var Store = () => {
   this.createPoolingContract = function(payload) {
     var url = 'ethereum/createPoolingContract'
     var postJson = {
-      //no documentation on this?
+      ownerEthAddress: payload.content.ethAddress,
+      name: payload.content.name
     }
 
     this.callApi(url,
@@ -100,6 +100,14 @@ var Store = () => {
   }
 
   this.callApi = function(url, method, postData, payload) {
+    //get X-curve-OTP from sessionStorage
+    var userString = sessionStorage.getItem('cc_user');
+    var authOTP = ''
+    if(userString) {
+      var user = JSON.parse(userString)
+      authOTP = user.authOTP
+    }
+
     var call = apiUrl+url
 
     if(method == 'GET') {
@@ -125,10 +133,13 @@ var Store = () => {
     fetch(call, {
       method: method,
       body: postData,
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token, 'X-curve-OTP': authOTP },
     })
     .then(res => {
       if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+      if(res.status == 403) {
         return emitter.emit('Unauthorised', null, null)
       }
 

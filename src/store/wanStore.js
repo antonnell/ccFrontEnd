@@ -68,6 +68,14 @@ var Store = () => {
   }
 
   this.callApi = function(url, method, postData, payload) {
+    //get X-curve-OTP from sessionStorage
+    var userString = sessionStorage.getItem('cc_user');
+    var authOTP = ''
+    if(userString) {
+      var user = JSON.parse(userString)
+      authOTP = user.authOTP
+    }
+
     var call = apiUrl+url
 
     if(method == 'GET') {
@@ -93,10 +101,13 @@ var Store = () => {
     fetch(call, {
         method: method,
         body: postData,
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token, 'X-curve-OTP': authOTP },
     })
     .then(res => {
       if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+      if(res.status == 403) {
         return emitter.emit('Unauthorised', null, null)
       }
 

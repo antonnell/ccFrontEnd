@@ -3,3 +3,8 @@ body {
   padding: 0;
   font-family: 'Abel', sans-serif;
 }
+
+.big-input {
+  font-size: 48px !important;
+  text-align: center;
+}

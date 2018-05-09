@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
@@ -9,7 +8,7 @@ import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
-class ForgotPassword extends Component {
+class Disable2FA extends Component {
 
   constructor(props) {
     super(props);
@@ -17,20 +16,28 @@ class ForgotPassword extends Component {
 
   render() {
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '100px'}}>
+      <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" color="inherit">
-                Forgot Password
+              <Typography variant="headline" color="inherit">
+                2 Factor Authentication
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
+            <Grid item xs={12} style={{marginTop: '24px'}}>
+              2 Factor Authentication is currently enabled on your account. It provides you with increased security so that your account remains safe.
+            </Grid>
+          </Grid>
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
+            <Grid item xs={12} style={{marginTop: '24px', fontWeight: 'bold'}}>
+              We strongly recomend that you keep 2FA enabled on your account.
+            </Grid>
+          </Grid>
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
-              <TextField required fullWidth={true} color="textSecondary" error={this.props.emailAddressError} disabled={this.props.loading}
-                id="emailAddress" label="Email Address" value={this.props.emailAddress}
-                onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onResetKeyDown} />
+              Turn off 2 factor authentication? <Button variant="flat" style={{border: '1px solid #ccc'}} size='medium' color='primary' onClick={this.props.submitDisable} disabled={this.props.loading}>Turn Off</Button>
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -41,22 +48,10 @@ class ForgotPassword extends Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
-            <Grid item xs={6} align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={this.props.submitLoginNavigate} disabled={this.props.loading}>
-                Back
-              </Button>
-            </Grid>
-            <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitReset} disabled={this.props.loading}>
-                Reset
-              </Button>
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
     );
-  };
+  }
 }
 
-export default withStyles(styles)(ForgotPassword);
+export default withStyles(styles)(Disable2FA);

@@ -28,7 +28,8 @@ var Store = () => {
   }.bind(this))
 
   this.getContacts = function(payload) {
-    var url = 'contacts/getUserContacts/'+payload.content.username
+    console.log(payload.content)
+    var url = 'contacts/getUserContacts/'+payload.content.id
 
     this.callApi(url,
       'GET',
@@ -37,36 +38,44 @@ var Store = () => {
   }
 
   this.addContact = function(payload) {
-    var url = 'contacts/AddUserContact'
+    var url = 'contacts/addUserContact'
     var postJson = {
-      emailOrUsername: payload.content.username,
+      emailOrUsername: payload.content.emailAddress,
       displayName: payload.content.displayName,
       notes: payload.content.notes,
       ownerUsername: payload.content.ownerUsername
     }
 
     this.callApi(url,
-      'PUT',
+      'POST',
       postJson,
       payload)
   }
 
   this.updateContact = function(payload) {
-    var url = 'contacts/UpdateUserContact'
+    var url = 'contacts/updateUserContact'
     var postJson = {
-      emailOrUsername: payload.content.username,
+      username: payload.content.username,
       displayName: payload.content.displayName,
       notes: payload.content.notes,
       ownerUsername: payload.content.ownerUsername
     }
 
     this.callApi(url,
-      'PUT',
+      'POST',
       postJson,
       payload)
   }
 
   this.callApi = function(url, method, postData, payload) {
+    //get X-curve-OTP from sessionStorage
+    var userString = sessionStorage.getItem('cc_user');
+    var authOTP = ''
+    if(userString) {
+      var user = JSON.parse(userString)
+      authOTP = user.authOTP
+    }
+
     var call = apiUrl+url
 
     if(method == 'GET') {
@@ -92,10 +101,13 @@ var Store = () => {
     fetch(call, {
         method: method,
         body: postData,
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token, 'X-curve-OTP': authOTP },
     })
     .then(res => {
       if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+      if(res.status == 403) {
         return emitter.emit('Unauthorised', null, null)
       }
 

@@ -15,9 +15,6 @@ var Store = () => {
 
   dispatcher.register(function(payload) {
     switch (payload.type) {
-    case 'testEncryption':
-      this.testEncryption(payload);
-      break;
     case 'login':
       this.login(payload);
       break;
@@ -33,25 +30,17 @@ var Store = () => {
     case 'sendResetPasswordEmail':
       this.sendResetPasswordEmail(payload);
       break;
+    case 'generate2faKey':
+      this.generate2faKey(payload);
+      break;
+    case 'enable2fa':
+      this.enable2fa(payload);
+      break;
+    case 'disable2fa':
+      this.disable2fa(payload);
+      break;
     }
   }.bind(this))
-
-  this.testEncryption = function(payload) {
-    var url = 'test/encryptionWithUserPass'
-
-    var postJson = {
-      hello: 'world',
-      testing: 123,
-      wrong: false,
-      rigth: true
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-
-  }
 
   this.login = function(payload) {
     var url = 'account/login'
@@ -97,7 +86,7 @@ var Store = () => {
     var url = 'account/resetPassword'
     var postJson = {
       code: payload.content.code,
-      email: payload.content.emailAddress,
+      token: payload.content.token,
       password: payload.content.password
     }
 
@@ -111,7 +100,7 @@ var Store = () => {
     var url = 'account/sendResetPasswordEmail'
     var postJson = {
       email: payload.content.emailAddress,
-      callbackUrl: "http://localhost:3000/#resetPassword" //change this at some stage. He needs to define the URL.
+      callbackUrl: window.location.origin+"/#resetPassword"
     }
 
     this.callApi(url,
@@ -120,7 +109,55 @@ var Store = () => {
       payload)
   }
 
+  this.generate2faKey = function(payload) {
+    var url = 'account/generate2faKey/'+payload.content.id
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload)
+  }
+
+  this.enable2fa = function(payload) {
+    var url = 'account/enable2fa'
+    var postJson = {
+      secretKey: payload.content.secretKey,
+      code: payload.content.code,
+      userId: payload.content.id,
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.disable2fa = function(payload) {
+    var url = 'account/disable2fa'
+    var postJson = {
+      userId: payload.content.id,
+    }
+
+    console.log(postJson)
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
   this.callApi = function(url, method, postData, payload) {
+    //get X-curve-OTP from sessionStorage
+    var authOTP = ''
+    if(payload.authOTP != null) {
+      authOTP = payload.authOTP
+    } else {
+      var userString = sessionStorage.getItem('cc_user');
+      if(userString) {
+        var user = JSON.parse(userString)
+        authOTP = user.authOTP
+      }
+    }
+
     var call = apiUrl+url
 
     if(method == 'GET') {
@@ -146,10 +183,13 @@ var Store = () => {
     fetch(call, {
         method: method,
         body: postData,
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token, 'X-curve-OTP': authOTP },
     })
     .then(res => {
       if(res.status == 401) {
+        return emitter.emit('Unauthorised', null, null)
+      }
+      if(res.status == 403) {
         return emitter.emit('Unauthorised', null, null)
       }
 

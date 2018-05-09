@@ -8,11 +8,11 @@ let contactsDispatcher = require('../store/contactsStore.js').default.dispatcher
 let Contacts = createReactClass({
   getInitialState() {
     return {
-      createLoading: false,
+      addLoading: false,
       error: null,
-      username: "",
-      usernameError: false,
-      usernameErrorText: "",
+      emailAddress: "",
+      emailAddressError: false,
+      emailAddressErrorText: "",
       displayName: "",
       displayNameError: false,
       displayNameErrorText: "",
@@ -23,14 +23,17 @@ let Contacts = createReactClass({
   },
 
   componentWillMount() {
-    contactsEmitter.on('createContact', this.createContactReturned);
+    contactsEmitter.on('addContact', this.addContactReturned);
+  },
+  componentWillUnmount() {
+    contactsEmitter.removeAllListeners('addContact');
   },
 
   resetInputs() {
     this.setState({
-      username: "",
-      usernameError: false,
-      usernameErrorText: "",
+      emailAddress: "",
+      emailAddressError: false,
+      emailAddressErrorText: "",
       displayName: "",
       displayNameError: false,
       displayNameErrorText: "",
@@ -40,15 +43,15 @@ let Contacts = createReactClass({
     })
   },
 
-  createContactReturned(error, data) {
-    this.setState({createLoading: false});
+  addContactReturned(error, data) {
+    this.setState({addLoading: false});
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
       this.resetInputs();
-      var content = {username: this.props.user.username};
+      var content = {id: this.props.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
 
       //show sncakbar?
@@ -63,39 +66,44 @@ let Contacts = createReactClass({
     return (
       <ContactsComponent
         handleChange={this.handleChange}
-        onCreateKeyDown={this.onCreateKeyDown}
-        createClicked={this.createImportClicked}
+        onAddKeyDown={this.onAddKeyDown}
+        addClicked={this.addClicked}
         updateNavigateClicked={this.updateNavigateClicked}
-        username={this.state.username}
-        usernameError={this.state.usernameError}
-        usernameErrorText={this.state.usernameErrorText}
+        sendEtherClicked={this.sendEtherClicked}
+        emailAddress={this.state.emailAddress}
+        emailAddressError={this.state.emailAddressError}
+        emailAddressErrorText={this.state.emailAddressErrorText}
         displayName={this.state.displayName}
         displayNameError={this.state.displayNameError}
         displayNameErrorText={this.state.displayNameErrorText}
         notes={this.state.notes}
         notesError={this.state.notesError}
         notesErrorText={this.state.notesErrorText}
-        createLoading={this.state.createLoading}
+        addLoading={this.state.addLoading}
         error={this.state.error}
         contacts={this.props.contacts}
-      />
+        />
     )
   },
 
-  onCreateKeyDown(event) {
+  onAddKeyDown(event) {
     if (event.which == 13) {
-      this.createClicked()
+      this.addClicked()
     }
   },
 
-  createClicked() {
-    this.setState({createLoading: true});
-    var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-    contactsDispatcher.dispatch({type: 'createContact', content, token: this.props.user.token });
+  addClicked() {
+    this.setState({addLoading: true});
+    var content = { emailAddress: this.state.emailAddress, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
+    contactsDispatcher.dispatch({type: 'addContact', content, token: this.props.user.token });
   },
 
   updateNavigateClicked() {
     //ok?
+  },
+
+  sendEtherClicked(contact) {
+    this.props.openSendEther(contact)
   },
 
   handleChange (event, name) {

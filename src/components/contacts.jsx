@@ -17,24 +17,24 @@ class Account extends Component {
     super(props);
   };
 
-  renderCreate() {
+  renderAdd() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Create Contact
+            Add Contact
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.usernameError} disabled={this.props.createLoading}
-            id="username" label="Contact Username" value={this.props.username}
-            onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.displayNameError} disabled={this.props.createLoading}
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.emailAddressError} disabled={this.props.addLoading}
+            id="emailAddress" label="Contact Email Address" value={this.props.emailAddress}
+            onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.displayNameError} disabled={this.props.addLoading}
             id="displayName" label="Display Name" value={this.props.displayName}
-            onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.notesError} disabled={this.props.createLoading}
+            onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.notesError} disabled={this.props.addLoading}
             id="notes" label="Notes" value={this.props.notes}
-            onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
         </Grid>
       </Grid>
     );
@@ -49,13 +49,13 @@ class Account extends Component {
 
     if(this.props.contacts.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1" >Oh no, we couldn't find any contacts for you. Why don't you create one?</Typography>
+        <Typography variant="display1" >Oh no, we couldn't find any contacts for you. Why don't you add one?</Typography>
       </Grid>);
     }
 
     return this.props.contacts.map((contact) => {
         return (
-          <Grid item xs={12} xl={6} align='left' key={contact.address}>
+          <Grid item xs={12} xl={6} align='left' key={contact.primaryAddress}>
             <Card style={{marginRight: '6px', marginBottom: '6px'}}>
               <CardContent>
                 <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
@@ -73,7 +73,7 @@ class Account extends Component {
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
                         <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Notes'}
+                          {'Note'}
                         </Typography>
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
@@ -91,15 +91,14 @@ class Account extends Component {
                         </Typography>
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
-                        <Typography variant="body1">
+                        <Typography variant="body1" noWrap>
                           {contact.primaryAddress}
                         </Typography>
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat" onClick={this.props.updateClicked}>Remove</Button>
-                    <Button size="small" variant="flat" color="secondary" onClick={this.props.updateClicked}>Update Note</Button>
+                  <Grid item xs={12} align='right' style={{marginTop: '12px'}}>
+                    <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} color="primary" onClick={() => { this.props.sendEtherClicked(contact) }}>Send Ether</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -123,11 +122,11 @@ class Account extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '500px'}}>
-          {this.renderCreate()}
-          {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
+          {this.renderAdd()}
+          {this.props.addLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>
-        <Tooltip title='Create Contact'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createClicked}>
+        <Tooltip title='Add Contact'>
+          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.addLoading} onClick={this.props.addClicked}>
             +
           </Button>
         </Tooltip>
