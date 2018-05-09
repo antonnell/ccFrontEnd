@@ -19,7 +19,7 @@ class KYCPhoto extends Component {
       imagePreview = <img src={this.props.photoImagePreviewUrl} style={{width: '100%', height: '100%', margin: 'auto'}} alt="upload" />;
     }
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             You're almost done.

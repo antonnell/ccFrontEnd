@@ -173,16 +173,16 @@ let Whitelist = createReactClass({
       wanPublicAddress = this.state.wanPublicAddress
     }
     this.setState({ wanPublicAddressError: false, wanPublicAddressErrorMessage: '' });
-    /*const isEthereumValid = isEthereumAddress(wanPublicAddress)
+    const isEthereumValid = isEthereumAddress(wanPublicAddress)
     if (!isEthereumValid) {
       this.setState({ wanPublicAddressError: true, wanPublicAddressErrorMessage: 'Invalid Wanchain Address' });
       return false
     } else if (isEthereumValid) {
       this.setState({ wanPublicAddressValid: true, wanPublicAddressError: true, wanPublicAddressErrorMessage: 'This address is not compatible with the official wanchain wallet, are you sure you want to proceed?' });
       return true
-    } else {*/
+    } else {
       this.setState({ wanPublicAddressValid: true })
-    //}
+    }
     return true
   },
   validateWANAddressName(wanAddressName) {
@@ -716,6 +716,9 @@ let Whitelist = createReactClass({
   sendFromMEW() {
     window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.props.whitelistObject.user.remainingAllocation+'#send-transaction')
   },
+  sendFromCC() {
+    window.open('https://eth.wallet.cryptocurve.network/account/send/?to='+this.state.contributionAddress+'&value='+this.state.allocation)
+  },
 
   checkIfEthPasswordProtected(value) {
     var isEthPasswordProtected = false;
@@ -1037,6 +1040,7 @@ let Whitelist = createReactClass({
           onwWallet={this.state.cryptocurveWallet}
           done={this.done}
           sendFromMEW={this.sendFromMEW}
+          sendFromCC={this.sendFromCC}
           cryptocurveWallet={this.state.cryptocurveWallet}
           />)
       default:

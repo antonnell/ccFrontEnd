@@ -4,7 +4,7 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import Card, {  CardContent } from 'material-ui/Card';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 
 const styles = {};
 
@@ -22,14 +22,14 @@ class HaveWanAddress extends Component {
       }
     } else {
       this.state = {
-        renderMessage: 'Do you have an Wanchain Address, or would you like us to create one for you?'
+        renderMessage: 'Do you have a Wanchain Address, or would you like us to create one for you?'
       }
     }
   };
 
   renderMessage() {
     if(this.props.wanAddresses != null && this.props.wanAddresses.length > 0) {
-      return (<List component="nav">
+      return (<List component="nav" style={{maxWidth:400}}>
         {this.renderAddresses()}
       </List>)
     } else {
@@ -42,6 +42,9 @@ class HaveWanAddress extends Component {
       return (
         <ListItem key={address.publicAddress} button onClick={(event) => { this.props.selectAddress(address); }}>
           <ListItemText primary={address.name} secondary={address.publicAddress} />
+            <ListItemSecondaryAction>
+              {address.balance+" WAN"}
+            </ListItemSecondaryAction>
         </ListItem>
       )
     })
@@ -49,7 +52,7 @@ class HaveWanAddress extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             Next, we need to know your Wanchain address.

@@ -24,7 +24,7 @@ class WhitelistJoined extends Component {
 
   renderDone() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
             That's it, you're done. We will take care of the rest. We will send you proof of payment as soon as its processed.
@@ -91,12 +91,20 @@ class WhitelistJoined extends Component {
             {this.props.loadingAddress?<Loader type="Bars" color="#000" height="25"	width="25" />:<Typography variant="title" noWrap>{this.props.contributionAddress}</Typography>}
           </div>
         </Grid>
-        {!this.props.loadingAddress?<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-          <Typography variant="body2">
-
-            <Button size="small" variant="raised" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
-          </Typography>
-        </Grid>:<div></div>}
+        {!this.props.loadingAddress?
+          <Grid container>
+            <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+              <Typography variant="body2">
+                <Button size="small" variant="raised" color="primary" onClick={this.props.sendFromCC}>Send from CryptoCurve Offline Wallet</Button>
+              </Typography>
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <Typography variant="body2">
+                <Button size="small" variant="flat" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
+              </Typography>
+            </Grid>
+          </Grid>
+          :<div></div>}
         <Grid item xs={12} align='right' style={{marginTop: '24px '}}>
           <Button size="small" variant="raised" color="primary" onClick={this.props.done}>Go to my account</Button>
         </Grid>
