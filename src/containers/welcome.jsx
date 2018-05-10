@@ -159,23 +159,25 @@ let Welcome = createReactClass({
       this.submitLogin();
     } else if (event.which == 8) {
       var name = event.target.id
-      var index = name.substring(4)
+      if(name.indexOf('code') > -1) {
+        var index = name.substring(4)
 
-      if(this.state[name].length > 0) {
-        var codeArray = this.state.codeArray
-        codeArray[index-1] = ''
+        if(this.state[name].length > 0) {
+          var codeArray = this.state.codeArray
+          codeArray[index-1] = ''
 
-        this.setState({codeArray, code: codeArray.join(''), [name]: ''})
-        if(index > 1) {
-          document.getElementById(name).focus()
-        }
-      } else {
-        var codeArray = this.state.codeArray
-        codeArray[index-2] = ''
+          this.setState({codeArray, code: codeArray.join(''), [name]: ''})
+          if(index > 1) {
+            document.getElementById(name).focus()
+          }
+        } else {
+          var codeArray = this.state.codeArray
+          codeArray[index-2] = ''
 
-        this.setState({codeArray, code: codeArray.join(''), ['code'+(parseInt(index)-1)]: ''})
-        if(index > 1) {
-          document.getElementById('code'+(parseInt(index)-1)).focus()
+          this.setState({codeArray, code: codeArray.join(''), ['code'+(parseInt(index)-1)]: ''})
+          if(index > 1) {
+            document.getElementById('code'+(parseInt(index)-1)).focus()
+          }
         }
       }
     }

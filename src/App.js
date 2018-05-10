@@ -18,7 +18,7 @@ import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
-import SendEther from './containers/sendEther.jsx';
+import SendEthereum from './containers/sendEthereum.jsx';
 
 import ComingSoon from './components/comingSoon.jsx';
 import PrivacyPolicy from './components/privacyPolicy.jsx';
@@ -120,8 +120,7 @@ class App extends Component {
       wanAddresses: null,
       contacts: null,
       whitelistState: whitelistState,
-      uriParameters: {},
-      sendEtherModalOpen: false
+      uriParameters: {}
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -131,7 +130,6 @@ class App extends Component {
     this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
     this.openSendEther = this.openSendEther.bind(this);
-    this.closeSendEther = this.closeSendEther.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -331,11 +329,8 @@ class App extends Component {
   };
 
   openSendEther(sendEtherContact, sendEtherAccount) {
-    this.setState({ sendEtherModalOpen: true, sendEtherContact, sendEtherAccount})
-  };
-
-  closeSendEther() {
-    this.setState({ sendEtherModalOpen: false, sendEtherContact: null, sendEtherAccount: null})
+    this.setState({ sendEtherContact, sendEtherAccount});
+    window.location.hash = 'sendEthereum'
   };
 
   locationHashChanged() {
@@ -404,15 +399,6 @@ class App extends Component {
       navClicked={this.navClicked} />
   };
 
-  renderSendEtherModal() {
-    return(<SendEther
-      isOpen={this.state.sendEtherModalOpen}
-      sendEtherContact={this.state.sendEtherContact}
-      sendEtherAccount={this.state.sendEtherAccount}
-      closeSendEther={this.closeSendEther}
-      ethAddresses={this.state.ethAddresses}/>)
-  };
-
   render() {
 
     return (
@@ -423,7 +409,6 @@ class App extends Component {
         <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '564px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
-            {this.renderSendEtherModal()}
           </Grid>
         </Grid>
         {this.renderFooter()}
@@ -446,7 +431,7 @@ class App extends Component {
       case 'whitelist':
         return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} />);
       case 'wanAccounts':
         return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} />);
       case 'contacts':
@@ -459,6 +444,8 @@ class App extends Component {
         return (<PrivacyPolicy />);
       case 'manageEthPools':
         return (<ComingSoon />);
+      case 'sendEthereum':
+        return (<SendEthereum sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'about':
         return (<ComingSoon />);
       case 'press':

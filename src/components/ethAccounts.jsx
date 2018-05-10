@@ -148,8 +148,7 @@ class EthAccounts extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat" >Send Ether</Button>
-                    <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} >Deposit Ether</Button>
+                    <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} onClick={() => { this.props.sendEtherClicked(null, address) }} >Send Ether</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -158,6 +157,7 @@ class EthAccounts extends Component {
         );
       })
   };
+  //<Button size="small" variant="flat" style={{border: '1px solid #ccc'}} >Deposit Ether</Button>
 
   render() {
     return (

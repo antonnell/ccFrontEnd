@@ -87,16 +87,6 @@ class AppDrawer extends Component {
       return null;
     }
 
-    /*
-    <Avatar style={{marginTop: '16px', marginBottom: '12px', backgroundColor: '#2ad4dc', color: '#000000'}} alt="">{this.props.user.username.charAt(0)}</Avatar>
-    <Typography variant="body2" style={{color: '#FFFFFF '}}>
-      {this.props.user.username}
-    </Typography>
-    <Typography variant="body1" style={{color: '#FFFFFF '}}>
-      {this.props.user.email}
-    </Typography>
-    */
-
     return (
       <Drawer open={this.props.open} onClose={this.props.closeDrawer}>
         <Grid container alignItems="flex-start" spacing={0}>
@@ -133,6 +123,12 @@ class AppDrawer extends Component {
                     <ContactIcon />
                   </ListItemIcon>
                   <ListItemText primary="Contacts" />
+                </ListItem>
+                <ListItem style={this.props.currentScreen=='sendEthereum'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
+                  <ListItemIcon>
+                    <AccountIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Send Ethereum" />
                 </ListItem>
                 <ListItem style={this.props.currentScreen=='manageEthPools'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
                   <ListItemIcon>

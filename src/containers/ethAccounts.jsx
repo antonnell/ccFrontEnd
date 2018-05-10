@@ -39,6 +39,8 @@ let EthAccounts = createReactClass({
         privateKeyError={this.state.privateKeyError}
         publicAddress={this.state.publicAddress}
         publicAddressError={this.state.publicAddressError}
+        handleChecked={this.handleChecked}
+        sendEtherClicked={this.props.openSendEther}
       />
     )
   },
