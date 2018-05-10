@@ -39,6 +39,9 @@ let SendEther = createReactClass({
       <SendEtherComponent
         handleChange={this.handleChange}
 
+        selectAddress={this.selectAddress}
+        selectContact={this.selectContact}
+
         error={this.state.error}
         loading={this.state.loading}
 
@@ -58,6 +61,14 @@ let SendEther = createReactClass({
         gweiErrorMessage={this.state.gweiErrorMessage}
       />
     )
+  },
+
+  selectAddress(account) {
+    this.setState({account})
+  },
+
+  selectContact(contact) {
+    this.setState({contact})
   },
 
   handleChange (event, name) {

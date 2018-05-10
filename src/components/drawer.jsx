@@ -87,16 +87,23 @@ class AppDrawer extends Component {
       return null;
     }
 
+    /*
+    <Avatar style={{marginTop: '16px', marginBottom: '12px', backgroundColor: '#2ad4dc', color: '#000000'}} alt="">{this.props.user.username.charAt(0)}</Avatar>
+    <Typography variant="body2" style={{color: '#FFFFFF '}}>
+      {this.props.user.username}
+    </Typography>
+    <Typography variant="body1" style={{color: '#FFFFFF '}}>
+      {this.props.user.email}
+    </Typography>
+    */
+
     return (
       <Drawer open={this.props.open} onClose={this.props.closeDrawer}>
         <Grid container alignItems="flex-start" spacing={0}>
           <Grid item xs={12}>
-            <div style={{width: '100%', height: '150px', padding: '24px', background: '#2c2c2c'}} color='secondary'>
-              <Avatar style={{marginTop: '16px', marginBottom: '12px', backgroundColor: '#2ad4dc', color: '#000000'}} alt="">{this.props.user.username.charAt(0)}</Avatar>
-              <Typography variant="body2" style={{color: '#FFFFFF '}}>
-                {this.props.user.username}
-              </Typography>
-              <Typography variant="body1" style={{color: '#FFFFFF '}}>
+            <div style={{width: '100%', height: '150px', padding: '24px', background: '#2c2c2c', position: 'relative'}} color='secondary'>
+              <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
+              <Typography variant="body2" style={{position: 'absolute', bottom: '12px', color: '#FFFFFF'}}>
                 {this.props.user.email}
               </Typography>
             </div>

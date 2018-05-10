@@ -37,7 +37,7 @@ class Disable2FA extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
-              Turn off 2 factor authentication? <Button variant="flat" style={{border: '1px solid #ccc'}} size='medium' color='primary' onClick={this.props.submitDisable} disabled={this.props.loading}>Turn Off</Button>
+              Turn off 2 Factor Authentication? <Button variant="flat" style={{border: '1px solid #ccc'}} size='medium' color='primary' onClick={this.props.submitDisable} disabled={this.props.loading}>Turn Off</Button>
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}

@@ -21,7 +21,7 @@ class Enable2FA extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="headline" color="inherit">
-                Enable 2FA
+                2 Factor Authentication
               </Typography>
             </Grid>
           </Grid>
@@ -41,17 +41,47 @@ class Enable2FA extends Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '24px'}}>
             <Grid item xs={12} style={{marginTop: '50px'}} style={{position: 'relative', minHeight: '228px'}}>
               <canvas id='canvas' style={{minHeight: '228px'}}></canvas>
               {this.props.QRCodeLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             </Grid>
           </Grid>
-          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
-            <Grid item xs={12} style={{marginTop: '50px'}}>
-              <TextField required fullWidth={true} color="textSecondary" error={this.props.codeError} disabled={this.props.loading}
-                id="code" label="Enter Code" value={this.props.code}
-                onChange={(event) => { this.props.handleChange(event, 'code'); }} margin="normal" onKeyDown={this.props.onCodeKeyDown} />
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={8}>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required autoFocus={true} fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code1" value={this.props.code1}
+                onChange={(event) => { this.props.handleChange(event, 'code1'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code2" value={this.props.code2}
+                onChange={(event) => { this.props.handleChange(event, 'code2'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code3" value={this.props.code3}
+                onChange={(event) => { this.props.handleChange(event, 'code3'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code4" value={this.props.code4}
+                onChange={(event) => { this.props.handleChange(event, 'code4'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code5" value={this.props.code5}
+                onChange={(event) => { this.props.handleChange(event, 'code5'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={2} style={{marginTop: '50px'}}>
+              <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code6" value={this.props.code6}
+                onChange={(event) => { this.props.handleChange(event, 'code6'); }} margin="normal"
+                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="display1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
+                {this.props.codeErrorMessage}
+              </Typography>
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -64,7 +94,7 @@ class Enable2FA extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitEnable} disabled={this.props.loading}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitEnable} disabled={this.props.loading||!this.props.codeValid}>
                 Enable
               </Button>
             </Grid>

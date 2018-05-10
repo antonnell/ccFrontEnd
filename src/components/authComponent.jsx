@@ -58,7 +58,7 @@ class AuthComponent extends Component {
                 InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onLoginKeyDown}/>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="display1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em'}}>
+              <Typography variant="display1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
                 {this.props.codeErrorMessage}
               </Typography>
             </Grid>
@@ -78,7 +78,7 @@ class AuthComponent extends Component {
               </Button>
             </Grid>
             <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitLogin} disabled={(this.props.loading||this.props.code.length<6)}>
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitLogin} disabled={(this.props.loading||!this.props.codeValid)}>
                 Login
               </Button>
             </Grid>

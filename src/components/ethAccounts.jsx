@@ -128,7 +128,7 @@ class EthAccounts extends Component {
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
                         <Typography variant="body1">
-                          {address.balance}
+                          {address.balance+' ETH'}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -148,8 +148,8 @@ class EthAccounts extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat">Update</Button>
-                    <Button size="small" variant="flat" color="secondary">Send Ether</Button>
+                    <Button size="small" variant="flat" >Send Ether</Button>
+                    <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} >Deposit Ether</Button>
                   </Grid>
                 </Grid>
               </CardContent>
