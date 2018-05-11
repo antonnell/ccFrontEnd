@@ -64,6 +64,8 @@ let SendEther = createReactClass({
 
       setupPaymentValid: false,
 
+      transactionID: '',
+
       disclaimer: 'CryptoCurve accepts no responsibility for funds transferred to an incorrect public address. Please ensure that the address entered is the correct Ethereum Public Address of your recipient.'
     };
   },
@@ -162,7 +164,8 @@ let SendEther = createReactClass({
         case 'completeEthereumPayment':
           return (<CompleteEthereumPayment
             error={this.state.error}
-            accountClicked={this.accountClicked}/>)
+            accountClicked={this.accountClicked}
+            transactionID={this.state.transactionID}/>)
     }
   },
 
@@ -297,7 +300,8 @@ let SendEther = createReactClass({
     var completed = this.state.completed
     completed[1] = true
     if(data.success) {
-      this.setState({currentScreen: 'completeEthereumPayment', activeStep: 2, completed})
+
+      this.setState({currentScreen: 'completeEthereumPayment', activeStep: 2, completed, transactionID: data.transactionId})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, currentScreen: 'completeEthereumPayment', activeStep: 2, completed});
     } else {

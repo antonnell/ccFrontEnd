@@ -36,6 +36,7 @@ class CompleteEthereumPayment extends Component {
   };
 
   renderSuccess() {
+    var url = 'https://ropsten.etherscan.io/tx/'+this.props.transactionID
     return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
       <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
         <Typography variant="body1">
@@ -45,6 +46,11 @@ class CompleteEthereumPayment extends Component {
       <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
         <Typography variant="body1">
           Please wait while the transaction is being mined. Once completed, the funds will relect on your account.
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="body1">
+          You can view the progress of your transaction using the following transaction ID: <a href={url} target="_blank">{this.props.transactionID}</a>
         </Typography>
       </Grid>
     </Grid>)
