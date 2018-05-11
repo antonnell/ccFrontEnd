@@ -74,12 +74,17 @@ var Store = () => {
     var url = 'ethereum/sendEther'
     var postJson = {
       fromAddress: payload.content.fromAddress,
-      toAddress: payload.content.toAddress,
-      contactUserName: payload.content.contactUserName,
       amount: payload.content.amount,
       gwei: payload.content.gwei
     }
+    if(payload.content.toAddress != null) {
+      postJson.toAddress = payload.content.toAddress
+    }
+    if(payload.content.contactUserName != null) {
+      postJson.contactUsername = payload.content.contactUserName
+    }
 
+    console.log(postJson)
     this.callApi(url,
       'POST',
       postJson,

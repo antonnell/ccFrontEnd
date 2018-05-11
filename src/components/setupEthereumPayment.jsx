@@ -8,6 +8,8 @@ import TextField from 'material-ui/TextField';
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import { InputAdornment } from 'material-ui/Input';
 
 class SetupEthereumPayment extends Component {
 
@@ -20,47 +22,51 @@ class SetupEthereumPayment extends Component {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
 
-    return (<Select
-      value={this.props.accountValue}
-      onChange={this.props.selectAddress}
-      style={{minWidth: '300px', width: '100%'}}
-      renderValue={(value) => {
-        var selectedAddress = this.props.ethAddresses.filter((address) => {
-          return address.address == value
-        })[0]
+    return (
+      <FormControl error style={{minWidth: '300px', width: '100%'}}>
+        <Select
+        error={this.props.accountError}
+        value={this.props.accountValue}
+        onChange={this.props.selectAddress}
+        renderValue={(value) => {
+          var selectedAddress = this.props.ethAddresses.filter((address) => {
+            return address.address == value
+          })[0]
 
-        return (
-          <Grid container justify="center" alignItems="center" direction="row">
-            <Grid item xs={8} align='left'>
-              <Typography variant='display1' noWrap color='secondary'>
-                {selectedAddress.name}
-              </Typography>
-              <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
-                {selectedAddress.address}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
-              <div></div>
-              <Typography variant='title' noWrap>
-                {selectedAddress.balance+" ETH"}
-              </Typography>
-              <Typography variant='subheading' noWrap>
-                Available Balance
-              </Typography>
-            </Grid>
-          </Grid>)
-      }} >
-      {this.props.ethAddresses.map((address) => {
-        return (
-          <MenuItem value={address.address} key={address.address}>
-            <ListItemText primary={address.name} secondary={address.address} />
-            <ListItemSecondaryAction style={{right: '24px'}}>
-              {address.balance+" ETH"}
-            </ListItemSecondaryAction>
-          </MenuItem>
-        )
-      })}
-    </Select>)
+          return (
+            <Grid container justify="center" alignItems="center" direction="row">
+              <Grid item xs={8} align='left'>
+                <Typography variant='display1' noWrap color='secondary'>
+                  {selectedAddress.name}
+                </Typography>
+                <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
+                  {selectedAddress.address}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
+                <div></div>
+                <Typography variant='title' noWrap>
+                  {selectedAddress.balance+" ETH"}
+                </Typography>
+                <Typography variant='subheading' noWrap>
+                  Available Balance
+                </Typography>
+              </Grid>
+            </Grid>)
+        }} >
+        {this.props.ethAddresses.map((address) => {
+          return (
+            <MenuItem value={address.address} key={address.address}>
+              <ListItemText primary={address.name} secondary={address.address} />
+              <ListItemSecondaryAction style={{right: '24px'}}>
+                {address.balance+" ETH"}
+              </ListItemSecondaryAction>
+            </MenuItem>
+          )
+        })}
+      </Select>
+      <FormHelperText>{this.props.accountErrorMessage}</FormHelperText>
+    </FormControl>)
   };
 
   renderContacts() {
@@ -68,41 +74,46 @@ class SetupEthereumPayment extends Component {
       return (<Typography variant="subheading" >Oh no, we couldn't find any contacts for you. Why don't you create/import one?</Typography>)
     }
 
-    return (<Select
-      value={this.props.contactValue}
-      onChange={this.props.selectContact}
-      style={{minWidth: '300px', width: '100%'}}
-      renderValue={(value) => {
-        var selectedContact = this.props.contacts.filter((contact) => {
-          return contact.primaryAddress == value
-        })[0]
+    return (
+      <FormControl error style={{minWidth: '300px', width: '100%'}}>
+        <Select
+        error={this.props.contactError}
+        value={this.props.contactValue}
+        onChange={this.props.selectContact}
+        style={{minWidth: '300px', width: '100%'}}
+        renderValue={(value) => {
+          var selectedContact = this.props.contacts.filter((contact) => {
+            return contact.primaryAddress == value
+          })[0]
 
-        return (
-          <Grid container justify="center" alignItems="center" direction="row">
-            <Grid item xs={8} align='left'>
-              <Typography variant='display1' noWrap color='secondary'>
-                {selectedContact.displayName}
-              </Typography>
-              <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
-                {selectedContact.primaryAddress}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
-              <div></div>
-              <Typography variant='subheading' >
-                {selectedContact.notes}
-              </Typography>
-            </Grid>
-          </Grid>)
-      }} >
-      {this.props.contacts.map((contact) => {
-        return (
-          <MenuItem value={contact.primaryAddress} key={contact.primaryAddress}>
-            <ListItemText primary={contact.displayName} secondary={contact.primaryAddress} />
-          </MenuItem>
-        )
-      })}
-    </Select>)
+          return (
+            <Grid container justify="center" alignItems="center" direction="row">
+              <Grid item xs={8} align='left'>
+                <Typography variant='display1' noWrap color='secondary'>
+                  {selectedContact.displayName}
+                </Typography>
+                <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
+                  {selectedContact.primaryAddress}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
+                <div></div>
+                <Typography variant='subheading' >
+                  {selectedContact.notes}
+                </Typography>
+              </Grid>
+            </Grid>)
+        }} >
+        {this.props.contacts.map((contact) => {
+          return (
+            <MenuItem value={contact.primaryAddress} key={contact.primaryAddress}>
+              <ListItemText primary={contact.displayName} secondary={contact.primaryAddress} />
+            </MenuItem>
+          )
+        })}
+      </Select>
+      <FormHelperText>{this.props.contactErrorMessage}</FormHelperText>
+    </FormControl>)
   };
 
   renderSelectBeneficiary() {
@@ -130,7 +141,7 @@ class SetupEthereumPayment extends Component {
           <TextField required fullWidth={false} color="textSecondary" error={this.props.publicAddressError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
             id="publicAddress" placeholder='Address' value={this.props.publicAddress}
             onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal"
-            helperText={this.props.publicAddressErrorMessage} />
+            helperText={this.props.publicAddressErrorMessage} onBlur={(event) => { this.props.validateField(event, 'publicAddress'); }} />
         </Grid>
       </Grid>);
   };
@@ -166,7 +177,7 @@ class SetupEthereumPayment extends Component {
             <TextField required fullWidth={false} color="textSecondary" error={this.props.ownReferenceError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
               id="ownReference" placeholder="Reference" value={this.props.ownReference}
               onChange={(event) => { this.props.handleChange(event, 'ownReference'); }} margin="normal"
-              helperText={this.props.ownReferenceErrorMessage} />
+              helperText={this.props.ownReferenceErrorMessage} onBlur={(event) => { this.props.validateField(event, 'ownReference'); }} />
           </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
@@ -181,7 +192,7 @@ class SetupEthereumPayment extends Component {
               onChange={this.props.handleTabChange}
               indicatorColor="secondary"
               textColor="secondary" >
-              <Tab label="Beneficairy Payment" />
+              <Tab label="Beneficiary Payment" />
               <Tab label="Public Address Payment" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderSelectBeneficiary()}
@@ -189,12 +200,12 @@ class SetupEthereumPayment extends Component {
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
             <Typography variant="subheading">
-              Beneficiary reference*
+              Their reference*
             </Typography>
-            <TextField required fullWidth={false} color="textSecondary" error={this.props.beneficairyReferenceError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
-              id="beneficairyReference" placeholder="Reference" value={this.props.beneficairyReference}
-              onChange={(event) => { this.props.handleChange(event, 'beneficairyReference'); }} margin="normal"
-              helperText={this.props.beneficairyReferenceErrorMessage} />
+            <TextField required fullWidth={false} color="textSecondary" error={this.props.beneficiaryReferenceError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
+              id="beneficiaryReference" placeholder="Reference" value={this.props.beneficiaryReference}
+              onChange={(event) => { this.props.handleChange(event, 'beneficiaryReference'); }} margin="normal"
+              helperText={this.props.beneficiaryReferenceErrorMessage} onBlur={(event) => { this.props.validateField(event, 'beneficiaryReference'); }} />
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
             <Typography variant="subheading">
@@ -203,7 +214,9 @@ class SetupEthereumPayment extends Component {
             <TextField required fullWidth={false} color="textSecondary" error={this.props.amountError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
               id="amount" placeholder="Amount" value={this.props.amount}
               onChange={(event) => { this.props.handleChange(event, 'amount'); }} margin="normal"
-              helperText={this.props.amountErrorMessage} />
+              helperText={this.props.amountErrorMessage} onBlur={(event) => { this.props.validateField(event, 'amount'); }} InputProps={{
+                endAdornment: <InputAdornment position="end">Eth</InputAdornment>,
+              }} />
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
             <Typography variant="subheading">
@@ -212,7 +225,9 @@ class SetupEthereumPayment extends Component {
             <TextField required fullWidth={false} color="textSecondary" error={this.props.gweiError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
               id="gwei" placeholder="Gwei" value={this.props.gwei}
               onChange={(event) => { this.props.handleChange(event, 'gwei'); }} margin="normal"
-              helperText={this.props.gweiErrorMessage} />
+              helperText={this.props.gweiErrorMessage} onBlur={(event) => { this.props.validateField(event, 'gwei'); }} InputProps={{
+                endAdornment: <InputAdornment position="end">Gwei</InputAdornment>,
+              }} />
           </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>

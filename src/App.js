@@ -273,11 +273,11 @@ class App extends Component {
   updateWindowDimensions() {
 
     var size = 'sm'
-    if(window.innerWidth <= 360) {
+    if(window.innerWidth < 600) {
       size = 'xs'
-    } else if (window.innerWidth <= 640) {
+    } else if (window.innerWidth < 1024) {
       size = 'sm'
-    } else if (window.innerWidth <= 960) {
+    } else if (window.innerWidth < 1440) {
       size = 'md'
     } else {
       size = 'lg'
@@ -445,7 +445,7 @@ class App extends Component {
       case 'manageEthPools':
         return (<ComingSoon />);
       case 'sendEthereum':
-        return (<SendEthereum sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+        return (<SendEthereum user={this.state.user} sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'about':
         return (<ComingSoon />);
       case 'press':

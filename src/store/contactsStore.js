@@ -28,7 +28,6 @@ var Store = () => {
   }.bind(this))
 
   this.getContacts = function(payload) {
-    console.log(payload.content)
     var url = 'contacts/getUserContacts/'+payload.content.id
 
     this.callApi(url,

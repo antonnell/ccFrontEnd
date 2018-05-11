@@ -148,8 +148,8 @@ class WanAccounts extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right'>
-                    <Button size="small" variant="flat">Update</Button>
-                    <Button size="small" variant="flat" color="secondary">Send Wan</Button>
+                    <Button size="small" variant="flat" disabled={true}>Update</Button>
+                    <Button size="small" variant="flat" color="secondary" disabled={true}>Send Wan</Button>
                   </Grid>
                 </Grid>
               </CardContent>

@@ -15,6 +15,41 @@ class CompleteEthereumPayment extends Component {
     super(props);
   };
 
+  renderError() {
+    return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="body1">
+          Your payment was unfortunately <b>not</b> successfully processed.
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="body1">
+          If the problem persists, please contact CryptoCurve support with the following error
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="subheading" style={{color: '#f44336'}}>
+          {this.props.error}
+        </Typography>
+      </Grid>
+    </Grid>)
+  };
+
+  renderSuccess() {
+    return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="body1">
+          Your payment was successfully processed.
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+        <Typography variant="body1">
+          Please wait while the transaction is being mined. Once completed, the funds will relect on your account.
+        </Typography>
+      </Grid>
+    </Grid>)
+  };
+
   render() {
     return (
       <div>
@@ -25,23 +60,8 @@ class CompleteEthereumPayment extends Component {
             </Typography>
           </Grid>
         </Grid>
-        <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
-          <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            <Typography variant="body1">
-              Your payment was successfully processed.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            <Typography variant="body1">
-              Please wait while the transaction is being mined. Once completed, the funds will relect on your account.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            <Typography variant="body1">
-
-            </Typography>
-          </Grid>
-        </Grid>
+        {this.props.error==null&&this.renderSuccess()}
+        {this.props.error!=null&&this.renderError()}
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='right'>
             <Button size="medium" variant="raised" color="primary" onClick={this.props.accountClicked}>Back to Account</Button>
