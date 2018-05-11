@@ -18,7 +18,6 @@ class TermsModal extends Component {
       <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
         <DialogTitle id="alert-dialog-title">{"Terms and Conditions"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" style={{ color: '#333'}}>
             <p>
               <b>I have copied this from the disclaimer popup: </b>
               Because I ahve no idea what the terms and conditions of our product are. So you may as
@@ -75,7 +74,6 @@ class TermsModal extends Component {
               OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
               DEALINGS IN THE SOFTWARE.
             </b>
-          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>

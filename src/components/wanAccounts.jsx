@@ -30,7 +30,8 @@ class WanAccounts extends Component {
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
             id="addressName" label="Address Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <FormControlLabel
@@ -47,11 +48,26 @@ class WanAccounts extends Component {
         </Grid>
       </Grid>
     );
-  }
+  };
+
+  renderImportCommingSoon() {
+    return (
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px',  position: 'relative'}}>
+        <Grid item xs={12} align='left'>
+          <Typography variant="headline" color="inherit">
+            Import Wanchain Address
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={10} md={9} lg={7} align='center'>
+          <Typography variant='headline' style={{marginTop: '48px'}}>Coming Soon...</Typography>
+        </Grid>
+      </Grid>
+    )
+  };
 
   renderImport() {
     return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px',  position: 'relative'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
             Import Wanchain Address
@@ -60,17 +76,20 @@ class WanAccounts extends Component {
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.publicAddressError} disabled={this.props.createLoading}
             id="publicAddress" label="Public Address" value={this.props.publicAddress}
-            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'publicAddress'); }} helperText={this.props.publicAddressErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.createLoading}
             id="privateKey" label="Private Key" value={this.props.privateKey}
-            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'privateKey'); }} helperText={this.props.privateKeyErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
             id="addressName" label="Address Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <FormControlLabel
@@ -183,7 +202,7 @@ class WanAccounts extends Component {
               <Tab label="Import Address" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderCreate()}
-            {this.props.tabValue === 1 && this.renderImport()}
+            {this.props.tabValue === 1 && this.renderImportCommingSoon()}
           </Grid>
           {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>

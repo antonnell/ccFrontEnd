@@ -1,9 +1,10 @@
-import React from 'react'
-import EthAccountsComponent from '../components/ethAccounts'
-const createReactClass = require('create-react-class')
+import React from 'react';
+import EthAccountsComponent from '../components/ethAccounts';
+const createReactClass = require('create-react-class');
+const isEthereumAddress  = require('is-ethereum-address');
 
-let ethEmitter = require('../store/ethStore.js').default.emitter
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher
+let ethEmitter = require('../store/ethStore.js').default.emitter;
+let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
 
 let EthAccounts = createReactClass({
   getInitialState() {
@@ -13,12 +14,15 @@ let EthAccounts = createReactClass({
       tabValue: 0,
       addressName: '',
       addressNameError: false,
-      primary: false,
-      primaryError: false,
+      addressNameErrorMessage: '',
       privateKey: '',
       privateKeyError: false,
+      privateKeyErrorMessage: '',
       publicAddress: '',
-      publicAddressError: false
+      publicAddressError: false,
+      publicAddressErrorMessage: '',
+      primary: false,
+      primaryError: false,
     }
   },
   render() {
@@ -34,13 +38,17 @@ let EthAccounts = createReactClass({
         addresses={this.props.ethAddresses}
         addressName={this.state.addressName}
         addressNameError={this.state.addressNameError}
+        addressNameErrorMessage={this.state.addressNameErrorMessage}
         primary={this.state.primary}
         privateKey={this.state.privateKey}
         privateKeyError={this.state.privateKeyError}
+        privateKeyErrorMessage={this.state.privateKeyErrorMessage}
         publicAddress={this.state.publicAddress}
         publicAddressError={this.state.publicAddressError}
+        publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
         sendEtherClicked={this.props.openSendEther}
+        validateField={this.validateField}
       />
     )
   },
@@ -119,16 +127,62 @@ let EthAccounts = createReactClass({
     }
   },
 
+  validateAddressName(value) {
+    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'' });
+    if(value==null) {
+      value = this.state.addressName;
+    }
+    if(value == '') {
+      this.setState({ addressNameError: true, addressNameErrorMessage:'Address name is required' });
+      return false;
+    }
+    this.setState({ addressNameValid: true });
+    return true;
+  },
+
+  validatePublicAddress(value) {
+    this.setState({ publicAddressValid: false, publicAddressError: false, publicAddressErrorMessage:'' });
+    if(value==null) {
+      value = this.state.publicAddress;
+    }
+    if(value == '') {
+      this.setState({ publicAddressError: true, publicAddressErrorMessage:'Ethereum public address is required' });
+      return false;
+    } else if (!isEthereumAddress(value)) {
+      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Ethereum public address'});
+      return false;
+    }
+    this.setState({ publicAddressValid: true });
+    return true;
+  },
+
+  validatePrivateKey(value) {
+    this.setState({ privateKeyValid: false, privateKeyError: false, privateKeyErrorMessage:'' });
+    if(value==null) {
+      value = this.state.publicAddress;
+    }
+    if(value == '') {
+      this.setState({ privateKeyError: true, privateKeyErrorMessage:'Ethereum private key is required' });
+      return false;
+    }
+    this.setState({ privateKeyValid: true });
+    return true;
+  },
+
   createEthAddress() {
-    this.setState({createLoading: true});
-    var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-    ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+    if(this.validateAddressName()) {
+      this.setState({createLoading: true});
+      var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
+      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+    }
   },
 
   importEthAddress() {
-    this.setState({createLoading: true});
-    var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
-    ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
+    if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
+      this.setState({createLoading: true});
+      var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
+      ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
+    }
   },
 
   handleTabChange(event, tabValue) {
@@ -145,6 +199,16 @@ let EthAccounts = createReactClass({
 
   handleChecked (event, name) {
     this.setState({ [name]: event.target.checked });
+  },
+
+  validateField (event, name) {
+    if (name==="addressName") {
+      this.validateAddressName(event.target.value)
+    } if (name==="privateKey") {
+      this.validatePrivateKey(event.target.value)
+    } else if (name==="publicAddress") {
+      this.validatePublicAddress(event.target.value)
+    }
   }
 
 })

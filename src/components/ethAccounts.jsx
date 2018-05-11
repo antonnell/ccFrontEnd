@@ -30,7 +30,8 @@ class EthAccounts extends Component {
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
             id="addressName" label="Address Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <FormControlLabel
@@ -60,17 +61,20 @@ class EthAccounts extends Component {
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.publicAddressError} disabled={this.props.createLoading}
             id="publicAddress" label="Public Address" value={this.props.publicAddress}
-            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'publicAddress'); }} helperText={this.props.publicAddressErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.createLoading}
             id="privateKey" label="Private Key" value={this.props.privateKey}
-            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'privateKey'); }} helperText={this.props.privateKeyErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
             id="addressName" label="Address Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <FormControlLabel
