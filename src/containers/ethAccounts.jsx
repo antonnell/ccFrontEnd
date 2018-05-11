@@ -159,7 +159,7 @@ let EthAccounts = createReactClass({
   validatePrivateKey(value) {
     this.setState({ privateKeyValid: false, privateKeyError: false, privateKeyErrorMessage:'' });
     if(value==null) {
-      value = this.state.publicAddress;
+      value = this.state.privateKey;
     }
     if(value == '') {
       this.setState({ privateKeyError: true, privateKeyErrorMessage:'Ethereum private key is required' });

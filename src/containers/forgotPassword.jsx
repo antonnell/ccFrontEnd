@@ -4,11 +4,17 @@ const createReactClass = require('create-react-class')
 let emitter = require('../store/accountStore.js').default.emitter
 let dispatcher = require('../store/accountStore.js').default.dispatcher
 
+const email = require("email-validator");
+
 let ForgotPassword = createReactClass({
   getInitialState() {
     return {
       loading: false,
-      error: null
+      error: null,
+
+      emailAddress: '',
+      emailAddressError: false,
+      emailAddressErrorMessage: ''
     };
   },
 
@@ -29,6 +35,7 @@ let ForgotPassword = createReactClass({
         onResetKeyDown={this.onResetKeyDown}
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
+        emailAddressErrorMessage={this.state.emailAddressErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
         />
@@ -51,9 +58,13 @@ let ForgotPassword = createReactClass({
 
   submitReset() {
     var error = false;
+    this.setState({emailAddressError: false, emailAddressErrorMessage:  ''})
 
     if(this.state.emailAddress == '') {
-      this.setState({emailAddressError: true});
+      this.setState({emailAddressError: true, emailAddressErrorMessage: 'Email address is required'});
+      error = true;
+    } else if (!email.validate(this.state.emailAddress)) {
+      this.setState({emailAddressError: true, emailAddressErrorMessage: "Email address provided is not a valid email address"});
       error = true;
     }
 

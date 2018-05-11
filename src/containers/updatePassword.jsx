@@ -1,5 +1,6 @@
 import React from 'react'
 import UpdatePasswordComponent from '../components/updatePassword'
+import UpdatePasswordDoneComponent from '../components/updatePasswordDone'
 const createReactClass = require('create-react-class')
 let emitter = require('../store/accountStore.js').default.emitter
 let dispatcher = require('../store/accountStore.js').default.dispatcher
@@ -8,7 +9,16 @@ let UpdatePassword = createReactClass({
   getInitialState() {
     return {
       loading: false,
-      error: null
+      error: null,
+      passwordUpdated: false,
+
+      password: '',
+      passwordError: false,
+      passwordErrorMessage: '',
+
+      confirmPassword: '',
+      confirmPasswordError: false,
+      confirmPasswordErrorMessage: '',
     };
   },
 
@@ -21,6 +31,11 @@ let UpdatePassword = createReactClass({
   },
 
   render() {
+    if(this.state.passwordUpdated === true) {
+      return(<UpdatePasswordDoneComponent
+          submitUpdatePasswordNavigate={this.submitUpdatePasswordNavigate}
+        />)
+    }
     return (
       <UpdatePasswordComponent
         handleChange={this.handleChange}
@@ -28,10 +43,13 @@ let UpdatePassword = createReactClass({
         submitUpdatePassword={this.submitUpdatePassword}
         password={this.state.password}
         passwordError={this.state.passwordError}
+        passwordErrorMessage={this.state.passwordErrorMessage}
         confirmPassword={this.state.confirmPassword}
         confirmPasswordError={this.state.confirmPasswordError}
+        confirmPasswordErrorMessage={this.state.confirmPasswordErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
+        validateField={this.validateField}
       />
     )
   },
@@ -42,23 +60,40 @@ let UpdatePassword = createReactClass({
     }
   },
 
+  validatePassword(value) {
+    this.setState({ passwordValid: false, passwordError: false, passwordErrorMessage:'' });
+    if(value==null) {
+      value = this.state.password;
+    }
+    if(value == '') {
+      this.setState({ passwordError: true, passwordErrorMessage:'Password is required' });
+      return false;
+    } else if (value.length < 8) {
+      this.setState({ passwordError: true, passwordErrorMessage: 'Your password needs to be at least 8 characaters long'});
+      return false;
+    }
+    this.setState({ passwordValid: true });
+    return true;
+  },
+
+  validateConfirmPassword(value) {
+    this.setState({ confirmPasswordValid: false, confirmPasswordError: false, confirmPasswordErrorMessage:'' });
+    if(value==null) {
+      value = this.state.confirmPassword;
+    }
+    if(value == '') {
+      this.setState({ confirmPasswordError: true, confirmPasswordErrorMessage:'Please confirm your password' });
+      return false;
+    } else if(this.state.password != value) {
+      this.setState({ passwordError: true, confirmPasswordError: true, confirmPasswordErrorMessage: 'Your passwords to do not match'});
+      return false;
+    }
+    this.setState({ confirmPasswordValid: true });
+    return true;
+  },
+
   submitUpdatePassword() {
-    var error = false;
-
-    if(this.state.password == '') {
-      this.setState({passwordError: true});
-      error = true;
-    }
-    if(this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: true});
-        error = true;
-    }
-    if(this.state.password != this.state.confirmPassword) {
-      this.setState({passwordError: true, confirmPasswordError: true});
-      error = true;
-    }
-
-    if(!error) {
+    if(this.validatePassword() & this.validateConfirmPassword()) {
       this.setState({loading: true});
       var content = {username: this.props.user.username, password: this.state.password};
       dispatcher.dispatch({type: 'updatePassword', content, token: this.props.user.token});
@@ -72,13 +107,17 @@ let UpdatePassword = createReactClass({
     }
 
     if(data.success) {
-      //or show 'Your password has been updated'
-      
+      this.setState({passwordUpdated: true})
+
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
       this.setState({error: data.statusText})
     }
+  },
+
+  submitUpdatePasswordNavigate(error, data) {
+    window.location.hash = 'ethAccounts';
   },
 
   handleChange (event, name) {
@@ -88,6 +127,14 @@ let UpdatePassword = createReactClass({
       });
     }
   },
+
+  validateField (event, name) {
+    if (name==="validatePassword") {
+      this.validatePassword(event.target.value)
+    } if (name==="confirmPassword") {
+      this.validateConfirmPassword(event.target.value)
+    }
+  }
 
 })
 

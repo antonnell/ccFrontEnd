@@ -12,13 +12,13 @@ let Contacts = createReactClass({
       error: null,
       emailAddress: "",
       emailAddressError: false,
-      emailAddressErrorText: "",
+      emailAddressErrorMessage: "",
       displayName: "",
       displayNameError: false,
-      displayNameErrorText: "",
+      displayNameErrorMessage: "",
       notes: "",
       notesError: false,
-      notesErrorText: ""
+      notesErrorMessage: ""
     }
   },
 
@@ -33,13 +33,13 @@ let Contacts = createReactClass({
     this.setState({
       emailAddress: "",
       emailAddressError: false,
-      emailAddressErrorText: "",
+      emailAddressErrorMessage: "",
       displayName: "",
       displayNameError: false,
-      displayNameErrorText: "",
+      displayNameErrorMessage: "",
       notes: "",
       notesError: false,
-      notesErrorText: "",
+      notesErrorMessage: "",
     })
   },
 
@@ -72,16 +72,17 @@ let Contacts = createReactClass({
         sendEtherClicked={this.sendEtherClicked}
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
-        emailAddressErrorText={this.state.emailAddressErrorText}
+        emailAddressErrorMessage={this.state.emailAddressErrorMessage}
         displayName={this.state.displayName}
         displayNameError={this.state.displayNameError}
-        displayNameErrorText={this.state.displayNameErrorText}
+        displayNameErrorMessage={this.state.displayNameErrorMessage}
         notes={this.state.notes}
         notesError={this.state.notesError}
-        notesErrorText={this.state.notesErrorText}
+        notesErrorMessage={this.state.notesErrorMessage}
         addLoading={this.state.addLoading}
         error={this.state.error}
         contacts={this.props.contacts}
+        validateField={this.validateField}
         />
     )
   },
@@ -93,9 +94,11 @@ let Contacts = createReactClass({
   },
 
   addClicked() {
-    this.setState({addLoading: true});
-    var content = { emailAddress: this.state.emailAddress, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
-    contactsDispatcher.dispatch({type: 'addContact', content, token: this.props.user.token });
+    if(this.validateEmailAddress() & this.validateDisplayName() & this.validateNotes()) {
+      this.setState({addLoading: true});
+      var content = { emailAddress: this.state.emailAddress, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
+      contactsDispatcher.dispatch({type: 'addContact', content, token: this.props.user.token });
+    }
   },
 
   updateNavigateClicked() {
@@ -112,6 +115,55 @@ let Contacts = createReactClass({
         [name]: event.target.value
       });
     }
+  },
+
+  validateField (event, name) {
+    if (name==="emailAddress") {
+      this.validateEmailAddress(event.target.value)
+    } if (name==="displayName") {
+      this.validateDisplayName(event.target.value)
+    } else if (name==="notes") {
+      this.validateNotes(event.target.value)
+    }
+  },
+
+  validateEmailAddress(value) {
+    this.setState({ emailAddressValid: false, emailAddressError: false, emailAddressErrorMessage:'' });
+    if(value==null) {
+      value = this.state.emailAddress;
+    }
+    if(value == '') {
+      this.setState({ emailAddressError: true, emailAddressErrorMessage:'Email address is required' });
+      return false;
+    }
+    this.setState({ emailAddressValid: true });
+    return true;
+  },
+
+  validateDisplayName(value) {
+    this.setState({ displayNameValid: false, displayNameError: false, displayNameErrorMessage:'' });
+    if(value==null) {
+      value = this.state.displayName;
+    }
+    if(value == '') {
+      this.setState({ displayNameError: true, displayNameErrorMessage:'Display name is required' });
+      return false;
+    }
+    this.setState({ displayNameValid: true });
+    return true;
+  },
+
+  validateNotes(value) {
+    this.setState({ notesValid: false, notesError: false, notesErrorMessage:'' });
+    if(value==null) {
+      value = this.state.notes;
+    }
+    if(value == '') {
+      this.setState({ notesError: true, notesErrorMessage:'Note is required' });
+      return false;
+    }
+    this.setState({ notesValid: true });
+    return true;
   },
 
 })

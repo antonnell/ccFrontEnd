@@ -28,13 +28,16 @@ class Account extends Component {
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.emailAddressError} disabled={this.props.addLoading}
             id="emailAddress" label="Contact Email Address" value={this.props.emailAddress}
-            onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'emailAddress'); }} helperText={this.props.emailAddressErrorMessage} />
           <TextField fullWidth={true} required color="textSecondary" error={this.props.displayNameError} disabled={this.props.addLoading}
             id="displayName" label="Display Name" value={this.props.displayName}
-            onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'displayName'); }} helperText={this.props.displayNameErrorMessage} />
           <TextField fullWidth={true} required color="textSecondary" error={this.props.notesError} disabled={this.props.addLoading}
             id="notes" label="Notes" value={this.props.notes}
-            onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onAddKeyDown} />
+            onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'notes'); }} helperText={this.props.notesErrorMessage} />
         </Grid>
       </Grid>
     );

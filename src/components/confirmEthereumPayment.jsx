@@ -43,7 +43,7 @@ class ConfirmEthereumPayment extends Component {
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='center'>
-            <Typography variant="title">
+            <Typography variant="headline">
               Confirm your payment
             </Typography>
           </Grid>

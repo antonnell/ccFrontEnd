@@ -34,10 +34,12 @@ class UpdatePassword extends Component {
             <Grid item xs={12} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
                 id="password" label="Password" value={this.props.password}
-                onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown} />
+                onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
+                onBlur={(event) => { this.props.validateField(event, 'password'); }} helperText={this.props.passwordErrorMessage} />
               <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.confirmPasswordError} disabled={this.props.loading}
                 id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
-                onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown} />
+                onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
+                onBlur={(event) => { this.props.validateField(event, 'confirmPassword'); }} helperText={this.props.confirmPasswordErrorMessage} />
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}

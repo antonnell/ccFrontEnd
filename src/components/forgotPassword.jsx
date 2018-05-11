@@ -35,7 +35,8 @@ class ForgotPassword extends Component {
             <Grid item xs={12} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" error={this.props.emailAddressError} disabled={this.props.loading}
                 id="emailAddress" label="Email Address" value={this.props.emailAddress}
-                onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onResetKeyDown} />
+                onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onResetKeyDown}
+                helperText={this.props.emailAddressErrorMessage} />
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
