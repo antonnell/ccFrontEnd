@@ -10,9 +10,17 @@ import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Card, { CardContent } from 'material-ui/Card';
 import { CircularProgress } from 'material-ui/Progress';
+import SvgIcon from 'material-ui/SvgIcon';
 
 const styles = {};
 
+function PrimaryIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+    </SvgIcon>
+  );
+}
 class EthAccounts extends Component {
 
   constructor(props) {
@@ -113,11 +121,14 @@ class EthAccounts extends Component {
             <Card style={{marginRight: '6px', marginBottom: '6px'}}>
               <CardContent>
                 <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-                  <Grid item xs={12} align='left'>
+                  <Grid item xs={11} align='left'>
                     <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px'}}>
                       {address.name}
                     </Typography>
                   </Grid>
+                  {address.isPrimary===true&&<Grid item xs={1} align='right'>
+                    <PrimaryIcon />
+                  </Grid>}
                   <Grid item xs={12} align='left' style={{paddingTop: '3px'}}>
                     <Typography noWrap color="textSecondary">
                       {address.address}
