@@ -473,6 +473,9 @@ let SendEther = createReactClass({
     } else if (!this.isNumeric(value)) {
       this.setState({amountError: true, amountErrorMessage:'Invalid amount'});
       return false;
+    } else if (this.state.account!=null && this.state.account.balance < value) {
+      this.setState({amountError: true, amountErrorMessage:'Amount greater than current balance'});
+      return false;
     } else {
       this.setState({ amountValid: true })
     }

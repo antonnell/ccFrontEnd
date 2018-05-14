@@ -121,48 +121,23 @@ class EthAccounts extends Component {
             <Card style={{marginRight: '6px', marginBottom: '6px'}}>
               <CardContent>
                 <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-                  <Grid item xs={11} align='left'>
-                    <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px'}}>
+                  <Grid item xs={9} align='left'>
+                    <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
                       {address.name}
                     </Typography>
+                    {address.isPrimary===true&& <Tooltip title='This is your primary Ethereum account'><PrimaryIcon style={{ marginTop: '2px', marginLeft: '5px', verticalAlign: 'top'}}/></Tooltip>}
                   </Grid>
-                  {address.isPrimary===true&&<Grid item xs={1} align='right'>
-                    <PrimaryIcon />
-                  </Grid>}
-                  <Grid item xs={12} align='left' style={{paddingTop: '3px'}}>
+                  <Grid item xs={3} align='right'>
+                    <Typography variant="headline" noWrap>
+                      {address.balance+' ETH'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
                     <Typography noWrap color="textSecondary">
                       {address.address}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} align='center'>
-                    <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
-                      <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
-                        <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Balance'}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
-                        <Typography variant="body1">
-                          {address.balance+' ETH'}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} align='center'>
-                    <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
-                      <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
-                        <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Primary?'}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
-                        <Typography variant="body1">
-                          {(address.isPrimary?'Yes':'No')}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} align='right'>
+                  <Grid item xs={12} align='right' style={{marginTop: '12px'}}>
                     <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} onClick={() => { this.props.sendEtherClicked(null, address) }} >Send Ether</Button>
                   </Grid>
                 </Grid>

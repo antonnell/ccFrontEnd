@@ -99,7 +99,7 @@ class AppDrawer extends Component {
             </div>
             <div>
               <List>
-                {this.props.canWhitelist && <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
+                {this.props.canWhitelist===true && <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
                   <ListItemIcon>
                     <WhitelistIcon />
                   </ListItemIcon>

@@ -299,6 +299,7 @@ class App extends Component {
 
   logUserOut() {
     sessionStorage.removeItem('cc_user');
+    sessionStorage.removeItem('cc_whiteliststate');
     window.location.hash = 'welcome';
   };
 
@@ -382,7 +383,7 @@ class App extends Component {
     var drawer = null
     if(this.state.user != null) {
       drawer = (<AppDrawer
-        canWhitelist={this.state.whitelistState != null}
+        canWhitelist={this.state.whitelistState!=null&&this.state.whitelistState.user!=null?this.state.whitelistState.user.canWhitelist:false}
         navClicked={this.navClicked}
         currentScreen={this.state.currentScreen}
         closeDrawer={this.closeDrawer}
@@ -400,7 +401,6 @@ class App extends Component {
   };
 
   render() {
-
     return (
       <MuiThemeProvider theme={theme}>
         {this.renderAppBar()}
