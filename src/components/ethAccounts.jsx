@@ -133,19 +133,25 @@ class EthAccounts extends Component {
       </Grid>);
     }
 
+    console.log(this.props.cardLoading)
     return this.props.addresses.map((address) => {
 
       address.editing = false
+      var loading = <div></div>
+
       if(this.props.editAccount != null) {
         if(address.address == this.props.editAccount.address)  {
           address.editing = true
+          if(this.props.cardLoading) {
+            loading = <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
+          }
         }
       }
 
       return (
         <Grid item xs={12} xl={6} align='left' key={address.address}>
           <Card style={{marginRight: '6px', marginBottom: '6px'}}>
-            <CardContent>
+            <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={9} align='left'>
                   {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
@@ -170,6 +176,7 @@ class EthAccounts extends Component {
                   </Typography>
                 </Grid>
               </Grid>
+              {loading}
             </CardContent>
             <CardActions>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>

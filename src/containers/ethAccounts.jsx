@@ -38,6 +38,7 @@ let EthAccounts = createReactClass({
         createImportClicked={this.createImportClicked}
         tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
+        cardLoading={this.state.cardLoading}
         error={this.state.error}
         addresses={this.props.ethAddresses}
         addressName={this.state.addressName}
@@ -128,7 +129,7 @@ let EthAccounts = createReactClass({
   },
 
   updateEthAddressReturned(error, data) {
-    this.setState({createLoading: false, editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: ''});
+    this.setState({cardLoading: false,  editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: ''});
     if(error) {
       return this.setState({error: error.toString()});
     }

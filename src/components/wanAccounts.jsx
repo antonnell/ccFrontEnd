@@ -151,9 +151,14 @@ class WanAccounts extends Component {
     return this.props.addresses.map((address) => {
 
       address.editing = false
+      var loading = <div></div>
+
       if(this.props.editAccount != null) {
         if(address.publicAddress == this.props.editAccount.publicAddress)  {
           address.editing = true
+          if(this.props.cardLoading) {
+            loading = <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
+          }
         }
       }
       return (
@@ -184,6 +189,7 @@ class WanAccounts extends Component {
                   </Typography>
                 </Grid>
               </Grid>
+              {loading}
             </CardContent>
             <CardActions>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
