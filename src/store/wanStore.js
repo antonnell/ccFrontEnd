@@ -9,17 +9,23 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.cryptocurve.network/';
+let apiUrl = 'http://18.221.173.171:81/';
 
 var Store = () => {
 
   dispatcher.register(function(payload) {
     switch (payload.type) {
     case 'getWanAddress':
-      this.getEthAddress(payload);
+      this.getWanAddress(payload);
       break;
     case 'createWanAddress':
       this.createWanAddress(payload);
+      break;
+    case 'updateWanAddress':
+      this.updateWanAddress(payload);
+      break;
+    case 'deleteWanAddress':
+      this.deleteWanAddress(payload);
       break;
     case 'sendWan':
       this.sendWan(payload);
@@ -27,7 +33,7 @@ var Store = () => {
     }
   }.bind(this))
 
-  this.getEthAddress = function(payload) {
+  this.getWanAddress = function(payload) {
     var url = 'wanchain/getUserAddresses/'+payload.content.id
 
     this.callApi(url,
@@ -50,7 +56,33 @@ var Store = () => {
       payload)
   }
 
-  this.sendEther = function(payload) {
+  this.updateWanAddress = function(payload) {
+    var url = 'wanchain/updateAddress'
+    var postJson = {
+      name: payload.content.name,
+      isPrimary: payload.content.isPrimary,
+      address: payload.content.publicAddress
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.deleteWanAddress = function(payload) {
+    var url = 'wanchain/deleteAddress'
+    var postJson = {
+      address: payload.content.publicAddress
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.sendWan = function(payload) {
     var url = 'wanchain/sendWan'
     var postJson = {
       address: payload.content.address,

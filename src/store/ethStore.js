@@ -9,7 +9,7 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.cryptocurve.network/';
+let apiUrl = 'http://18.221.173.171:81/';
 
 var Store = () => {
 
@@ -23,6 +23,12 @@ var Store = () => {
       break;
     case 'importAddress':
       this.importAddress(payload);
+      break;
+    case 'updateEthAddress':
+      this.updateEthAddress(payload);
+      break;
+    case 'deleteEthAddress':
+      this.deleteEthAddress(payload);
       break;
     case 'sendEther':
       this.sendEther(payload);
@@ -62,6 +68,32 @@ var Store = () => {
       isPrimary: payload.content.isPrimary,
       address: payload.content.publicAddress,
       privateKey: payload.content.privateKey
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.updateEthAddress = function(payload) {
+    var url = 'ethereum/updateAddress'
+    var postJson = {
+      name: payload.content.name,
+      isPrimary: payload.content.isPrimary,
+      address: payload.content.address
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.deleteEthAddress = function(payload) {
+    var url = 'ethereum/deleteAddress'
+    var postJson = {
+      address: payload.content.publicAddress
     }
 
     this.callApi(url,

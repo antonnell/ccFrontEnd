@@ -8,9 +8,10 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Tooltip from 'material-ui/Tooltip';
 import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
-import Card, { CardContent } from 'material-ui/Card';
+import Card, { CardContent, CardActions } from 'material-ui/Card';
 import { CircularProgress } from 'material-ui/Progress';
 import SvgIcon from 'material-ui/SvgIcon';
+import IconButton from 'material-ui/IconButton';
 
 const styles = {};
 
@@ -18,6 +19,22 @@ function PrimaryIcon(props) {
   return (
     <SvgIcon {...props}>
       <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+    </SvgIcon>
+  );
+}
+
+function SetPrimaryIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
+    </SvgIcon>
+  );
+}
+
+function EditIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
     </SvgIcon>
   );
 }
@@ -132,37 +149,53 @@ class WanAccounts extends Component {
     }
 
     return this.props.addresses.map((address) => {
-        return (
-          <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
-            <Card style={{marginRight: '6px', marginBottom: '6px'}}>
-              <CardContent>
-                <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-                  <Grid item xs={9} align='left'>
-                    <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
-                      {address.name}
-                    </Typography>
-                    {address.isPrimary===true&& <Tooltip title='This is your primary Wanchain account'><PrimaryIcon style={{ marginTop: '2px', marginLeft: '5px', verticalAlign: 'top'}}/></Tooltip>}
-                  </Grid>
-                  <Grid item xs={3} align='right'>
-                    <Typography variant="headline" noWrap>
-                      {address.balance+' WAN'}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography noWrap color="textSecondary">
-                      {address.publicAddress}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} align='right' style={{marginTop: '12px'}}>
-                    <Button size="small" variant="flat" disabled={true}>Update</Button>
-                    <Button size="small" variant="flat" color="secondary" disabled={true}>Send Wan</Button>
-                  </Grid>
+
+      address.editing = false
+      if(this.props.editAccount != null) {
+        if(address.publicAddress == this.props.editAccount.publicAddress)  {
+          address.editing = true
+        }
+      }
+      return (
+        <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
+          <Card style={{marginRight: '6px', marginBottom: '6px'}}>
+            <CardContent>
+              <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+                <Grid item xs={9} align='left'>
+                  {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
+                    {address.isPrimary===true&& <Tooltip title='This is your primary Wanchain account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
+                    {address.isPrimary===false&& <Tooltip title='Make this account my primary Wanchain account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
+                    {address.name}
+                    <Tooltip style={{verticalAlign: 'top'}} title='Edit name'><IconButton style={{ marginTop: '-8px', verticalAlign: 'top'}} onClick={() => { this.props.editNameClicked(address) }}><EditIcon /></IconButton></Tooltip>
+                  </Typography>}
+                  {address.editing===true&& <TextField autoFocus={true} style={{display: 'inline-block', marginTop: '0px', marginBottom: '5px'}} fullWidth={true} required
+                    color="textSecondary" error={this.props.editAddressNameError} disabled={this.props.cardLoading} id="editAddressName" value={this.props.editAddressName}
+                    onChange={(event) => { this.props.handleChange(event, 'editAddressName'); }} margin="normal" onKeyDown={(event) => { this.props.onEditAddressNameKeyDown(event, address) }}
+                    onBlur={(event) => { this.props.onEditAddressNameBlur(event, address); }} helperText={this.props.editAddressNameErrorMessage} />}
                 </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-      })
+                <Grid item xs={3} align='right'>
+                  <Typography variant="headline" noWrap>
+                    {address.balance+' WAN'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography noWrap color="textSecondary">
+                    {address.publicAddress}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+                <Grid item xs={12} align='right' >
+                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={true}>Send Wan</Button>
+                </Grid>
+              </Grid>
+            </CardActions>
+          </Card>
+        </Grid>
+      );
+    })
   };
 
   render() {

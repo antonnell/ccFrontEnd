@@ -23,6 +23,10 @@ let EthAccounts = createReactClass({
       publicAddressErrorMessage: '',
       primary: false,
       primaryError: false,
+      editAddressName: '',
+      editAddressNameError: false,
+      editAddressNameErrorMessage: '',
+      editAccount: null
     }
   },
   render() {
@@ -49,6 +53,14 @@ let EthAccounts = createReactClass({
         handleChecked={this.handleChecked}
         sendEtherClicked={this.props.openSendEther}
         validateField={this.validateField}
+        updatePrimaryClicked={this.updatePrimaryClicked}
+        editNameClicked={this.editNameClicked}
+        editAccount={this.state.editAccount}
+        editAddressName={this.state.editAddressName}
+        editAddressNameError={this.state.editAddressNameError}
+        editAddressNameErrorMessage={this.state.editAddressNameErrorMessage}
+        onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
+        onEditAddressNameBlur={this.onEditAddressNameBlur}
       />
     )
   },
@@ -56,10 +68,12 @@ let EthAccounts = createReactClass({
   componentWillMount() {
     ethEmitter.on('createEthAddress', this.createEthAddressReturned);
     ethEmitter.on('importEthAddress', this.importEthAddressReturned);
+    ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
   },
   componentWillUnmount() {
     ethEmitter.removeAllListeners('createEthAddress');
     ethEmitter.removeAllListeners('importEthAddress');
+    ethEmitter.removeAllListeners('updateEthAddress');
   },
 
   resetInputs() {
@@ -113,6 +127,24 @@ let EthAccounts = createReactClass({
     }
   },
 
+  updateEthAddressReturned(error, data) {
+    this.setState({createLoading: false, editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: ''});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var content = {id: this.props.user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+
+      //show sncakbar?
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
   onCreateImportKeyDown(event) {
     if (event.which == 13) {
       this.createImportClicked()
@@ -125,6 +157,32 @@ let EthAccounts = createReactClass({
     } else {
       this.importEthAddress();
     }
+  },
+
+  updatePrimaryClicked(account) {
+    this.setState({cardLoading: true})
+    var content = { name: account.name, isPrimary: true, address: account.address };
+    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
+  },
+
+  editNameClicked(editAccount) {
+    this.setState({editAccount, editAddressName: editAccount.name})
+  },
+
+  onEditAddressNameKeyDown(event, editAccount) {
+    if (event.which == 13) {
+      this.updateName(editAccount)
+    }
+  },
+
+  onEditAddressNameBlur(event, editAccount) {
+    this.updateName(editAccount)
+  },
+
+  updateName(account) {
+    this.setState({cardLoading: true})
+    var content = { name: this.state.editAddressName, isPrimary: account.isPrimary, address: account.address };
+    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
   },
 
   validateAddressName(value) {

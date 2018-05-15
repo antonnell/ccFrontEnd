@@ -221,8 +221,10 @@ let Welcome = createReactClass({
       data.user.authOTP = this.state.code;
       this.props.setUser(data.user);
 
-      var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
-      whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
+      //var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
+      //whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
+
+      window.location.hash = 'ethAccounts';
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {

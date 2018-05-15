@@ -23,6 +23,10 @@ let WanAccounts = createReactClass({
       publicAddressErrorMessage: '',
       primary: false,
       primaryError: false,
+      editAddressName: '',
+      editAddressNameError: false,
+      editAddressNameErrorMessage: '',
+      editAccount: null
     }
   },
   render() {
@@ -47,8 +51,16 @@ let WanAccounts = createReactClass({
         publicAddressError={this.state.publicAddressError}
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
-        validateField={this.validateField}
 
+        validateField={this.validateField}
+        updatePrimaryClicked={this.updatePrimaryClicked}
+        editNameClicked={this.editNameClicked}
+        editAccount={this.state.editAccount}
+        editAddressName={this.state.editAddressName}
+        editAddressNameError={this.state.editAddressNameError}
+        editAddressNameErrorMessage={this.state.editAddressNameErrorMessage}
+        onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
+        onEditAddressNameBlur={this.onEditAddressNameBlur}
       />
     )
   },
@@ -56,10 +68,12 @@ let WanAccounts = createReactClass({
   componentWillMount() {
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
+    wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
   },
   componentWillUnmount() {
     wanEmitter.removeAllListeners('createWanAddress');
     wanEmitter.removeAllListeners('importWanAddress');
+    wanEmitter.removeAllListeners('updateWanAddress');
   },
 
   resetInputs() {
@@ -113,6 +127,24 @@ let WanAccounts = createReactClass({
     }
   },
 
+  updateWanAddressReturned(error, data) {
+    this.setState({createLoading: false, editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: ''});
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var content = {id: this.props.user.id};
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
+
+      //show sncakbar?
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
   onCreateImportKeyDown(event) {
     if (event.which == 13) {
       this.createImportClicked()
@@ -125,6 +157,32 @@ let WanAccounts = createReactClass({
     } else {
       this.importWanAddress();
     }
+  },
+
+  updatePrimaryClicked(account) {
+    this.setState({cardLoading: true})
+    var content = { name: account.name, isPrimary: true, publicAddress: account.publicAddress };
+    wanDispatcher.dispatch({type: 'updateWanAddress', content, token: this.props.user.token });
+  },
+
+  editNameClicked(editAccount) {
+    this.setState({editAccount, editAddressName: editAccount.name})
+  },
+
+  onEditAddressNameKeyDown(event, editAccount) {
+    if (event.which == 13) {
+      this.updateName(editAccount)
+    }
+  },
+
+  onEditAddressNameBlur(event, editAccount) {
+    this.updateName(editAccount)
+  },
+
+  updateName(account) {
+    this.setState({cardLoading: true})
+    var content = { name: this.state.editAddressName, isPrimary: account.isPrimary, publicAddress: account.publicAddress };
+    wanDispatcher.dispatch({type: 'updateWanAddress', content, token: this.props.user.token });
   },
 
   validateAddressName(value) {
@@ -178,8 +236,6 @@ let WanAccounts = createReactClass({
   },
 
   importWanAddress() {
-    //not available yet
-
     /*if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
       this.setState({createLoading: true});
       var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
