@@ -717,7 +717,7 @@ let Whitelist = createReactClass({
     window.open('https://www.myetherwallet.com/?to='+this.state.contributionAddress+'&value='+this.props.whitelistObject.user.remainingAllocation+'#send-transaction')
   },
   sendFromCC() {
-    window.open('https://eth.wallet.cryptocurve.network/account/send/?to='+this.state.contributionAddress+'&value='+this.state.allocation)
+    window.open('https://wallet.cryptocurve.xyz/account/send/?to='+this.state.contributionAddress+'&value='+this.props.whitelistObject.user.remainingAllocation)
   },
 
   checkIfEthPasswordProtected(value) {
