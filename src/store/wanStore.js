@@ -8,7 +8,6 @@ let Emitter = require('events').EventEmitter
 
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
-//http://54.246.224.70:81/
 let apiUrl = 'http://54.246.224.70:81/';
 
 var Store = () => {

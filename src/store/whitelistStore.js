@@ -10,7 +10,7 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.whitelist.cryptocurve.network/';
+let apiUrl = 'https://api.cryptocurve.xyz/';
 
 var Store = () => {
 
