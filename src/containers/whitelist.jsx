@@ -114,6 +114,8 @@ let Whitelist = createReactClass({
     whitelistEmitter.on('uploadFileKYC', this.uploadFileKYCReturned);
     whitelistEmitter.on('uploadFileID', this.uploadFileIDReturned);
     whitelistEmitter.on('setWhitelistState', this.setWhitelistStateReturned);
+
+    wanEmitter.on('getWanAddress', this.getWanAddressReturned);
   },
 
   componentWillUnmount() {
@@ -122,6 +124,8 @@ let Whitelist = createReactClass({
     whitelistEmitter.removeAllListeners('uploadFileKYC');
     whitelistEmitter.removeAllListeners('uploadFileID');
     whitelistEmitter.removeAllListeners('setWhitelistState');
+
+    wanEmitter.removeAllListeners('getWanAddress');
   },
 
   setWhitelistStateReturned(error, data) {
@@ -280,7 +284,7 @@ let Whitelist = createReactClass({
     whitelistObject.completed = completed;
     whitelistObject.activeStep = 1;
 
-    whitelistObject.currentScreen = 'haveEthAddress';
+    whitelistObject.currentScreen = 'importPublicEthAddress';
     whitelistObject.termsAndConditions.accepted = true;
 
     this.props.setWhitelistState(whitelistObject);
@@ -519,11 +523,46 @@ let Whitelist = createReactClass({
       whitelistObject.wanAddress = { publicAddressName: this.state.wanAddressName };
       whitelistObject.currentScreen = 'kycIDDOcument';
 
+      //get ETH Addresses
+      var content = {id: this.props.user.id};
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
+
       this.props.setWhitelistState(whitelistObject);
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
       this.setState({error: data.statusText})
+    }
+  },
+
+  getWanAddressReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    var that = this
+    if(data.success) {
+
+      console.log()
+      var address = data.wanAddresses.filter((address) => {
+        return address.name == that.state.wanAddressName
+      })
+
+      console.log(address)
+      if(address.length > 0) {
+        var whitelistObject = this.props.whitelistObject;
+        whitelistObject.wanAddress.publicAddress = address[0].publicAddress;
+
+        this.props.setWhitelistState(whitelistObject);
+        this.setState({wanPublicAddress: address[0].publicAddress});
+      } else {
+        //eh, not sure?
+      }
+
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, ethAddresses: []});
+    } else {
+      this.setState({error: data.statusText, ethAddresses: []});
     }
   },
 
@@ -869,7 +908,7 @@ let Whitelist = createReactClass({
           readTerms={this.readTerms}
           termsOpened={this.state.termsOpened}
         />);
-      case 'haveEthAddress':
+      /*case 'haveEthAddress':
         return (<HaveEthAddress
           ethAddresses={this.props.ethAddresses}
           selectAddress={this.selectEthAddress}
@@ -877,7 +916,7 @@ let Whitelist = createReactClass({
           navigateExistingEthAddress={this.navigateImportPublicEthAddress}
           navigateCreateEthAddress={this.navigateCreateEthAddress}
           />);
-      /*case 'storeEthAddress':
+      case 'storeEthAddress':
         return (<StoreEthAddress
           navigateBack={this.navigateHaveEthAddress}
           navigateImportPublicEthAddress={this.navigateImportPublicEthAddress}
@@ -885,7 +924,7 @@ let Whitelist = createReactClass({
           />);*/
       case 'importPublicEthAddress':
         return (<ImportPublicEthAddress
-          navigateBack={this.navigateHaveEthAddress}
+          navigateBack={this.navigateTermsAndConditions}
           handleChange={this.handleChange}
           ethPublicAddress={this.state.ethPublicAddress}
           ethPublicAddressError={this.state.ethPublicAddressError}
@@ -923,7 +962,7 @@ let Whitelist = createReactClass({
           unlockPrivateEthAddress={this.unlockPrivateEthAddress}
           ethPrivateAddressValid={this.state.ethPrivateAddressValid}
           ethPasswordValid={this.state.ethPasswordValid}
-          />);*/
+          />);
       case 'createEthAddress':
         return (<CreateEthAddres
           loading={this.state.loading}
@@ -935,12 +974,12 @@ let Whitelist = createReactClass({
           ethAddressNameError={this.state.ethAddressNameError}
           ethAddressNameErrorMessage={this.state.ethAddressNameErrorMessage}
           ethAddressNameValid={this.state.ethAddressNameValid}
-          />);
+          />);*/
       case 'haveWanAddress':
         return (<HaveWanAddress
           wanAddresses={this.props.wanAddresses}
           selectAddress={this.selectWanAddress}
-          navigateBack={this.navigateHaveEthAddress}
+          navigateBack={this.navigateImportPublicEthAddress}
           navigateExistingWanAddress={this.navigateImportPublicWanAddress}
           navigateCreateWanAddress={this.navigateCreateWanAddress}
           />)
@@ -1030,12 +1069,12 @@ let Whitelist = createReactClass({
         setTimeout(function() {
           that.setState({loadingAddress:false})
         },2000)
+        console.log(this.props.whitelistObject)
         return (<WhitelistJoined
-          ethPublicAddress={this.state.ethPublicAddress}
-          ethAddressName={this.state.ethAddressName}
-          wanPublicAddress={this.state.wanPublicAddress}
-          wanAddressName={this.state.wanAddressName}
+          ethPublicAddress={this.props.whitelistObject.ethAddress.publicAddress}
+          wanPublicAddress={this.props.whitelistObject.wanAddress.publicAddress}
           allocation={this.props.whitelistObject.user.remainingAllocation}
+          contributed={this.props.whitelistObject.user.remainingAllocation}
           loadingAddress={this.state.loadingAddress}
           contributionAddress={this.state.contributionAddress}
           handleChange={this.handleChange}

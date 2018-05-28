@@ -92,15 +92,10 @@ class WhitelistJoined extends Component {
           </div>
         </Grid>
         {!this.props.loadingAddress?
-          <Grid container>
-            <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-              <Typography variant="body2">
-                <Button size="small" variant="raised" color="primary" onClick={this.props.sendFromCC}>Send from CryptoCurve Offline Wallet</Button>
-              </Typography>
-            </Grid>
+          <Grid container style={{marginTop: '12px'}}>
             <Grid item xs={12} align='center'>
               <Typography variant="body2">
-                <Button size="small" variant="flat" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
+                <Button size="small" variant="raised" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
               </Typography>
             </Grid>
           </Grid>

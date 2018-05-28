@@ -243,6 +243,7 @@ let Welcome = createReactClass({
 
     if(data.success) {
       var whitelistState = this.decodeWhitelistResponse(data.message)
+      console.log(whitelistState)
       if(whitelistState) {
         this.props.setWhitelistState(whitelistState);
 
