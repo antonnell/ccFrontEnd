@@ -653,6 +653,8 @@ let Whitelist = createReactClass({
     whitelistObject.currentScreen = 'whitelistJoined';
 
     this.props.setWhitelistState(whitelistObject);
+
+    whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistObject, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey });
   },
 
   joinWhitelist() {
@@ -872,18 +874,18 @@ let Whitelist = createReactClass({
           ethAddresses={this.props.ethAddresses}
           selectAddress={this.selectEthAddress}
           navigateBack={this.navigateTermsAndConditions}
-          navigateExistingEthAddress={this.navigateExistingEthAddress}
+          navigateExistingEthAddress={this.navigateImportPublicEthAddress}
           navigateCreateEthAddress={this.navigateCreateEthAddress}
           />);
-      case 'storeEthAddress':
+      /*case 'storeEthAddress':
         return (<StoreEthAddress
           navigateBack={this.navigateHaveEthAddress}
           navigateImportPublicEthAddress={this.navigateImportPublicEthAddress}
           navigateImportPrivateTypeEthAddress={this.navigateImportPrivateTypeEthAddress}
-          />);
+          />);*/
       case 'importPublicEthAddress':
         return (<ImportPublicEthAddress
-          navigateBack={this.navigateExistingEthAddress}
+          navigateBack={this.navigateHaveEthAddress}
           handleChange={this.handleChange}
           ethPublicAddress={this.state.ethPublicAddress}
           ethPublicAddressError={this.state.ethPublicAddressError}
@@ -893,7 +895,7 @@ let Whitelist = createReactClass({
           importPublicEthAddressKeyDown={this.importPublicEthAddressKeyDown}
           handleChange={this.handleChange}
           />);
-      case 'importPrivateTypeEthAddress':
+      /*case 'importPrivateTypeEthAddress':
         return (<ImportPrivateTypeEthAddress
           navigateBack={this.navigateExistingEthAddress}
           navigateImportPrivateEthAddress={this.navigateImportPrivateEthAddress}
@@ -921,7 +923,7 @@ let Whitelist = createReactClass({
           unlockPrivateEthAddress={this.unlockPrivateEthAddress}
           ethPrivateAddressValid={this.state.ethPrivateAddressValid}
           ethPasswordValid={this.state.ethPasswordValid}
-          />);
+          />);*/
       case 'createEthAddress':
         return (<CreateEthAddres
           loading={this.state.loading}
@@ -939,18 +941,18 @@ let Whitelist = createReactClass({
           wanAddresses={this.props.wanAddresses}
           selectAddress={this.selectWanAddress}
           navigateBack={this.navigateHaveEthAddress}
-          navigateExistingWanAddress={this.navigateExistingWanAddress}
+          navigateExistingWanAddress={this.navigateImportPublicWanAddress}
           navigateCreateWanAddress={this.navigateCreateWanAddress}
           />)
-      case 'storeWanAddress':
+      /*case 'storeWanAddress':
         return (<StoreWanAddress
           navigateBack={this.navigateHaveWanAddress}
           navigateImportPublicWanAddress={this.navigateImportPublicWanAddress}
           navigateImportPrivateTypeWanAddress={this.navigateImportPrivateTypeWanAddress}
-          />)
+          />)*/
       case 'importPublicWanAddress':
         return (<ImportPublicWanAddress
-          navigateBack={this.navigateExistingWanAddress}
+          navigateBack={this.navigateHaveWanAddress}
           importPublicWanAddress={this.importPublicWanAddress}
           importPublicWanAddressKeyDown={this.importPublicWanAddressKeyDown}
           handleChange={this.handleChange}
@@ -959,7 +961,7 @@ let Whitelist = createReactClass({
           wanPublicAddressErrorMessage={this.state.wanPublicAddressErrorMessage}
           wanPublicAddressValid={this.state.wanPublicAddressValid}
           />)
-      case 'importPrivateTypeWanAddress':
+      /*case 'importPrivateTypeWanAddress':
         return (<ImportPrivateTypeWanAddress
           navigateBack={this.navigateExistingWanAddress}
           navigateImportPrivateWanAddress={this.navigateImportPrivateWanAddress}
@@ -988,7 +990,7 @@ let Whitelist = createReactClass({
           unlockPrivateWanAddress={this.unlockPrivateWanAddress}
           wanPrivateAddressValid={this.state.wanPrivateAddressValid}
           wanPasswordValid={this.state.wanPasswordValid}
-          />)
+          />)*/
       case 'createWanAddress':
         return (<CreateWanAddress
           loading={this.state.loading}
