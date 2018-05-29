@@ -10,7 +10,8 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.cryptocurve.xyz/';
+//let apiUrl = 'https://api.cryptocurve.xyz/';
+let apiUrl = 'http://localhost:8081/';
 
 var Store = () => {
 
@@ -99,12 +100,11 @@ var Store = () => {
     var version = 'api/v1/'
     var postJson = payload.content
 
-    console.log(payload)/*
     this.callApi(url,
       version,
       'POST',
       postJson,
-      payload)*/
+      payload)
   }
 
   this.ethPrivateKeyUnlock = function(payload) {
@@ -255,14 +255,17 @@ var Store = () => {
       postData = JSON.stringify(signData)
     }
 
+    console.log(payload.token)
+    console.log(payload.tokenKey)
+
     fetch(call, {
       method: method,
       body: postData,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx' },
+        'Authorization': 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx',
         'x-access-token': payload.token,
-        'x-key': payload.tokenKey
+        'x-key': payload.tokenKey }
     })
     .then(res => {
       if(res.status == 401) {

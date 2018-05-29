@@ -19,7 +19,7 @@ class ImportPublicEthAddress extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
-            No problems! Then we just need to know your Ethereum address.
+            Next, we need to know your Ethereum address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
@@ -37,7 +37,7 @@ class ImportPublicEthAddress extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethPublicAddressValid?"raised":"flat"} disabled={!this.props.ethPublicAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.ethPublicAddressValid?"raised":"flat"} disabled={!this.props.ethPublicAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Next</Button>
         </Grid>
       </Grid>
     );
