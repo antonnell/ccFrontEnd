@@ -254,9 +254,6 @@ var Store = () => {
       postData = JSON.stringify(signData)
     }
 
-    console.log(payload.token)
-    console.log(payload.tokenKey)
-
     fetch(call, {
       method: method,
       body: postData,

@@ -328,7 +328,6 @@ class App extends Component {
     this.setState({whitelistState});
     sessionStorage.setItem('cc_whiteliststate', JSON.stringify(whitelistState));
 
-    console.log(this.state.user)
     whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistState, token: this.state.user.whitelistToken, tokenKey: this.state.user.whitelistTokenKey });
   };
 

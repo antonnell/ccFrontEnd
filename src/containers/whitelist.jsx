@@ -113,7 +113,6 @@ let Whitelist = createReactClass({
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     whitelistEmitter.on('uploadFileKYC', this.uploadFileKYCReturned);
     whitelistEmitter.on('uploadFileID', this.uploadFileIDReturned);
-    whitelistEmitter.on('setWhitelistState', this.setWhitelistStateReturned);
 
     wanEmitter.on('getWanAddress', this.getWanAddressReturned);
   },
@@ -123,7 +122,6 @@ let Whitelist = createReactClass({
     wanEmitter.removeAllListeners('createWanAddress');
     whitelistEmitter.removeAllListeners('uploadFileKYC');
     whitelistEmitter.removeAllListeners('uploadFileID');
-    whitelistEmitter.removeAllListeners('setWhitelistState');
 
     wanEmitter.removeAllListeners('getWanAddress');
   },
@@ -288,8 +286,6 @@ let Whitelist = createReactClass({
     whitelistObject.termsAndConditions.accepted = true;
 
     this.props.setWhitelistState(whitelistObject);
-
-    whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistObject, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey });
   },
 
   navigateHaveEthAddress() {
@@ -692,8 +688,6 @@ let Whitelist = createReactClass({
     whitelistObject.currentScreen = 'whitelistJoined';
 
     this.props.setWhitelistState(whitelistObject);
-
-    whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistObject, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey });
   },
 
   joinWhitelist() {
