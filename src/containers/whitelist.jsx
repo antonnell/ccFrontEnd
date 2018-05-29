@@ -53,8 +53,8 @@ let Whitelist = createReactClass({
       termsOpened: false,
 
       cryptocurveWallet: false,
-      loadingAddress: true,
-      contributionAddress: '0x4a48c693B100775d66C8E0Cf9B32663Cf1996838',
+      loadingAddress: false,
+      contributionAddress: '0xAbCC42bd1eD741902df780358DED85bF851B3C8f',
 
       ethAddressName: '',
       ethAddressNameError: false,
@@ -539,12 +539,10 @@ let Whitelist = createReactClass({
     var that = this
     if(data.success) {
 
-      console.log()
       var address = data.wanAddresses.filter((address) => {
         return address.name == that.state.wanAddressName
       })
 
-      console.log(address)
       if(address.length > 0) {
         var whitelistObject = this.props.whitelistObject;
         whitelistObject.wanAddress.publicAddress = address[0].publicAddress;
@@ -616,7 +614,6 @@ let Whitelist = createReactClass({
     var data = new FormData()
     data.append('id', file)
 
-    console.log(this.props.user)
     whitelistDispatcher.dispatch({ type: 'uploadFile', content:{ data:data, fileType: 'ID', emailAddress: this.props.user.email }, token: this.props.user.whitelistToken, tokenKey: this.props.user.whitelistTokenKey })
   },
 
@@ -628,6 +625,15 @@ let Whitelist = createReactClass({
 
     if(data.success) {
       this.setState({idDocumentFileUuid: data.uuid})
+
+      var whitelistObject = this.props.whitelistObject;
+      var kyc = whitelistObject.kyc
+      if(kyc == null) {
+        kyc = {}
+      }
+      kyc.idDocumentUuid = data.uuid;
+
+      this.props.setWhitelistState(whitelistObject);
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -671,6 +677,16 @@ let Whitelist = createReactClass({
 
     if(data.success) {
       this.setState({photoFileUuid: data.uuid})
+
+      var whitelistObject = this.props.whitelistObject;
+      var kyc = whitelistObject.kyc
+      if(kyc == null) {
+        kyc = {}
+      }
+      kyc.photoUuid = data.uuid;
+
+      this.props.setWhitelistState(whitelistObject);
+
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -1059,11 +1075,6 @@ let Whitelist = createReactClass({
           notNow={this.notNow}
           />)
       case 'whitelistJoined':
-        var that = this
-        setTimeout(function() {
-          that.setState({loadingAddress:false})
-        },2000)
-        console.log(this.props.whitelistObject)
         return (<WhitelistJoined
           ethPublicAddress={this.props.whitelistObject.ethAddress.publicAddress}
           wanPublicAddress={this.props.whitelistObject.wanAddress.publicAddress}

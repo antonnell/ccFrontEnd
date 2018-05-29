@@ -86,7 +86,6 @@ var Store = () => {
     var postJson = {
       emailAddress: payload.content.emailAddress
     }
-    console.log(payload)
     this.callApi(url,
       version,
       'POST',
@@ -198,12 +197,13 @@ var Store = () => {
 
   this.uploadFile = function(payload) {
     var func = '';
+    var version = 'api/v1/'
     if(payload.content.fileType == 'KYC') {
-      func = 'api/v1/uploadFileKYC';
+      func = 'uploadFileKYC';
     } else {
-      func = 'api/v1/uploadFileID';
+      func = 'uploadFileID';
     }
-    var call = apiUrl+func+'?emailAddress='+payload.content.emailAddress
+    var call = apiUrl+version+func+'?emailAddress='+payload.content.emailAddress
 
     /*fetch(call, {
       method: 'POST',
