@@ -19,6 +19,9 @@ var Store = () => {
     case 'whitelistLogin':
       this.whitelistLogin(payload);
       break;
+    case 'whitelistRegister':
+      this.whitelistLogin(payload);
+      break;
     case 'whitelistCheck':
       this.whitelistCheck(payload);
       break;

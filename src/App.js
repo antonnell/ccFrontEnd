@@ -354,19 +354,23 @@ class App extends Component {
     } else {
       currentScreen = window.location.hash.substring(1);
     }
-    if(['', 'welcome', 'logOut'].includes(currentScreen)) {
+    if(['', 'welcome', 'logOut', 'registerAccount'].includes(currentScreen)) {
       sessionStorage.removeItem('cc_user');
-      this.setState({drawerOpen: false, user: null});
-      this.setState({currentScreen: 'welcome'});
-    } else {
-      if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
-        if(this.state.user == null) {
-          return window.location.hash = 'welcome';
-        }
-      }
+      sessionStorage.removeItem('cc_whiteliststate');
 
-      this.setState({currentScreen, uriParameters});
+      this.setState({drawerOpen: false, user: null});
+      if(currentScreen != 'registerAccount') {
+        this.setState({currentScreen: 'welcome'});
+      }
     }
+
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
+      if(this.state.user == null) {
+        return window.location.hash = 'welcome';
+      }
+    }
+
+    this.setState({currentScreen, uriParameters});
   };
 
   renderAppBar() {

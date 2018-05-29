@@ -35,7 +35,7 @@ let RegisterAccount = createReactClass({
     emitter.on('register', this.registerReturned);
     whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
     whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
-    whitelistEmitter.on('whitelistLogin', this.whitelistLoginReturned);
+    whitelistEmitter.on('whitelistRegister', this.whitelistLoginReturned);
     whitelistEmitter.on('123123', this.whitelistUnauthorisedReturned)
   },
 
@@ -43,7 +43,7 @@ let RegisterAccount = createReactClass({
     emitter.removeAllListeners('register');
     whitelistEmitter.removeAllListeners('whitelistCheck');
     whitelistEmitter.removeAllListeners('Unauthorised');
-    whitelistEmitter.removeAllListeners('whitelistLogin');
+    whitelistEmitter.removeAllListeners('whitelistRegister');
   },
 
   render() {
@@ -182,12 +182,11 @@ let RegisterAccount = createReactClass({
     }
 
     if(data.success) {
-      console.log(data)
       data.user.token = data.token;
       this.props.setUser(data.user);
 
       var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
-      whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
+      whitelistDispatcher.dispatch({type: 'whitelistRegister', content: whitelistContent });
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, loading: false});
     } else {
