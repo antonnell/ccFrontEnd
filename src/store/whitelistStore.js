@@ -269,6 +269,7 @@ var Store = () => {
         return res;
       } else if(res.status == 404) {
         emitter.emit('Unauthorised', null, null)
+        emitter.emit('123123', null, null)
         return res;
       }
 

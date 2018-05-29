@@ -36,6 +36,7 @@ let RegisterAccount = createReactClass({
     whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
     whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
     whitelistEmitter.on('whitelistLogin', this.whitelistLoginReturned);
+    whitelistEmitter.on('123123', this.whitelistUnauthorisedReturned)
   },
 
   componentWillUnmount() {
@@ -85,7 +86,7 @@ let RegisterAccount = createReactClass({
   },
 
   validateEmail() {
-    var that = this
+    /*var that = this
     setTimeout(function() {
 
       if(that.state.emailAddress == '') {
@@ -95,7 +96,7 @@ let RegisterAccount = createReactClass({
       } else {
         that.setState({emailAddressError: false, emailAddressErrorMessage: "The email address that is approved for Presale participation"})
       }
-    }, 100)
+    }, 100)*/
   },
 
   submitRegister() {
@@ -145,10 +146,10 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistCheckReturned(error, data) {
+    console.log('check')
     if(error) {
       return this.setState({error: error.toString()});
     }
-
     if(data.success) {
       var decodedData = this.decodeWhitelistResponse(data.message);
 
@@ -160,7 +161,7 @@ let RegisterAccount = createReactClass({
           this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
         }
       } else {
-        this.setState({loading: false, error: "An unexpected error has occurred"})
+        this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
       }
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, loading: false});
@@ -170,15 +171,18 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistUnauthorisedReturned(error, data) {
+    console.log('whitelist unauthorised')
     this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
   },
 
   registerReturned(error, data) {
+    console.log('register')
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
+      console.log(data)
       data.user.token = data.token;
       this.props.setUser(data.user);
 
@@ -192,6 +196,7 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistLoginReturned(error, data) {
+    console.log('login')
     this.setState({loading: false});
 
     if(error) {
@@ -200,6 +205,7 @@ let RegisterAccount = createReactClass({
 
     if(data.success) {
       var whitelistState = this.decodeWhitelistResponse(data.message)
+      console.log(whitelistState)
       if(whitelistState) {
         this.props.setWhitelistState(whitelistState);
 
