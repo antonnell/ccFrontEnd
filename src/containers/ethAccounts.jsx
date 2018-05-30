@@ -67,14 +67,13 @@ let EthAccounts = createReactClass({
   },
 
   componentWillMount() {
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
-    ethEmitter.on('importEthAddress', this.importEthAddressReturned);
-    ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
-  },
-  componentWillUnmount() {
     ethEmitter.removeAllListeners('createEthAddress');
     ethEmitter.removeAllListeners('importEthAddress');
     ethEmitter.removeAllListeners('updateEthAddress');
+
+    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
+    ethEmitter.on('importEthAddress', this.importEthAddressReturned);
+    ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
   },
 
   resetInputs() {
@@ -239,7 +238,7 @@ let EthAccounts = createReactClass({
   importEthAddress() {
     if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
       this.setState({createLoading: true});
-      var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
+      var content = { name: this.state.addressName, isPrimary: this.state.primary, publicAddress: this.state.publicAddress, privateKey: this.state.privateKey };
       ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
     }
   },

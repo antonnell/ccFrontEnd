@@ -108,22 +108,19 @@ let Whitelist = createReactClass({
     };
   },
 
-  componentWillMount() {
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
-    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
-    whitelistEmitter.on('uploadFileKYC', this.uploadFileKYCReturned);
-    whitelistEmitter.on('uploadFileID', this.uploadFileIDReturned);
-
-    wanEmitter.on('getWanAddress', this.getWanAddressReturned);
-  },
-
-  componentWillUnmount() {
-    ethEmitter.removeAllListeners('createEthAddress');
-    wanEmitter.removeAllListeners('createWanAddress');
+  componentDidMount() {
+    ethEmitter.removeAllListeners('createEthAddressWhitelist');
+    wanEmitter.removeAllListeners('createWanAddressWhitelist');
     whitelistEmitter.removeAllListeners('uploadFileKYC');
     whitelistEmitter.removeAllListeners('uploadFileID');
+    wanEmitter.removeAllListeners('getWanAddressWhitelist');
 
-    wanEmitter.removeAllListeners('getWanAddress');
+
+    ethEmitter.on('createEthAddressWhitelist', this.createEthAddressReturned);
+    wanEmitter.on('createWanAddressWhitelist', this.createWanAddressReturned);
+    whitelistEmitter.on('uploadFileKYC', this.uploadFileKYCReturned);
+    whitelistEmitter.on('uploadFileID', this.uploadFileIDReturned);
+    wanEmitter.on('getWanAddressWhitelist', this.getWanAddressReturned);
   },
 
   setWhitelistStateReturned(error, data) {
@@ -370,7 +367,7 @@ let Whitelist = createReactClass({
     if (this.validateETHAddressName()) {
       this.setState({loading: true});
       var content = { username: this.props.user.username, name: this.state.ethAddressName, isPrimary: true };
-      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+      ethDispatcher.dispatch({type: 'createEthAddressWhitelist', content, token: this.props.user.token });
     }
   },
 
@@ -500,7 +497,7 @@ let Whitelist = createReactClass({
     if (this.validateWANAddressName()) {
       this.setState({loading: true});
       var content = { username: this.props.user.username, name: this.state.wanAddressName, isPrimary: true };
-      wanDispatcher.dispatch({type: 'createWanAddress', content, token: this.props.user.token });
+      wanDispatcher.dispatch({type: 'createWanAddressWhitelist', content, token: this.props.user.token });
     }
   },
 
@@ -519,9 +516,9 @@ let Whitelist = createReactClass({
       whitelistObject.wanAddress = { publicAddressName: this.state.wanAddressName };
       whitelistObject.currentScreen = 'kycIDDOcument';
 
-      //get ETH Addresses
+      //get WAN Addresses
       var content = {id: this.props.user.id};
-      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
+      wanDispatcher.dispatch({type: 'getWanAddressWhitelist', content, token: this.props.user.token });
 
       this.props.setWhitelistState(whitelistObject);
     } else if (data.errorMsg) {

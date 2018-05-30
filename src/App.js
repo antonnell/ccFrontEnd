@@ -160,6 +160,16 @@ class App extends Component {
       }
     }
 
+    window.removeEventListener('resize', this.updateWindowDimensions);
+    contactsEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('Unauthorised');
+    wanEmitter.removeAllListeners('Unauthorised');
+    accountEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('getEthAddress');
+    wanEmitter.removeAllListeners('getWanAddress');
+    contactsEmitter.removeAllListeners('getContacts');
+    whitelistEmitter.removeAllListeners('whitelistCheck');
+
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
     wanEmitter.on('Unauthorised', this.logUserOut);
@@ -170,9 +180,7 @@ class App extends Component {
     contactsEmitter.on('getContacts', this.getContactsReturned);
 
     whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
-  };
 
-  componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
 
@@ -181,18 +189,6 @@ class App extends Component {
 
     var loader = document.getElementById("loader")
     document.body.removeChild(loader);
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-    contactsEmitter.removeAllListeners('Unauthorised');
-    ethEmitter.removeAllListeners('Unauthorised');
-    wanEmitter.removeAllListeners('Unauthorised');
-    accountEmitter.removeAllListeners('Unauthorised');
-    ethEmitter.removeAllListeners('getEthAddress');
-    wanEmitter.removeAllListeners('getWanAddress');
-    contactsEmitter.removeAllListeners('getContacts');
-    whitelistEmitter.removeAllListeners('whitelistCheck');
   };
 
   getUserDetails(user) {
@@ -358,7 +354,7 @@ class App extends Component {
       sessionStorage.removeItem('cc_user');
       sessionStorage.removeItem('cc_whiteliststate');
 
-      this.setState({drawerOpen: false, user: null});
+      this.setState({drawerOpen: false, user: null, contacts: null, ethAddresses: null, wanAddress: null});
       if(currentScreen != 'registerAccount') {
         this.setState({currentScreen: 'welcome'});
       }
@@ -368,6 +364,17 @@ class App extends Component {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
+    }
+
+    if(currentScreen == 'wanAccounts') {
+      var content = {id: this.state.user.id};
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
+    } else if (currentScreen == 'ethAccounts') {
+      var content = {id: this.state.user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
+    } else if (currentScreen == 'contacts') {
+      var content = {id: this.state.user.id};
+      contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
     }
 
     this.setState({currentScreen, uriParameters});

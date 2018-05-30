@@ -39,6 +39,11 @@ class Account extends Component {
             onChange={(event) => { this.props.handleChange(event, 'notes'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
             onBlur={(event) => { this.props.validateField(event, 'notes'); }} helperText={this.props.notesErrorMessage} />
         </Grid>
+        <Tooltip title='Add Contact'>
+          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.addLoading} onClick={this.props.addClicked}>
+            +
+          </Button>
+        </Tooltip>
       </Grid>
     );
   }
@@ -128,11 +133,6 @@ class Account extends Component {
           {this.renderAdd()}
           {this.props.addLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>
-        <Tooltip title='Add Contact'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.addLoading} onClick={this.props.addClicked}>
-            +
-          </Button>
-        </Tooltip>
       </Grid>
     );
   }

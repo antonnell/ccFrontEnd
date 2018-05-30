@@ -18,11 +18,12 @@ var Store = () => {
     case 'getEthAddress':
       this.getEthAddress(payload);
       break;
+    case 'createEthAddressWhitelist':
     case 'createEthAddress':
       this.createEthAddress(payload);
       break;
-    case 'importAddress':
-      this.importAddress(payload);
+    case 'importEthAddress':
+      this.importEthAddress(payload);
       break;
     case 'updateEthAddress':
       this.updateEthAddress(payload);
@@ -61,7 +62,7 @@ var Store = () => {
       payload)
   }
 
-  this.importAddress = function(payload) {
+  this.importEthAddress = function(payload) {
     var url = 'ethereum/importAddress'
     var postJson = {
       name: payload.content.name,
@@ -116,7 +117,6 @@ var Store = () => {
       postJson.contactUsername = payload.content.contactUserName
     }
 
-    console.log(postJson)
     this.callApi(url,
       'POST',
       postJson,
