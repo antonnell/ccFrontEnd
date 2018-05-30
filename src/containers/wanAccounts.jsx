@@ -67,14 +67,13 @@ let WanAccounts = createReactClass({
   },
 
   componentWillMount() {
-    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
-    wanEmitter.on('importWanAddress', this.importWanAddressReturned);
-    wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
-  },
-  componentWillUnmount() {
     wanEmitter.removeAllListeners('createWanAddress');
     wanEmitter.removeAllListeners('importWanAddress');
     wanEmitter.removeAllListeners('updateWanAddress');
+
+    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
+    wanEmitter.on('importWanAddress', this.importWanAddressReturned);
+    wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
   },
 
   resetInputs() {

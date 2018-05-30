@@ -23,10 +23,9 @@ let Contacts = createReactClass({
   },
 
   componentWillMount() {
-    contactsEmitter.on('addContact', this.addContactReturned);
-  },
-  componentWillUnmount() {
     contactsEmitter.removeAllListeners('addContact');
+
+    contactsEmitter.on('addContact', this.addContactReturned);
   },
 
   resetInputs() {

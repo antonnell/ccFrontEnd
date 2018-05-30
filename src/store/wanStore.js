@@ -15,9 +15,11 @@ var Store = () => {
 
   dispatcher.register(function(payload) {
     switch (payload.type) {
+    case 'getWanAddressWhitelist':
     case 'getWanAddress':
       this.getWanAddress(payload);
       break;
+    case 'createWanAddressWhitelist':
     case 'createWanAddress':
       this.createWanAddress(payload);
       break;
