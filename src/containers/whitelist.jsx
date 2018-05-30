@@ -365,7 +365,7 @@ let Whitelist = createReactClass({
 
   createEthAddress() {
     if (this.validateETHAddressName()) {
-      this.setState({loading: true});
+      this.setState({error: '', loading: true});
       var content = { username: this.props.user.username, name: this.state.ethAddressName, isPrimary: true };
       ethDispatcher.dispatch({type: 'createEthAddressWhitelist', content, token: this.props.user.token });
     }
@@ -495,7 +495,7 @@ let Whitelist = createReactClass({
 
   createWanAddress() {
     if (this.validateWANAddressName()) {
-      this.setState({loading: true});
+      this.setState({error: '', loading: true});
       var content = { username: this.props.user.username, name: this.state.wanAddressName, isPrimary: true };
       wanDispatcher.dispatch({type: 'createWanAddressWhitelist', content, token: this.props.user.token });
     }
@@ -589,6 +589,13 @@ let Whitelist = createReactClass({
   navigateKYCIDDocument() {
     var whitelistObject = this.props.whitelistObject;
     whitelistObject.currentScreen = 'kycIDDOcument';
+
+    this.props.setWhitelistState(whitelistObject);
+  },
+
+  navigateKYCPhoto() {
+    var whitelistObject = this.props.whitelistObject;
+    whitelistObject.currentScreen = 'kycPhoto';
 
     this.props.setWhitelistState(whitelistObject);
   },
@@ -1039,6 +1046,7 @@ let Whitelist = createReactClass({
           />)*/
       case 'createWanAddress':
         return (<CreateWanAddress
+          error={this.state.error}
           loading={this.state.loading}
           handleChange={this.handleChange}
           createWanAddress={this.createWanAddress}
@@ -1073,6 +1081,7 @@ let Whitelist = createReactClass({
           />)
       case 'whitelistJoined':
         return (<WhitelistJoined
+          navigateBack={this.navigateKYCPhoto}
           ethPublicAddress={this.props.whitelistObject.ethAddress.publicAddress}
           wanPublicAddress={this.props.whitelistObject.wanAddress.publicAddress}
           allocation={this.props.whitelistObject.user.remainingAllocation}

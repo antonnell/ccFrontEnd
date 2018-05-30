@@ -100,7 +100,10 @@ class WhitelistJoined extends Component {
             </Grid>
           </Grid>
           :<div></div>}
-        <Grid item xs={12} align='right' style={{marginTop: '24px '}}>
+        <Grid item xs={6} align='left' style={{marginTop: '24px '}}>
+          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+        </Grid>
+        <Grid item xs={6} align='right' style={{marginTop: '24px '}}>
           <Button size="small" variant="raised" color="primary" onClick={this.props.done}>Go to my account</Button>
         </Grid>
       </Grid>
