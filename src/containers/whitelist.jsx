@@ -39,6 +39,9 @@ let wanDispatcher = require('../store/wanStore.js').default.dispatcher
 let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
 
+let accountEmitter = require('../store/accountStore.js').default.emitter
+let accountDispatcher = require('../store/accountStore.js').default.dispatcher
+
 
 const isEthereumAddress  = require('is-ethereum-address');
 
@@ -706,6 +709,9 @@ let Whitelist = createReactClass({
     whitelistObject.activeStep = 4;
     whitelistObject.kyc = { idDocumentUuid: this.state.idDocumentFileUuid, photoUuid: this.state.photoFileUuid };
     whitelistObject.currentScreen = 'whitelistJoined';
+
+    var content = { id: this.props.user.id };
+    accountDispatcher.dispatch({type: 'sendPresaleEmail', content, token: this.props.user.token });
 
     this.props.setWhitelistState(whitelistObject);
   },

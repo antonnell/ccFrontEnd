@@ -34,7 +34,7 @@ class CreateWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanAddressNameError} disabled={this.props.loading}
+          <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} autoFocus required color="textSecondary" error={this.props.wanAddressNameError} disabled={this.props.loading}
             id="wanAddressName" placeholder="Wanchain Address Name" value={this.props.wanAddressName}
             onChange={(event) => { this.props.handleChange(event, 'wanAddressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
             helperText={this.props.wanAddressNameErrorMessage} />

@@ -83,7 +83,7 @@ class WhitelistJoined extends Component {
         </Grid>
         <Grid item xs={12} align='center' style={{ marginTop: '24px' }}>
           <Typography variant="body2">
-            As soon as you have been added to the whitelist the contribution address will be emailed and appear below
+            You have been added to the whitelist. An email will be sent to you confirming your participation.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
