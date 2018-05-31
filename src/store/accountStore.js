@@ -39,6 +39,9 @@ var Store = () => {
     case 'disable2fa':
       this.disable2fa(payload);
       break;
+    case 'sendPresaleEmail':
+      this.sendPresaleEmail(payload);
+      break;
     }
   }.bind(this))
 
@@ -138,7 +141,18 @@ var Store = () => {
       userId: payload.content.id,
     }
 
-    console.log(postJson)
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.sendPresaleEmail = function(payload) {
+    var url = 'account/sendPresaleEmail'
+    var postJson = {
+      userId: payload.content.id,
+    }
+
     this.callApi(url,
       'POST',
       postJson,
