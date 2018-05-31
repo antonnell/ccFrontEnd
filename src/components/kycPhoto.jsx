@@ -49,7 +49,7 @@ class KYCPhoto extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.photoImagePreviewUrl?"raised":"flat"} disabled={!this.props.photoImagePreviewUrl}  color="primary" onClick={this.props.navigateJoinWhitelist}>Next</Button>
+          <Button size="small" variant={this.props.photoImagePreviewUrl?"raised":"flat"} disabled={!this.props.photoImagePreviewUrl}  color="primary" onClick={this.props.navigateJoinWhitelist}>Whitest me now</Button>
         </Grid>
       </Grid>
     );
