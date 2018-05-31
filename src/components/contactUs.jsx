@@ -17,13 +17,9 @@ class ContactUs extends Component {
         <Grid item xs={10} sm={10} md={10} lg={10} align='center'>
           <Typography variant='headline'>Contact Us</Typography>
           <br />
-          <Typography variant='Subheading' style={{fontWeight: 'bold'}}>CryptopCurve</Typography>
+          <Typography variant='Subheading' style={{fontWeight: 'bold'}}>CryptoCurve</Typography>
           <br />
-          <Typography variant='Subheading'>1600 Amphitheatre Parkway</Typography>
-          <Typography variant='Subheading'>Mountain View, California 1111</Typography>
-          <Typography variant='Subheading'>United States</Typography>
-          <br />
-          <Typography variant='Subheading'>support@cryptopcurve.io</Typography>
+          <Typography variant='Subheading'>Email us at support@cryptocurve.io</Typography>
         </Grid>
       </Grid>
     );

@@ -42,7 +42,7 @@ class WhitelistJoined extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
           <Typography variant="title">
-            Last steps!
+            Whitelist joined!
           </Typography>
         </Grid>
         <Grid item xs={12} align='center' style={{ marginTop: '24px' }}>
