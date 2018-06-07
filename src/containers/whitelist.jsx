@@ -29,6 +29,7 @@ import JoinWhitelist from '../components/joinWhitelist.jsx';
 import WhitelistJoined from '../components/whitelistJoined.jsx';
 
 const createReactClass = require('create-react-class')
+const { sha3, isValidPrivate } = require('ethereumjs-util');
 
 let ethEmitter = require('../store/ethStore.js').default.emitter
 let ethDispatcher = require('../store/ethStore.js').default.dispatcher
@@ -45,6 +46,46 @@ let accountDispatcher = require('../store/accountStore.js').default.dispatcher
 
 const isEthereumAddress  = require('is-ethereum-address');
 
+function isValidWANAddress(address) {
+  if (address === '0x0000000000000000000000000000000000000000') {
+    return false;
+  }
+  if (address.substring(0, 2) !== '0x') {
+    return false;
+  } else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+    return false;
+    /*} else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) {
+    return true;*/
+  } else {
+    return isWanChecksumAddress(address);
+  }
+}
+
+function isWanChecksumAddress(address) {
+  return address === toChecksumWaddress(address);
+}
+
+function toChecksumWaddress(address) {
+  /* stripHexPrefix */
+  if (typeof address !== 'string') {
+    return false;
+  }
+  address = address.slice(0, 2) === '0x' ? address.slice(2) : address;
+  address = address.toLowerCase();
+  /* toChecksumWaddress */
+  const hash = sha3(address).toString('hex');
+  let ret = '0x';
+
+  for (let i = 0; i < address.length; i++) {
+    if (parseInt(hash[i], 16) < 8) {
+      ret += address[i].toUpperCase();
+    } else {
+      ret += address[i];
+    }
+  }
+  return ret;
+}
+
 let Whitelist = createReactClass({
   getInitialState() {
     return {
@@ -57,7 +98,7 @@ let Whitelist = createReactClass({
 
       cryptocurveWallet: false,
       loadingAddress: false,
-      contributionAddress: '0xAbCC42bd1eD741902df780358DED85bF851B3C8f',
+      contributionAddress: '0xE1197070018D5CFbC15c5fCBb346A3De9de9bC9A',
 
       ethAddressName: '',
       ethAddressNameError: false,
@@ -175,8 +216,9 @@ let Whitelist = createReactClass({
       wanPublicAddress = this.state.wanPublicAddress
     }
     this.setState({ wanPublicAddressError: false, wanPublicAddressErrorMessage: '' });
+    const isWanchainValid = isValidWANAddress(wanPublicAddress)
     const isEthereumValid = isEthereumAddress(wanPublicAddress)
-    if (!isEthereumValid) {
+    if (!isEthereumValid&&!isWanchainValid) {
       this.setState({ wanPublicAddressError: true, wanPublicAddressErrorMessage: 'Invalid Wanchain Address' });
       return false
     } else if (isEthereumValid) {

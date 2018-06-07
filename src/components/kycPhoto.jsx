@@ -27,7 +27,7 @@ class KYCPhoto extends Component {
         </Grid>
         <Grid item xs={12} align='center'>
           <Typography variant="body2">
-            Please upload a recent photo of yourself.
+            Please upload a recent photo of yourself holding your ID.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
