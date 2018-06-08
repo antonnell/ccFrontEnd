@@ -71,7 +71,6 @@ var Store = () => {
       country: payload.content.country
     }
 
-    console.log(postJson)
     this.callApi(url,
       version,
       'POST',

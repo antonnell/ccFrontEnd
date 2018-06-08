@@ -154,7 +154,7 @@ let WhitelistMe = createReactClass({
     }
 
     if(data.success) {
-      this.setState({ done: true, email: '', firstname: '', surname: '', telegram: '', country: '' })
+      this.setState({ loading: false, done: true, email: '', firstname: '', surname: '', telegram: '', country: '' })
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {
