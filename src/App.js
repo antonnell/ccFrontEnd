@@ -154,7 +154,7 @@ class App extends Component {
     if(paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex)
     }
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'whitelistMe'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
       }
@@ -360,7 +360,7 @@ class App extends Component {
       }
     }
 
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'whitelistMe'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add'].includes(currentScreen)) {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
@@ -474,7 +474,7 @@ class App extends Component {
         return (<ComingSoon />);
       case 'fees':
         return (<ComingSoon />);
-      case 'whitelistMe':
+      case 'add':
         return (<WhitelistMe />)
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
