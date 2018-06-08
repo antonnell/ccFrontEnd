@@ -10,10 +10,6 @@ const styles = {};
 
 class Enable2FA extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '50px'}}>
@@ -42,7 +38,7 @@ class Enable2FA extends Component {
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '24px'}}>
-            <Grid item xs={12} style={{marginTop: '50px'}} style={{position: 'relative', minHeight: '228px'}}>
+            <Grid item xs={12} style={{position: 'relative', minHeight: '228px', marginTop: '50px'}}>
               <canvas id='canvas' style={{minHeight: '228px'}}></canvas>
               {this.props.QRCodeLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             </Grid>

@@ -2,17 +2,12 @@ import React, { Component } from "react";
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
 class TermsModal extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   render() {
     var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}

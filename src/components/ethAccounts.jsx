@@ -41,10 +41,6 @@ function EditIcon(props) {
 
 class EthAccounts extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   renderCreate() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>

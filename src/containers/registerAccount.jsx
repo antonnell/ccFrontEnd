@@ -6,9 +6,7 @@ let dispatcher = require('../store/accountStore.js').default.dispatcher
 let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
 var crypto = require('crypto');
-var bip39 = require('bip39');
 var sha256 = require('sha256');
-var crypto = require('crypto');
 
 const email = require("email-validator");
 
@@ -226,7 +224,6 @@ let RegisterAccount = createReactClass({
   decodeWhitelistResponse(message) {
     const mnemonic = message.m.hexDecode()
     const encrypted = message.e.hexDecode()
-    const time = message.t
     const signature = message.s
 
     const sig = {

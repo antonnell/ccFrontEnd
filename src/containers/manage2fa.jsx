@@ -121,8 +121,9 @@ let Manage2FA = createReactClass({
       if(name.indexOf('code') > -1) {
         var index = name.substring(4)
 
+        var codeArray = this.state.codeArray
         if(this.state[name].length > 0) {
-          var codeArray = this.state.codeArray
+
           codeArray[index-1] = ''
 
           this.setState({codeArray, code: codeArray.join(''), [name]: ''})
@@ -130,7 +131,6 @@ let Manage2FA = createReactClass({
             document.getElementById(name).focus()
           }
         } else {
-          var codeArray = this.state.codeArray
           codeArray[index-2] = ''
 
           this.setState({codeArray, code: codeArray.join(''), ['code'+(parseInt(index)-1)]: ''})

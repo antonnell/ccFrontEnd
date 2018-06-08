@@ -4,16 +4,11 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Card, {  CardContent } from 'material-ui/Card';
 import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
 class CreateEthAddress extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   render() {
     return (

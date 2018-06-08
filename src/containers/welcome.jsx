@@ -7,9 +7,7 @@ let dispatcher = require('../store/accountStore.js').default.dispatcher
 let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
 var crypto = require('crypto');
-var bip39 = require('bip39');
 var sha256 = require('sha256');
-var crypto = require('crypto');
 
 let Welcome = createReactClass({
   getInitialState() {
@@ -107,20 +105,21 @@ let Welcome = createReactClass({
           return false
         }
 
+        var codeArray = null
         if(event.target.value.length <= 1) {
           this.setState({
             [name]: event.target.value
           });
 
           var index = name.substring(4)
-          var codeArray = this.state.codeArray
+          codeArray = this.state.codeArray
           codeArray[index-1] = event.target.value
           this.setState({codeArray, code: codeArray.join('')})
           if(index < 6 && event.target.value.length == 1) {
             document.getElementById('code'+(parseInt(index)+1)).focus()
           }
         } else if(event.target.value.length === 6) {
-          var codeArray = event.target.value.split('')
+          codeArray = event.target.value.split('')
           var state = {
             code1: codeArray[0],
             code2: codeArray[1],
@@ -162,8 +161,8 @@ let Welcome = createReactClass({
       if(name.indexOf('code') > -1) {
         var index = name.substring(4)
 
+        var codeArray = this.state.codeArray
         if(this.state[name].length > 0) {
-          var codeArray = this.state.codeArray
           codeArray[index-1] = ''
 
           this.setState({codeArray, code: codeArray.join(''), [name]: ''})
@@ -171,7 +170,6 @@ let Welcome = createReactClass({
             document.getElementById(name).focus()
           }
         } else {
-          var codeArray = this.state.codeArray
           codeArray[index-2] = ''
 
           this.setState({codeArray, code: codeArray.join(''), ['code'+(parseInt(index)-1)]: ''})
@@ -265,7 +263,6 @@ let Welcome = createReactClass({
   decodeWhitelistResponse(message) {
     const mnemonic = message.m.hexDecode()
     const encrypted = message.e.hexDecode()
-    const time = message.t
     const signature = message.s
 
     const sig = {

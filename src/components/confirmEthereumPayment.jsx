@@ -1,20 +1,10 @@
 import React, { Component } from "react";
-import Dialog, { DialogActions, DialogContent, DialogTitle, } from 'material-ui/Dialog';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import TextField from 'material-ui/TextField';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
-import Tabs, { Tab } from 'material-ui/Tabs';
 import { CircularProgress } from 'material-ui/Progress';
 
 class ConfirmEthereumPayment extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   renderBeneficiary() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
@@ -28,7 +18,7 @@ class ConfirmEthereumPayment extends Component {
   };
 
   renderPublic() {
-    return (<Grid item xs={12} align='center' style={{ marginTop: '12px', marginTop: '12px' }}>
+    return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
       To public address:
       <div style={{border: '1px solid #000', padding: '12px'}}>
         <Typography variant="title" noWrap>

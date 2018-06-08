@@ -17,10 +17,6 @@ function MenuIcon(props) {
 
 class ApplicationBar extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     //<img src='account-logo.png' width='158px' height='24pox' alt='CRPTOCURVE.IO'/>
     return (

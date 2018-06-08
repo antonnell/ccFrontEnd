@@ -9,7 +9,9 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.cryptocurve.network/';
+let config = require('../config')
+
+let apiUrl = config.apiUrl;
 
 var Store = () => {
 

@@ -7,10 +7,6 @@ const styles = {};
 
 class ComingSoon extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '150px'}}>

@@ -19,6 +19,7 @@ import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
 import SendEthereum from './containers/sendEthereum.jsx';
+import WhitelistMe from './containers/whitelistMe.jsx';
 
 import ComingSoon from './components/comingSoon.jsx';
 import PrivacyPolicy from './components/privacyPolicy.jsx';
@@ -26,7 +27,6 @@ import ContactUs from './components/contactUs.jsx';
 var sha256 = require('sha256');
 
 let accountEmitter = require('./store/accountStore.js').default.emitter
-let accountDispatcher = require('./store/accountStore.js').default.dispatcher
 
 let contactsEmitter = require('./store/contactsStore.js').default.emitter
 let contactsDispatcher = require('./store/contactsStore.js').default.dispatcher
@@ -154,7 +154,7 @@ class App extends Component {
     if(paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex)
     }
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'whitelistMe'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
       }
@@ -360,20 +360,21 @@ class App extends Component {
       }
     }
 
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'whitelistMe'].includes(currentScreen)) {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
     }
 
+    var content = {}
     if(currentScreen == 'wanAccounts') {
-      var content = {id: this.state.user.id};
+      content = {id: this.state.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
     } else if (currentScreen == 'ethAccounts') {
-      var content = {id: this.state.user.id};
+      content = {id: this.state.user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
     } else if (currentScreen == 'contacts') {
-      var content = {id: this.state.user.id};
+      content = {id: this.state.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
     }
 
@@ -383,7 +384,7 @@ class App extends Component {
   renderAppBar() {
     var menuClicked = null
     if(this.state.user != null) {
-      var menuClicked = this.openDrawer
+      menuClicked = this.openDrawer
     }
 
     return (<TheAppBar
@@ -473,6 +474,8 @@ class App extends Component {
         return (<ComingSoon />);
       case 'fees':
         return (<ComingSoon />);
+      case 'whitelistMe':
+        return (<WhitelistMe />)
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:

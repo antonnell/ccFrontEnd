@@ -1,6 +1,5 @@
 import React from 'react';
-import Stepper, { Step, StepButton, StepLabel, StepContent } from 'material-ui/Stepper';
-import MobileStepper from 'material-ui/MobileStepper';
+import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Card, {  CardContent } from 'material-ui/Card';
@@ -40,7 +39,6 @@ let wanDispatcher = require('../store/wanStore.js').default.dispatcher
 let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
 
-let accountEmitter = require('../store/accountStore.js').default.emitter
 let accountDispatcher = require('../store/accountStore.js').default.dispatcher
 
 
@@ -994,7 +992,6 @@ let Whitelist = createReactClass({
           ethPublicAddressValid={this.state.ethPublicAddressValid}
           importPublicEthAddress={this.importPublicEthAddress}
           importPublicEthAddressKeyDown={this.importPublicEthAddressKeyDown}
-          handleChange={this.handleChange}
           />);
       /*case 'importPrivateTypeEthAddress':
         return (<ImportPrivateTypeEthAddress

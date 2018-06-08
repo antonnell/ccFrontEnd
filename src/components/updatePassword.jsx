@@ -10,10 +10,6 @@ const styles = {};
 
 class UpdatePassword extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '50px'}}>
