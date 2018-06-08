@@ -4,7 +4,6 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Tabs, { Tab } from 'material-ui/Tabs';
 import Tooltip from 'material-ui/Tooltip';
 import Card, { CardContent } from 'material-ui/Card';
 import { CircularProgress } from 'material-ui/Progress';
@@ -12,10 +11,6 @@ import { CircularProgress } from 'material-ui/Progress';
 const styles = {};
 
 class Account extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   renderAdd() {
     return(

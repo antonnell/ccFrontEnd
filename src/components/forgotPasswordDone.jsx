@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
 
 const styles = {};
 
 class ForgotPasswordDone extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   render() {
     return (

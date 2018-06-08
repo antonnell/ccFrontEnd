@@ -9,10 +9,6 @@ import Button from 'material-ui/Button';
 
 class Disable2FaConfirmation extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     return (
       <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >

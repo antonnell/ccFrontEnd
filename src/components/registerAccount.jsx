@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
@@ -10,10 +9,6 @@ import { CircularProgress } from 'material-ui/Progress';
 const styles = {};
 
 class RegisterAccount extends Component {
-
-  constructor(props) {
-    super(props);
-  };
   /*<TextField required fullWidth={true} color="textSecondary" error={this.props.usernameError} disabled={this.props.loading}
     id="username" label="Username" value={this.props.username}
     onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onRegisterKeyDown} />*/

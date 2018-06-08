@@ -4,15 +4,10 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Card, {  CardContent } from 'material-ui/Card';
 
 const styles = {};
 
 class ImportPrivateWanAddress extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   componentDidMount() {
     this.props.checkIfWanPasswordProtected(this.props.wanPrivateKey)

@@ -10,10 +10,6 @@ const styles = {};
 
 class ImportWanAddress extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>

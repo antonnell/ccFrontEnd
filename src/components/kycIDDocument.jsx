@@ -3,15 +3,10 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Card, { CardContent } from 'material-ui/Card';
 
 const styles = {};
 
 class KYCIDDOcument extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   render() {
     var imagePreview = null

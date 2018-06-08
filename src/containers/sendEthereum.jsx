@@ -2,9 +2,7 @@ import React from 'react'
 import SetupEthereumPayment from '../components/setupEthereumPayment'
 import ConfirmEthereumPayment from '../components/confirmEthereumPayment'
 import CompleteEthereumPayment from '../components/completeEthereumPayment'
-import Stepper, { Step, StepButton, StepLabel, StepContent } from 'material-ui/Stepper';
-import MobileStepper from 'material-ui/MobileStepper';
-import Typography from 'material-ui/Typography';
+import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
 import Grid from 'material-ui/Grid';
 import Card, {  CardContent } from 'material-ui/Card';
 
@@ -166,6 +164,52 @@ let SendEther = createReactClass({
             error={this.state.error}
             accountClicked={this.accountClicked}
             transactionID={this.state.transactionID}/>)
+        default:
+          return(<SetupEthereumPayment
+            handleChange={this.handleChange}
+            handleTabChange={this.handleTabChange}
+
+            error={this.state.error}
+            loading={this.state.loading}
+
+            proceedClicked={this.proceedClicked}
+            selectAddress={this.selectAddress}
+            selectContact={this.selectContact}
+
+            ethAddresses={this.props.ethAddresses}
+            contacts={this.props.contacts}
+
+            tabValue={this.state.tabValue}
+
+            accountValue={this.state.accountValue}
+            account={this.state.account}
+            accountError={this.state.accountError}
+            accountErrorMessage={this.state.accountErrorMessage}
+            contactValue={this.state.contactValue}
+            contact={this.state.contact}
+            contactError={this.state.contactError}
+            contactErrorMessage={this.state.contactErrorMessage}
+
+            amount={this.state.amount}
+            amountError={this.state.amountError}
+            amountErrorMessage={this.state.amountErrorMessage}
+            gwei={this.state.gwei}
+            gweiError={this.state.gweiError}
+            gweiErrorMessage={this.state.gweiErrorMessage}
+            ownReference={this.state.ownReference}
+            ownReferenceError={this.state.ownReferenceError}
+            ownReferenceErrorMessage={this.state.ownReferenceErrorMessage}
+            beneficiaryReference={this.state.beneficiaryReference}
+            beneficiaryReferenceError={this.state.beneficiaryReferenceError}
+            beneficiaryReferenceErrorMessage={this.state.beneficiaryReferenceErrorMessage}
+            publicAddress={this.state.publicAddress}
+            publicAddressError={this.state.publicAddressError}
+            publicAddressErrorMessage={this.state.publicAddressErrorMessage}
+
+            setupPaymentValid={this.state.setupPaymentValid}
+            disclaimer={this.state.disclaimer}
+            validateField={this.validateField}
+          />)
     }
   },
 
@@ -227,7 +271,7 @@ let SendEther = createReactClass({
     if(selectedAccount.length > 0) {
       selectedAccount = selectedAccount[0]
     } else {
-      selectedAccount: null
+      selectedAccount = null
     }
     this.setState({accountValue: selectedAccount.address, account: selectedAccount, accountValid: true});
 
@@ -242,7 +286,7 @@ let SendEther = createReactClass({
     if(selectedContact.length > 0) {
       selectedContact = selectedContact[0]
     } else {
-      selectedContact: ''
+      selectedContact = ''
     }
     this.setState({contactValue: selectedContact.primaryAddress, contact: selectedContact, contactValid: true});
 

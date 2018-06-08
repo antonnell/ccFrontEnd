@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
@@ -11,10 +10,6 @@ const styles = {};
 
 class Welcome extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     var forgotPasswordClicked = this.props.submitForgotPasswordNavigate
     var registerClicked = this.props.submitRegisterNavigate
@@ -23,8 +18,8 @@ class Welcome extends Component {
       registerClicked = null
     }
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '100px'}}>
-        <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
+      <Grid container justify="space-around" direction="row" spacing={0} style={{marginTop: '100px'}}>
+        <Grid item xs={10} sm={6} md={4} lg={3} >
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="display1" color="inherit">

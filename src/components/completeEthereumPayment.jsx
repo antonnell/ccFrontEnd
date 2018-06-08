@@ -1,19 +1,11 @@
 import React, { Component } from "react";
-import Dialog, { DialogActions, DialogContent, DialogTitle, } from 'material-ui/Dialog';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import TextField from 'material-ui/TextField';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
-import Tabs, { Tab } from 'material-ui/Tabs';
+
+let config = require('../config')
 
 class CompleteEthereumPayment extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   renderError() {
     return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
@@ -36,7 +28,7 @@ class CompleteEthereumPayment extends Component {
   };
 
   renderSuccess() {
-    var url = 'https://ropsten.etherscan.io/tx/'+this.props.transactionID
+    var url = config.etherscanUrl+this.props.transactionID
     return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
       <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
         <Typography variant="body1">

@@ -7,10 +7,6 @@ const styles = {};
 
 class PrivacyPolicy extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   render() {
     var styles = {
       ppBody: {

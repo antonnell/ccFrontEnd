@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import Dialog, { DialogActions, DialogContent, DialogTitle, } from 'material-ui/Dialog';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
+import { ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 import TextField from 'material-ui/TextField';
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
@@ -12,10 +11,6 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import { InputAdornment } from 'material-ui/Input';
 
 class SetupEthereumPayment extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   renderAddresses() {
     if(this.props.ethAddresses == null || this.props.ethAddresses.length == 0) {

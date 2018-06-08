@@ -10,7 +10,9 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'https://api.cryptocurve.xyz/';
+let config = require('../config')
+
+let apiUrl = config.whitelistApiUrl;
 
 var Store = () => {
 
@@ -52,8 +54,30 @@ var Store = () => {
     case 'wanMnemonic':
       this.wanMnemonic(payload);
       break;
+    case 'whitelist':
+      this.whitelist(payload);
+      break;
     }
   }.bind(this))
+
+  this.whitelist = function(payload) {
+    var url = 'whitelist'
+    var version = 'api/v2/'
+    var postJson = {
+      email: payload.content.email,
+      firstname: payload.content.firstname,
+      surname: payload.content.surname,
+      telegram: payload.content.telegram,
+      country: payload.content.country
+    }
+
+    console.log(postJson)
+    this.callApi(url,
+      version,
+      'POST',
+      postJson,
+      payload)
+  }
 
   this.whitelistLogin = function(payload) {
     var url = 'login'
@@ -262,7 +286,7 @@ var Store = () => {
       body: postData,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic NDk5MUQ1OTJFN0ZFQTE1MDkyQ0IwNjhFQkZCREVFQzczNzNBMTk0NEU1MTA3QTFERDE5MUMzMTBENkY5MDRBMDowRkYxNUI0NDMxQjI0RkE0M0U5RTYwODIxMERGNEU0QTVBNjBCQ0MzMTUzREIzMTlEMTU1MUE4RjEzQ0ZEMkUx',
+        'Authorization': config.whitelistApiHeader,
         'x-access-token': payload.token,
         'x-key': payload.tokenKey }
     })

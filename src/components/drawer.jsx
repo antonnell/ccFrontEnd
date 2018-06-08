@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
-import Icon from 'material-ui/Icon';
 import SvgIcon from 'material-ui/SvgIcon';
-import List, { ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 const styles = {};
@@ -71,10 +67,6 @@ function WhitelistIcon(props) {
 }
 
 class AppDrawer extends Component {
-
-  constructor(props) {
-    super(props);
-  };
 
   componentDidMount() {
     if(this.props.user == null) {

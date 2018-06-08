@@ -3,7 +3,6 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Card, {  CardContent } from 'material-ui/Card';
 import List, { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 
 const styles = {};
