@@ -11,6 +11,7 @@ let Footer = createReactClass({
       <FooterComponent
         user={this.props.user}
         navClicked={this.props.navClicked}
+        ipValid={this.props.ipValid}
       />
     )
   },

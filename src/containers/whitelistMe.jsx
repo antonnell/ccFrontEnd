@@ -1,6 +1,7 @@
 import React from 'react'
 import WhitelistMeComponent from '../components/whitelistMe'
 import WhitelistMeDoneComponent from '../components/whitelistMeDone'
+import ReactGA from 'react-ga';
 const createReactClass = require('create-react-class')
 let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
@@ -28,9 +29,7 @@ let WhitelistMe = createReactClass({
       telegramErrorMessage: false,
       country: '',
       countryError: false,
-      countryErrorMessage: false,
-
-      done: false
+      countryErrorMessage: false
     };
   },
 
@@ -42,13 +41,15 @@ let WhitelistMe = createReactClass({
     whitelistEmitter.removeAllListeners('whitelist');
   },
 
+  componentDidMount() {
+    ReactGA.event({
+      category: 'AddToWhitelist',
+      action: 'Requested'
+    });
+  },
+
   render() {
-    if(this.state.done) {
-      return (
-        <WhitelistMeDoneComponent
-          submitBack={this.submitBack}/>
-      )
-    }
+
     return (
       <WhitelistMeComponent
         handleChange={this.handleChange}
@@ -93,10 +94,6 @@ let WhitelistMe = createReactClass({
     if (event.which == 13) {
       this.submitWhitelist();
     }
-  },
-
-  submitBack() {
-    this.setState({ done: false})
   },
 
   submitWhitelist() {
@@ -154,7 +151,8 @@ let WhitelistMe = createReactClass({
     }
 
     if(data.success) {
-      this.setState({ loading: false, done: true, email: '', firstname: '', surname: '', telegram: '', country: '' })
+      this.setState({ loading: false, email: '', firstname: '', surname: '', telegram: '', country: '' })
+      window.location.hash = 'added'
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {
