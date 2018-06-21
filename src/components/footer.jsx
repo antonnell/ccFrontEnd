@@ -49,6 +49,11 @@ class Footer extends Component {
             © 2018 Cryptocurve All Rights Reserved
           </Typography>
         </Grid>
+        <div style={{position: 'absolute', bottom: '0px', right: '3px'}}>
+          <Typography style={{color:'#FFFFFF'}}>
+            Version: 1.0.0
+          </Typography>
+        </div>
       </Grid>
     );
   };
