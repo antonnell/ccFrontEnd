@@ -51,7 +51,7 @@ class Footer extends Component {
         </Grid>
         <div style={{position: 'absolute', bottom: '0px', right: '3px'}}>
           <Typography style={{color:'#FFFFFF'}}>
-            Version: 1.0.0
+            Version: 1.0.1
           </Typography>
         </div>
       </Grid>
