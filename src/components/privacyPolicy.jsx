@@ -151,13 +151,13 @@ class PrivacyPolicy extends Component {
                   England, EX1 1UG
               </p>
               <p style={paragraphStyle}>
-                  <a name="a563186">Name and title of DPM: </a> [NAME]
+                  <a name="a563186">Name and title of DPM: </a> Xander Yi - CFO
               </p>
               <p style={paragraphStyle}>
-                  <a name="a770336">Email address: </a> [EMAIL]
+                  <a name="a770336">Email address: </a> xander@cryptocurve.io
               </p>
               <p style={paragraphStyle}>
-                  <a name="a733364">Telephone number: </a> [NUMBER]
+                  <a name="a733364">Telephone number: </a> +15712576498
               </p>
               <p style={paragraphStyle}>
                 <a name="a389597">

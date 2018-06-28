@@ -574,7 +574,7 @@ class CookiePolicy extends Component {
                     and any subsequent amendments to this Agreement, or otherwise (a “    <strong>Dispute</strong>”) shall, if possible, be finally settled amicably
                         by negotiation between the Parties. Each Party will notify the other Party
                     in writing of a Dispute within thirty (30) days of the date it arises (a “    <strong>Notice</strong>”). Notice to the Company shall be sent by
-                        registered mail to the registered address of the Company, being [--].
+                        registered mail to the registered address of the Company, being The Senate, Southernhay Gardens, EXETER Devon EX1 1UG, UNITED KINGDOM.
                         Notice to you shall be by email to the email address you provide to us.
                         Your Notice must include (i) your name, postal address, email address and
                         telephone number, (ii) a description in reasonable detail of the nature or
