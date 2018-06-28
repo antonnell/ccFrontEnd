@@ -31,6 +31,8 @@ class Footer extends Component {
             <Grid item xs={3} align='left'>
               <Typography variant='subheading' style={headingStyle}>ABOUT</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'privacyPolicy'); }}>Privacy Policy</Typography>
+              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'cookiePolicy'); }}>Cookie Policy</Typography>
+              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'termsAndConditions'); }}>Presale Ts&Cs</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'about'); }}>About Us</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'press'); }}>Press</Typography>
             </Grid>
@@ -51,7 +53,7 @@ class Footer extends Component {
         </Grid>
         <div style={{position: 'absolute', bottom: '0px', right: '3px'}}>
           <Typography style={{color:'#FFFFFF'}}>
-            Version: 1.0.1
+            Version: 1.0.2
           </Typography>
         </div>
       </Grid>
