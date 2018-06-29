@@ -129,7 +129,8 @@ class App extends Component {
       contacts: null,
       whitelistState: whitelistState,
       uriParameters: {},
-      ipValid: true
+      ipValid: false,
+      ipLoading: true
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -209,10 +210,11 @@ class App extends Component {
   };
 
   getIpReturned(err, data) {
+    this.setState({ipLoading: false})
     emitter.removeAllListeners('getIp');
 
-    if(data.country.code != null && data.country.code == 'US') {
-      this.setState({ipValid: false})
+    if(data != null && data.country != null && data.country.code != 'US') {
+      this.setState({ipValid: true})
     }
   };
 
@@ -512,7 +514,7 @@ class App extends Component {
           window.location.hash = 'addUnavailable'
           return <div></div>
         }
-        return (<WhitelistMe />);
+        return (<WhitelistMe ipLoading={this.state.ipLoading} />);
       case 'added':
         return (<WhitelistMeDone />);
       case 'addUnavailable':
@@ -520,7 +522,7 @@ class App extends Component {
           window.location.hash = 'add'
           return <div></div>
         }
-        return (<WhitelistMeUnavailable />);
+        return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} />);
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:
