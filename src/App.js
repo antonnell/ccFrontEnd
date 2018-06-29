@@ -26,6 +26,8 @@ import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
 import PrivacyPolicy from './components/privacyPolicy.jsx';
+import CookiePolicy from './components/cookiePolicy.jsx';
+import TermsAndConditions from './components/termsAndConditions.jsx';
 import ContactUs from './components/contactUs.jsx';
 var sha256 = require('sha256');
 
@@ -165,7 +167,7 @@ class App extends Component {
     if(paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex)
     }
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
       }
@@ -383,7 +385,7 @@ class App extends Component {
       }
     }
 
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
@@ -483,6 +485,10 @@ class App extends Component {
         return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
+      case 'cookiePolicy':
+        return (<CookiePolicy />);
+      case 'termsAndConditions':
+        return (<TermsAndConditions />);
       case 'manageEthPools':
         return (<ComingSoon />);
       case 'sendEthereum':

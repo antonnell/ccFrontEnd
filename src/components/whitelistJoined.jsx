@@ -83,7 +83,7 @@ class WhitelistJoined extends Component {
         </Grid>
         <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
           <div style={{border: '1px solid #000', padding: '12px'}}>
-            {this.props.loadingAddress?<Loader type="Bars" color="#000" height="25"	width="25" />:<Typography variant="title" noWrap>{this.props.contributionAddress}</Typography>}
+            {this.props.loadingAddress?<Loader type="Bars" color="#000" height="25"	width="25" />:<Typography variant="title" noWrap>Contribution Address: {this.props.contributionAddress}</Typography>}
           </div>
         </Grid>
         {!this.props.loadingAddress?

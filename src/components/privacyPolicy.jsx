@@ -8,164 +8,768 @@ const styles = {};
 class PrivacyPolicy extends Component {
 
   render() {
-    var styles = {
-      ppBody: {
-        width:'100%',
-        margin:'0 auto',
-        textAlign:'justify'
-      },
-      ppConsistencies: {
-        display:'none'
-      }
-    }
+    var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
 
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant='headline'>Privacy Policy</Typography>
-          <div style={styles.ppBody}>
-             <div style={styles.ppConsistencies}>
-                <div class='col-2'>
-                   <div class="quick-links text-center">Information Collection</div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links text-center">Information Usage</div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links text-center">Information Protection</div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links text-center">Cookie Usage</div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links text-center">3rd Party Disclosure</div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links text-center">3rd Party Links</div>
-                </div>
-                <div class='col-2'></div>
-             </div>
-             <div style={{clear:'both',height:'10px'}}></div>
-             <div style={styles.ppConsistencies}>
-                <div class='col-2'>
-                   <div class="col-12 quick-links2 gen-text-center">Google AdSense</div>
-                </div>
-                <div class='col-2'>
-                   <div class="col-12 quick-links2 gen-text-center">
-                      Fair Information Practices
-                      <div class="col-8 gen-text-left gen-xs-text-center" style={{fontSize:'12px',position:'relative',left:'20px'}}>Fair information<br /> Practices</div>
-                   </div>
-                </div>
-                <div class='col-2'>
-                   <div class="col-12 quick-links2 gen-text-center coppa-pad">                    COPPA                </div>
-                </div>
-                <div class='col-2'>
-                   <div class="col-12 quick-links2 quick4 gen-text-center caloppa-pad">                    CalOPPA                </div>
-                </div>
-                <div class='col-2'>
-                   <div class="quick-links2 gen-text-center">Our Contact Information<br /></div>
-                </div>
-             </div>
-             <div style={{clear:'both',height:'10px'}}></div>
-             <div class='innerText'>This privacy policy has been compiled to better serve those who are concerned with how their 'Personally Identifiable Information' (PII) is being used online. PII, as described in US privacy law and information security, is information that can be used on its own or with other information to identify, contact, or locate a single person, or to identify an individual in context. Please read our privacy policy carefully to get a clear understanding of how we collect, use, protect or otherwise handle your Personally Identifiable Information in accordance with our website.<br /></div>
-             <span id='infoCo'></span><br />
-             <div class='grayText'><strong>What personal information do we collect from the people that visit our blog, website or app?</strong></div>
-             <br />
-             <div class='innerText'>When ordering or registering on our site, as appropriate, you may be asked to enter your name, email address  or other details to help you with your experience.</div>
-             <br />
-             <div class='grayText'><strong>When do we collect information?</strong></div>
-             <br />
-             <div class='innerText'>We collect information from you when you register on our site or enter information on our site.</div>
-             <br /> <span id='infoUs'></span><br />
-             <div class='grayText'><strong>How do we use your information? </strong></div>
-             <br />
-             <div class='innerText'> We may use the information we collect from you when you register, make a purchase, sign up for our newsletter, respond to a survey or marketing communication, surf the website, or use certain other site features in the following ways:<br /><br /></div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> To personalize your experience and to allow us to deliver the type of content and product offerings in which you are most interested.</div>
-             <span id='infoPro'></span><br />
-             <div class='grayText'><strong>How do we protect your information?</strong></div>
-             <br />
-             <div class='innerText'>We do not use vulnerability scanning and/or scanning to PCI standards.</div>
-             <div class='innerText'>We only provide articles and information. We never ask for credit card numbers.</div>
-             <div class='innerText'>We use regular Malware Scanning.<br /><br /></div>
-             <div class='innerText'>Your personal information is contained behind secured networks and is only accessible by a limited number of persons who have special access rights to such systems, and are required to keep the information confidential. In addition, all sensitive/credit information you supply is encrypted via Secure Socket Layer (SSL) technology. </div>
-             <br />
-             <div class='innerText'>We implement a variety of security measures when a user enters, submits, or accesses their information to maintain the safety of your personal information.</div>
-             <br />
-             <div class='innerText'>All transactions are processed through a gateway provider and are not stored or processed on our servers.</div>
-             <span id='coUs'></span><br />
-             <div class='grayText'><strong>Do we use 'cookies'?</strong></div>
-             <br />
-             <div class='innerText'>We do not use cookies for tracking purposes </div>
-             <div class='innerText'><br />You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies. You do this through your browser settings. Since browser is a little different, look at your browser's Help Menu to learn the correct way to modify your cookies.<br /></div>
-             <br />
-             <div class='innerText'>If you turn cookies off .</div>
-             <span id='trDi'></span><br />
-             <div class='grayText'><strong>Third-party disclosure</strong></div>
-             <br />
-             <div class='innerText'>We do not sell, trade, or otherwise transfer to outside parties your Personally Identifiable Information unless we provide users with advance notice. This does not include website hosting partners and other parties who assist us in operating our website, conducting our business, or serving our users, so long as those parties agree to keep this information confidential. We may also release information when it's release is appropriate to comply with the law, enforce our site policies, or protect ours or others rights, property or safety. <br /><br /> However, non-personally identifiable visitor information may be provided to other parties for marketing, advertising, or other uses. </div>
-             <span id='trLi'></span><br />
-             <div class='grayText'><strong>Third-party links</strong></div>
-             <br />
-             <div class='innerText'>Occasionally, at our discretion, we may include or offer third-party products or services on our website. These third-party sites have separate and independent privacy policies. We therefore have no responsibility or liability for the content and activities of these linked sites. Nonetheless, we seek to protect the integrity of our site and welcome any feedback about these sites.</div>
-             <span id='gooAd'></span><br />
-             <div class='blueText'><strong>Google</strong></div>
-             <br />
-             <div class='innerText'>Google's advertising requirements can be summed up by Google's Advertising Principles. They are put in place to provide a positive experience for users. https://support.google.com/adwordspolicy/answer/1316548?hl=en <br /><br /></div>
-             <div class='innerText'>We have not enabled Google AdSense on our site but we may do so in the future.</div>
-             <span id='calOppa'></span><br />
-             <div class='blueText'><strong>California Online Privacy Protection Act</strong></div>
-             <br />
-             <div class='innerText'>CalOPPA is the first state law in the nation to require commercial websites and online services to post a privacy policy.  The law's reach stretches well beyond California to require any person or company in the United States (and conceivably the world) that operates websites collecting Personally Identifiable Information from California consumers to post a conspicuous privacy policy on its website stating exactly the information being collected and those individuals or companies with whom it is being shared. -  See more at: http://consumercal.org/california-online-privacy-protection-act-caloppa/#sthash.0FdRbT51.dpuf<br /></div>
-             <div class='innerText'><br /><strong>According to CalOPPA, we agree to the following:</strong><br /></div>
-             <div class='innerText'>Users can visit our site anonymously.</div>
-             <div class='innerText'>Once this privacy policy is created, we will add a link to it on our home page or as a minimum, on the first significant page after entering our website.<br /></div>
-             <div class='innerText'>Our Privacy Policy link includes the word 'Privacy' and can easily be found on the page specified above.</div>
-             <div class='innerText'><br />You will be notified of any Privacy Policy changes:</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> On our Privacy Policy Page<br /></div>
-             <div class='innerText'>Can change your personal information:</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> By logging in to your account</div>
-             <div class='innerText'><br /><strong>How does our site handle Do Not Track signals?</strong><br /></div>
-             <div class='innerText'>We honor Do Not Track signals and Do Not Track, plant cookies, or use advertising when a Do Not Track (DNT) browser mechanism is in place. </div>
-             <div class='innerText'><br /><strong>Does our site allow third-party behavioral tracking?</strong><br /></div>
-             <div class='innerText'>It's also important to note that we do not allow third-party behavioral tracking</div>
-             <span id='coppAct'></span><br />
-             <div class='blueText'><strong>COPPA (Children Online Privacy Protection Act)</strong></div>
-             <br />
-             <div class='innerText'>When it comes to the collection of personal information from children under the age of 13 years old, the Children's Online Privacy Protection Act (COPPA) puts parents in control.  The Federal Trade Commission, United States' consumer protection agency, enforces the COPPA Rule, which spells out what operators of websites and online services must do to protect children's privacy and safety online.<br /><br /></div>
-             <div class='innerText'>We do not specifically market to children under the age of 13 years old.</div>
-             <div class='innerText'>Do we let third-parties, including ad networks or plug-ins collect PII from children under 13?</div>
-             <span id='ftcFip'></span><br />
-             <div class='blueText'><strong>Fair Information Practices</strong></div>
-             <br />
-             <div class='innerText'>The Fair Information Practices Principles form the backbone of privacy law in the United States and the concepts they include have played a significant role in the development of data protection laws around the globe. Understanding the Fair Information Practice Principles and how they should be implemented is critical to comply with the various privacy laws that protect personal information.<br /><br /></div>
-             <div class='innerText'><strong>In order to be in line with Fair Information Practices we will take the following responsive action, should a data breach occur:</strong></div>
-             <div class='innerText'>We will notify you via email</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Within 7 business days</div>
-             <div class='innerText'><br />We also agree to the Individual Redress Principle which requires that individuals have the right to legally pursue enforceable rights against data collectors and processors who fail to adhere to the law. This principle requires not only that individuals have enforceable rights against data users, but also that individuals have recourse to courts or government agencies to investigate and/or prosecute non-compliance by data processors.</div>
-             <span id='canSpam'></span><br />
-             <div class='blueText'><strong>CAN SPAM Act</strong></div>
-             <br />
-             <div class='innerText'>The CAN-SPAM Act is a law that sets the rules for commercial email, establishes requirements for commercial messages, gives recipients the right to have emails stopped from being sent to them, and spells out tough penalties for violations.<br /><br /></div>
-             <div class='innerText'><strong>We collect your email address in order to:</strong></div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Send information, respond to inquiries, and/or other requests or questions</div>
-             <div class='innerText'><br /><strong>To be in accordance with CANSPAM, we agree to the following:</strong></div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Not use false or misleading subjects or email addresses.</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Identify the message as an advertisement in some reasonable way.</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Include the physical address of our business or site headquarters.</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Monitor third-party email marketing services for compliance, if one is used.</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Honor opt-out/unsubscribe requests quickly.</div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Allow users to unsubscribe by using the link at the bottom of each email.</div>
-             <div class='innerText'><strong><br />If at any time you would like to unsubscribe from receiving future emails, you can email us at</strong></div>
-             <div class='innerText'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>&bull;</strong> Follow the instructions at the bottom of each email.</div>
-             and we will promptly remove you from <strong>ALL</strong> correspondence.
-          </div>
-          <br />
-          <br />
-          <Typography variant='headline'>Contact Us</Typography>
-          <br />
-          <Typography variant='Subheading' style={{fontWeight: 'bold'}}>CryptoCurve</Typography>
-          <br />
-          <Typography variant='Subheading'>Email us at support@cryptocurve.io</Typography>
+          <Typography variant='display1' align='center'>
+            CRYPTOCURVE PRIVACY POLICY
+          </Typography>
+          <p style={{paragraphStyle, fontWeight: 'bold'}}>
+            Introduction
+          </p>
+          <p style={paragraphStyle}>
+            <a name="a496830">Welcome to the CryptoCurve's privacy policy. </a>
+          </p>
+          <p style={paragraphStyle}>
+            <a name="a410588">
+              CryptoCurve respects your privacy and is committed to protecting your
+              personal data. This privacy notice will inform you as to how we look
+              after your personal data when you visit our website (regardless of
+              where you visit it from) and tell you about your privacy rights and how
+              the law protects you.
+            </a>
+          </p>
+          <p style={paragraphStyle}>
+            <a name="a183820">
+              Please also use the Glossary to understand the meaning of some of the
+              terms used in this privacy notice.
+            </a>
+          </p>
+          <ol style={{paddingLeft: '0px'}}>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                Glossary
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold', fontSize: '16px'}}>
+                LAWFUL BASIS
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a647495">
+                  <strong>Legitimate Interest</strong> means the interest of our business in conducting and managing our
+                  business to enable us to give you the best service and the best and
+                  most secure experience. We make sure we consider and balance any
+                  potential impact on you (both positive and negative) and your rights
+                  before we process your personal data for our legitimate interests. We
+                  do not use your personal data for activities where our interests are
+                  overridden by the impact on you (unless we have your consent or are
+                  otherwise required or permitted to by law). <strong>Performance of Contract</strong> means processing your data where it is necessary for the performance of
+                  a contract to which you are a party or to take steps at your request
+                  before entering into such a contract.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a865636">
+                  <strong>Comply with a legal or regulatory obligation</strong> means processing your personal data where it is necessary for
+                  compliance with a legal or regulatory obligation that we are subject
+                  to.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                THIRD PARTIES
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a678226">Internal Third Parties</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a548600">
+                  Other companies in the Company Group acting as joint controllers or
+                  processors and who are based in US and Cayman Island.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a995424">External Third Parties</a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Service providers who provide IT and system administration services.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Professional advisers, including lawyers, bankers, auditors and insurers
+                based in NL, UK and US who provide consultancy, banking, legal, insurance
+                and accounting services.</li>
+              </ul>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a819128">Important information and who we are</a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a424696">Purpose of this privacy notice</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a644190">
+                  This privacy notice aims to give you information on how CryptoCurve
+                  collects and processes your personal data through your use of this
+                  website.
+                </a>
+                <a name="a961414">
+                  This website is not intended for children and we do not knowingly
+                  collect data relating to children.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a222632">
+                  It is important that you read this privacy notice together with any
+                  other privacy notice or fair processing notice we may provide on
+                  specific occasions when we are collecting or processing personal data
+                  about you so that you are fully aware of how and why we are using your
+                  data. This privacy notice supplements the other notices and is not
+                  intended to override them.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a985786">Controller</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a382234">
+                  CryptoCurve Ltd. is the controller and responsible for your personal
+                  data (collectively referred to as “CryptoCurve”, "Company", "we", "us"
+                  or "our" in this privacy notice).
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                  <a name="a540866">
+                      We have appointed a data privacy manager (DPM) who is responsible for
+                      overseeing questions in relation to this privacy policy. If you have
+                      any questions about this privacy policy, including any requests to
+                      exercise your legal rights, please contact the DPM using the details
+                      set out below.
+                  </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                  <a name="a599551">Contact details</a>
+              </p>
+              <p style={paragraphStyle}>
+                  <a name="a501999"></a>
+                  <a name="a199685">Full name of legal entity:</a>
+                  CryptoCurve Ltd.
+              </p>
+              <p style={paragraphStyle}>
+                  Company number: 11027490
+              </p>
+              <p style={paragraphStyle}>
+                  Registered office address: The Senate, Southernhay Gardens, Exeter,
+                  England, EX1 1UG
+              </p>
+              <p style={paragraphStyle}>
+                  <a name="a563186">Name and title of DPM: </a> Xander Yi - CFO
+              </p>
+              <p style={paragraphStyle}>
+                  <a name="a770336">Email address: </a> xander@cryptocurve.io
+              </p>
+              <p style={paragraphStyle}>
+                  <a name="a733364">Telephone number: </a> +15712576498
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a389597">
+                  You have the right to make a complaint at any time to the Information
+                  Commissioner's Office (ICO), the UK supervisory authority for data
+                  protection issues (<a href="http://www.ico.org.uk">www.ico.org.uk</a>). We would, however, appreciate the chance to deal with your
+                  concerns before you approach the ICO so please contact us in the first
+                  instance.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a465678">
+                  Changes to the privacy notice and your duty to inform us of changes
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a292073">
+                  This version was last updated on 25 June 2018 and historic versions can
+                  be obtained by contacting us.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a457168">
+                  It is important that the personal data we hold about you is accurate
+                  and current. Please keep us informed if your personal data changes
+                  during your relationship with us.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a378536">Third-party links</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a998713">
+                  This website may include links to third-party websites, plug-ins and
+                  applications. Clicking on those links or enabling those connections may
+                  allow third parties to collect or share data about you. We do not
+                  control these third-party websites and are not responsible for their
+                  privacy statements. When you leave our website, we encourage you to
+                  read the privacy notice of every website you visit.
+                </a>
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a480831">The data we collect about you</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a738838">
+                  Personal data, or personal information, means any information about an
+                  individual from which that person can be identified. It does not
+                  include data where the identity has been removed (anonymous data).
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a562087">
+                  We may collect, use, store and transfer different kinds of personal
+                  data about you which we have grouped together follows:
+                </a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Identity Data</strong> includes your name and a copy of your photo identification.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Contact Data</strong> includes your email address and physical address.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Technical Data</strong> includes internet protocol (IP) address, your login data, browser type
+                  and version, time zone setting and location, browser plug-in types and
+                  versions, operating system and platform and other technology on the
+                  devices you use to access this website.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Profile Data </strong> includes<strong> </strong>your username and password.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Usage Data</strong> includes information about how you use our website, products and
+                  services.
+                </li>
+              </ul>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a331664">If you fail to provide personal data</a>
+              </p>
+              <p style={paragraphStyle}>
+                Where we need to collect personal data by law, or under the terms of a
+                contract we have with you and you fail to provide that data when requested,
+                we may not be able to perform the contract we have or are trying to enter
+                into with you (for example, to provide you with services). In this case, we
+                may have to cancel a product or service you have with us but we will notify
+                you if this is the case at the time.
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a524838">How is your personal data collected?</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a653340">
+                  We use different methods to collect data from and about you including
+                  through:
+                </a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Direct interactions.</strong> You may give us your personal data by filling in forms or by
+                  corresponding with us by post, phone, email or otherwise. This includes
+                  personal data you provide when you enquire about our products or
+                  services.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Automated technologies or interactions.</strong> As you interact with our website, we may automatically collect
+                  Technical Data about your equipment, browsing actions and patterns. We
+                  collect this personal data by using cookies and other similar
+                  technologies.
+                </li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>
+                  <strong>Third parties or publicly available sources.</strong> We may receive personal data about you from various third parties and
+                  public sources.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a179246">How we use your personal data</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a964261">
+                  We will only use your personal data when the law allows us to. Most
+                  commonly, we will use your personal data in the following
+                  circumstances:
+                </a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Where it is necessary for our legitimate interests (or those of a third
+                party) and your interests and fundamental rights do not override those
+                interests.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Where we need to comply with a legal or regulatory obligation.</li>
+              </ul>
+              <p style={paragraphStyle}>
+                <a name="a852894">
+                  Generally we do not rely on consent as a legal basis for processing
+                  your personal data.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a309744">Purposes for which we will use your personal data</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a218374">
+                  We have set out below, in a table format, a description of all the ways
+                  we plan to use your personal data, and which of the legal bases we rely
+                  on to do so. We have also identified what our legitimate interests are
+                  where appropriate.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a638713">
+                  Note that we may process your personal data for more than one lawful
+                  ground depending on the specific purpose for which we are using your
+                  data.
+                </a>
+              </p>
+              <table border="1" cellSpacing="0" cellPadding="16">
+                <tbody>
+                  <tr>
+                    <td width="520" valign="top">
+                      <p style={paragraphStyle}>
+                        <strong>Purpose/Activity</strong>
+                      </p>
+                    </td>
+                    <td width="400" valign="top">
+                      <p style={paragraphStyle}>
+                        <strong>Type of data</strong>
+                      </p>
+                    </td>
+                    <td width="600" valign="top">
+                      <p style={paragraphStyle}>
+                        <strong>
+                          Lawful basis for processing including basis of
+                          legitimate interest
+                        </strong>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                      <p style={paragraphStyle}>
+                        To register you as a new client
+                      </p>
+                    </td>
+                    <td width="184" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Identity
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Contact
+                      </p>
+                    </td>
+                    <td width="291" valign="top">
+                      <p style={paragraphStyle}>
+                        Performance of a contract with you
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                    </td>
+                    <td width="184" valign="top">
+                    </td>
+                    <td width="291" valign="top">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                      <p style={paragraphStyle}>
+                        To manage our relationship with you which will includes
+                        notifying you about changes to our terms or privacy policy
+                      </p>
+                    </td>
+                    <td width="184" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Identity
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Contact
+                      </p>
+                    </td>
+                    <td width="291" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Performance of a contract with you
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Necessary to comply with a legal obligation
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                    </td>
+                    <td width="184" valign="top">
+                    </td>
+                    <td width="291" valign="top">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                      <p style={paragraphStyle}>
+                        To administer and protect our business and this website
+                        (including troubleshooting, data analysis, testing, system
+                        maintenance, support, reporting and hosting of data,
+                        KYC/AML compliance on connection with any business
+                        transactions)
+                      </p>
+                    </td>
+                    <td width="184" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Identity
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Contact
+                      </p>
+                      <p style={paragraphStyle}>
+                        (c) Technical
+                      </p>
+                    </td>
+                    <td width="291" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Necessary for our legitimate interests (for running our
+                        business, provision of administration and IT services,
+                        network security, to prevent fraud and in the context of a
+                        business reorganisation or group restructuring exercise)
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Necessary to comply with a legal obligation
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                      <p style={paragraphStyle}>
+                        To deliver relevant website content to you
+                      </p>
+                    </td>
+                    <td width="184" valign="top">
+                      <p style={paragraphStyle}>
+                          (a) Identity
+                      </p>
+                      <p style={paragraphStyle}>
+                          (b) Contact
+                      </p>
+                      <p style={paragraphStyle}>
+                          (c) Profile
+                      </p>
+                      <p style={paragraphStyle}>
+                          (d) Usage
+                      </p>
+                      <p style={paragraphStyle}>
+                          (f) Technical
+                      </p>
+                    </td>
+                    <td width="291" valign="top">
+                      <p style={paragraphStyle}>
+                        Necessary for our legitimate interests (to study how
+                        clients use our products/services, to develop them and to
+                        grow our business)
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                      <p style={paragraphStyle}>
+                        To use data analytics to improve our website,
+                        products/services, client relationships and experiences
+                      </p>
+                    </td>
+                    <td width="184" valign="top">
+                      <p style={paragraphStyle}>
+                        (a) Technical
+                      </p>
+                      <p style={paragraphStyle}>
+                        (b) Usage
+                      </p>
+                    </td>
+                    <td width="291" valign="top">
+                      <p style={paragraphStyle}>
+                        Necessary for our legitimate interests (to define types of
+                        clients for our products and services, to keep our website
+                        updated and relevant and to develop our business)
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="237" valign="top">
+                    </td>
+                    <td width="184" valign="top">
+                    </td>
+                    <td width="291" valign="top">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a512081">Cookies</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a591491">
+                  You can set your browser to refuse all or some browser cookies, or to
+                  alert you when websites set or access cookies. If you disable or refuse
+                  cookies, please note that some parts of this website may become
+                  inaccessible or not function properly. For more information about the
+                  cookies we use, please see our <a href="https://cryptocurve.network/#cookiePolicy">Cookie Policy</a>
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a233076">Change of purpose </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a290238">
+                  We will only use your personal data for the purposes for which we
+                  collected it, unless we reasonably consider that we need to use it for
+                  another reason and that reason is compatible with the original purpose.
+                  If you wish to get an explanation as to how the processing for the new
+                  purpose is compatible with the original purpose, please contact us.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a178016">
+                  If we need to use your personal data for an unrelated purpose, we will
+                  notify you and we will explain the legal basis which allows us to do
+                  so.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a834833">
+                  Please note that we may process your personal data without your
+                  knowledge or consent, in compliance with the above rules, where this is
+                  required or permitted by law.
+                </a>
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a239061">Disclosures of your personal data</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a342752">
+                  We may have to share your personal data with the parties set out below
+                  for the purposes set out in the table in paragraph 5 above.
+                </a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Internal Third Parties as set out in the <em>Glossary</em>.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>External Third Parties as set out in the <em>Glossary</em>.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Third parties to whom we may choose to sell, transfer, or merge parts of
+                our business or our assets. Alternatively, we may seek to acquire other
+                businesses or merge with them. If a change happens to our business, then
+                the new owners may use your personal data in the same way as set out in
+                this privacy notice.</li>
+              </ul>
+              <p style={paragraphStyle}>
+                <a name="a880441">
+                  We require all third parties to respect the security of your personal
+                  data and to treat it in accordance with the law. We do not allow our
+                  third-party service providers to use your personal data for their own
+                  purposes and only permit them to process your personal data for
+                  specified purposes and in accordance with our instructions.
+                </a>
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a888527">International transfers</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a718730">
+                  We share your personal data within the Company Group. This will involve
+                  transferring your data outside the European Economic Area (<strong>EEA</strong>).
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a232622">
+                  We ensure your personal data is protected by requiring all our group
+                  companies to follow the same rules when processing your personal data.
+                  These rules are called "binding corporate rules".
+                </a>
+                <a name="a926207">
+                  Some of our external third parties are based outside the European
+                  Economic Area (<strong>EEA</strong>) so their processing of your
+                  personal data will involve a transfer of data outside the EEA.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a108510">
+                  Whenever we transfer your personal data out of the EEA, we ensure a
+                  similar degree of protection is afforded to it by ensuring at least one
+                  of the following safeguards is implemented:
+                </a>
+              </p>
+              <ul style={{paddingLeft: '18px'}}>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>We will only transfer your personal data to countries that have been
+                  deemed to provide an adequate level of protection for personal data by the
+                  European Commission.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Where we use certain service providers, we may use specific contracts
+                  approved by the European Commission which give personal data the same
+                  protection it has in Europe.</li>
+                <li style={{paragraphStyle, listStyleType:'disc', paddingBottom: '6px'}}>Where we use providers based in the US, we may transfer data to them if
+                  they are part of the Privacy Shield which requires them to provide similar
+                  protection to personal data shared between the Europe and the US. Please contact us if you want further information on the specific mechanism used by us when
+                  transferring your personal data out of the EEA. <strong></strong>
+              </li>
+              </ul>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a424553">Data security</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a117271">
+                  We have put in place appropriate security measures to prevent your
+                  personal data from being accidentally lost, used or accessed in an
+                  unauthorised way, altered or disclosed. In addition, we limit access to
+                  your personal data to those employees, agents, contractors and other
+                  third parties who have a business need to know. They will only process
+                  your personal data on our instructions and they are subject to a duty
+                  of confidentiality.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a347220">
+                  We have put in place procedures to deal with any suspected personal
+                  data breach and will notify you and any applicable regulator of a
+                  breach where we are legally required to do so.
+                </a>
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a852989">Data retention</a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a536431">How long will you use my personal data for?</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a656402">
+                  We will only retain your personal data for as long as necessary to
+                  fulfil the purposes we collected it for, including for the purposes of
+                  satisfying any legal, accounting, or reporting requirements.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a679927">
+                  To determine the appropriate retention period for personal data, we
+                  consider the amount, nature, and sensitivity of the personal data, the
+                  potential risk of harm from unauthorised use or disclosure of your
+                  personal data, the purposes for which we process your personal data and
+                  whether we can achieve those purposes through other means, and the
+                  applicable legal requirements.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a137296">
+                  In some circumstances you can ask us to delete your data: see <em>Request erasure</em> below for further information.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a938517">
+                  In some circumstances we may anonymise your personal data (so that it
+                  can no longer be associated with you) for research or statistical
+                  purposes in which case we may use this information indefinitely without
+                  further notice to you.
+                </a>
+              </p>
+            </li>
+            <li>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                <a name="a513536">YOUR LEGAL RIGHTS</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a484071">You have the right to:</a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a100058">
+                  <strong>Request access </strong> to your personal data (commonly known as a "data subject access
+                  request"). This enables you to receive a copy of the personal data we
+                  hold about you and to check that we are lawfully processing it.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a297597">
+                  <strong>Request correction </strong> of the personal data that we hold about you. This enables you to have
+                  any incomplete or inaccurate data we hold about you corrected, though
+                  we may need to verify the accuracy of the new data you provide to us.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a836012">
+                  <strong>Request erasure </strong> of your personal data. This enables you to ask us to delete or remove
+                  personal data where there is no good reason for us continuing to
+                  process it. You also have the right to ask us to delete or remove your
+                  personal data where you have successfully exercised your right to
+                  object to processing (see below), where we may have processed your
+                  information unlawfully or where we are required to erase your personal
+                  data to comply with local law. Note, however, that we may not always be
+                  able to comply with your request of erasure for specific legal reasons
+                  which will be notified to you, if applicable, at the time of your
+                  request.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a789450">
+                  <strong>Object to processing </strong> of your personal data where we are relying on a legitimate interest (or
+                  those of a third party) and there is something about your particular
+                  situation which makes you want to object to processing on this ground
+                  as you feel it impacts on your fundamental rights and freedoms. In some
+                  cases, we may demonstrate that we have compelling legitimate grounds to
+                  process your information which override your rights and freedoms.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a520072">
+                  <strong>Request restriction of processing </strong> of your personal data. This enables you to ask us to suspend the
+                  processing of your personal data in the following scenarios: (a) if you
+                  want us to establish the data's accuracy; (b) where our use of the data
+                  is unlawful but you do not want us to erase it; (c) where you need us
+                  to hold the data even if we no longer require it as you need it to
+                  establish, exercise or defend legal claims; or (d) you have objected to
+                  our use of your data but we need to verify whether we have overriding
+                  legitimate grounds to use it.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a546939">
+                  <strong>Request the transfer </strong> of your personal data to you or to a third party. We will provide to
+                  you, or a third party you have chosen, your personal data in a
+                  structured, commonly used, machine-readable format.
+                </a>
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a722140">
+                  <strong>Withdraw consent at any time </strong> where we are relying on consent to process your personal data. However,
+                  this will not affect the lawfulness of any processing carried out
+                  before you withdraw your consent. If you withdraw your consent, we may
+                  not be able to provide certain products or services to you. We will
+                  advise you if this is the case at the time you withdraw your consent.
+                </a>
+              </p>
+              <p style={{paragraphStyle, fontWeight: 'bold'}}>
+                No fee usually required
+              </p>
+              <p style={paragraphStyle}>
+                You will not have to pay a fee to access your personal data (or to exercise
+                any of the other rights). However, we may charge a reasonable fee if your
+                request is clearly unfounded, repetitive or excessive. Alternatively, we
+                may refuse to comply with your request in these circumstances.
+              </p>
+              <p style={paragraphStyle}>
+                Time limit to respond
+              </p>
+              <p style={paragraphStyle}>
+                We try to respond to all legitimate requests within one month. Occasionally
+                it may take us longer than a month if your request is particularly complex
+                or you have made a number of requests. In this case, we will notify you and
+                keep you updated.
+              </p>
+              <p style={paragraphStyle}>
+                <a name="a694615"></a>
+              </p>
+              <p style={paragraphStyle}>
+                If you wish to exercise any of the rights set out above, please contact us.
+              </p>
+            </li>
+          </ol>
         </Grid>
       </Grid>
     );

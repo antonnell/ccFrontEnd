@@ -1,24 +1,21 @@
-import React, { Component } from "react";
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+import React, { Component } from 'react';
+import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
-class TermsModal extends Component {
+const styles = {};
+
+class CookiePolicy extends Component {
 
   render() {
     var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
+
     return (
-      <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
-        <DialogTitle id="alert-dialog-title">
-          <Typography variant='title' align='center'>
-            CURV SALE TERMS & CONDITIONS
+      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
+        <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
+          <Typography variant='display1' align='center'>
+            CURV SALE TERMS &amp; CONDITIONS
           </Typography>
-        </DialogTitle>
-        <DialogContent>
           <p>
             PLEASE READ THESE SALE TERMS &amp; CONDITIONS CAREFULLY. NOTE THAT IN
             SECTION 8 YOU EXPRESSLY ACKNOWLEDGE AND ASSUME THE RISKS ASSOCIATED WITH
@@ -43,7 +40,7 @@ class TermsModal extends Component {
             You and the Company agree as follows:
           </p>
           <ol style={{paddingLeft: '0px'}}>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Commencement and Duration of Sale</u>
                 . You understand and acknowledge that it is the intention of the
                 Company to sell a total amount of 207,500,000 Tokens via public and
@@ -58,7 +55,7 @@ class TermsModal extends Component {
                 Tokens are entitled are provided free of cost with purchased tokens and
                 are not included in the above total quantities.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Eligibility</u>
                 . In order to be eligible to participate in the Sale and to log into
                 the Sale Portal to make a purchase, you agree to allow the Company,
@@ -83,7 +80,7 @@ class TermsModal extends Component {
                 ComplyAdvantage, and (ii) prescribe additional guidance regarding
                 specific wallet requirements.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Purchase and Sale of Tokens.</u>
                 <ol type='a'>
                   <li>
@@ -180,7 +177,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Purpose and Use of Tokens in the Ecosystem.</u>
                 <ol type='a'>
                   <li>
@@ -262,7 +259,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Scope of Terms.</u>
                 <ol type='a'>
                   <li>
@@ -280,7 +277,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Cancellation; Refusal of Purchase Requests</u>
                 . All purchases of Tokens from us during the Sale are final, and there
                 are no refunds or cancellations except as set forth herein or as may be
@@ -288,14 +285,14 @@ class TermsModal extends Component {
                 refuse or cancel Token purchase requests at any time in our sole
                 discretion.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Token Creation and Allocation</u>
                 . Important information about the Company’s creation and intended use
                 of the Tokens is provided in our Whitepaper which is available via our
                 Website. By purchasing Tokens, you acknowledge that you have read,
                 understand, and have no objection to our Whitepaper.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Acknowledgment and Assumption of Risks</u>
                 . You acknowledge and agree that there are risks associated with
                 purchasing, owning, and using Tokens for the provision or receipt of
@@ -315,7 +312,7 @@ class TermsModal extends Component {
                 performed your own research regarding the Tokens, the Sale and the
                 risks associated with them.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Security</u>
                 . You are responsible for implementing reasonable measures for securing
                 the wallet, vault, or other storage mechanism you use to receive and
@@ -325,7 +322,7 @@ class TermsModal extends Component {
                 access to your Tokens. We are not responsible for any losses, costs, or
                 expenses relating to lost access credentials.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Personal Information</u>
                 . We may determine, in our sole discretion, that it is necessary to
                 obtain certain information about you in order to comply with applicable
@@ -335,7 +332,7 @@ class TermsModal extends Component {
                 requested information and we have determined that it is permissible to
                 sell you Tokens under applicable laws or regulations.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Taxes</u>
                 . Any amounts that you pay for Tokens are exclusive of all applicable
                 taxes. You are responsible for determining what, if any, taxes apply to
@@ -346,7 +343,7 @@ class TermsModal extends Component {
                 reporting, or remitting any sales, use, value added, or similar tax
                 arising from your purchase of Tokens.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Representations and Warranties</u>
               . By sending BCTs to purchase Tokens from us, you represent and warrant
                 that:
@@ -461,7 +458,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Indemnification</u>.
                 <ol type='a'>
                   <li>
@@ -489,7 +486,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Disclaimers</u>.
                 <ol type='a'>
                   <li>
@@ -516,7 +513,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Limitation of Liability</u>.
                 <ol type='a'>
                   <li>
@@ -554,7 +551,7 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Release</u>
                 . To the fullest extent permitted by applicable law, you release the
                 Company and the other Company Parties from responsibility, liability,
@@ -567,7 +564,7 @@ class TermsModal extends Component {
                 release to include only those claims which you may know or suspect to
                 exist in your favor at the time of agreeing to this release.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Dispute Resolution; Arbitration</u>.
                 <ol type='a'>
                   <li>
@@ -577,7 +574,7 @@ class TermsModal extends Component {
                     and any subsequent amendments to this Agreement, or otherwise (a “    <strong>Dispute</strong>”) shall, if possible, be finally settled amicably
                         by negotiation between the Parties. Each Party will notify the other Party
                     in writing of a Dispute within thirty (30) days of the date it arises (a “    <strong>Notice</strong>”). Notice to the Company shall be sent by
-                        registered mail to the registered address of the Company, being [--].
+                        registered mail to the registered address of the Company, being The Senate, Southernhay Gardens, EXETER Devon EX1 1UG, UNITED KINGDOM.
                         Notice to you shall be by email to the email address you provide to us.
                         Your Notice must include (i) your name, postal address, email address and
                         telephone number, (ii) a description in reasonable detail of the nature or
@@ -612,12 +609,12 @@ class TermsModal extends Component {
                   </li>
                 </ol>
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <a name="_Hlk510775626"><u>Governing Law and Venue</u></a>
                 . These Terms will be governed by and construed and enforced in
                 accordance with the laws of The Netherlands.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Severability</u>
                 . If any term, clause or provision of these Terms is held unlawful,
                 void, or unenforceable, then that term, clause or provision will be
@@ -625,7 +622,7 @@ class TermsModal extends Component {
                 enforceability of any remaining part of that term, clause or provision,
                 or any other term, clause or provision of these Terms.
             </li>
-            <li>
+            <li style={paragraphStyle}>
                 <u>Miscellaneous</u>
                 . These Terms constitute the entire agreement between you and us
                 relating to your purchase of Tokens from us. We may assign our rights
@@ -894,15 +891,10 @@ class TermsModal extends Component {
               </p>
             </li>
           </ol>
-        </DialogContent>
-        <DialogActions>
-          <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </Grid>
+      </Grid>
     );
   };
 }
 
-export default (TermsModal);
+export default withStyles(styles)(CookiePolicy);
