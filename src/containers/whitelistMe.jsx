@@ -55,6 +55,7 @@ let WhitelistMe = createReactClass({
 
     return (
       <WhitelistMeComponent
+        ipLoading={this.props.ipLoading}
         handleChange={this.handleChange}
         handleChecked={this.handleChecked}
         submitWhitelist={this.submitWhitelist}
