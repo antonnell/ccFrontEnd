@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CssBaseline from 'material-ui/CssBaseline';
 import Grid from 'material-ui/Grid';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
+import ReactGA from 'react-ga';
 
 import TheAppBar from './containers/applicationBar.jsx';
 import AppDrawer from './containers/drawer.jsx';
@@ -20,7 +21,9 @@ import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
 import SendEthereum from './containers/sendEthereum.jsx';
 import WhitelistMe from './containers/whitelistMe.jsx';
+import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 
+import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
 import PrivacyPolicy from './components/privacyPolicy.jsx';
 import ContactUs from './components/contactUs.jsx';
@@ -39,6 +42,9 @@ let wanDispatcher = require('./store/wanStore.js').default.dispatcher
 
 let whitelistEmitter = require('./store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatcher
+
+let emitter = require('./store/ipStore.js').default.emitter
+let dispatcher = require('./store/ipStore.js').default.dispatcher
 
 const theme = createMuiTheme({
   overrides: {
@@ -120,7 +126,8 @@ class App extends Component {
       wanAddresses: null,
       contacts: null,
       whitelistState: whitelistState,
-      uriParameters: {}
+      uriParameters: {},
+      ipValid: true
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -139,9 +146,13 @@ class App extends Component {
     this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
     this.getContactsReturned = this.getContactsReturned.bind(this);
     this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
+
+    this.getIpReturned = this.getIpReturned.bind(this);
   };
 
   componentWillMount() {
+    ReactGA.initialize('UA-106832873-2', { cookieDomain: 'auto' });
+
     var user = null;
     var userString = sessionStorage.getItem('cc_user');
     if(userString) {
@@ -154,7 +165,7 @@ class App extends Component {
     if(paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex)
     }
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
       }
@@ -189,6 +200,18 @@ class App extends Component {
 
     var loader = document.getElementById("loader")
     document.body.removeChild(loader);
+
+    emitter.on('getIp', this.getIpReturned);
+    dispatcher.dispatch({ type: 'getIp' });
+
+  };
+
+  getIpReturned(err, data) {
+    emitter.removeAllListeners('getIp');
+
+    if(data.country_code == 'US') {
+      this.setState({ipValid: false})
+    }
   };
 
   getUserDetails(user) {
@@ -360,7 +383,7 @@ class App extends Component {
       }
     }
 
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
@@ -377,6 +400,9 @@ class App extends Component {
       content = {id: this.state.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
     }
+
+    ReactGA.set({ page: window.location.pathname + window.location.hash })
+    ReactGA.pageview(window.location.pathname + window.location.hash)
 
     this.setState({currentScreen, uriParameters});
   };
@@ -411,7 +437,8 @@ class App extends Component {
   renderFooter() {
     return <AppFooter
       user={this.state.user}
-      navClicked={this.navClicked} />
+      navClicked={this.navClicked}
+      ipValid={this.state.ipValid} />
   };
 
   render() {
@@ -475,7 +502,19 @@ class App extends Component {
       case 'fees':
         return (<ComingSoon />);
       case 'add':
-        return (<WhitelistMe />)
+        if(!this.state.ipValid) {
+          window.location.hash = 'addUnavailable'
+          return <div></div>
+        }
+        return (<WhitelistMe />);
+      case 'added':
+        return (<WhitelistMeDone />);
+      case 'addUnavailable':
+        if(this.state.ipValid == true) {
+          window.location.hash = 'add'
+          return <div></div>
+        }
+        return (<WhitelistMeUnavailable />);
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:

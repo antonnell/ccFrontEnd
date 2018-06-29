@@ -1,6 +1,7 @@
 import React from 'react'
 import WelcomeComponent from '../components/welcome'
 import AuthComponent from '../components/authComponent'
+
 const createReactClass = require('create-react-class')
 let emitter = require('../store/accountStore.js').default.emitter
 let dispatcher = require('../store/accountStore.js').default.dispatcher

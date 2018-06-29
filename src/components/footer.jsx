@@ -26,7 +26,7 @@ class Footer extends Component {
               <Typography variant='subheading' style={headingStyle}>ACCOUNT</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'welcome'); }}>{login}</Typography>
               <Typography color="inherit" variant='body1' style={{marginBottom: '6px', textDecoration: 'line-through'}} >Register</Typography>
-              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'add'); }}>Whitelist</Typography>
+              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, (this.props.ipValid?'add':'addUnavailable')); }}>Whitelist</Typography>
             </Grid>
             <Grid item xs={3} align='left'>
               <Typography variant='subheading' style={headingStyle}>ABOUT</Typography>
