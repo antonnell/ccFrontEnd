@@ -29,7 +29,10 @@ let WhitelistMe = createReactClass({
       telegramErrorMessage: false,
       country: '',
       countryError: false,
-      countryErrorMessage: false
+      countryErrorMessage: false,
+      accepted: false,
+      acceptedError: false,
+      acceptedErrorMessage: false
     };
   },
 
@@ -53,6 +56,7 @@ let WhitelistMe = createReactClass({
     return (
       <WhitelistMeComponent
         handleChange={this.handleChange}
+        handleChecked={this.handleChecked}
         submitWhitelist={this.submitWhitelist}
         onWhitelistKeyDown={this.onWhitelistKeyDown}
         email={this.state.email}
@@ -70,6 +74,9 @@ let WhitelistMe = createReactClass({
         country={this.state.country}
         countryError={this.state.countryError}
         countryErrorMessage={this.state.countryErrorMessage}
+        accepted={this.state.accepted}
+        acceptedError={this.state.acceptedError}
+        acceptedErrorMessage={this.state.acceptedErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
       />
@@ -90,6 +97,14 @@ let WhitelistMe = createReactClass({
     }
   },
 
+  handleChecked (event, name) {
+    this.setState({
+      [name]: event.target.checked,
+      [name+'Error']: false,
+      [name+'ErrorMessage']: ''
+    });
+  },
+
   onWhitelistKeyDown(event) {
     if (event.which == 13) {
       this.submitWhitelist();
@@ -107,7 +122,9 @@ let WhitelistMe = createReactClass({
       telegramError: false,
       telegramErrorMessage: '',
       countryError: false,
-      countryErrorMessage: ''
+      countryErrorMessage: '',
+      acceptedError: false,
+      acceptedErrorMessage: ''
     })
     var error = false;
 
@@ -128,6 +145,10 @@ let WhitelistMe = createReactClass({
     }
     if(this.state.country == '') {
       this.setState({countryError: true, countryErrorMessage: 'Please select a country'});
+      error = true;
+    }
+    if(this.state.accepted !== true) {
+      this.setState({acceptedError: true, acceptedErrorMessage: 'Please accept the disclaimer'});
       error = true;
     }
 
