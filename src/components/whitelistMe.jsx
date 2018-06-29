@@ -58,7 +58,6 @@ class WhitelistMe extends Component {
                   disabled={this.props.loading}
                 >
                   <option value="" />
-                  <option value="United States">United States</option>
                   <option value="United Kingdom">United Kingdom</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Albania">Albania</option>
@@ -103,7 +102,6 @@ class WhitelistMe extends Component {
                   <option value="Central African Republic">Central African Republic</option>
                   <option value="Chad">Chad</option>
                   <option value="Chile">Chile</option>
-                  <option value="China">China</option>
                   <option value="Christmas Island">Christmas Island</option>
                   <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
                   <option value="Colombia">Colombia</option>
