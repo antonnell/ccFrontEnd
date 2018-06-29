@@ -211,7 +211,7 @@ class App extends Component {
   getIpReturned(err, data) {
     emitter.removeAllListeners('getIp');
 
-    if(data.countryCode != null && data.country.code == 'US') {
+    if(data.country.code != null && data.country.code == 'US') {
       this.setState({ipValid: false})
     }
   };
