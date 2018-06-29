@@ -130,7 +130,8 @@ class App extends Component {
       whitelistState: whitelistState,
       uriParameters: {},
       ipValid: false,
-      ipLoading: true
+      ipLoading: true,
+      rejectionReason: ''
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -212,9 +213,15 @@ class App extends Component {
   getIpReturned(err, data) {
     this.setState({ipLoading: false})
     emitter.removeAllListeners('getIp');
-
-    if(data != null && data.country != null && data.country.code != 'US') {
-      this.setState({ipValid: true})
+    
+    if(data == null || data.country == null) {
+      this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
+    } else {
+      if(data.country.code != 'US') {
+        this.setState({ipValid: true})
+      } else {
+        this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
+      }
     }
   };
 
@@ -522,7 +529,7 @@ class App extends Component {
           window.location.hash = 'add'
           return <div></div>
         }
-        return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} />);
+        return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:
