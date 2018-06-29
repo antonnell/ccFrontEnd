@@ -6,8 +6,9 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { CircularProgress } from 'material-ui/Progress';
 import { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import { FormControl, FormHelperText, FormControlLabel } from 'material-ui/Form';
 import Select from 'material-ui/Select';
+import Checkbox from 'material-ui/Checkbox';
 
 const styles = {};
 
@@ -58,7 +59,6 @@ class WhitelistMe extends Component {
                   disabled={this.props.loading}
                 >
                   <option value="" />
-                  <option value="United Kingdom">United Kingdom</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Albania">Albania</option>
                   <option value="Algeria">Algeria</option>
@@ -265,7 +265,6 @@ class WhitelistMe extends Component {
                   <option value="Sweden">Sweden</option>
                   <option value="Switzerland">Switzerland</option>
                   <option value="Syrian Arab Republic">Syrian Arab Republic</option>
-                  <option value="Taiwan, Province of China">Taiwan, Province of China</option>
                   <option value="Tajikistan">Tajikistan</option>
                   <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
                   <option value="Thailand">Thailand</option>
@@ -283,8 +282,6 @@ class WhitelistMe extends Component {
                   <option value="Ukraine">Ukraine</option>
                   <option value="United Arab Emirates">United Arab Emirates</option>
                   <option value="United Kingdom">United Kingdom</option>
-                  <option value="United States">United States</option>
-                  <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
                   <option value="Uruguay">Uruguay</option>
                   <option value="Uzbekistan">Uzbekistan</option>
                   <option value="Vanuatu">Vanuatu</option>
@@ -299,6 +296,22 @@ class WhitelistMe extends Component {
                   <option value="Zimbabwe">Zimbabwe</option>
                 </Select>
                 <FormHelperText>{this.props.countryErrorMessage}</FormHelperText>
+              </FormControl>
+              <FormControl component="accepted" required error={this.props.acceptedError}>
+                <FormControlLabel
+                  style={{ textAlign: 'justify', marginRight: '0px' }}
+                  control={
+                    <Checkbox
+                      error={this.props.acceptedError}
+                      disabled={this.props.loading}
+                      checked={this.props.accepted}
+                      onChange={ (event) => { this.props.handleChecked(event, 'accepted'); }}
+                      value="accepted"
+                    />
+                  }
+                  label="By submitting your information to CryptoCurve via this form, you acknowledge that you have read, agree with, and shall abide by our Terms & Conditions, Privacy Policy, and Cookie Policy. You hereby provide us with consent to use your submitted information in accordance with those policies."
+                />
+              <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
