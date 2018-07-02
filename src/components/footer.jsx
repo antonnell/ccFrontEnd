@@ -41,19 +41,19 @@ class Footer extends Component {
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'contactUs'); }}>Contact Us</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'bugBounty'); }}>Bug Bounty</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'blog'); }}>Blog</Typography>
-              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'faq'); }}>Faq</Typography>
+              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'faq'); }}>FAQ</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'fees'); }}>Fees</Typography>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} align='center'>
           <Typography style={{color:'#FFFFFF'}}>
-            © 2018 Cryptocurve All Rights Reserved
+            © 2018 CryptoCurve All Rights Reserved
           </Typography>
         </Grid>
         <div style={{position: 'absolute', bottom: '0px', right: '3px'}}>
           <Typography style={{color:'#FFFFFF'}}>
-            Version: 1.0.4
+            Version: 1.0.5
           </Typography>
         </div>
       </Grid>
