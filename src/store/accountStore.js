@@ -32,6 +32,9 @@ var Store = () => {
     case 'sendResetPasswordEmail':
       this.sendResetPasswordEmail(payload);
       break;
+    case 'sendWhitelistConfirmationEmail':
+      this.sendWhitelistConfirmationEmail(payload);
+      break;
     case 'generate2faKey':
       this.generate2faKey(payload);
       break;
@@ -106,6 +109,18 @@ var Store = () => {
     var postJson = {
       email: payload.content.emailAddress,
       callbackUrl: window.location.origin+"/#resetPassword"
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.sendWhitelistConfirmationEmail = function(payload) {
+    var url = 'account/sendWhitelistConfirmationEmail'
+    var postJson = {
+      emailAddress: payload.content.emailAddress
     }
 
     this.callApi(url,

@@ -45,7 +45,7 @@ class WhitelistMe extends Component {
                 id="email" label="Email Address" value={this.props.email} onKeyDown={this.props.onWhitelistKeyDown}
                 onChange={(event) => { this.props.handleChange(event, 'email'); }} margin="normal" helperText={this.props.emailErrorMessage}  />
               <TextField required fullWidth={true} color="textSecondary" error={this.props.firstnameError} disabled={this.props.loading}
-                id="firstname" label="Firstname" value={this.props.firstname} onKeyDown={this.props.onWhitelistKeyDown}
+                id="firstname" label="First name" value={this.props.firstname} onKeyDown={this.props.onWhitelistKeyDown}
                 onChange={(event) => { this.props.handleChange(event, 'firstname'); }} margin="normal" helperText={this.props.firstnameErrorMessage}  />
               <TextField required fullWidth={true} color="textSecondary" error={this.props.surnameError} disabled={this.props.loading}
                 id="surname" label="Surname" value={this.props.surname} onKeyDown={this.props.onWhitelistKeyDown}
@@ -104,7 +104,6 @@ class WhitelistMe extends Component {
                   <option value="Burundi">Burundi</option>
                   <option value="Cambodia">Cambodia</option>
                   <option value="Cameroon">Cameroon</option>
-                  <option value="Canada">Canada</option>
                   <option value="Cape Verde">Cape Verde</option>
                   <option value="Cayman Islands">Cayman Islands</option>
                   <option value="Central African Republic">Central African Republic</option>
@@ -317,7 +316,7 @@ class WhitelistMe extends Component {
                       value="accepted"
                     />
                   }
-                  label="By submitting your information to CryptoCurve via this form, you acknowledge that you have read, agree with, and shall abide by our Terms & Conditions, Privacy Policy, and Cookie Policy. You hereby provide us with consent to use your submitted information in accordance with those policies."
+                  label="By submitting your information to CryptoCurve via this form, you acknowledge that you have read, agree with, and shall abide by our: Terms & Conditions, Privacy Policy, and Cookie Policy. You hereby provide us with consent to use your submitted information in accordance with those policies. You confirm that you are not: a citizen, resident, or green card holder of the People’s Republic of China, the United States of America, or Canada; or a citizen, resident or a person located or domiciled in any geographic area or country in which your participation in this ICO may be prohibited or restricted by the applicable laws."
                 />
               <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
               </FormControl>

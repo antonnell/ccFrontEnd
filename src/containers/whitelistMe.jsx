@@ -8,6 +8,7 @@ let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatch
 const email = require("email-validator");
 var crypto = require('crypto');
 var sha256 = require('sha256');
+let dispatcher = require('../store/accountStore.js').default.dispatcher
 
 let WhitelistMe = createReactClass({
   getInitialState() {
@@ -113,6 +114,7 @@ let WhitelistMe = createReactClass({
   },
 
   submitWhitelist() {
+
     this.setState({
       emailError: false,
       emailErrorMessage: '',
@@ -137,7 +139,7 @@ let WhitelistMe = createReactClass({
       error = true;
     }
     if(this.state.firstname == '') {
-      this.setState({firstnameError: true, firstnameErrorMessage: 'Firstname is required'});
+      this.setState({firstnameError: true, firstnameErrorMessage: 'First name is required'});
       error = true;
     }
     if(this.state.surname == '') {
@@ -175,6 +177,10 @@ let WhitelistMe = createReactClass({
     if(data.success) {
       this.setState({ loading: false, email: '', firstname: '', surname: '', telegram: '', country: '' })
       window.location.hash = 'added'
+
+      var content = { emailAddress: data.emailAddress };
+      dispatcher.dispatch({type: 'sendWhitelistConfirmationEmail', content});
+
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {

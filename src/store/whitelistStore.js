@@ -302,14 +302,38 @@ var Store = () => {
       if (res.ok) {
         return res;
       } else {
-        throw Error(res.statusText);
+        try {
+          res.json().then((res) => {
+            emitter.emit(payload.type, new Error(res.message.detail), null)
+          }).catch((err) => {
+            emitter.emit(payload.type, new Error(res.statusText), null)
+          })
+        } catch (err) {
+          emitter.emit(payload.type, new Error(res.statusText), null)
+        }
+        return null
       }
     })
-    .then(res => res.json())
+    .then(res => {
+      if (res) {
+        res.json().then((res) => {
+          console.log(payload)
+          res.emailAddress = payload.content.email
+          if (res) {
+            emitter.emit(payload.type, null, res)
+          }
+        })
+      } else {
+        return null
+      }
+    })
     .then((res) => {
-      emitter.emit(payload.type, null, res)
+      if (res) {
+        emitter.emit(payload.type, null, res)
+      }
     })
     .catch((error) => {
+
       emitter.emit(payload.type, error, null)
     });
   }
