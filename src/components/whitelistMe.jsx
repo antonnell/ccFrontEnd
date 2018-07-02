@@ -272,6 +272,7 @@ class WhitelistMe extends Component {
                   <option value="Sweden">Sweden</option>
                   <option value="Switzerland">Switzerland</option>
                   <option value="Syrian Arab Republic">Syrian Arab Republic</option>
+                  <option value="Taiwan">Taiwan</option>
                   <option value="Tajikistan">Tajikistan</option>
                   <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
                   <option value="Thailand">Thailand</option>
