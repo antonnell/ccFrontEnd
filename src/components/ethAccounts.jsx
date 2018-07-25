@@ -82,6 +82,13 @@ class EthAccounts extends Component {
             +
           </Button>
         </Tooltip>
+        <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
+          <Grid item xs={12} align='left'>
+            <Typography style={{color: '#f44336'}} >
+              {this.props.error}
+            </Typography>
+          </Grid>
+        </Grid>
         <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
       </Grid>
     );
@@ -131,6 +138,13 @@ class EthAccounts extends Component {
             +
           </Button>
         </Tooltip>
+        <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
+          <Grid item xs={12} align='left'>
+            <Typography style={{color: '#f44336'}} >
+              {this.props.error}
+            </Typography>
+          </Grid>
+        </Grid>
       </Grid>
     );
   };
@@ -162,7 +176,7 @@ class EthAccounts extends Component {
           }
         }
       }
-      
+
       if(this.props.exportKeyAccount != null) {
         if(address.address == this.props.exportKeyAccount)  {
           if(this.props.privateKeyLoading) {
