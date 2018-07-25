@@ -12,6 +12,7 @@ import Card, { CardContent, CardActions } from 'material-ui/Card';
 import { CircularProgress } from 'material-ui/Progress';
 import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
+import PrivateKeyModal from './privateKeyModal.jsx';
 
 const styles = {};
 
@@ -35,6 +36,14 @@ function EditIcon(props) {
   return (
     <SvgIcon {...props}>
       <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+    </SvgIcon>
+  );
+}
+
+function KeyIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
     </SvgIcon>
   );
 }
@@ -73,6 +82,7 @@ class WanAccounts extends Component {
             +
           </Button>
         </Tooltip>
+        <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
       </Grid>
     );
   };
@@ -162,10 +172,19 @@ class WanAccounts extends Component {
           }
         }
       }
+
+      if(this.props.exportKeyAccount != null) {
+        if(address.publicAddress == this.props.exportKeyAccount)  {
+          if(this.props.privateKeyLoading) {
+            loading = <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
+          }
+        }
+      }
+
       return (
         <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
           <Card style={{marginRight: '6px', marginBottom: '6px'}}>
-            <CardContent>
+            <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={9} align='left'>
                   {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
@@ -185,9 +204,10 @@ class WanAccounts extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap color="textSecondary">
+                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.publicAddress}
                   </Typography>
+                  <Tooltip style={{verticalAlign: 'top'}} title='Show Private Key'><IconButton disabled={this.props.privateKeyLoading} style={{ marginTop: '-13px', verticalAlign: 'top'}} onClick={() => { this.props.exportWanchainKeyClicked(address.publicAddress) }}><KeyIcon /></IconButton></Tooltip>
                 </Grid>
               </Grid>
               {loading}
@@ -230,8 +250,8 @@ class WanAccounts extends Component {
             </Tabs>
             {this.props.tabValue === 0 && this.renderCreate()}
             {this.props.tabValue === 1 && this.renderImportCommingSoon()}
+            {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
-          {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>
       </Grid>
     );

@@ -1,7 +1,7 @@
 import React from 'react'
 import WelcomeComponent from '../components/welcome'
 import AuthComponent from '../components/authComponent'
-import Abacus from "@abacusprotocol/client-sdk";
+// import Abacus from "@abacusprotocol/client-sdk";
 
 
 const createReactClass = require('create-react-class')
@@ -195,9 +195,9 @@ let Welcome = createReactClass({
         onClose: function() {
             console.log('Done verifying!');
         }
-    });*/
+    });
 
-    return false;
+    return false;*/
     this.setState({usernameError: false, passwordError: false, codeErrorMessage: ''})
     var error = false;
 

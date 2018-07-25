@@ -1,5 +1,10 @@
 import React from 'react';
 import EthAccountsComponent from '../components/ethAccounts';
+import bip39 from 'bip39';
+
+const crypto = require('crypto');
+const sha256 = require('sha256');
+
 const createReactClass = require('create-react-class');
 const isEthereumAddress  = require('is-ethereum-address');
 
@@ -26,7 +31,9 @@ let EthAccounts = createReactClass({
       editAddressName: '',
       editAddressNameError: false,
       editAddressNameErrorMessage: '',
-      editAccount: null
+      editAccount: null,
+      keyOpen: false,
+      currentAccountKey:  ''
     }
   },
   render() {
@@ -36,9 +43,11 @@ let EthAccounts = createReactClass({
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
+        exportEthereumKeyClicked={this.exportEthereumKeyClicked}
         tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
+        privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
         addresses={this.props.ethAddresses}
         addressName={this.state.addressName}
@@ -62,6 +71,11 @@ let EthAccounts = createReactClass({
         editAddressNameErrorMessage={this.state.editAddressNameErrorMessage}
         onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
         onEditAddressNameBlur={this.onEditAddressNameBlur}
+        currentAccountKey={this.state.currentAccountKey}
+        keyOpen={this.state.keyOpen}
+        handleKeyClose={this.handleKeyClose}
+        copyKey={this.copyKey}
+        exportKeyAccount={this.state.exportKeyAccount}
       />
     )
   },
@@ -70,10 +84,12 @@ let EthAccounts = createReactClass({
     ethEmitter.removeAllListeners('createEthAddress');
     ethEmitter.removeAllListeners('importEthAddress');
     ethEmitter.removeAllListeners('updateEthAddress');
+    ethEmitter.removeAllListeners('exportEthereumKey');
 
     ethEmitter.on('createEthAddress', this.createEthAddressReturned);
     ethEmitter.on('importEthAddress', this.importEthAddressReturned);
     ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
+    ethEmitter.on('exportEthereumKey', this.exportEthereumKeyReturned);
   },
 
   resetInputs() {
@@ -143,6 +159,36 @@ let EthAccounts = createReactClass({
     } else {
       this.setState({error: data.statusText})
     }
+  },
+
+  exportEthereumKeyReturned(error, data) {
+    this.setState({ privateKeyLoading: false,  exportKeyAccount: null });
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+
+      const encodedKeyHex = data.encryptedPrivateKey
+      const mnemonic = this.state.mnemonic
+      const encodedKey = encodedKeyHex.hexDecode()
+
+      var privateKey = decrypt(encodedKey, mnemonic)
+      this.setState({keyOpen: true, currentAccountKey: privateKey})
+
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
+  exportEthereumKeyClicked(address) {
+    this.setState({ privateKeyLoading: true, exportKeyAccount: address })
+    var mnemonic = bip39.generateMnemonic()
+    this.setState({ mnemonic })
+    var content = { mnemonic: mnemonic, address };
+    ethDispatcher.dispatch({type: 'exportEthereumKey', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {
@@ -243,6 +289,32 @@ let EthAccounts = createReactClass({
     }
   },
 
+  copyKey() {
+    var elm = document.getElementById("currentAccountKey");
+    // for Internet Explorer
+
+    if(document.body.createTextRange) {
+      var range = document.body.createTextRange();
+      range.moveToElementText(elm);
+      range.select();
+      document.execCommand("Copy");
+    }
+    else if(window.getSelection) {
+      // other browsers
+
+      var selection = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(elm);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("Copy");
+    }
+  },
+
+  handleKeyClose() {
+    this.setState({keyOpen: false})
+  },
+
   handleTabChange(event, tabValue) {
     this.setState({ tabValue });
   },
@@ -270,5 +342,12 @@ let EthAccounts = createReactClass({
   }
 
 })
+
+function decrypt(text,seed){
+  var decipher = crypto.createDecipher('aes-256-cbc', seed)
+  var dec = decipher.update(text,'base64','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
 
 export default (EthAccounts);

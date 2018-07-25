@@ -34,6 +34,9 @@ var Store = () => {
     case 'sendWan':
       this.sendWan(payload);
       break;
+    case 'exportWanchainKey':
+      this.exportWanchainKey(payload);
+      break;
     }
   }.bind(this))
 
@@ -95,6 +98,19 @@ var Store = () => {
       password: payload.content.password,
       amount: payload.content.amount,
       gwei: payload.content.gwei
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.exportWanchainKey = function(payload) {
+    var url = 'wanchain/exportAddress'
+    var postJson = {
+      address: payload.content.address,
+      mnemonic: payload.content.mnemonic
     }
 
     this.callApi(url,

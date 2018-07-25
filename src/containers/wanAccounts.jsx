@@ -1,5 +1,10 @@
 import React from 'react';
 import WanAccountsComponent from '../components/wanAccounts';
+import bip39 from 'bip39';
+
+const crypto = require('crypto');
+const sha256 = require('sha256');
+
 const createReactClass = require('create-react-class');
 
 
@@ -26,7 +31,9 @@ let WanAccounts = createReactClass({
       editAddressName: '',
       editAddressNameError: false,
       editAddressNameErrorMessage: '',
-      editAccount: null
+      editAccount: null,
+      keyOpen: false,
+      currentAccountKey:  ''
     }
   },
   render() {
@@ -36,9 +43,11 @@ let WanAccounts = createReactClass({
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
+        exportWanchainKeyClicked={this.exportWanchainKeyClicked}
         tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
+        privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
         addresses={this.props.wanAddresses}
         addressName={this.state.addressName}
@@ -62,6 +71,11 @@ let WanAccounts = createReactClass({
         editAddressNameErrorMessage={this.state.editAddressNameErrorMessage}
         onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
         onEditAddressNameBlur={this.onEditAddressNameBlur}
+        currentAccountKey={this.state.currentAccountKey}
+        keyOpen={this.state.keyOpen}
+        handleKeyClose={this.handleKeyClose}
+        copyKey={this.copyKey}
+        exportKeyAccount={this.state.exportKeyAccount}
       />
     )
   },
@@ -70,10 +84,12 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners('createWanAddress');
     wanEmitter.removeAllListeners('importWanAddress');
     wanEmitter.removeAllListeners('updateWanAddress');
+    wanEmitter.removeAllListeners('exportWanchainKey');
 
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
     wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
+    wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
   },
 
   resetInputs() {
@@ -143,6 +159,36 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({error: data.statusText})
     }
+  },
+
+  exportWanchainKeyReturned(error, data) {
+    this.setState({ privateKeyLoading: false,  exportKeyAccount: null });
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+
+      const encodedKeyHex = data.encryptedPrivateKey
+      const mnemonic = this.state.mnemonic
+      const encodedKey = encodedKeyHex.hexDecode()
+
+      var privateKey = decrypt(encodedKey, mnemonic)
+      this.setState({keyOpen: true, currentAccountKey: privateKey})
+
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
+  exportWanchainKeyClicked(address) {
+    this.setState({ privateKeyLoading: true, exportKeyAccount: address })
+    var mnemonic = bip39.generateMnemonic()
+    this.setState({ mnemonic })
+    var content = { mnemonic: mnemonic, address };
+    wanDispatcher.dispatch({type: 'exportWanchainKey', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {
@@ -243,6 +289,31 @@ let WanAccounts = createReactClass({
     }*/
   },
 
+  copyKey() {
+    let elm = document.getElementById("currentAccountKey");
+
+    if(document.body.createTextRange) {
+      // for Internet Explorer
+      let range = document.body.createTextRange();
+      range.moveToElementText(elm);
+      range.select();
+      document.execCommand("Copy");
+    }
+    else if(window.getSelection) {
+      // other browsers
+      let selection = window.getSelection();
+      let range = document.createRange();
+      range.selectNodeContents(elm);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("Copy");
+    }
+  },
+
+  handleKeyClose() {
+    this.setState({keyOpen: false})
+  },
+
   handleTabChange(event, tabValue) {
     this.setState({ tabValue });
   },
@@ -270,5 +341,12 @@ let WanAccounts = createReactClass({
   }
 
 })
+
+function decrypt(text,seed){
+  var decipher = crypto.createDecipher('aes-256-cbc', seed)
+  var dec = decipher.update(text,'base64','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
 
 export default (WanAccounts);

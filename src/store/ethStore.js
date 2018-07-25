@@ -39,6 +39,9 @@ var Store = () => {
     case 'createPoolingContract':
       this.createPoolingContract(payload);
       break;
+    case 'exportEthereumKey':
+      this.exportEthereumKey(payload);
+      break;
     }
   }.bind(this))
 
@@ -130,6 +133,19 @@ var Store = () => {
     var postJson = {
       ownerEthAddress: payload.content.ethAddress,
       name: payload.content.name
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.exportEthereumKey = function(payload) {
+    var url = 'ethereum/exportAddress'
+    var postJson = {
+      address: payload.content.address,
+      mnemonic: payload.content.mnemonic
     }
 
     this.callApi(url,
