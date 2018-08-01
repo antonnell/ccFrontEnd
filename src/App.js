@@ -22,6 +22,8 @@ import Whitelist from './containers/whitelist.jsx';
 import SendEthereum from './containers/sendEthereum.jsx';
 import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
+//import KYC from './containers/kyc.jsx';
+import WhitelistCheck from './containers/whitelistCheck.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -169,7 +171,7 @@ class App extends Component {
     if(paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex)
     }
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable', 'whitelistStatus'].includes(currentScreen)) {
       if(user == null) {
         window.location.hash = 'welcome';
       }
@@ -213,7 +215,7 @@ class App extends Component {
   getIpReturned(err, data) {
     this.setState({ipLoading: false})
     emitter.removeAllListeners('getIp');
-    
+
     if(data == null || data.country == null) {
       this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
     } else {
@@ -394,7 +396,7 @@ class App extends Component {
       }
     }
 
-    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable'].includes(currentScreen)) {
+    if(!['welcome', 'registerAccount', 'forgotPassword', 'forgotPasswordDone', 'resetPassword', 'privacyPolicy', 'cookiePolicy', 'termsAndConditions', 'about', 'press', 'contactUs', 'bugBounty', 'blog', 'faq', 'fees', 'add', 'added', 'addUnavailable', 'whitelistStatus'].includes(currentScreen)) {
       if(this.state.user == null) {
         return window.location.hash = 'welcome';
       }
@@ -458,7 +460,7 @@ class App extends Component {
         {this.renderAppBar()}
         {this.renderDrawer()}
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '564px', position: 'relative'}}>
+        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '562px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
           </Grid>
@@ -492,6 +494,8 @@ class App extends Component {
         return (<UpdatePassword user={this.state.user} />);
       case 'manage2FA':
         return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
+      /*case 'kyc':
+        return (<KYC user={this.state.user} setUser={this.setUser} />);*/
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
       case 'cookiePolicy':
@@ -530,6 +534,8 @@ class App extends Component {
           return <div></div>
         }
         return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
+      case 'whitelistStatus':
+        return (<WhitelistCheck />)
       case 'logOut':
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       default:

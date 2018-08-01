@@ -57,6 +57,9 @@ var Store = () => {
     case 'whitelist':
       this.whitelist(payload);
       break;
+    case 'whitelistStatus':
+      this.whitelistStatus(payload);
+      break;
     }
   }.bind(this))
 
@@ -69,6 +72,20 @@ var Store = () => {
       surname: payload.content.surname,
       telegram: payload.content.telegram,
       country: payload.content.country
+    }
+
+    this.callApi(url,
+      version,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.whitelistStatus = function(payload) {
+    var url = 'whitelistStatus'
+    var version = 'api/v2/'
+    var postJson = {
+      email: payload.content.email
     }
 
     this.callApi(url,

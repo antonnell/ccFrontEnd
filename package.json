@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@abacusprotocol/client-sdk": "^0.1.76",
+    "@abacusprotocol/sdk-browser": "^0.2.18",
     "authenticator": "^1.1.5",
     "bip39": "^2.5.0",
     "create-react-class": "^15.6.3",
