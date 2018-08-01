@@ -2,7 +2,8 @@ var config = {
   whitelistApiUrl: "",
   whitelistApiHeader: "",
   apiUrl: "",
-  etherscanUrl : ""
+  etherscanUrl : "",
+  abacusAppId: ""
 };
 
 module.exports = config;
