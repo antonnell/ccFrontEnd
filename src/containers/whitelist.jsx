@@ -96,8 +96,8 @@ let Whitelist = createReactClass({
 
       cryptocurveWallet: false,
       loadingAddress: false,
-      contributionAddress: '0xE1197070018D5CFbC15c5fCBb346A3De9de9bC9A',
-
+      //contributionAddress: '0xE1197070018D5CFbC15c5fCBb346A3De9de9bC9A',
+      contributionAddress: '0xe00D89D5E18eC757cf24418F4Eb93B79ff6aBB8b',
       ethAddressName: '',
       ethAddressNameError: false,
       ethAddressNameErrorMessage: 'Just a name for your account, you will use this to identify your accounts',
