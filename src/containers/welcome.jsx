@@ -1,7 +1,6 @@
 import React from 'react'
 import WelcomeComponent from '../components/welcome'
 import AuthComponent from '../components/authComponent'
-// import Abacus from "@abacusprotocol/client-sdk";
 
 
 const createReactClass = require('create-react-class')
@@ -11,10 +10,6 @@ let whitelistEmitter = require('../store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('../store/whitelistStore.js').default.dispatcher
 var crypto = require('crypto');
 var sha256 = require('sha256');
-
-/*const abacus = new Abacus({
-  applicationId: "74ba179a-1ef5-45d0-8ff0-1467d193c157"
-});*/
 
 let Welcome = createReactClass({
   getInitialState() {
@@ -189,15 +184,6 @@ let Welcome = createReactClass({
   },
 
   submitLogin() {
-
-    /*abacus.authorizeWithModal({
-        runVerifications: true,
-        onClose: function() {
-            console.log('Done verifying!');
-        }
-    });
-
-    return false;*/
     this.setState({usernameError: false, passwordError: false, codeErrorMessage: ''})
     var error = false;
 
