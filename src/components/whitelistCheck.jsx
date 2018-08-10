@@ -42,7 +42,7 @@ class WhitelistCheck extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
             <Grid item xs={12} align='center'>
-              <Typography style={{color: (this.props.whitelistedMessage == 'Email is whitelisted'?'#51ab63':'#f44336')}} >
+              <Typography style={{color: (this.props.whitelistedMessage == 'This email has been registered as a Whitelist candidate. You will be emailed once your Whitelist status has been approved.'?'#51ab63':'#f44336')}} >
                 {this.props.whitelistedMessage}
               </Typography>
             </Grid>
