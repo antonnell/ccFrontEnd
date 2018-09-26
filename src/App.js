@@ -10,20 +10,27 @@ import AppFooter from './containers/footer.jsx';
 
 import Welcome from './containers/welcome.jsx';
 import RegisterAccount from './containers/registerAccount.jsx';
+import CreateEth from './containers/createEth.jsx';
+import CreateWan from './containers/createWan.jsx';
+import KYC from './containers/kyc.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import ResetPassword from './containers/resetPassword.jsx';
+//import Accounts from './containers/accounts.jsx';
 import EthAccounts from './containers/ethAccounts.jsx';
 import WanAccounts from './containers/wanAccounts.jsx';
+import AionAccounts from './containers/aionAccounts.jsx';
 import UpdatePassword from './containers/updatePassword.jsx';
 import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
 import SendEthereum from './containers/sendEthereum.jsx';
+import SendWanchain from './containers/sendWanchain.jsx';
+import SendAion from './containers/sendAion.jsx';
 import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
-//import KYC from './containers/kyc.jsx';
 import WhitelistCheck from './containers/whitelistCheck.jsx';
+import SetUsername from './containers/setUsername.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -43,6 +50,9 @@ let ethDispatcher = require('./store/ethStore.js').default.dispatcher
 
 let wanEmitter = require('./store/wanStore.js').default.emitter
 let wanDispatcher = require('./store/wanStore.js').default.dispatcher
+
+let aionEmitter = require('./store/aionStore.js').default.emitter
+let aionDispatcher = require('./store/aionStore.js').default.dispatcher
 
 let whitelistEmitter = require('./store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatcher
@@ -126,8 +136,10 @@ class App extends Component {
     this.state = {
       drawerOpen: false,
       user: user,
+      addresses: null,
       ethAddresses: null,
       wanAddresses: null,
+      aionAddresses: null,
       contacts: null,
       whitelistState: whitelistState,
       uriParameters: {},
@@ -143,6 +155,8 @@ class App extends Component {
     this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
     this.openSendEther = this.openSendEther.bind(this);
+    this.openSendWanchain = this.openSendWanchain.bind(this);
+    this.openSendAion = this.openSendAion.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -150,6 +164,7 @@ class App extends Component {
 
     this.getEthAddressReturned = this.getEthAddressReturned.bind(this);
     this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
+    this.getAionAddressReturned = this.getAionAddressReturned.bind(this);
     this.getContactsReturned = this.getContactsReturned.bind(this);
     this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
 
@@ -181,19 +196,23 @@ class App extends Component {
     contactsEmitter.removeAllListeners('Unauthorised');
     ethEmitter.removeAllListeners('Unauthorised');
     wanEmitter.removeAllListeners('Unauthorised');
+    aionEmitter.removeAllListeners('Unauthorised');
     accountEmitter.removeAllListeners('Unauthorised');
     ethEmitter.removeAllListeners('getEthAddress');
     wanEmitter.removeAllListeners('getWanAddress');
+    aionEmitter.removeAllListeners('getAionAddress');
     contactsEmitter.removeAllListeners('getContacts');
     whitelistEmitter.removeAllListeners('whitelistCheck');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
     wanEmitter.on('Unauthorised', this.logUserOut);
+    aionEmitter.on('Unauthorised', this.logUserOut);
     accountEmitter.on('Unauthorised', this.logUserOut);
 
     ethEmitter.on('getEthAddress', this.getEthAddressReturned);
     wanEmitter.on('getWanAddress', this.getWanAddressReturned);
+    aionEmitter.on('getAionAddress', this.getAionAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
 
     whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
@@ -231,6 +250,7 @@ class App extends Component {
     var content = {id: user.id};
     ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
     wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
+    aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
     contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
 
     if(this.state.whitelistState == null) {
@@ -266,7 +286,31 @@ class App extends Component {
     }
 
     if(data.success) {
-      this.setState({ethAddresses: data.ethAddresses})
+      this.setState({ethAddresses: data.ethAddresses});
+
+      // let ethAddresses = data.ethAddresses.map((add) => {
+      //   add.type = 'Ethereum'
+      //   add.extension = 'Eth'
+      //   return add
+      // })
+      //
+      // let wanAddress = this.state.wanAddresses.map((add) => {
+      //   add.type = 'Wanchain'
+      //   add.extension = 'Wan'
+      //   add.address = add.publicAddress
+      //   return add
+      // })
+      //
+      // let aionAddress = this.state.aionAddresses.map((add) => {
+      //   add.type = 'Aion'
+      //   add.extension = 'Aion'
+      //   return add
+      // })
+      //
+      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
+      //
+      // this.setState({addresses});
+
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, ethAddresses: []});
     } else {
@@ -281,10 +325,72 @@ class App extends Component {
 
     if(data.success) {
       this.setState({wanAddresses: data.wanAddresses})
+
+      // let ethAddresses = this.state.ethAddresses.map((add) => {
+      //   add.type = 'Ethereum'
+      //   add.extension = 'Eth'
+      //   return add
+      // })
+      //
+      // let wanAddress = data.wanAddresses.map((add) => {
+      //   add.type = 'Wanchain'
+      //   add.extension = 'Wan'
+      //   add.address = add.publicAddress
+      //   return add
+      // })
+      //
+      // let aionAddress = this.state.aionAddresses.map((add) => {
+      //   add.type = 'Aion'
+      //   add.extension = 'Aion'
+      //   return add
+      // })
+      //
+      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
+      //
+      // this.setState({addresses});
+
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, wanAddresses: []});
     } else {
       this.setState({error: data.statusText, wanAddresses: []})
+    }
+  };
+
+  getAionAddressReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({aionAddresses: data.aionAddresses})
+
+      // let ethAddresses = this.state.ethAddresses.map((add) => {
+      //   add.type = 'Ethereum'
+      //   add.extension = 'Eth'
+      //   return add
+      // })
+      //
+      // let wanAddress = this.state.wanAddresses.map((add) => {
+      //   add.type = 'Wanchain'
+      //   add.extension = 'Wan'
+      //   add.address = add.publicAddress
+      //   return add
+      // })
+      //
+      // let aionAddress = data.aionAddresses.map((add) => {
+      //   add.type = 'Aion'
+      //   add.extension = 'Aion'
+      //   return add
+      // })
+      //
+      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
+      //
+      // this.setState({addresses});
+
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, aionAddresses: []});
+    } else {
+      this.setState({error: data.statusText, aionAddresses: []})
     }
   };
 
@@ -368,6 +474,16 @@ class App extends Component {
     window.location.hash = 'sendEthereum'
   };
 
+  openSendWanchain(sendWanchainContact, sendWanchainAccount) {
+    this.setState({ sendWanchainContact, sendWanchainAccount});
+    window.location.hash = 'sendWanchain'
+  };
+
+  openSendAion(sendAionContact, sendAionAccount) {
+    this.setState({ sendAionContact, sendAionAccount});
+    window.location.hash = 'sendAion'
+  };
+
   locationHashChanged() {
     var uriParameters = {}
     var currentScreen = ''
@@ -390,7 +506,7 @@ class App extends Component {
       sessionStorage.removeItem('cc_user');
       sessionStorage.removeItem('cc_whiteliststate');
 
-      this.setState({drawerOpen: false, user: null, contacts: null, ethAddresses: null, wanAddress: null});
+      this.setState({drawerOpen: false, user: null, contacts: null, ethAddresses: null, wanAddress: null, aionAddresses: null});
       if(currentScreen != 'registerAccount') {
         this.setState({currentScreen: 'welcome'});
       }
@@ -403,16 +519,25 @@ class App extends Component {
     }
 
     var content = {}
-    if(currentScreen == 'wanAccounts') {
+    if(currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') {
       content = {id: this.state.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
-    } else if (currentScreen == 'ethAccounts') {
+    } else if (currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') {
       content = {id: this.state.user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
+    } else if (currentScreen == 'aionAccounts' || currentScreen == 'sendAion') {
+      content = {id: this.state.user.id};
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
     } else if (currentScreen == 'contacts') {
       content = {id: this.state.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
     }
+    //  else if (currentScreen == 'accounts') {
+    //   content = {id: this.state.user.id};
+    //   ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
+    //   wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
+    //   aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
+    // }
 
     ReactGA.set({ page: window.location.pathname + window.location.hash })
     ReactGA.pageview(window.location.pathname + window.location.hash)
@@ -460,7 +585,7 @@ class App extends Component {
         {this.renderAppBar()}
         {this.renderDrawer()}
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '562px', position: 'relative'}}>
+        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '627px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
           </Grid>
@@ -476,6 +601,14 @@ class App extends Component {
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
       case 'registerAccount':
         return (<RegisterAccount setUser={this.setUser} setWhitelistState={this.setWhitelistState}/>);
+      case 'createEth':
+        return (<CreateEth user={this.state.user} />);
+      case 'createWan':
+        return (<CreateWan user={this.state.user} />);
+      case 'kyc':
+        return (<KYC user={this.state.user} setUser={this.setUser} />);
+      case 'setUsername':
+        return (<SetUsername user={this.state.user} setUser={this.setUser} />);
       case 'forgotPassword':
         return (<ForgotPassword />);
       case 'forgotPasswordDone':
@@ -487,15 +620,15 @@ class App extends Component {
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} />);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} />);
+      case 'aionAccounts':
+        return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':
-        return (<Contacts user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} />);
+        return (<Contacts user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} openSendWanchain={this.openSendWanchain} openSendAion={this.openSendAion} />);
       case 'updatePassword':
         return (<UpdatePassword user={this.state.user} />);
       case 'manage2FA':
         return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
-      /*case 'kyc':
-        return (<KYC user={this.state.user} setUser={this.setUser} />);*/
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
       case 'cookiePolicy':
@@ -506,6 +639,10 @@ class App extends Component {
         return (<ComingSoon />);
       case 'sendEthereum':
         return (<SendEthereum user={this.state.user} sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendWanchain':
+        return (<SendWanchain user={this.state.user} sendWanchainContact={this.state.sendWanchainContact} sendWanchainAccount={this.state.sendWanchainAccount} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendAion':
+        return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'about':
         return (<ComingSoon />);
       case 'press':

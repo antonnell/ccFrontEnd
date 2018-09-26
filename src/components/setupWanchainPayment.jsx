@@ -10,10 +10,10 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import { InputAdornment } from 'material-ui/Input';
 
-class SetupEthereumPayment extends Component {
+class SetupWanchainPayment extends Component {
 
   renderAddresses() {
-    if(this.props.ethAddresses == null || this.props.ethAddresses.length == 0) {
+    if(this.props.wanAddresses == null || this.props.wanAddresses.length == 0) {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
 
@@ -24,8 +24,8 @@ class SetupEthereumPayment extends Component {
         value={this.props.accountValue}
         onChange={this.props.selectAddress}
         renderValue={(value) => {
-          var selectedAddress = this.props.ethAddresses.filter((address) => {
-            return address.address == value
+          var selectedAddress = this.props.wanAddresses.filter((address) => {
+            return address.publicAddress == value
           })[0]
 
           return (
@@ -35,13 +35,13 @@ class SetupEthereumPayment extends Component {
                   {selectedAddress.name}
                 </Typography>
                 <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
-                  {selectedAddress.address}
+                  {selectedAddress.publicAddress}
                 </Typography>
               </Grid>
               <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
                 <div></div>
                 <Typography variant='title' noWrap>
-                  {selectedAddress.balance+" ETH"}
+                  {selectedAddress.balance+" WAN"}
                 </Typography>
                 <Typography variant='subheading' noWrap>
                   Available Balance
@@ -49,12 +49,12 @@ class SetupEthereumPayment extends Component {
               </Grid>
             </Grid>)
         }} >
-        {this.props.ethAddresses.map((address) => {
+        {this.props.wanAddresses.map((address) => {
           return (
-            <MenuItem value={address.address} key={address.address}>
-              <ListItemText primary={address.name} secondary={address.address} />
+            <MenuItem value={address.publicAddress} key={address.publicAddress}>
+              <ListItemText primary={address.name} secondary={address.publicAddress} />
               <ListItemSecondaryAction style={{right: '24px'}}>
-                {address.balance+" ETH"}
+                {address.balance+" WAN"}
               </ListItemSecondaryAction>
             </MenuItem>
           )
@@ -78,7 +78,7 @@ class SetupEthereumPayment extends Component {
         style={{minWidth: '300px', width: '100%'}}
         renderValue={(value) => {
           var selectedContact = this.props.contacts.filter((contact) => {
-            return contact.primaryEthAddress == value
+            return contact.primaryWanAddress == value
           })[0]
 
           return (
@@ -88,7 +88,7 @@ class SetupEthereumPayment extends Component {
                   {selectedContact.displayName}
                 </Typography>
                 <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
-                  {selectedContact.primaryEthAddress}
+                  {selectedContact.primaryWanAddress}
                 </Typography>
               </Grid>
               <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
@@ -101,8 +101,8 @@ class SetupEthereumPayment extends Component {
         }} >
         {this.props.contacts.map((contact) => {
           return (
-            <MenuItem value={contact.primaryEthAddress} key={contact.primaryEthAddress}>
-              <ListItemText primary={contact.displayName} secondary={contact.primaryEthAddress} />
+            <MenuItem value={contact.primaryWanAddress} key={contact.primaryWanAddress}>
+              <ListItemText primary={contact.displayName} secondary={contact.primaryWanAddress} />
             </MenuItem>
           )
         })}
@@ -147,7 +147,7 @@ class SetupEthereumPayment extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='center'>
             <Typography variant="headline">
-              Set up your Ethereum payment
+              Set up your Wanchain payment
             </Typography>
           </Grid>
         </Grid>
@@ -210,7 +210,7 @@ class SetupEthereumPayment extends Component {
               id="amount" placeholder="Amount" value={this.props.amount}
               onChange={(event) => { this.props.handleChange(event, 'amount'); }} margin="normal"
               helperText={this.props.amountErrorMessage} onBlur={(event) => { this.props.validateField(event, 'amount'); }} InputProps={{
-                endAdornment: <InputAdornment position="end">Eth</InputAdornment>,
+                endAdornment: <InputAdornment position="end">Wan</InputAdornment>,
               }} />
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
@@ -235,4 +235,4 @@ class SetupEthereumPayment extends Component {
   };
 }
 
-export default (SetupEthereumPayment);
+export default (SetupWanchainPayment);

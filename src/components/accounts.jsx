@@ -13,20 +13,9 @@ import { CircularProgress } from 'material-ui/Progress';
 import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 import PrivateKeyModal from './privateKeyModal.jsx';
-import Popover from 'material-ui/Popover';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import DeleteAccountConfirmation from './deleteAccountConfirmation';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = {};
-
-function MoreIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
-    </SvgIcon>
-  );
-};
 
 function PrimaryIcon(props) {
   return (
@@ -60,19 +49,19 @@ function KeyIcon(props) {
   );
 }
 
-class EthAccounts extends Component {
+class Accounts extends Component {
 
   renderCreate() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Create Ethereum Account
+            Create Account
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
+            id="addressName" label="Address Name" value={this.props.addressName}
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
             onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
@@ -86,10 +75,10 @@ class EthAccounts extends Component {
                 value="primary"
               />
             }
-            label="Make this my primary account"
+            label="Make this my primary address"
           />
         </Grid>
-        <Tooltip title='Create Ethereum Account'>
+        <Tooltip title='Create Account'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
             +
           </Button>
@@ -111,7 +100,7 @@ class EthAccounts extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Import Ethereum Account
+            Import Account
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -128,7 +117,7 @@ class EthAccounts extends Component {
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
           <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
+            id="addressName" label="Address Name" value={this.props.addressName}
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
             onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
         </Grid>
@@ -142,10 +131,10 @@ class EthAccounts extends Component {
                 value="primary"
               />
             }
-            label="Make this my primary account"
+            label="Make this my primary address"
           />
         </Grid>
-        <Tooltip title='Import Ethereum Account'>
+        <Tooltip title='Import Account'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
             +
           </Button>
@@ -162,7 +151,6 @@ class EthAccounts extends Component {
   };
 
   renderAddresses() {
-
     if(this.props.addresses == null) {
       return (<Grid item xs={12} xl={12} align='left' style={{minHeight: '190px', position: 'relative'}}>
         <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
@@ -171,29 +159,14 @@ class EthAccounts extends Component {
 
     if(this.props.addresses.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1">Oh no, we couldn't find any accounts for you. Why don't you create/import one?</Typography>
+        <Typography variant="display1" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>
       </Grid>);
     }
 
     return this.props.addresses.map((address) => {
 
       address.editing = false
-      let open = false
-      let anchorEl = null
-      let loading = <div></div>
-
-      if(this.props.optionsAccount != null) {
-        if(address.address == this.props.optionsAccount.address) {
-          open = true
-          anchorEl = this.props.optionsAccount.anchorEl
-        }
-      }
-
-      if(this.props.loadingAccount != null) {
-        if(address.address == this.props.loadingAccount.address)  {
-          loading = <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
-        }
-      }
+      var loading = <div></div>
 
       if(this.props.editAccount != null) {
         if(address.address == this.props.editAccount.address)  {
@@ -214,79 +187,42 @@ class EthAccounts extends Component {
 
       return (
         <Grid item xs={12} xl={6} align='left' key={address.address}>
-          <Card style={{marginRight: '6px', marginBottom: '6px'}}>
+          <Card style={{margin: '3px'}}>
             <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-                <Grid item xs={11} align='left'>
+                <Grid item xs={9} align='left'>
                   {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
-                    {address.isPrimary===true&& <Tooltip title='This is your primary Ethereum account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
-                    {address.isPrimary===false&& <Tooltip title='Make this account my primary Ethereum account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
+                    {address.isPrimary===true&& <Tooltip title={'This is your primary '+address.type+' account'}><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
+                    {address.isPrimary===false&& <Tooltip title={'Make this account my primary '+address.type+' account'}><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
+                    <Tooltip style={{verticalAlign: 'top'}} title='Edit name'><IconButton style={{ marginTop: '-8px', verticalAlign: 'top'}} onClick={() => { this.props.editNameClicked(address) }}><EditIcon /></IconButton></Tooltip>
                   </Typography>}
                   {address.editing===true&& <TextField autoFocus={true} style={{display: 'inline-block', marginTop: '0px', marginBottom: '5px'}} fullWidth={true} required
-                    color="textSecondary" error={this.props.editAddressNameError} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} id="editAddressName" value={this.props.editAddressName}
+                    color="textSecondary" error={this.props.editAddressNameError} disabled={this.props.cardLoading||this.props.privateKeyLoading} id="editAddressName" value={this.props.editAddressName}
                     onChange={(event) => { this.props.handleChange(event, 'editAddressName'); }} margin="normal" onKeyDown={(event) => { this.props.onEditAddressNameKeyDown(event, address) }}
-                    helperText={this.props.editAddressNameErrorMessage} />}
+                    onBlur={(event) => { this.props.onEditAddressNameBlur(event, address); }} helperText={this.props.editAddressNameErrorMessage} />}
                 </Grid>
-                <Grid item xs={1} align='right'>
-                  <IconButton
-                    style={{verticalAlign: 'top'}}
-                    color="primary"
-                    aria-label="More"
-                    buttonRef={node => {
-                      this.anchorEl = node;
-                    }}
-                    onClick={(e) => { this.props.optionsClicked(e, address) }}
-                    disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading}>
-                    <MoreIcon  />
-                  </IconButton>
-                  <Popover
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorPosition={{ top: 200, left: 400 }}
-                    onClose={this.props.optionsClosed}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    >
-                    <List component="nav">
-                      <ListItem button onClick={() => { this.props.editNameClicked(address) }}>
-                        <ListItemText primary="Update Name" />
-                      </ListItem>
-                      <ListItem button onClick={() => { this.props.updatePrimaryClicked(address) }}>
-                        <ListItemText primary="Set Primary" />
-                      </ListItem>
-                      <ListItem button onClick={() => { this.props.exportEthereumKeyClicked(address.address) }}>
-                        <ListItemText primary="View Private Key" />
-                      </ListItem>
-                      <Divider />
-                      <ListItem button onClick={() => { this.props.deleteKeyClicked(address.address) }}>
-                        <ListItemText primary="Delete" />
-                      </ListItem>
-                    </List>
-                  </Popover>
+                <Grid item xs={3} align='right'>
+                  <Typography variant="headline" noWrap>
+                    {address.balance+' '+address.extension}
+                  </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px'}}>
+                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.address}
                   </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="headline" noWrap>
-                    {address.balance+' ETH ($'+address.usdBalance.toFixed(2)+')'}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} align='right' >
-                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendEtherClicked(null, address) }} >Send Ether</Button>
+                  <Tooltip style={{verticalAlign: 'top'}} title='Show Private Key'><IconButton disabled={this.props.privateKeyLoading} style={{ marginTop: '-13px', verticalAlign: 'top'}} onClick={() => { this.props.exportKeyClicked(address.address) }}><KeyIcon /></IconButton></Tooltip>
                 </Grid>
               </Grid>
               {loading}
             </CardContent>
+            <CardActions>
+              <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+                <Grid item xs={12} align='right' >
+                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} onClick={() => { this.props.sendClicked(null, address) }} >{'Send '+address.type}</Button>
+                </Grid>
+              </Grid>
+            </CardActions>
           </Card>
         </Grid>
       );
@@ -295,36 +231,34 @@ class EthAccounts extends Component {
 
   render() {
     return (
-      <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Grid item xs={12} align='center'>
-              <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
-                Ethereum Accounts
-              </Typography>
-            </Grid>
+      <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px', padding: '24px'}}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='left'>
+          <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
+            Your Accounts
+          </Typography>
+          <Grid container>
             {this.renderAddresses()}
           </Grid>
+
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '470px'}}>
-          <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '500px'}}>
+          <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0}>
             <Tabs
               value={this.props.tabValue}
               onChange={this.props.handleTabChange}
               indicatorColor="primary"
               textColor="primary" >
-              <Tab label="Create Account" />
-              <Tab label="Import Account" />
+              <Tab label="Create Address" />
+              <Tab label="Import Address" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderCreate()}
             {this.props.tabValue === 1 && this.renderImport()}
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
         </Grid>
-        <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>
     );
   }
 }
 
-export default withStyles(styles)(EthAccounts);
+export default withStyles(styles)(Accounts);

@@ -17,6 +17,7 @@ let RegisterAccount = createReactClass({
       error: null,
       username: '',
       usernameError: false,
+      usernameErrorMessage: 'This is your Curve ID',
       emailAddress: '',
       emailAddressError: false,
       emailAddressErrorMessage: 'The email address that is approved for Presale participation',
@@ -33,7 +34,7 @@ let RegisterAccount = createReactClass({
     emitter.on('register', this.registerReturned);
     whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
     whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
-    whitelistEmitter.on('whitelistRegister', this.whitelistLoginReturned);
+    whitelistEmitter.on('whitelistRegister', this.whitelistRegisterReturned);
     whitelistEmitter.on('123123', this.whitelistUnauthorisedReturned)
   },
 
@@ -57,6 +58,7 @@ let RegisterAccount = createReactClass({
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
         username={this.state.username}
         usernameError={this.state.usernameError}
+        usernameErrorMessage={this.state.usernameErrorMessage}
         password={this.state.password}
         passwordError={this.state.passwordError}
         passwordErrorMessage={this.state.passwordErrorMessage}
@@ -100,6 +102,8 @@ let RegisterAccount = createReactClass({
   submitRegister() {
     var error = false;
     this.setState({
+      usernameError: false,
+      usernameErrorMessage: 'This is your curve ID',
       emailAddressError: false,
       emailAddressErrorMessage: 'The email address that is approved for Presale participation',
       passwordError: false,
@@ -108,10 +112,10 @@ let RegisterAccount = createReactClass({
       confirmPasswordErrorMessage: ''
     })
 
-    /*if(this.state.username == '') {
-      this.setState({usernameError: true});
+    if(this.state.username == '') {
+      this.setState({usernameError: true, usernameErrorMessage: 'Username is a required field'});
       error = true;
-    }*/
+    }
     if(this.state.emailAddress == '') {
       this.setState({emailAddressError: true, emailAddressErrorMessage: "Email address is a required field"});
       error = true;
@@ -144,7 +148,6 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistCheckReturned(error, data) {
-    console.log('check')
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -153,7 +156,7 @@ let RegisterAccount = createReactClass({
 
       if(decodedData) {
         if(decodedData.user.canWhitelist === true) {
-          var content = {username: this.state.emailAddress, emailAddress: this.state.emailAddress, password: this.state.password};
+          var content = {username: this.state.username, emailAddress: this.state.emailAddress, password: this.state.password};
           dispatcher.dispatch({type: 'register', content});
         } else {
           this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
@@ -169,12 +172,10 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistUnauthorisedReturned(error, data) {
-    console.log('whitelist unauthorised')
     this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
   },
 
   registerReturned(error, data) {
-    console.log('register')
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -192,8 +193,7 @@ let RegisterAccount = createReactClass({
     }
   },
 
-  whitelistLoginReturned(error, data) {
-    console.log('login')
+  whitelistRegisterReturned(error, data) {
     this.setState({loading: false});
 
     if(error) {
@@ -202,12 +202,11 @@ let RegisterAccount = createReactClass({
 
     if(data.success) {
       var whitelistState = this.decodeWhitelistResponse(data.message)
-      console.log(whitelistState)
       if(whitelistState) {
         this.props.setWhitelistState(whitelistState);
 
         if(whitelistState.user.canWhitelist === true /*&& whitelistState.user.whitelisted !== true*/) {
-          window.location.hash = 'whitelist';
+          window.location.hash = 'createEth';
         } else {
           window.location.hash = 'ethAccounts';
         }

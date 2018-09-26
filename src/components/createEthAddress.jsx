@@ -8,7 +8,7 @@ import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
-class CreateEthAddress extends Component {
+class CreateEth extends Component {
 
   render() {
     return (
@@ -46,4 +46,4 @@ class CreateEthAddress extends Component {
   }
 }
 
-export default withStyles(styles)(CreateEthAddress);
+export default withStyles(styles)(CreateEth);

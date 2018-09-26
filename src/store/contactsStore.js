@@ -41,7 +41,7 @@ var Store = () => {
   this.addContact = function(payload) {
     var url = 'contacts/addUserContact'
     var postJson = {
-      emailOrUsername: payload.content.emailAddress,
+      emailOrUsername: payload.content.username,
       displayName: payload.content.displayName,
       notes: payload.content.notes,
       ownerUsername: payload.content.ownerUsername

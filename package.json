@@ -17,10 +17,13 @@
     "node-fetch": "^2.1.2",
     "qrcode": "^1.2.0",
     "react": "^16.4.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.0",
     "react-ga": "^2.5.3",
     "react-loader-spinner": "^2.1.0",
+    "react-perfect-scrollbar": "^1.2.0",
     "react-scripts": "1.1.4",
+    "react-scrollbar": "^0.5.4",
     "sha256": "^0.2.0"
   },
   "scripts": {

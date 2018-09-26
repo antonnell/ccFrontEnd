@@ -1,24 +1,24 @@
 import React from 'react'
-import SetupEthereumPayment from '../components/setupEthereumPayment'
-import ConfirmEthereumPayment from '../components/confirmEthereumPayment'
-import CompleteEthereumPayment from '../components/completeEthereumPayment'
+import SetupAionPayment from '../components/setupAionPayment'
+import ConfirmAionPayment from '../components/confirmAionPayment'
+import CompleteAionPayment from '../components/completeAionPayment'
 import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
 import Grid from 'material-ui/Grid';
 import Card, {  CardContent } from 'material-ui/Card';
 
 const createReactClass = require('create-react-class')
-let ethEmitter = require('../store/ethStore.js').default.emitter
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher
+let aionEmitter = require('../store/aionStore.js').default.emitter
+let aionDispatcher = require('../store/aionStore.js').default.dispatcher
 const isEthereumAddress  = require('is-ethereum-address');
 
-let SendEther = createReactClass({
+let SendAion = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
 
       tabValue: 0,
-      currentScreen: 'setupEthereumPayment',
+      currentScreen: 'setupAionPayment',
       steps: ['Set up your payment', 'Confirm the details', 'Results of the payment'],
       activeStep:  0,
       completed: {},
@@ -64,30 +64,30 @@ let SendEther = createReactClass({
 
       transactionID: '',
 
-      disclaimer: 'CryptoCurve accepts no responsibility for funds transferred to an incorrect public address. Please ensure that the address entered is the correct Ethereum Public Address of your recipient.'
+      disclaimer: 'CryptoCurve accepts no responsibility for funds transferred to an incorrect public address. Please ensure that the address entered is the correct Aion Public Address of your recipient.'
     };
   },
 
   componentWillMount() {
-    ethEmitter.on('sendEther', this.sendEtherReturned);
+    aionEmitter.on('sendAion', this.sendAionReturned);
   },
 
   componentWillUnmount() {
-    ethEmitter.removeAllListeners('sendEther');
+    aionEmitter.removeAllListeners('sendAion');
   },
 
   componentDidMount() {
-    if(this.props.sendEtherContact != null) {
+    if(this.props.sendAionContact != null) {
       this.setState({
-        contact: this.props.sendEtherContact,
-        contactValue: this.props.sendEtherContact.primaryEthAddress,
+        contact: this.props.sendAionContact,
+        contactValue: this.props.sendAionContact.primaryAionAddress,
         contactValid: true
       })
     }
-    if(this.props.sendEtherAccount != null) {
+    if(this.props.sendAionAccount != null) {
       this.setState({
-        account: this.props.sendEtherAccount,
-        accountValue: this.props.sendEtherAccount.address,
+        account: this.props.sendAionAccount,
+        accountValue: this.props.sendAionAccount.address,
         accountValid: true
       })
     }
@@ -95,8 +95,8 @@ let SendEther = createReactClass({
 
   renderScreen() {
     switch (this.state.currentScreen) {
-      case 'setupEthereumPayment':
-        return(<SetupEthereumPayment
+      case 'setupAionPayment':
+        return(<SetupAionPayment
           handleChange={this.handleChange}
           handleTabChange={this.handleTabChange}
 
@@ -107,7 +107,7 @@ let SendEther = createReactClass({
           selectAddress={this.selectAddress}
           selectContact={this.selectContact}
 
-          ethAddresses={this.props.ethAddresses}
+          aionAddresses={this.props.aionAddresses}
           contacts={this.props.contacts}
 
           tabValue={this.state.tabValue}
@@ -141,8 +141,8 @@ let SendEther = createReactClass({
           disclaimer={this.state.disclaimer}
           validateField={this.validateField}
         />)
-      case 'confirmEthereumPayment':
-        return (<ConfirmEthereumPayment
+      case 'confirmAionPayment':
+        return (<ConfirmAionPayment
           confirmClicked={this.confirmClicked}
           backClicked={this.backClicked}
 
@@ -159,13 +159,13 @@ let SendEther = createReactClass({
           beneficiaryReference={this.state.beneficiaryReference}
           publicAddress={this.state.publicAddress}
           />)
-        case 'completeEthereumPayment':
-          return (<CompleteEthereumPayment
+        case 'completeAionPayment':
+          return (<CompleteAionPayment
             error={this.state.error}
             accountClicked={this.accountClicked}
             transactionID={this.state.transactionID}/>)
         default:
-          return(<SetupEthereumPayment
+          return(<SetupAionPayment
             handleChange={this.handleChange}
             handleTabChange={this.handleTabChange}
 
@@ -176,7 +176,7 @@ let SendEther = createReactClass({
             selectAddress={this.selectAddress}
             selectContact={this.selectContact}
 
-            ethAddresses={this.props.ethAddresses}
+            aionAddresses={this.props.aionAddresses}
             contacts={this.props.contacts}
 
             tabValue={this.state.tabValue}
@@ -265,7 +265,7 @@ let SendEther = createReactClass({
   },
 
   selectAddress(event) {
-    var selectedAccount = this.props.ethAddresses.filter((address) => {
+    var selectedAccount = this.props.aionAddresses.filter((address) => {
       return address.address == event.target.value
     })
     if(selectedAccount.length > 0) {
@@ -281,14 +281,14 @@ let SendEther = createReactClass({
 
   selectContact(event) {
     var selectedContact = this.props.contacts.filter((contact) => {
-      return contact.primaryEthAddress == event.target.value
+      return contact.primaryAionAddress == event.target.value
     })
     if(selectedContact.length > 0) {
       selectedContact = selectedContact[0]
     } else {
       selectedContact = ''
     }
-    this.setState({contactValue: selectedContact.primaryEthAddress, contact: selectedContact, contactValid: true});
+    this.setState({contactValue: selectedContact.primaryAionAddress, contact: selectedContact, contactValid: true});
 
     this.validateContact(selectedContact);
     this.validateSetupPayment();
@@ -306,7 +306,7 @@ let SendEther = createReactClass({
     if(this.validateSetupPayment()) {
       var completed = this.state.completed
       completed[0] = true
-      this.setState({currentScreen: 'confirmEthereumPayment', activeStep: 1, completed})
+      this.setState({currentScreen: 'confirmAionPayment', activeStep: 1, completed})
     }
   },
 
@@ -332,10 +332,10 @@ let SendEther = createReactClass({
     }
 
     //console.log(content)
-    ethDispatcher.dispatch({type: 'sendEther', content, token: this.props.user.token})
+    aionDispatcher.dispatch({type: 'sendAion', content, token: this.props.user.token})
   },
 
-  sendEtherReturned(error, data) {
+  sendAionReturned(error, data) {
     this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
@@ -345,22 +345,22 @@ let SendEther = createReactClass({
     completed[1] = true
     if(data.success) {
 
-      this.setState({currentScreen: 'completeEthereumPayment', activeStep: 2, completed, transactionID: data.transactionId})
+      this.setState({currentScreen: 'completeAionPayment', activeStep: 2, completed, transactionID: data.transactionId})
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg, currentScreen: 'completeEthereumPayment', activeStep: 2, completed});
+      this.setState({error: data.errorMsg, currentScreen: 'completeAionPayment', activeStep: 2, completed});
     } else {
-      this.setState({error: data.statusText, currentScreen: 'completeEthereumPayment', activeStep: 2, completed})
+      this.setState({error: data.statusText, currentScreen: 'completeAionPayment', activeStep: 2, completed})
     }
   },
 
   backClicked() {
     var completed = this.state.completed
     completed[0] = false
-    this.setState({currentScreen: 'setupEthereumPayment', activeStep: 1, completed})
+    this.setState({currentScreen: 'setupAionPayment', activeStep: 1, completed})
   },
 
   accountClicked() {
-    window.location.hash = 'ethAccounts'
+    window.location.hash = 'aionAccounts'
   },
 
   handleChange (event, name) {
@@ -480,7 +480,7 @@ let SendEther = createReactClass({
       this.setState({publicAddressError: true, publicAddressErrorMessage:'Public address is requred'});
       return false;
     } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Ethereum public address'});
+      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Aion public address'});
       return false;
     } else {
       this.setState({ publicAddressValid: true })
@@ -548,4 +548,4 @@ let SendEther = createReactClass({
 
 })
 
-export default (SendEther);
+export default (SendAion);

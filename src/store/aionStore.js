@@ -17,123 +17,29 @@ var Store = () => {
 
   dispatcher.register(function(payload) {
     switch (payload.type) {
-    case 'login':
-      this.login(payload);
+    case 'getAionAddress':
+      this.getAionAddress(payload);
       break;
-    case 'register':
-      this.register(payload);
+    case 'createAionAddress':
+      this.createAionAddress(payload);
       break;
-    case 'updatePassword':
-      this.updatePassword(payload);
+    case 'updateAionAddress':
+      this.updateAionAddress(payload);
       break;
-    case 'resetPassword':
-      this.resetPassword(payload);
+    case 'deleteAionAddress':
+      this.deleteAionAddress(payload);
       break;
-    case 'sendResetPasswordEmail':
-      this.sendResetPasswordEmail(payload);
+    case 'sendAion':
+      this.sendAion(payload);
       break;
-    case 'sendWhitelistConfirmationEmail':
-      this.sendWhitelistConfirmationEmail(payload);
-      break;
-    case 'generate2faKey':
-      this.generate2faKey(payload);
-      break;
-    case 'enable2fa':
-      this.enable2fa(payload);
-      break;
-    case 'disable2fa':
-      this.disable2fa(payload);
-      break;
-    case 'sendPresaleEmail':
-      this.sendPresaleEmail(payload);
-      break;
-    case 'updateUsername':
-      this.updateUsername(payload)
+    case 'exportAionKey':
+      this.exportAionKey(payload);
       break;
     }
   }.bind(this))
 
-  this.login = function(payload) {
-    var url = 'account/login'
-    var postJson = {
-      usernameOrEmail: payload.content.username,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.register = function(payload) {
-    var url = 'account/register'
-    var postJson = {
-      username: payload.content.username,
-      email: payload.content.emailAddress,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.updatePassword = function(payload) {
-    var url = 'account/updatePassword'
-    var postJson = {
-      username: payload.content.username,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.resetPassword = function(payload) {
-    var url = 'account/resetPassword'
-    var postJson = {
-      code: payload.content.code,
-      token: payload.content.token,
-      password: payload.content.password
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.sendResetPasswordEmail = function(payload) {
-    var url = 'account/sendResetPasswordEmail'
-    var postJson = {
-      email: payload.content.emailAddress,
-      callbackUrl: window.location.origin+"/#resetPassword"
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.sendWhitelistConfirmationEmail = function(payload) {
-    var url = 'account/sendWhitelistConfirmationEmail'
-    var postJson = {
-      emailAddress: payload.content.emailAddress
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.generate2faKey = function(payload) {
-    var url = 'account/generate2faKey/'+payload.content.id
+  this.getAionAddress = function(payload) {
+    var url = 'aion/getUserAddresses/'+payload.content.id
 
     this.callApi(url,
       'GET',
@@ -141,49 +47,70 @@ var Store = () => {
       payload)
   }
 
-  this.enable2fa = function(payload) {
-    var url = 'account/enable2fa'
-    var postJson = {
-      secretKey: payload.content.secretKey,
-      code: payload.content.code,
-      userId: payload.content.id,
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.disable2fa = function(payload) {
-    var url = 'account/disable2fa'
-    var postJson = {
-      userId: payload.content.id,
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.sendPresaleEmail = function(payload) {
-    var url = 'account/sendPresaleEmail'
-    var postJson = {
-      userId: payload.content.id,
-    }
-
-    this.callApi(url,
-      'POST',
-      postJson,
-      payload)
-  }
-
-  this.updateUsername = function(payload) {
-    var url = 'account/updateUsername'
+  this.createAionAddress = function(payload) {
+    var url = 'aion/createAddress'
     var postJson = {
       username: payload.content.username,
-      usernameNew: payload.content.usernameNew
+      isPrimary: payload.content.isPrimary,
+      name: payload.content.name
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.updateAionAddress = function(payload) {
+    var url = 'aion/updateAddress'
+    var postJson = {
+      name: payload.content.name,
+      isPrimary: payload.content.isPrimary,
+      address: payload.content.address
+    }
+
+    console.log(postJson)
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.deleteAionAddress = function(payload) {
+    var url = 'aion/deleteAddress'
+    var postJson = {
+      address: payload.content.publicAddress
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.sendAion = function(payload) {
+    var url = 'aion/sendAion'
+    var postJson = {
+      address: payload.content.address,
+      contactUserName: payload.content.contactUserName,
+      aionAddressID: payload.content.aionAddressID,
+      password: payload.content.password,
+      amount: payload.content.amount,
+      gwei: payload.content.gwei
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.exportAionKey = function(payload) {
+    var url = 'aion/exportAddress'
+    var postJson = {
+      address: payload.content.address,
+      mnemonic: payload.content.mnemonic
     }
 
     this.callApi(url,
@@ -194,15 +121,11 @@ var Store = () => {
 
   this.callApi = function(url, method, postData, payload) {
     //get X-curve-OTP from sessionStorage
+    var userString = sessionStorage.getItem('cc_user');
     var authOTP = ''
-    if(payload.authOTP != null) {
-      authOTP = payload.authOTP
-    } else {
-      var userString = sessionStorage.getItem('cc_user');
-      if(userString) {
-        var user = JSON.parse(userString)
-        authOTP = user.authOTP
-      }
+    if(userString) {
+      var user = JSON.parse(userString)
+      authOTP = user.authOTP
     }
 
     var call = apiUrl+url

@@ -24,6 +24,8 @@ import CreateWanAddress from '../components/createWanAddress.jsx';
 import KYCIDDocument from '../components/kycIDDocument.jsx';
 import KYCPhoto from '../components/kycPhoto.jsx';
 
+import KYCNetki from '../components/kycNetki.jsx';
+
 import JoinWhitelist from '../components/joinWhitelist.jsx';
 import WhitelistJoined from '../components/whitelistJoined.jsx';
 
@@ -481,7 +483,8 @@ let Whitelist = createReactClass({
     whitelistObject.completed = completed;
     whitelistObject.activeStep = 3;
     whitelistObject.wanAddress = address;
-    whitelistObject.currentScreen = 'kycIDDOcument';
+    // whitelistObject.currentScreen = 'kycIDDOcument';
+    whitelistObject.currentScreen = 'kycNetki';
 
     this.setState({wanPublicAddress: address.publicAddress})
     this.props.setWhitelistState(whitelistObject);
@@ -557,7 +560,8 @@ let Whitelist = createReactClass({
       whitelistObject.completed = completed;
       whitelistObject.activeStep = 3;
       whitelistObject.wanAddress = { publicAddressName: this.state.wanAddressName };
-      whitelistObject.currentScreen = 'kycIDDOcument';
+      // whitelistObject.currentScreen = 'kycIDDOcument';
+      whitelistObject.currentScreen = 'kycNetki';
 
       //get WAN Addresses
       var content = {id: this.props.user.id};
@@ -608,7 +612,8 @@ let Whitelist = createReactClass({
       whitelistObject.completed = completed;
       whitelistObject.activeStep = 3;
       whitelistObject.wanAddress = { publicAddress: this.state.wanPublicAddress };
-      whitelistObject.currentScreen = 'kycIDDOcument';
+      // whitelistObject.currentScreen = 'kycIDDOcument';
+      whitelistObject.currentScreen = 'kycNetki';
 
       this.props.setWhitelistState(whitelistObject);
     }
@@ -623,7 +628,8 @@ let Whitelist = createReactClass({
       whitelistObject.completed = completed;
       whitelistObject.activeStep = 3;
       whitelistObject.wanAddress = { privateKey: this.state.wanPrivateKey, mnemonic: this.state.wanMnemonic, jsonV3: this.state.wanJSONV3 };
-      whitelistObject.currentScreen = 'kycIDDOcument';
+      // whitelistObject.currentScreen = 'kycIDDOcument';
+      whitelistObject.currentScreen = 'kycNetki';
 
       this.props.setWhitelistState(whitelistObject);
     }
@@ -631,7 +637,8 @@ let Whitelist = createReactClass({
 
   navigateKYCIDDocument() {
     var whitelistObject = this.props.whitelistObject;
-    whitelistObject.currentScreen = 'kycIDDOcument';
+    // whitelistObject.currentScreen = 'kycIDDOcument';
+    whitelistObject.currentScreen = 'kycNetki';
 
     this.props.setWhitelistState(whitelistObject);
   },
@@ -901,6 +908,12 @@ let Whitelist = createReactClass({
     }
   },
 
+  onKycClick() {
+    let someURL = 'https://daiu.app.link/yBE7efy4PI?service_code=ccvhmj'
+    let win = window.open(someURL, '_blank')
+    win.focus()
+  },
+
   renderStepper() {
     if(this.props.whitelistObject == null) {
       return (<Typography variant='headline' style={{marginTop: '150px'}}>Unfortunately you do not qualify for our presale.</Typography>)
@@ -1117,6 +1130,13 @@ let Whitelist = createReactClass({
           navigateJoinWhitelist={this.navigateJoinWhitelist}
           photoFile={this.state.photoFile}
           photoImagePreviewUrl={this.state.photoImagePreviewUrl}
+          />)
+      case 'kycNetki':
+        return (<KYCNetki
+          navigateBack={this.navigateHaveWanAddress}
+          navigateJoinWhitelist={this.navigateJoinWhitelist}
+          kycDone={this.props.whitelistObject.kycDone}
+          onKycClick={this.onKycClick}
           />)
       case 'joinWhitelist':
         return (<JoinWhitelist

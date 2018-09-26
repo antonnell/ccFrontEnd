@@ -60,14 +60,14 @@ function KeyIcon(props) {
   );
 }
 
-class EthAccounts extends Component {
+class AionAccounts extends Component {
 
   renderCreate() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Create Ethereum Account
+            Create Aion Account
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -89,7 +89,7 @@ class EthAccounts extends Component {
             label="Make this my primary account"
           />
         </Grid>
-        <Tooltip title='Create Ethereum Account'>
+        <Tooltip title='Create Aion Account'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
             +
           </Button>
@@ -111,7 +111,7 @@ class EthAccounts extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="headline" color="inherit">
-            Import Ethereum Account
+            Import Aion Account
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
@@ -145,7 +145,7 @@ class EthAccounts extends Component {
             label="Make this my primary account"
           />
         </Grid>
-        <Tooltip title='Import Ethereum Account'>
+        <Tooltip title='Import Aion Account'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
             +
           </Button>
@@ -171,7 +171,7 @@ class EthAccounts extends Component {
 
     if(this.props.addresses.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1">Oh no, we couldn't find any accounts for you. Why don't you create/import one?</Typography>
+        <Typography variant="display1" >Oh no, we couldn't find any accounts for you. Why don't you create/import one?</Typography>
       </Grid>);
     }
 
@@ -219,8 +219,8 @@ class EthAccounts extends Component {
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={11} align='left'>
                   {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
-                    {address.isPrimary===true&& <Tooltip title='This is your primary Ethereum account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
-                    {address.isPrimary===false&& <Tooltip title='Make this account my primary Ethereum account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
+                    {address.isPrimary===true&& <Tooltip title='This is your primary Aion account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
+                    {address.isPrimary===false&& <Tooltip title='Make this account my primary Aion account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
                   </Typography>}
                   {address.editing===true&& <TextField autoFocus={true} style={{display: 'inline-block', marginTop: '0px', marginBottom: '5px'}} fullWidth={true} required
@@ -261,7 +261,7 @@ class EthAccounts extends Component {
                       <ListItem button onClick={() => { this.props.updatePrimaryClicked(address) }}>
                         <ListItemText primary="Set Primary" />
                       </ListItem>
-                      <ListItem button onClick={() => { this.props.exportEthereumKeyClicked(address.address) }}>
+                      <ListItem button onClick={() => { this.props.exportAionKeyClicked(address.address) }}>
                         <ListItemText primary="View Private Key" />
                       </ListItem>
                       <Divider />
@@ -278,11 +278,11 @@ class EthAccounts extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="headline" noWrap>
-                    {address.balance+' ETH ($'+address.usdBalance.toFixed(2)+')'}
+                    {address.balance+' Aion ($'+address.usdBalance.toFixed(2)+')'}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} align='right' >
-                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendEtherClicked(null, address) }} >Send Ether</Button>
+                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendAionClicked(null, address) }} >Send Aion</Button>
                 </Grid>
               </Grid>
               {loading}
@@ -300,7 +300,7 @@ class EthAccounts extends Component {
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='center'>
               <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
-                Ethereum Accounts
+                Aion Accounts
               </Typography>
             </Grid>
             {this.renderAddresses()}
@@ -327,4 +327,4 @@ class EthAccounts extends Component {
   }
 }
 
-export default withStyles(styles)(EthAccounts);
+export default withStyles(styles)(AionAccounts);

@@ -4,7 +4,7 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { CircularProgress } from 'material-ui/Progress';
 
-class ConfirmEthereumPayment extends Component {
+class ConfirmAionPayment extends Component {
 
   renderBeneficiary() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
@@ -34,7 +34,7 @@ class ConfirmEthereumPayment extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='center'>
             <Typography variant="headline">
-              Confirm your Ethereum payment
+              Confirm your Aion payment
             </Typography>
           </Grid>
         </Grid>
@@ -45,7 +45,7 @@ class ConfirmEthereumPayment extends Component {
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
             <div style={{border: '1px solid #000', padding: '12px'}}>
               <Typography variant="title" noWrap>
-                <b>{this.props.amount} Ethereum</b>
+                <b>{this.props.amount} Aion</b>
               </Typography>
             </div>
           </Grid>
@@ -76,4 +76,4 @@ class ConfirmEthereumPayment extends Component {
   };
 }
 
-export default (ConfirmEthereumPayment);
+export default (ConfirmAionPayment);

@@ -6,17 +6,39 @@ const createReactClass = require('create-react-class')
 
 let KYC = createReactClass({
   getInitialState() {
-    return { }
-  },
-
-  componentDidMount() {
-  
+    return {
+      url: 'https://daiu.app.link/yBE7efy4PI?service_code=ccv7j2'
+    }
   },
 
   render() {
     return (
-      <KYCComponent />
+      <KYCComponent
+        KYC={this.KYC}
+        navigateSkip={this.navigateSkip}
+        confirm={this.confirm}/>
     )
+  },
+
+  KYC() {
+    window.open(this.state.url, '_blank')
+  },
+
+  navigateSkip() {
+    console.log(this.props.user)
+    if (this.props.user && this.props.user.username == this.props.user.email) {
+      window.location.hash = 'setUsername';
+    } else {
+      window.location.hash = 'wanAccounts';
+    }
+  },
+
+  confirm() {
+    if (this.props.user && this.props.user.username == this.props.user.email) {
+      window.location.hash = 'setUsername';
+    } else {
+      window.location.hash = 'wanAccounts';
+    }
   },
 })
 

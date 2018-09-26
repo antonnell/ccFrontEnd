@@ -1,5 +1,5 @@
 import React from 'react';
-import EthAccountsComponent from '../components/ethAccounts';
+import AionAccountsComponent from '../components/aionAccounts';
 import bip39 from 'bip39';
 
 const crypto = require('crypto');
@@ -8,10 +8,10 @@ const sha256 = require('sha256');
 const createReactClass = require('create-react-class');
 const isEthereumAddress  = require('is-ethereum-address');
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+let aionEmitter = require('../store/aionStore.js').default.emitter;
+let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
 
-let EthAccounts = createReactClass({
+let AionAccounts = createReactClass({
   getInitialState() {
     return {
       createLoading: false,
@@ -40,18 +40,18 @@ let EthAccounts = createReactClass({
   },
   render() {
     return (
-      <EthAccountsComponent
+      <AionAccountsComponent
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
-        exportEthereumKeyClicked={this.exportEthereumKeyClicked}
+        exportAionKeyClicked={this.exportAionKeyClicked}
         tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
-        addresses={this.props.ethAddresses}
+        addresses={this.props.aionAddresses}
         addressName={this.state.addressName}
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
@@ -63,7 +63,7 @@ let EthAccounts = createReactClass({
         publicAddressError={this.state.publicAddressError}
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
-        sendEtherClicked={this.props.openSendEther}
+        sendAionClicked={this.props.openSendAion}
         validateField={this.validateField}
         updatePrimaryClicked={this.updatePrimaryClicked}
         editNameClicked={this.editNameClicked}
@@ -92,17 +92,17 @@ let EthAccounts = createReactClass({
   },
 
   componentWillMount() {
-    ethEmitter.removeAllListeners('createEthAddress');
-    ethEmitter.removeAllListeners('importEthAddress');
-    ethEmitter.removeAllListeners('updateEthAddress');
-    ethEmitter.removeAllListeners('exportEthereumKey');
-    ethEmitter.removeAllListeners('deleteEthAddress');
+    aionEmitter.removeAllListeners('createAionAddress');
+    aionEmitter.removeAllListeners('importAionAddress');
+    aionEmitter.removeAllListeners('updateAionAddress');
+    aionEmitter.removeAllListeners('exportAionKey');
+    aionEmitter.removeAllListeners('deleteAionAddress');
 
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
-    ethEmitter.on('importEthAddress', this.importEthAddressReturned);
-    ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
-    ethEmitter.on('exportEthereumKey', this.exportEthereumKeyReturned);
-    ethEmitter.on('deleteEthAddress', this.deleteEthAddressReturned);
+    aionEmitter.on('createAionAddress', this.createAionAddressReturned);
+    aionEmitter.on('importAionAddress', this.importAionAddressReturned);
+    aionEmitter.on('updateAionAddress', this.updateAionAddressReturned);
+    aionEmitter.on('exportAionKey', this.exportAionKeyReturned);
+    aionEmitter.on('deleteAionAddress', this.deleteAionAddressReturned);
   },
 
   resetInputs() {
@@ -118,7 +118,7 @@ let EthAccounts = createReactClass({
     })
   },
 
-  createEthAddressReturned(error, data) {
+  createAionAddressReturned(error, data) {
     this.setState({createLoading: false});
     if(error) {
       return this.setState({error: error.toString()});
@@ -127,7 +127,7 @@ let EthAccounts = createReactClass({
     if(data.success) {
       this.resetInputs();
       var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
       //show sncakbar?
     } else if (data.errorMsg) {
@@ -137,7 +137,7 @@ let EthAccounts = createReactClass({
     }
   },
 
-  importEthAddressReturned(error, data) {
+  importAionAddressReturned(error, data) {
     this.setState({createLoading: false});
     if(error) {
       return this.setState({error: error.toString()});
@@ -146,7 +146,7 @@ let EthAccounts = createReactClass({
     if(data.success) {
       this.resetInputs();
       var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
       //show sncakbar?
     } else if (data.errorMsg) {
@@ -156,7 +156,7 @@ let EthAccounts = createReactClass({
     }
   },
 
-  updateEthAddressReturned(error, data) {
+  updateAionAddressReturned(error, data) {
     this.setState({cardLoading: false,  editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: '', loadingAccount: null});
     if(error) {
       return this.setState({error: error.toString()});
@@ -164,7 +164,7 @@ let EthAccounts = createReactClass({
 
     if(data.success) {
       var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
       //show sncakbar?
     } else if (data.errorMsg) {
@@ -174,7 +174,7 @@ let EthAccounts = createReactClass({
     }
   },
 
-  exportEthereumKeyReturned(error, data) {
+  exportAionKeyReturned(error, data) {
     this.optionsClosed()
     this.setState({ privateKeyLoading: false,  exportKeyAccount: null });
     if(error) {
@@ -197,7 +197,7 @@ let EthAccounts = createReactClass({
     }
   },
 
-  deleteEthAddressReturned(error, data) {
+  deleteAionAddressReturned(error, data) {
     this.setState({ deleteLoading: false, deleteAddress: null, deleteOpen: false });
     if(error) {
       return this.setState({error: error.toString()});
@@ -205,7 +205,7 @@ let EthAccounts = createReactClass({
 
     if(data.success) {
       var content = { id: this.props.user.id };
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -220,19 +220,19 @@ let EthAccounts = createReactClass({
   confirmDelete() {
     this.setState({deleteLoading: true});
     var content = { publicAddress: this.state.deleteAddress };
-    ethDispatcher.dispatch({type: 'deleteEthAddress', content, token: this.props.user.token });
+    aionDispatcher.dispatch({type: 'deleteAionAddress', content, token: this.props.user.token });
   },
 
   handleDeleteClose() {
     this.setState({deleteAddress: null, deleteOpen: false});
   },
 
-  exportEthereumKeyClicked(address) {
+  exportAionKeyClicked(address) {
     this.setState({ privateKeyLoading: true, exportKeyAccount: address })
     var mnemonic = bip39.generateMnemonic()
     this.setState({ mnemonic })
     var content = { mnemonic: mnemonic, address };
-    ethDispatcher.dispatch({type: 'exportEthereumKey', content, token: this.props.user.token });
+    aionDispatcher.dispatch({type: 'exportAionKey', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {
@@ -243,17 +243,17 @@ let EthAccounts = createReactClass({
 
   createImportClicked() {
     if(this.state.tabValue === 0) {
-      this.createEthAddress();
+      this.createAionAddress();
     } else {
-      this.importEthAddress();
+      this.importAionAddress();
     }
   },
 
   updatePrimaryClicked(account) {
     this.optionsClosed()
-    this.setState({loadingAccount: account, cardLoading: true})
+    this.setState({cardLoading: true})
     var content = { name: account.name, isPrimary: true, address: account.address };
-    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
+    aionDispatcher.dispatch({type: 'updateAionAddress', content, token: this.props.user.token });
   },
 
   optionsClicked(event, optionsAccount) {
@@ -283,7 +283,7 @@ let EthAccounts = createReactClass({
   updateName(account) {
     this.setState({cardLoading: true})
     var content = { name: this.state.editAddressName, isPrimary: account.isPrimary, address: account.address };
-    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
+    aionDispatcher.dispatch({type: 'updateAionAddress', content, token: this.props.user.token });
   },
 
   validateAddressName(value) {
@@ -305,10 +305,10 @@ let EthAccounts = createReactClass({
       value = this.state.publicAddress;
     }
     if(value == '') {
-      this.setState({ publicAddressError: true, publicAddressErrorMessage:'Ethereum public address is required' });
+      this.setState({ publicAddressError: true, publicAddressErrorMessage:'Aion public address is required' });
       return false;
     } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Ethereum public address'});
+      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Aion public address'});
       return false;
     }
     this.setState({ publicAddressValid: true });
@@ -321,35 +321,35 @@ let EthAccounts = createReactClass({
       value = this.state.privateKey;
     }
     if(value == '') {
-      this.setState({ privateKeyError: true, privateKeyErrorMessage:'Ethereum private key is required' });
+      this.setState({ privateKeyError: true, privateKeyErrorMessage:'Aion private key is required' });
       return false;
     }
     this.setState({ privateKeyValid: true });
     return true;
   },
 
-  createEthAddress() {
+  createAionAddress() {
     if(this.validateAddressName()) {
       this.setState({createLoading: true});
       var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'createAionAddress', content, token: this.props.user.token });
     }
   },
 
-  importEthAddress() {
+  importAionAddress() {
     if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
       this.setState({createLoading: true});
       var content = { name: this.state.addressName, isPrimary: this.state.primary, publicAddress: this.state.publicAddress, privateKey: this.state.privateKey };
-      ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'importAionAddress', content, token: this.props.user.token });
     }
   },
 
   copyKey() {
-    let elm = document.getElementById("currentAccountKey");
+    var elm = document.getElementById("currentAccountKey");
     // for Internet Explorer
 
     if(document.body.createTextRange) {
-      let range = document.body.createTextRange();
+      var range = document.body.createTextRange();
       range.moveToElementText(elm);
       range.select();
       document.execCommand("Copy");
@@ -404,4 +404,4 @@ function decrypt(text,seed){
   return dec;
 }
 
-export default (EthAccounts);
+export default (AionAccounts);

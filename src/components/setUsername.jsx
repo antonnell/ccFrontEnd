@@ -8,7 +8,7 @@ import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
-class UpdatePassword extends Component {
+class SerUsername extends Component {
 
   render() {
     return (
@@ -17,25 +17,21 @@ class UpdatePassword extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="headline" color="inherit">
-                Update Password
+                Set Username
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
               <Typography variant="body2" color="inherit" style={{marginTop: '24px'}}>
-                Enter your new password below.
+                Your username will be used so that contacts can easilly transfer funds to your account. Enter your username below.
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}} align='left'>
-              <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
-                id="password" label="Password" value={this.props.password}
-                onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
-                onBlur={(event) => { this.props.validateField(event, 'password'); }} helperText={this.props.passwordErrorMessage} />
-              <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.confirmPasswordError} disabled={this.props.loading}
-                id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
-                onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
-                onBlur={(event) => { this.props.validateField(event, 'confirmPassword'); }} helperText={this.props.confirmPasswordErrorMessage} />
+              <TextField required fullWidth={true} color="textSecondary" error={this.props.usernameError} disabled={this.props.loading}
+                id="usernmae" label="Username" value={this.props.username}
+                onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
+                helperText={this.props.usernameErrorMessage} />
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -48,8 +44,8 @@ class UpdatePassword extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitUpdatePassword}>
-                Update Password
+              <Button variant="raised" size='large' color='primary' onClick={this.props.submitUpdateUsername}>
+                Set Username
               </Button>
             </Grid>
           </Grid>
@@ -59,4 +55,4 @@ class UpdatePassword extends Component {
   }
 }
 
-export default withStyles(styles)(UpdatePassword);
+export default withStyles(styles)(SerUsername);

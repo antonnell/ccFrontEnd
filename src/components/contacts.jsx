@@ -10,7 +10,16 @@ import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {};
 
-class Account extends Component {
+class Contacts extends Component {
+
+  /*
+
+  <TextField fullWidth={true} required color="textSecondary" error={this.props.emailAddressError} disabled={this.props.addLoading}
+  id="emailAddress" label="Contact Email Address" value={this.props.emailAddress}
+  onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
+  onBlur={(event) => { this.props.validateField(event, 'emailAddress'); }} helperText={this.props.emailAddressErrorMessage} />
+
+  */
 
   renderAdd() {
     return(
@@ -21,10 +30,10 @@ class Account extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.emailAddressError} disabled={this.props.addLoading}
-            id="emailAddress" label="Contact Email Address" value={this.props.emailAddress}
-            onChange={(event) => { this.props.handleChange(event, 'emailAddress'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'emailAddress'); }} helperText={this.props.emailAddressErrorMessage} />
+          <TextField fullWidth={true} required color="textSecondary" error={this.props.usernameError} disabled={this.props.addLoading}
+            id="username" label="Contact Username" value={this.props.username}
+            onChange={(event) => { this.props.handleChange(event, 'username'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
+            onBlur={(event) => { this.props.validateField(event, 'username'); }} helperText={this.props.usernameErrorMessage} />
           <TextField fullWidth={true} required color="textSecondary" error={this.props.displayNameError} disabled={this.props.addLoading}
             id="displayName" label="Display Name" value={this.props.displayName}
             onChange={(event) => { this.props.handleChange(event, 'displayName'); }} margin="normal" onKeyDown={this.props.onAddKeyDown}
@@ -65,7 +74,7 @@ class Account extends Component {
 
     return this.props.contacts.map((contact) => {
         return (
-          <Grid item xs={12} xl={6} align='left' key={contact.primaryAddress}>
+          <Grid item xs={12} xl={6} align='left' key={contact.userName}>
             <Card style={{marginRight: '6px', marginBottom: '6px'}}>
               <CardContent>
                 <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
@@ -97,18 +106,48 @@ class Account extends Component {
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
                         <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Primary Address'}
+                          {'Wanchain Address'}
                         </Typography>
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
                         <Typography variant="body1" noWrap>
-                          {contact.primaryAddress}
+                          {contact.primaryWanAddress}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} align='center'>
+                    <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
+                      <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
+                        <Typography variant="body2" style={{fontWeight: 'bold'}}>
+                          {'Ethereum Address'}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
+                        <Typography variant="body1" noWrap>
+                          {contact.primaryEthAddress}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} align='center'>
+                    <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
+                      <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
+                        <Typography variant="body2" style={{fontWeight: 'bold'}}>
+                          {'Aion Address'}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
+                        <Typography variant="body1" noWrap>
+                          {contact.primaryAionAddress}
                         </Typography>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right' style={{marginTop: '12px'}}>
-                    <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} color="primary" onClick={() => { this.props.sendEtherClicked(contact) }}>Send Ether</Button>
+                    <Button disabled={contact.primaryAionAddress=='No primary eth address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendEtherClicked(contact) }}>Send Ether</Button>
+                    <Button disabled={contact.primaryAionAddress=='No primary wanchain address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendWanClicked(contact) }}>Send Wan</Button>
+                    <Button disabled={contact.primaryAionAddress=='No primary aion address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendAionClicked(contact) }}>Send Aion</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -140,4 +179,4 @@ class Account extends Component {
   }
 }
 
-export default withStyles(styles)(Account);
+export default withStyles(styles)(Contacts);

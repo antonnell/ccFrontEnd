@@ -2,7 +2,9 @@ var config = {
   whitelistApiUrl: "",
   whitelistApiHeader: "",
   apiUrl: "",
-  etherscanUrl : ""
+  etherscanUrl : "",
+  wanscanURL: "",
+  aionscanURL: ""
 };
 
 module.exports = config;

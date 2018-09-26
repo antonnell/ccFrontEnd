@@ -10,6 +10,9 @@ let Contacts = createReactClass({
     return {
       addLoading: false,
       error: null,
+      username: "",
+      usernameError: false,
+      usernameErrorMessage: "",
       emailAddress: "",
       emailAddressError: false,
       emailAddressErrorMessage: "",
@@ -30,6 +33,9 @@ let Contacts = createReactClass({
 
   resetInputs() {
     this.setState({
+      username: "",
+      usernameError: false,
+      usernameErrorMessage: "",
       emailAddress: "",
       emailAddressError: false,
       emailAddressErrorMessage: "",
@@ -69,6 +75,11 @@ let Contacts = createReactClass({
         addClicked={this.addClicked}
         updateNavigateClicked={this.updateNavigateClicked}
         sendEtherClicked={this.sendEtherClicked}
+        sendAionClicked={this.sendAionClicked}
+        sendWanClicked={this.sendWanClicked}
+        username={this.state.username}
+        usernameError={this.state.usernameError}
+        usernameErrorMessage={this.state.usernameErrorMessage}
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
@@ -93,9 +104,9 @@ let Contacts = createReactClass({
   },
 
   addClicked() {
-    if(this.validateEmailAddress() & this.validateDisplayName() & this.validateNotes()) {
+    if(this.validateUsername() & this.validateDisplayName() & this.validateNotes()) {
       this.setState({addLoading: true});
-      var content = { emailAddress: this.state.emailAddress, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
+      var content = { username: this.state.username, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
       contactsDispatcher.dispatch({type: 'addContact', content, token: this.props.user.token });
     }
   },
@@ -106,6 +117,14 @@ let Contacts = createReactClass({
 
   sendEtherClicked(contact) {
     this.props.openSendEther(contact)
+  },
+
+  sendWanClicked(contact) {
+    this.props.openSendWanchain(contact)
+  },
+
+  sendAionClicked(contact) {
+    this.props.openSendAion(contact)
   },
 
   handleChange (event, name) {
@@ -119,11 +138,26 @@ let Contacts = createReactClass({
   validateField (event, name) {
     if (name==="emailAddress") {
       this.validateEmailAddress(event.target.value)
-    } if (name==="displayName") {
+    } else if (name==="username") {
+      this.validateUsername(event.target.value)
+    } else if (name==="displayName") {
       this.validateDisplayName(event.target.value)
     } else if (name==="notes") {
       this.validateNotes(event.target.value)
     }
+  },
+
+  validateUsername(value) {
+    this.setState({ usernameValid: false, usernameError: false, usernameErrorMessage:'' });
+    if(value==null) {
+      value = this.state.username;
+    }
+    if(value == '') {
+      this.setState({ usernameError: true, usernameErrorMessage:'Username is required' });
+      return false;
+    }
+    this.setState({ usernameValid: true });
+    return true;
   },
 
   validateEmailAddress(value) {

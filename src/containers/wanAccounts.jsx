@@ -33,7 +33,11 @@ let WanAccounts = createReactClass({
       editAddressNameErrorMessage: '',
       editAccount: null,
       keyOpen: false,
-      currentAccountKey:  ''
+      currentAccountKey:  '',
+      optionsAccount: null,
+      loadingAccount: null,
+      selectedAddress: '',
+      investmentAmount: ''
     }
   },
   render() {
@@ -61,7 +65,7 @@ let WanAccounts = createReactClass({
         publicAddressError={this.state.publicAddressError}
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
-
+        sendWanchainClicked={this.props.openSendWanchain}
         validateField={this.validateField}
         updatePrimaryClicked={this.updatePrimaryClicked}
         editNameClicked={this.editNameClicked}
@@ -76,6 +80,19 @@ let WanAccounts = createReactClass({
         handleKeyClose={this.handleKeyClose}
         copyKey={this.copyKey}
         exportKeyAccount={this.state.exportKeyAccount}
+        optionsClicked={this.optionsClicked}
+        optionsClosed={this.optionsClosed}
+        optionsAccount={this.state.optionsAccount}
+        loadingAccount={this.state.loadingAccount}
+        deleteKeyClicked={this.deleteKeyClicked}
+        deleteOpen={this.state.deleteOpen}
+        confirmDelete={this.confirmDelete}
+        handleDeleteClose={this.handleDeleteClose}
+        deleteLoading={this.state.deleteLoading}
+        selectedAddress={this.state.selectedAddress}
+        selectAddress={this.selectAddress}
+        investmentAmount={this.state.investmentAmount}
+        user={this.props.user}
       />
     )
   },
@@ -85,11 +102,13 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners('importWanAddress');
     wanEmitter.removeAllListeners('updateWanAddress');
     wanEmitter.removeAllListeners('exportWanchainKey');
+    wanEmitter.removeAllListeners('deleteWanAddress');
 
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
     wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
     wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
+    wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
   },
 
   resetInputs() {
@@ -144,7 +163,7 @@ let WanAccounts = createReactClass({
   },
 
   updateWanAddressReturned(error, data) {
-    this.setState({cardLoading: false, editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: ''});
+    this.setState({cardLoading: false, editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: '', loadingAccount: null});
     if(error) {
       return this.setState({error: error.toString()});
     }
@@ -162,6 +181,7 @@ let WanAccounts = createReactClass({
   },
 
   exportWanchainKeyReturned(error, data) {
+    this.optionsClosed()
     this.setState({ privateKeyLoading: false,  exportKeyAccount: null });
     if(error) {
       return this.setState({error: error.toString()});
@@ -181,6 +201,36 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({error: data.statusText})
     }
+  },
+
+  deleteWanAddressReturned(error, data) {
+    this.setState({ deleteLoading: false, deleteAddress: null, deleteOpen: false });
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      var content = { id: this.props.user.id };
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  },
+
+  deleteKeyClicked(address) {
+    this.setState({deleteAddress: address, deleteOpen: true});
+  },
+
+  confirmDelete() {
+    this.setState({deleteLoading: true});
+    var content = { publicAddress: this.state.deleteAddress };
+    wanDispatcher.dispatch({type: 'deleteWanAddress', content, token: this.props.user.token });
+  },
+
+  handleDeleteClose() {
+    this.setState({deleteAddress: null, deleteOpen: false});
   },
 
   exportWanchainKeyClicked(address) {
@@ -206,12 +256,23 @@ let WanAccounts = createReactClass({
   },
 
   updatePrimaryClicked(account) {
-    this.setState({cardLoading: true})
+    this.optionsClosed()
+    this.setState({loadingAccount: account, cardLoading: true})
     var content = { name: account.name, isPrimary: true, publicAddress: account.publicAddress };
     wanDispatcher.dispatch({type: 'updateWanAddress', content, token: this.props.user.token });
   },
 
+  optionsClicked(event, optionsAccount) {
+    optionsAccount.anchorEl = event.currentTarget
+    this.setState({optionsAccount})
+  },
+
+  optionsClosed() {
+    this.setState({optionsAccount: null})
+  },
+
   editNameClicked(editAccount) {
+    this.optionsClosed()
     this.setState({editAccount, editAddressName: editAccount.name})
   },
 
@@ -291,9 +352,9 @@ let WanAccounts = createReactClass({
 
   copyKey() {
     let elm = document.getElementById("currentAccountKey");
+      // for Internet Explorer
 
     if(document.body.createTextRange) {
-      // for Internet Explorer
       let range = document.body.createTextRange();
       range.moveToElementText(elm);
       range.select();
@@ -328,6 +389,10 @@ let WanAccounts = createReactClass({
 
   handleChecked (event, name) {
     this.setState({ [name]: event.target.checked });
+  },
+
+  selectAddress(event, value) {
+    this.setState({selectedAddress: event.target.value})
   },
 
   validateField (event, name) {
