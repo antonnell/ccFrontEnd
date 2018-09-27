@@ -64,6 +64,7 @@ let EthAccounts = createReactClass({
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
         sendEtherClicked={this.props.openSendEther}
+        sendERC20={this.props.openSendERC}
         validateField={this.validateField}
         updatePrimaryClicked={this.updatePrimaryClicked}
         editNameClicked={this.editNameClicked}

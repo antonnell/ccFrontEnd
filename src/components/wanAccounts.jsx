@@ -16,11 +16,21 @@ import PrivateKeyModal from './privateKeyModal.jsx';
 import Popover from 'material-ui/Popover';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import ExpansionPanel, {ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel';
+import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table';
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 
 const styles = {};
+
+function ExpandMoreIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+    </SvgIcon>
+  );
+}
 
 function MoreIcon(props) {
   return (
@@ -217,6 +227,41 @@ class WanAccounts extends Component {
         }
       }
 
+      let wrc20 = <div></div>
+      if(address.wrc20Tokens) {
+        wrc20 = (
+        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px'}}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>WRC20 Tokens</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Divider />
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Symbol</TableCell>
+                    <TableCell numeric>Balance</TableCell>
+                    <TableCell numeric>Send</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {address.wrc20Tokens.map(n => {
+                    return (
+                      <TableRow key={n.symbol}>
+                        <TableCell component="th" scope="row">
+                          {n.symbol}
+                        </TableCell>
+                        <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
+                        <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>)
+      }
+
       return (
         <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
           <Card style={{marginRight: '6px', marginBottom: '6px'}}>
@@ -288,6 +333,9 @@ class WanAccounts extends Component {
                 </Grid>
                 <Grid item xs={6} align='right' >
                   <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendWanchainClicked(null, address) }} >Send Wan</Button>
+                </Grid>
+                <Grid item xs={12} align='left'>
+                  {wrc20}
                 </Grid>
               </Grid>
               {loading}
@@ -438,7 +486,7 @@ class WanAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
-          {this.props.user.kycDone?this.renderICOS():this.renderICOUnavailable()}
+          {(this.props.user&&this.props.user.kycDone)?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>

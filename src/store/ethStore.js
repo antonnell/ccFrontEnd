@@ -42,6 +42,15 @@ var Store = () => {
     case 'exportEthereumKey':
       this.exportEthereumKey(payload);
       break;
+    case 'getERC20Address':
+      this.getERC20Address(payload);
+      break;
+    case 'sendERC20':
+      this.sendERC20(payload);
+      break;
+    case 'getSupportedERC20Tokens':
+      this.getSupportedERC20Tokens(payload);
+      break;
     }
   }.bind(this))
 
@@ -154,7 +163,47 @@ var Store = () => {
       payload)
   }
 
-  this.callApi = function(url, method, postData, payload) {
+  this.getERC20Address = function(payload) {
+    var url = 'ethereum/getErc20Balances/'+payload.content.address
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload,
+      payload.content.address)
+  }
+
+  this.sendERC20 = function(payload) {
+    var url = 'ethereum/sendErc20Tokens'
+    var postJson = {
+      fromAddress: payload.content.fromAddress,
+      amount: payload.content.amount,
+      gwei: payload.content.gwei,
+      tokenAddress: payload.content.tokenAddress
+    }
+    if(payload.content.toAddress != null) {
+      postJson.toAddress = payload.content.toAddress
+    }
+    if(payload.content.contactUserName != null) {
+      postJson.contactUsername = payload.content.contactUserName
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.getSupportedERC20Tokens = function(payload) {
+    var url = 'ethereum/getSupportedErc20Tokens'
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload)
+  }
+
+  this.callApi = function(url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = ''
@@ -206,10 +255,10 @@ var Store = () => {
     })
     .then(res => res.json())
     .then((res) => {
-      emitter.emit(payload.type, null, res)
+      emitter.emit(payload.type, null, res, customEmit)
     })
     .catch((error) => {
-      emitter.emit(payload.type, error, null)
+      emitter.emit(payload.type, error, null, customEmit)
     });
   }
 }

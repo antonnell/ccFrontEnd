@@ -37,6 +37,15 @@ var Store = () => {
     case 'exportWanchainKey':
       this.exportWanchainKey(payload);
       break;
+    case 'getWRC20Address':
+      this.getWRC20Address(payload);
+      break;
+    case 'sendWRC20':
+      this.sendWRC20(payload);
+      break;
+    case 'getSupportedWRC20Tokens':
+      this.getSupportedWRC20Tokens(payload);
+      break;
     }
   }.bind(this))
 
@@ -92,12 +101,15 @@ var Store = () => {
   this.sendWan = function(payload) {
     var url = 'wanchain/sendWan'
     var postJson = {
-      address: payload.content.address,
-      contactUserName: payload.content.contactUserName,
-      wanAddressID: payload.content.wanAddressID,
-      password: payload.content.password,
+      fromAddress: payload.content.fromAddress,
       amount: payload.content.amount,
       gwei: payload.content.gwei
+    }
+    if(payload.content.toAddress != null) {
+      postJson.toAddress = payload.content.toAddress
+    }
+    if(payload.content.contactUserName != null) {
+      postJson.contactUsername = payload.content.contactUserName
     }
 
     this.callApi(url,
@@ -119,7 +131,47 @@ var Store = () => {
       payload)
   }
 
-  this.callApi = function(url, method, postData, payload) {
+  this.getWRC20Address = function(payload) {
+    var url = 'wanchain/getWrc20Balances/'+payload.content.address
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload,
+      payload.content.address)
+  }
+
+  this.sendWRC20 = function(payload) {
+    var url = 'wanchain/sendWrc20Tokens'
+    var postJson = {
+      fromAddress: payload.content.fromAddress,
+      amount: payload.content.amount,
+      gwei: payload.content.gwei,
+      tokenAddress: payload.content.tokenAddress
+    }
+    if(payload.content.toAddress != null) {
+      postJson.toAddress = payload.content.toAddress
+    }
+    if(payload.content.contactUserName != null) {
+      postJson.contactUsername = payload.content.contactUserName
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.getSupportedWRC20Tokens = function(payload) {
+    var url = 'wanchain/getSupportedWrc20Tokens'
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload)
+  }
+
+  this.callApi = function(url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = ''
@@ -171,10 +223,10 @@ var Store = () => {
     })
     .then(res => res.json())
     .then((res) => {
-      emitter.emit(payload.type, null, res)
+      emitter.emit(payload.type, null, res, customEmit)
     })
     .catch((error) => {
-      emitter.emit(payload.type, error, null)
+      emitter.emit(payload.type, error, null, customEmit)
     });
   }
 }

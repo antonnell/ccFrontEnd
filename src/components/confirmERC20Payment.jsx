@@ -4,7 +4,7 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { CircularProgress } from 'material-ui/Progress';
 
-class ConfirmWanchainPayment extends Component {
+class ConfirmERC20Payment extends Component {
 
   renderBeneficiary() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
@@ -34,7 +34,7 @@ class ConfirmWanchainPayment extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='center'>
             <Typography variant="headline">
-              Confirm your Wanchain payment
+              Confirm your {this.props.sendERC20Symbol} payment
             </Typography>
           </Grid>
         </Grid>
@@ -45,7 +45,7 @@ class ConfirmWanchainPayment extends Component {
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
             <div style={{border: '1px solid #000', padding: '12px'}}>
               <Typography variant="title" noWrap>
-                <b>{this.props.amount} Wan</b>
+                <b>{this.props.amount+" "+this.props.sendERC20Symbol}</b>
               </Typography>
             </div>
           </Grid>
@@ -55,7 +55,7 @@ class ConfirmWanchainPayment extends Component {
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
             <div style={{border: '1px solid #000', padding: '12px'}}>
               <Typography variant="title" noWrap>
-                <b>{this.props.account.name}</b> ({this.props.account.publicAddress})
+                <b>{this.props.account.name}</b> ({this.props.account.address})
               </Typography>
             </div>
           </Grid>
@@ -76,4 +76,4 @@ class ConfirmWanchainPayment extends Component {
   };
 }
 
-export default (ConfirmWanchainPayment);
+export default (ConfirmERC20Payment);

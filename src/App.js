@@ -25,7 +25,9 @@ import Manage2FA from './containers/manage2fa.jsx';
 import Contacts from './containers/contacts.jsx';
 import Whitelist from './containers/whitelist.jsx';
 import SendEthereum from './containers/sendEthereum.jsx';
+import SendERC20 from './containers/sendERC20.jsx';
 import SendWanchain from './containers/sendWanchain.jsx';
+import SendWRC20 from './containers/sendWRC20.jsx';
 import SendAion from './containers/sendAion.jsx';
 import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
@@ -155,7 +157,9 @@ class App extends Component {
     this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
     this.openSendEther = this.openSendEther.bind(this);
+    this.openSendERC = this.openSendERC.bind(this);
     this.openSendWanchain = this.openSendWanchain.bind(this);
+    this.openSendWRC = this.openSendWRC.bind(this);
     this.openSendAion = this.openSendAion.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
@@ -169,6 +173,11 @@ class App extends Component {
     this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
 
     this.getIpReturned = this.getIpReturned.bind(this);
+
+    this.getERC20AddressReturned = this.getERC20AddressReturned.bind(this);
+    this.getWRC20AddressReturned = this.getWRC20AddressReturned.bind(this);
+    this.getSupportedERC20TokensReturned = this.getSupportedERC20TokensReturned.bind(this);
+    this.getSupportedWRC20TokensReturned = this.getSupportedWRC20TokensReturned.bind(this);
   };
 
   componentWillMount() {
@@ -211,7 +220,9 @@ class App extends Component {
     accountEmitter.on('Unauthorised', this.logUserOut);
 
     ethEmitter.on('getEthAddress', this.getEthAddressReturned);
+    ethEmitter.on('getERC20Address', this.getERC20AddressReturned);
     wanEmitter.on('getWanAddress', this.getWanAddressReturned);
+    wanEmitter.on('getWRC20Address', this.getWRC20AddressReturned);
     aionEmitter.on('getAionAddress', this.getAionAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
 
@@ -229,6 +240,14 @@ class App extends Component {
     emitter.on('getIp', this.getIpReturned);
     dispatcher.dispatch({ type: 'getIp' });
 
+    ethEmitter.on('getSupportedERC20Tokens', this.getSupportedERC20TokensReturned);
+    wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned);
+
+    if(this.state.user) {
+      let content = {}
+      ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
+      wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+    }
   };
 
   getIpReturned(err, data) {
@@ -243,6 +262,34 @@ class App extends Component {
       } else {
         this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
       }
+    }
+  };
+
+  getSupportedERC20TokensReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({erc20Tokens: data.tokens})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getSupportedWRC20TokensReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({wrc20Tokens: data.tokens})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
     }
   };
 
@@ -288,6 +335,13 @@ class App extends Component {
     if(data.success) {
       this.setState({ethAddresses: data.ethAddresses});
 
+      //map through the eth addresses and get their ERC20 addresses.
+      data.ethAddresses.map((address) => {
+        let content = {address: address.address};
+
+        ethDispatcher.dispatch({type: 'getERC20Address', content, token: this.state.user.token });
+      })
+
       // let ethAddresses = data.ethAddresses.map((add) => {
       //   add.type = 'Ethereum'
       //   add.extension = 'Eth'
@@ -318,6 +372,35 @@ class App extends Component {
     }
   };
 
+  getERC20AddressReturned(error, data, publicAddress) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      //add the ERC20 addresses as a child of the eth address
+      let ethAddresses = this.state.ethAddresses.map((address) => {
+        if(address.address == publicAddress) {
+          address.erc20Tokens = data.tokens
+          return address
+        }
+
+        return address
+      })
+
+      if(ethAddresses.length > 0) {
+        //save it to state
+        this.setState({ethAddresses})
+      } else {
+        //hmmmmm?
+      }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, wanAddresses: []});
+    } else {
+      this.setState({error: data.statusText, wanAddresses: []})
+    }
+  };
+
   getWanAddressReturned(error, data) {
     if(error) {
       return this.setState({error: error.toString()});
@@ -325,6 +408,13 @@ class App extends Component {
 
     if(data.success) {
       this.setState({wanAddresses: data.wanAddresses})
+
+      //map through the eth addresses and get their ERC20 addresses.
+      data.wanAddresses.map((address) => {
+        let content = {address: address.publicAddress};
+
+        wanDispatcher.dispatch({type: 'getWRC20Address', content, token: this.state.user.token });
+      })
 
       // let ethAddresses = this.state.ethAddresses.map((add) => {
       //   add.type = 'Ethereum'
@@ -349,6 +439,35 @@ class App extends Component {
       //
       // this.setState({addresses});
 
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, wanAddresses: []});
+    } else {
+      this.setState({error: data.statusText, wanAddresses: []})
+    }
+  };
+
+  getWRC20AddressReturned(error, data, publicAddress) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      //add the WRC20 addresses as a child of the wan address
+      let wanAddresses = this.state.wanAddresses.map((address) => {
+        if(address.publicAddress == publicAddress) {
+          address.wrc20Tokens = data.tokens
+          return address
+        }
+
+        return address
+      })
+
+      if(wanAddresses.length > 0) {
+        //save it to state
+        this.setState({wanAddresses})
+      } else {
+        //hmmmmm?
+      }
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, wanAddresses: []});
     } else {
@@ -474,9 +593,19 @@ class App extends Component {
     window.location.hash = 'sendEthereum'
   };
 
+  openSendERC(sendERC20Symbol, sendERC20Account) {
+    this.setState({ sendERC20Symbol, sendERC20Account});
+    window.location.hash = 'sendERC20'
+  };
+
   openSendWanchain(sendWanchainContact, sendWanchainAccount) {
     this.setState({ sendWanchainContact, sendWanchainAccount});
     window.location.hash = 'sendWanchain'
+  };
+
+  openSendWRC(sendWRC20Symbol, sendWRC20Account) {
+    this.setState({ sendWRC20Symbol, sendWRC20Account});
+    window.location.hash = 'sendWRC20'
   };
 
   openSendAion(sendAionContact, sendAionAccount) {
@@ -519,16 +648,16 @@ class App extends Component {
     }
 
     var content = {}
-    if(currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') {
+    if((currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') && this.state.wanAddresses == null) {
       content = {id: this.state.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
-    } else if (currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') {
+    } else if ((currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') && this.state.ethAddresses == null) {
       content = {id: this.state.user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
-    } else if (currentScreen == 'aionAccounts' || currentScreen == 'sendAion') {
+    } else if ((currentScreen == 'aionAccounts' || currentScreen == 'sendAion') && this.state.aionAddresses == null) {
       content = {id: this.state.user.id};
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
-    } else if (currentScreen == 'contacts') {
+    } else if (currentScreen == 'contacts' && this.state.contacts == null) {
       content = {id: this.state.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
     }
@@ -538,6 +667,12 @@ class App extends Component {
     //   wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
     //   aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
     // }
+
+    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrcTokens == null)) {
+      let content = {}
+      ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
+      wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+    }
 
     ReactGA.set({ page: window.location.pathname + window.location.hash })
     ReactGA.pageview(window.location.pathname + window.location.hash)
@@ -618,9 +753,9 @@ class App extends Component {
       case 'whitelist':
         return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} />);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} />);
       case 'aionAccounts':
         return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':
@@ -639,8 +774,12 @@ class App extends Component {
         return (<ComingSoon />);
       case 'sendEthereum':
         return (<SendEthereum user={this.state.user} sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendERC20':
+        return (<SendERC20 user={this.state.user} sendERC20Symbol={this.state.sendERC20Symbol} erc20Tokens={this.state.erc20Tokens} sendERC20Contact={this.state.sendERC20Contact} sendERC20Account={this.state.sendERC20Account} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendWanchain':
         return (<SendWanchain user={this.state.user} sendWanchainContact={this.state.sendWanchainContact} sendWanchainAccount={this.state.sendWanchainAccount} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendWRC20':
+        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendAion':
         return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'about':

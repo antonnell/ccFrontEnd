@@ -4,7 +4,7 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Drawer from 'material-ui/Drawer';
 import SvgIcon from 'material-ui/SvgIcon';
-import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
+import List, { ListItem, ListItemIcon, ListItemText, ListSubheader, Collapse } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 const styles = {};
@@ -178,11 +178,23 @@ class AppDrawer extends Component {
                   </ListItemIcon>
                   <ListItemText primary="Send Wanchain" />
                 </ListItem>
-                <ListItem style={this.props.currentScreen=='sendEthereum'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
+                <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
+                  <ListItemIcon>
+                    <WanIconPng />
+                  </ListItemIcon>
+                  <ListItemText primary="Send WRC20" />
+                </ListItem>
+                <ListItem onClick={this.openEth} style={this.props.currentScreen=='sendEthereum'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
                   <ListItemIcon>
                     <EthIconPng />
                   </ListItemIcon>
                   <ListItemText primary="Send Ethereum" />
+                </ListItem>
+                <ListItem style={this.props.currentScreen=='sendERC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendERC20'); }}>
+                  <ListItemIcon>
+                    <EthIconPng />
+                  </ListItemIcon>
+                  <ListItemText primary="Send ERC20" />
                 </ListItem>
                 <ListItem style={this.props.currentScreen=='sendAion'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendAion'); }}>
                   <ListItemIcon>

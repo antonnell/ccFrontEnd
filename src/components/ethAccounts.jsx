@@ -16,9 +16,20 @@ import PrivateKeyModal from './privateKeyModal.jsx';
 import Popover from 'material-ui/Popover';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import ExpansionPanel, {ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel';
+import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table';
+
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 
 const styles = {};
+
+function ExpandMoreIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+    </SvgIcon>
+  );
+}
 
 function MoreIcon(props) {
   return (
@@ -212,6 +223,41 @@ class EthAccounts extends Component {
         }
       }
 
+      let erc20 = <div></div>
+      if(address.erc20Tokens) {
+        erc20 = (
+        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px'}}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>ERC20 Tokens</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Divider />
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Symbol</TableCell>
+                    <TableCell numeric>Balance</TableCell>
+                    <TableCell numeric>Send</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {address.erc20Tokens.map(n => {
+                    return (
+                      <TableRow key={n.symbol}>
+                        <TableCell component="th" scope="row">
+                          {n.symbol}
+                        </TableCell>
+                        <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
+                        <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>)
+      }
+
       return (
         <Grid item xs={12} xl={6} align='left' key={address.address}>
           <Card style={{marginRight: '6px', marginBottom: '6px'}}>
@@ -283,6 +329,9 @@ class EthAccounts extends Component {
                 </Grid>
                 <Grid item xs={6} align='right' >
                   <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendEtherClicked(null, address) }} >Send Ether</Button>
+                </Grid>
+                <Grid item xs={12} align='left'>
+                  {erc20}
                 </Grid>
               </Grid>
               {loading}
