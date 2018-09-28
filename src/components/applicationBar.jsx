@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 const styles = {};
 

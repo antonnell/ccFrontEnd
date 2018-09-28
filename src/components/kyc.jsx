@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import { CircularProgress } from 'material-ui/Progress';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 const styles = {};
 
