@@ -1,8 +1,8 @@
 import React from 'react';
-import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
-import Card, {  CardContent } from 'material-ui/Card';
+import Stepper, { Step, StepLabel, StepContent } from '@material-ui/core/Stepper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Card, {  CardContent } from '@material-ui/core/Card';
 
 import AcceptTermsAndConditions from '../components/acceptTermsAndConditions.jsx';
 import TermsModal from '../components/termsModal.jsx';
