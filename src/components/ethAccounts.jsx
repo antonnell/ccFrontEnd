@@ -226,7 +226,7 @@ class EthAccounts extends Component {
       let erc20 = <div></div>
       if(address.erc20Tokens) {
         erc20 = (
-        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px'}}>
+        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>ERC20 Tokens</Typography>
           </ExpansionPanelSummary>
@@ -276,7 +276,7 @@ class EthAccounts extends Component {
                 </Grid>
                 <Grid item xs={1} align='right'>
                   <IconButton
-                    style={{verticalAlign: 'top'}}
+                    style={{verticalAlign: 'top', marginRight: '-20px'}}
                     color="primary"
                     aria-label="More"
                     buttonRef={node => {

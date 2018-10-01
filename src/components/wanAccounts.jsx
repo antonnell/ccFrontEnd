@@ -230,7 +230,7 @@ class WanAccounts extends Component {
       let wrc20 = <div></div>
       if(address.wrc20Tokens) {
         wrc20 = (
-        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px'}}>
+        <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>WRC20 Tokens</Typography>
           </ExpansionPanelSummary>
@@ -280,7 +280,7 @@ class WanAccounts extends Component {
                 </Grid>
                 <Grid item xs={1} align='right'>
                   <IconButton
-                    style={{verticalAlign: 'top'}}
+                    style={{verticalAlign: 'top', marginRight: '-20px'}}
                     color="primary"
                     aria-label="More"
                     buttonRef={node => {

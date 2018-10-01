@@ -246,11 +246,7 @@ let Welcome = createReactClass({
       if(whitelistState) {
         this.props.setWhitelistState(whitelistState);
 
-        //change this validation to check if we need to run through the KYC process. API update!
-
-        if(whitelistState.user.canWhitelist === true /*&& whitelistState.user.whitelisted !== true*/) {
-          window.location.hash = 'createEth';
-        } else if (this.props.user && this.props.user.username == this.props.user.email) {
+        if (this.props.user && this.props.user.username == this.props.user.email) {
           window.location.hash = 'setUsername';
         } else {
           window.location.hash = 'wanAccounts';
