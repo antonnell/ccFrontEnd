@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import SvgIcon from 'material-ui/SvgIcon';
-import IconButton from 'material-ui/IconButton';
-import Tooltip from 'material-ui/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function CopyIcon(props) {
   return (
