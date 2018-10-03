@@ -741,7 +741,7 @@ class App extends Component {
       case 'createWan':
         return (<CreateWan user={this.state.user} />);
       case 'kyc':
-        return (<KYC user={this.state.user} setUser={this.setUser} />);
+        return (<KYC user={this.state.user} setUser={this.setUser} whitelistState={this.state.whitelistState} />);
       case 'setUsername':
         return (<SetUsername user={this.state.user} setUser={this.setUser} />);
       case 'forgotPassword':
@@ -755,7 +755,7 @@ class App extends Component {
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} />);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} whitelistState={this.state.whitelistState}/>);
       case 'aionAccounts':
         return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':

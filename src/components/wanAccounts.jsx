@@ -486,7 +486,7 @@ class WanAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
-          {(this.props.user&&this.props.user.kycDone)?this.renderICOS():this.renderICOUnavailable()}
+          {(this.props.whitelistState&&this.props.whitelistState.verificationResult&&this.props.whitelistState.verificationResult.verification_result=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>

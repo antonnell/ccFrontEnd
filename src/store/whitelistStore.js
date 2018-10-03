@@ -334,7 +334,6 @@ var Store = () => {
     .then(res => {
       if (res) {
         res.json().then((res) => {
-          console.log(payload)
           res.emailAddress = payload.content.email
           if (res) {
             emitter.emit(payload.type, null, res)

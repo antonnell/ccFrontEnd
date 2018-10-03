@@ -37,7 +37,8 @@ let WanAccounts = createReactClass({
       optionsAccount: null,
       loadingAccount: null,
       selectedAddress: '',
-      investmentAmount: ''
+      investmentAmount: '',
+      deleteOpen: false
     }
   },
   render() {
@@ -66,6 +67,7 @@ let WanAccounts = createReactClass({
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
         sendWanchainClicked={this.props.openSendWanchain}
+        sendWRC20={this.props.openSendWRC}
         validateField={this.validateField}
         updatePrimaryClicked={this.updatePrimaryClicked}
         editNameClicked={this.editNameClicked}
@@ -93,6 +95,7 @@ let WanAccounts = createReactClass({
         selectAddress={this.selectAddress}
         investmentAmount={this.state.investmentAmount}
         user={this.props.user}
+        whitelistState={this.props.whitelistState}
       />
     )
   },

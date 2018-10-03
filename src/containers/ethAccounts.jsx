@@ -35,7 +35,8 @@ let EthAccounts = createReactClass({
       keyOpen: false,
       currentAccountKey:  '',
       optionsAccount: null,
-      loadingAccount: null
+      loadingAccount: null,
+      deleteOpen: false
     }
   },
   render() {
