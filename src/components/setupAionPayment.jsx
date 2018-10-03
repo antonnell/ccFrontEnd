@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import { ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import TextField from 'material-ui/TextField';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
-import Tabs, { Tab } from 'material-ui/Tabs';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import { InputAdornment } from 'material-ui/Input';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem  from '@material-ui/core/MenuItem';
+import Tabs  from '@material-ui/core/Tabs';
+import Tab  from '@material-ui/core/Tab';
+import FormControl  from '@material-ui/core/FormControl';
+import FormHelperText  from '@material-ui/core/FormHelperText';
+import InputAdornment  from '@material-ui/core/InputAdornment';
+
 
 class SetupAionPayment extends Component {
 

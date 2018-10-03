@@ -2,9 +2,13 @@ import React from 'react'
 import SetupAionPayment from '../components/setupAionPayment'
 import ConfirmAionPayment from '../components/confirmAionPayment'
 import CompleteAionPayment from '../components/completeAionPayment'
-import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
-import Grid from 'material-ui/Grid';
-import Card, {  CardContent } from 'material-ui/Card';
+import Stepper  from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Grid from '@material-ui/core/Grid';
+import Card  from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 const createReactClass = require('create-react-class')
 let aionEmitter = require('../store/aionStore.js').default.emitter

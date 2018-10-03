@@ -2,9 +2,13 @@ import React from 'react'
 import SetupWRC20Payment from '../components/setupWRC20Payment'
 import ConfirmWRC20Payment from '../components/confirmWRC20Payment'
 import CompleteWRC20Payment from '../components/completeWRC20Payment'
-import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper';
-import Grid from 'material-ui/Grid';
-import Card, {  CardContent } from 'material-ui/Card';
+import Stepper  from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Grid from '@material-ui/core/Grid';
+import Card  from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 const createReactClass = require('create-react-class')
 let wanEmitter = require('../store/wanStore.js').default.emitter
