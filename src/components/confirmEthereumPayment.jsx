@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import { CircularProgress } from 'material-ui/Progress';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress  from '@material-ui/core/CircularProgress';
 
 class ConfirmEthereumPayment extends Component {
 

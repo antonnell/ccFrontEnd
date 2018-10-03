@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import CssBaseline from 'material-ui/CssBaseline';
-import Grid from 'material-ui/Grid';
-import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
 
 import TheAppBar from './containers/applicationBar.jsx';

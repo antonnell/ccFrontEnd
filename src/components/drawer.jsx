@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import Drawer from 'material-ui/Drawer';
-import SvgIcon from 'material-ui/SvgIcon';
-import List, { ListItem, ListItemIcon, ListItemText, ListSubheader, Collapse } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Drawer from '@material-ui/core/Drawer';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import List  from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
 
 const styles = {};
-
 
 function EthIconPng(props) {
   return (
