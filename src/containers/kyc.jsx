@@ -10,7 +10,8 @@ let KYC = createReactClass({
     return {
       url: this.props.whitelistState!=null&&this.props.whitelistState.verificationResult!=null?this.props.whitelistState.verificationResult.url:null,
       state: this.props.whitelistState!=null&&this.props.whitelistState.verificationResult!=null?this.props.whitelistState.verificationResult.verification_result:null,
-      kycClicked: false
+      kycClicked: false,
+      notes: this.props.whitelistState!=null&&this.props.whitelistState.verificationResult!=null&&this.props.whitelistState.verificationResult.payload!=null&&this.props.whitelistState.verificationResult.payload.identity!=null?this.props.whitelistState.verificationResult.payload.identity.notes:null
     }
   },
 
@@ -31,7 +32,8 @@ let KYC = createReactClass({
         navigateSkip={this.navigateSkip}
         confirm={this.confirm}
         kycState={this.state.state}
-        kycClicked={this.state.kycClicked}/>
+        kycClicked={this.state.kycClicked}
+        notes={this.state.notes}/>
     )
   },
 

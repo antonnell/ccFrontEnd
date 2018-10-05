@@ -23,7 +23,12 @@ class KYC extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
               <Typography variant="title" align='center'>
-                Your KYC process is {this.props.kycState}.
+                Your KYC process {this.props.kycState}.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
+              <Typography variant="title" align='center'>
+                {this.props.notes}
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
