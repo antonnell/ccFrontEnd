@@ -440,11 +440,11 @@ class WanAccounts extends Component {
         </Grid>
         <Grid item xs={2} align='center' style={bodyStyle}>
           <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
-            500 Curve
+            {this.props.investmentAmount*5} Curve
           </Typography>
         </Grid>
         <Grid item xs={2} align='center' style={bodyStyle}>
-          <Button size="small" variant={"raised"} disabled={this.props.investLoading} color="primary" onClick={this.props.investClicked}>Invest</Button>
+          <Button size="small" variant={"raised"} disabled={this.props.investLoading} color="primary" onClick={() => { this.props.investClicked('CURVE TOKENSALE CONTRACT')}}>Invest</Button>
         </Grid>
       </Grid>
     );

@@ -46,6 +46,8 @@ var Store = () => {
     case 'getSupportedWRC20Tokens':
       this.getSupportedWRC20Tokens(payload);
       break;
+    case 'investICO':
+      this.investICO(payload)
     }
   }.bind(this))
 
@@ -154,6 +156,21 @@ var Store = () => {
     }
     if(payload.content.contactUserName != null) {
       postJson.contactUsername = payload.content.contactUserName
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.investICO = function(payload) {
+    var url = 'wanchain/sendWan'
+    var postJson = {
+      fromAddress: payload.content.fromAddress,
+      amount: payload.content.amount,
+      gwei: payload.content.gwei,
+      toAddress: payload.content.toAddress
     }
 
     this.callApi(url,

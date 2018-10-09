@@ -147,7 +147,9 @@ class App extends Component {
       uriParameters: {},
       ipValid: false,
       ipLoading: true,
-      rejectionReason: ''
+      rejectionReason: '',
+      erc20Tokens: null,
+      wrc20Tokens: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -212,6 +214,8 @@ class App extends Component {
     aionEmitter.removeAllListeners('getAionAddress');
     contactsEmitter.removeAllListeners('getContacts');
     whitelistEmitter.removeAllListeners('whitelistCheck');
+    ethEmitter.removeAllListeners('getSupportedERC20Tokens');
+    wanEmitter.removeAllListeners('getSupportedWRC20Tokens');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -243,7 +247,7 @@ class App extends Component {
     ethEmitter.on('getSupportedERC20Tokens', this.getSupportedERC20TokensReturned);
     wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned);
 
-    if(this.state.user) {
+    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrc20Tokens == null)) {
       let content = {}
       ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
       wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
@@ -254,15 +258,16 @@ class App extends Component {
     this.setState({ipLoading: false})
     emitter.removeAllListeners('getIp');
 
-    if(data == null || data.country == null) {
-      this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
-    } else {
-      if(data.country.code != 'US') {
-        this.setState({ipValid: true})
-      } else {
-        this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
-      }
-    }
+    this.setState({ipValid: true})
+    // if(data == null || data.country == null) {
+    //   this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
+    // } else {
+    //   if(data.country.code != 'US') {
+    //     this.setState({ipValid: true})
+    //   } else {
+    //     this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
+    //   }
+    // }
   };
 
   getSupportedERC20TokensReturned(error, data) {
@@ -668,7 +673,7 @@ class App extends Component {
     //   aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
     // }
 
-    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrcTokens == null)) {
+    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrc20Tokens == null)) {
       let content = {}
       ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
       wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
@@ -720,7 +725,7 @@ class App extends Component {
         {this.renderAppBar()}
         {this.renderDrawer()}
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '627px', position: 'relative'}}>
+        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '622px', position: 'relative'}}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             {this.renderScreen()}
           </Grid>

@@ -147,7 +147,7 @@ class AppDrawer extends Component {
       <Drawer open={this.props.open} onClose={this.props.closeDrawer}>
         <Grid container alignItems="flex-start" spacing={0}>
           <Grid item xs={12}>
-            <div style={{width: '100%', height: '150px', padding: '24px', background: '#2c2c2c', position: 'relative'}} color='secondary'>
+            <div style={{width: '100%', height: '144px', padding: '24px', background: '#2c2c2c', position: 'relative'}} color='secondary'>
               <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
               <Typography variant="body2" style={{position: 'absolute', bottom: '12px', color: '#FFFFFF'}}>
                 {this.props.user.email}

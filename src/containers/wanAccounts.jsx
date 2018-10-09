@@ -94,8 +94,10 @@ let WanAccounts = createReactClass({
         selectedAddress={this.state.selectedAddress}
         selectAddress={this.selectAddress}
         investmentAmount={this.state.investmentAmount}
+        investClicked={this.investClicked}
         user={this.props.user}
         whitelistState={this.props.whitelistState}
+        investmentAmountKeyDown={this.investmentAmountKeyDown}
       />
     )
   },
@@ -244,6 +246,18 @@ let WanAccounts = createReactClass({
     wanDispatcher.dispatch({type: 'exportWanchainKey', content, token: this.props.user.token });
   },
 
+  investClicked(icoContractAddress) {
+    this.setState({ investLoading: true })
+
+    var content = {
+      fromAddress: this.state.selectedAddress,
+      amount: this.stsate.investmentAmount,
+      gwei: 2,
+      toAddress: icoContractAddress
+    }
+    wanDispatcher.dispatch({type: 'investICO', content, token: this.props.user.token });
+  },
+
   onCreateImportKeyDown(event) {
     if (event.which == 13) {
       this.createImportClicked()
@@ -384,6 +398,11 @@ let WanAccounts = createReactClass({
 
   handleChange (event, name) {
     if(event != null && event.target != null) {
+      if(name.indexOf('investmentAmount') > -1) {
+        if((isNaN(parseFloat(event.target.value)) || !isFinite(event.target.value)) && event.target.value != '') {
+          return false
+        }
+      }
       this.setState({
         [name]: event.target.value
       });
