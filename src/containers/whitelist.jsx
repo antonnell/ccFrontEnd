@@ -32,6 +32,10 @@ import WhitelistJoined from '../components/whitelistJoined.jsx';
 const createReactClass = require('create-react-class')
 const { sha3, isValidPrivate } = require('ethereumjs-util');
 
+var sha256 = require('sha256');
+var crypto = require('crypto');
+var bip39 = require('bip39');
+
 let ethEmitter = require('../store/ethStore.js').default.emitter
 let ethDispatcher = require('../store/ethStore.js').default.dispatcher
 
@@ -1197,5 +1201,24 @@ let Whitelist = createReactClass({
   },
 
 })
+
+
+function decrypt(text,seed){
+  var decipher = crypto.createDecipher('aes-256-cbc', seed)
+  var dec = decipher.update(text,'base64','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+
+String.prototype.hexDecode = function(){
+    var j;
+    var hexes = this.match(/.{1,4}/g) || [];
+    var back = "";
+    for(j = 0; j<hexes.length; j++) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+
+    return back;
+}
 
 export default (Whitelist);

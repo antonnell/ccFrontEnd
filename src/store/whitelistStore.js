@@ -60,6 +60,9 @@ var Store = () => {
     case 'whitelistStatus':
       this.whitelistStatus(payload);
       break;
+    case 'verificationResult':
+      this.verificationResult(payload);
+      break;
     }
   }.bind(this))
 
@@ -86,6 +89,20 @@ var Store = () => {
     var version = 'api/v2/'
     var postJson = {
       email: payload.content.email
+    }
+
+    this.callApi(url,
+      version,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.verificationResult = function(payload) {
+    var url = 'verificationResult'
+    var version = 'api/v2/'
+    var postJson = {
+      username: payload.content.username
     }
 
     this.callApi(url,

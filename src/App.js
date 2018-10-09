@@ -41,6 +41,9 @@ import CookiePolicy from './components/cookiePolicy.jsx';
 import TermsAndConditions from './components/termsAndConditions.jsx';
 import ContactUs from './components/contactUs.jsx';
 var sha256 = require('sha256');
+var crypto = require('crypto');
+var bip39 = require('bip39');
+
 
 let accountEmitter = require('./store/accountStore.js').default.emitter
 
@@ -133,6 +136,12 @@ class App extends Component {
     var whitelistState = null;
     if (whitelistString != null) {
       whitelistState = JSON.parse(whitelistString)
+
+      if(whitelistState.jwt && user && (user.whitelistToken == null || user.whitelistTokenKey == null)) {
+        user.whitelistToken = whitelistState.jwt.token;
+        user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
+        sessionStorage.setItem('cc_user', JSON.stringify(user));
+      }
     }
 
     this.state = {
@@ -572,10 +581,8 @@ class App extends Component {
   };
 
   setWhitelistState(whitelistState) {
-    if(whitelistState != null && whitelistState.activeStep == null) {
-      whitelistState.activeStep = 0;
-      whitelistState.completed = {};
-    } else if (whitelistState != null) {
+
+    if(whitelistState != null) {
       if(whitelistState.jwt) {
         var user = this.state.user;
 
@@ -586,11 +593,16 @@ class App extends Component {
         this.setState({user});
         sessionStorage.setItem('cc_user', JSON.stringify(user));
       }
+
+      if(whitelistState.activeStep == null) {
+        whitelistState.activeStep = 0;
+        whitelistState.completed = {};
+      }
     }
+
     this.setState({whitelistState});
     sessionStorage.setItem('cc_whiteliststate', JSON.stringify(whitelistState));
-
-    whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistState, token: this.state.user.whitelistToken, tokenKey: this.state.user.whitelistTokenKey });
+    // whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistState, token: this.state.user.whitelistToken, tokenKey: this.state.user.whitelistTokenKey });
   };
 
   openSendEther(sendEtherContact, sendEtherAccount) {
@@ -746,7 +758,7 @@ class App extends Component {
       case 'createWan':
         return (<CreateWan user={this.state.user} />);
       case 'kyc':
-        return (<KYC user={this.state.user} setUser={this.setUser} whitelistState={this.state.whitelistState} />);
+        return (<KYC user={this.state.user} setUser={this.setUser} whitelistState={this.state.whitelistState} setWhitelistState={this.setWhitelistState} />);
       case 'setUsername':
         return (<SetUsername user={this.state.user} setUser={this.setUser} />);
       case 'forgotPassword':
@@ -823,6 +835,54 @@ class App extends Component {
         return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
     }
   }
+
+  decodeWhitelistResponse(message) {
+    const mnemonic = message.m.hexDecode()
+    const encrypted = message.e.hexDecode()
+    const signature = message.s
+
+    const sig = {
+      e: message.e,
+      m: message.m,
+      u: message.u,
+      p: message.p,
+      t: message.t
+    }
+    const seed = JSON.stringify(sig)
+    const compareSignature = sha256(seed)
+
+    if (compareSignature !== signature) {
+      return null
+    }
+
+    const payload = decrypt(encrypted, mnemonic)
+    var data = null
+    try {
+      data = JSON.parse(payload)
+    } catch (ex) {
+      return null
+    }
+
+    return data;
+  }
+}
+
+function decrypt(text,seed){
+  var decipher = crypto.createDecipher('aes-256-cbc', seed)
+  var dec = decipher.update(text,'base64','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+
+String.prototype.hexDecode = function(){
+    var j;
+    var hexes = this.match(/.{1,4}/g) || [];
+    var back = "";
+    for(j = 0; j<hexes.length; j++) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+
+    return back;
 }
 
 export default App;
