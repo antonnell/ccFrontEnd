@@ -27,6 +27,10 @@ let RegisterAccount = createReactClass({
       confirmPassword: '',
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
+      accepted: false,
+      acceptedError: false,
+      acceptedErrorMessage: '',
+      termsOpen: false
     };
   },
 
@@ -67,6 +71,13 @@ let RegisterAccount = createReactClass({
         confirmPasswordErrorMessage={this.state.confirmPasswordErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
+        handleChecked={this.handleChecked}
+        accepted={this.state.accepted}
+        acceptedError={this.state.acceptedError}
+        acceptedErrorMessage={this.state.acceptedErrorMessage}
+        termsOpen={this.state.termsOpen}
+        handleTermsClose={this.handleTermsClose}
+        handleTermsAccepted={this.handleTermsAccepted}
         />
     );
   },
@@ -83,6 +94,30 @@ let RegisterAccount = createReactClass({
     if (event.which == 13) {
       this.submitLogin();
     }
+  },
+
+  handleChecked (event, name) {
+
+    if(event.target.checked) {
+      this.setState({termsOpen: true})
+    } else {
+      this.setState({accepted: false})
+    }
+
+
+    // this.setState({
+    //   [name]: event.target.checked,
+    //   [name+'Error']: false,
+    //   [name+'ErrorMessage']: ''
+    // });
+  },
+
+  handleTermsClose(){
+    this.setState({termsOpen: false})
+  },
+
+  handleTermsAccepted(){
+    this.setState({termsOpen: false, accepted: true})
   },
 
   validateEmail() {
@@ -109,7 +144,9 @@ let RegisterAccount = createReactClass({
       passwordError: false,
       passwordErrorMessage: 'This will be your account password for the Curve wallet',
       confirmPasswordError: false,
-      confirmPasswordErrorMessage: ''
+      confirmPasswordErrorMessage: '',
+      acceptedError: false,
+      acceptedErrorMessage: ''
     })
 
     if(this.state.username == '') {
@@ -136,6 +173,10 @@ let RegisterAccount = createReactClass({
     }
     if(this.state.password != this.state.confirmPassword) {
       this.setState({confirmPasswordError: true, confirmPasswordErrorMessage: "Your passwords to do not match"});
+      error = true;
+    }
+    if(this.state.accepted == false) {
+      this.setState({acceptedError: true, acceptedErrorMessage: "You need to accept the terms and conditions"});
       error = true;
     }
 

@@ -5,6 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress  from '@material-ui/core/CircularProgress';
+import FormControl  from '@material-ui/core/FormControl';
+import FormHelperText  from '@material-ui/core/FormHelperText';
+import FormControlLabel  from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import TermsModalComponent from './termsModal';
 
 const styles = {};
 
@@ -38,6 +43,22 @@ class RegisterAccount extends Component {
                 id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
                 onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onRegisterKeyDown}
                 helperText={this.props.confirmPasswordErrorMessage} />
+              <FormControl component="accepted" required error={this.props.acceptedError}>
+                <FormControlLabel
+                  style={{ textAlign: 'justify', marginRight: '0px' }}
+                  control={
+                    <Checkbox
+                      error={this.props.acceptedError}
+                      disabled={this.props.loading}
+                      checked={this.props.accepted}
+                      onChange={ (event) => { this.props.handleChecked(event, 'accepted'); }}
+                      value="accepted"
+                    />
+                  }
+                  label="I accept the Terms & Conditions"
+                />
+              <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
+              </FormControl>
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -60,6 +81,7 @@ class RegisterAccount extends Component {
               </Button>
             </Grid>
           </Grid>
+          <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />
         </Grid>
       </Grid>
     );

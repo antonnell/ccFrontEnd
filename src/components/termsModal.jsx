@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
@@ -15,7 +14,7 @@ class TermsModal extends Component {
       <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
         <DialogTitle id="alert-dialog-title">
           <Typography variant='title' align='center'>
-            CURV SALE TERMS & CONDITIONS
+            CURV ACCOUNT TERMS & CONDITIONS
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -896,8 +895,8 @@ class TermsModal extends Component {
           </ol>
         </DialogContent>
         <DialogActions>
-          <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>
-            Done
+          <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleTermsAccepted} color="primary" autoFocus>
+            Accept
           </Button>
         </DialogActions>
       </Dialog>

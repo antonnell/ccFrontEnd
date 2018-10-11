@@ -71,7 +71,6 @@ let KYC = createReactClass({
     if(data.success) {
       var verificationResult = this.decodeWhitelistResponse(data.message)
 
-      console.log(verificationResult)
       let whitelistState = this.props.whitelistState
       whitelistState.verificationResult = verificationResult
 

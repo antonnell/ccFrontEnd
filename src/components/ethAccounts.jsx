@@ -357,7 +357,7 @@ class EthAccounts extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Grid item xs={12} align='center'>
+            <Grid item xs={12} align='left'>
               <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
                 Ethereum Accounts
               </Typography>

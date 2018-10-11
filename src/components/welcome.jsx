@@ -68,7 +68,7 @@ class Welcome extends Component {
             </Grid>
             <Grid item xs={12} align='center'>
               <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer', display: 'inline-block', marginTop: '20px'}} onClick={registerClicked}>
-                Approved presale participant? Click here to get your account details
+                Whitelisted ICO participant? Click here to get your account details
               </Typography>
             </Grid>
           </Grid>

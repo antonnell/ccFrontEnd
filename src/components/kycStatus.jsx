@@ -9,6 +9,33 @@ const styles = {};
 
 class KYC extends Component {
 
+  returnStatus() {
+    let kycState = 'pending'
+
+    switch(this.props.kycState) {
+      case 'hold':
+        kycState = 'Your KYC process is on hold while we take a closer look at your documents. Once all documents have been reviewed, you will be notified on this page.'
+        break;
+      case 'post_processing':
+        kycState = 'Your KYC documents are being reviewed by Netki. Once all documents have been reviewed, you will be notified on this page.'
+        break;
+      case 'complete':
+        kycState = 'Your KYC process has completed successfullly.'
+        break;
+      case 'pending':
+        kycState = 'Your KYC documents are pending review. Once all documents have been reviewed, you will be notified on this page.'
+        break;
+      case 'failed':
+        kycState = 'Your KYC documents are unfortunately not valid. Please review the notes below and go through the process again to upload new documents.'
+        break;
+      default:
+        kycState = 'Your KYC process is '+this.props.kycState
+        break;
+    }
+
+    return kycState
+  }
+
   render() {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '100px', marginBottom: '100px'}}>
@@ -22,8 +49,8 @@ class KYC extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
-              <Typography variant="title" align='center'>
-                Your KYC process is {this.props.kycState}.
+              <Typography variant="title" align='justify'>
+                {this.returnStatus()}
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
@@ -41,7 +68,7 @@ class KYC extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
-              <Button size="small" variant={this.props.kycState=='completed'||this.props.kycClicked?"flat":"raised"} disabled={this.props.kycState=='completed'||this.props.kycClicked||this.props.loading} color="primary" onClick={this.props.KYC}>KYC</Button>
+              <Button size="small" variant={this.props.kycState!='failed'&&(this.props.kycState=='completed'||this.props.kycClicked)?"flat":"raised"} disabled={this.props.loading||this.props.kycClicked||(['completed', 'hold', 'post_processing'].includes(this.props.kycState))} color="primary" onClick={this.props.KYC}>KYC</Button>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
