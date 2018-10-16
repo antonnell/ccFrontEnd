@@ -62,12 +62,12 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Typography color="inherit" style={{fontSize: '12px', display: 'inline-block'}}>
+              <Typography color="inherit" style={{fontSize: '14px', display: 'inline-block'}}>
                 No account yet? Sorry, registrations are currently closed, but will be opening up soon!
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer', display: 'inline-block', marginTop: '20px'}} onClick={registerClicked}>
+              <Typography color="inherit" style={{fontSize: '14px', cursor: 'pointer', display: 'inline-block', marginTop: '20px'}} onClick={registerClicked}>
                 Whitelisted ICO participant? Click here to get your account details
               </Typography>
             </Grid>
