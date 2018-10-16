@@ -11,6 +11,9 @@ const createReactClass = require('create-react-class');
 let wanEmitter = require('../store/wanStore.js').default.emitter;
 let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
 
+let crowdsaleEmitter = require('../store/crowdsaleStore.js').default.emitter;
+let crowdsaleDispatcher = require('../store/crowdsaleStore.js').default.dispatcher;
+
 let WanAccounts = createReactClass({
   getInitialState() {
     return {
@@ -36,9 +39,15 @@ let WanAccounts = createReactClass({
       currentAccountKey:  '',
       optionsAccount: null,
       loadingAccount: null,
-      selectedAddress: '',
+      selectedAddress: null,
+      selectedAddressError: false,
+      selectedAddressErrorMessage: '',
       investmentAmount: '',
-      deleteOpen: false
+      investmentAmountError: false,
+      investmentAmountErrorMessage: '',
+      deleteOpen: false,
+      ICOError: '',
+      investLoading: false
     }
   },
   render() {
@@ -92,12 +101,22 @@ let WanAccounts = createReactClass({
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
         selectedAddress={this.state.selectedAddress}
+        selectedAddressError={this.state.selectedAddressError}
+        selectedAddressErrorMessage={this.state.selectedAddressErrorMessage}
         selectAddress={this.selectAddress}
         investmentAmount={this.state.investmentAmount}
+        investmentAmountError={this.state.investmentAmountError}
+        investmentAmountErrorMessage={this.state.investmentAmountErrorMessage}
         investClicked={this.investClicked}
         user={this.props.user}
         whitelistState={this.props.whitelistState}
         investmentAmountKeyDown={this.investmentAmountKeyDown}
+        crowdsales={this.props.crowdsales}
+        termsOpen={this.state.termsOpen}
+        handleTermsClose={this.handleTermsClose}
+        handleTermsAccepted={this.handleTermsAccepted}
+        ICOError={this.state.ICOError}
+        investLoading={this.state.investLoading}
       />
     )
   },
@@ -108,12 +127,14 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners('updateWanAddress');
     wanEmitter.removeAllListeners('exportWanchainKey');
     wanEmitter.removeAllListeners('deleteWanAddress');
+    wanEmitter.removeAllListeners('investICO');
 
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
     wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
     wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
     wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
+    wanEmitter.on('investICO', this.investICOReturned);
   },
 
   resetInputs() {
@@ -224,6 +245,23 @@ let WanAccounts = createReactClass({
     }
   },
 
+  investICOReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data.success) {
+
+      //update the contributed amounts? Show them a tx? I don't know...
+
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
+    }
+  },
+
   deleteKeyClicked(address) {
     this.setState({deleteAddress: address, deleteOpen: true});
   },
@@ -247,13 +285,52 @@ let WanAccounts = createReactClass({
   },
 
   investClicked(icoContractAddress) {
-    this.setState({ investLoading: true })
+
+    this.setState({investmentAmountError: false, investmentAmountErrorMessage: '', selectedAddressError: false, selectedAddressErrorMessage: ''})
+
+    let currentCrowdsale = this.props.crowdsales.filter((crowdsale) => {
+      return crowdsale.contractAddress == icoContractAddress
+    })
+    if(currentCrowdsale.length > 0) {
+      currentCrowdsale = currentCrowdsale[0]
+      let error = false
+
+      if(this.state.investmentAmount == '' || this.state.investmentAmount == 0) {
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Invalid investment amount'})
+        error = true
+      }
+      if(this.state.investmentAmount > currentCrowdsale.userCap) {
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than contribution cap'})
+        error = true
+      }
+
+      if(this.state.selectedAddress == '' || this.state.selectedAddress == null) {
+        this.setState({selectedAddressError: true, selectedAddressErrorMessage: 'Please select an address'})
+        error = true
+      }
+
+      if(error == false) {
+        this.setState({icoContractAddress, termsOpen: true})
+      }
+
+    } else {
+      this.setState({ICOError: 'An error occurred'})
+    }
+    //rather throw up a popup saying : Are you sure that you would like to invest? You need to accept our terms and conditions. etc.
+  },
+
+  handleTermsClose(){
+    this.setState({ termsOpen: false })
+  },
+
+  handleTermsAccepted() {
+    this.setState({ termsOpen: false, investLoading: true })
 
     var content = {
       fromAddress: this.state.selectedAddress,
-      amount: this.stsate.investmentAmount,
+      amount: this.state.investmentAmount,
       gwei: 2,
-      toAddress: icoContractAddress
+      toAddress: this.state.icoContractAddress
     }
     wanDispatcher.dispatch({type: 'investICO', content, token: this.props.user.token });
   },

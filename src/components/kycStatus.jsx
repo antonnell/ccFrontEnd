@@ -26,7 +26,8 @@ class KYC extends Component {
         kycState = 'Your KYC documents are pending review. Once all documents have been reviewed, you will be notified on this page.'
         break;
       case 'failed':
-        kycState = 'Your KYC documents are unfortunately not valid. Please review the notes below and go through the process again to upload new documents.'
+      case 'restarted':
+        kycState = 'Your KYC documents are unfortunately not valid. Please click on the KYC button again to upload new documents.'
         break;
       default:
         kycState = 'Your KYC process is '+this.props.kycState

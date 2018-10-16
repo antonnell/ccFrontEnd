@@ -62,6 +62,9 @@ let aionDispatcher = require('./store/aionStore.js').default.dispatcher
 let whitelistEmitter = require('./store/whitelistStore.js').default.emitter
 let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatcher
 
+let crowdsaleEmitter = require('./store/crowdsaleStore.js').default.emitter
+let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default.dispatcher
+
 let emitter = require('./store/ipStore.js').default.emitter
 let dispatcher = require('./store/ipStore.js').default.dispatcher
 
@@ -158,7 +161,8 @@ class App extends Component {
       ipLoading: true,
       rejectionReason: '',
       erc20Tokens: null,
-      wrc20Tokens: null
+      wrc20Tokens: null,
+      crowdsales: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -189,6 +193,9 @@ class App extends Component {
     this.getWRC20AddressReturned = this.getWRC20AddressReturned.bind(this);
     this.getSupportedERC20TokensReturned = this.getSupportedERC20TokensReturned.bind(this);
     this.getSupportedWRC20TokensReturned = this.getSupportedWRC20TokensReturned.bind(this);
+
+    this.getCrowdSalesReturned = this.getCrowdSalesReturned.bind(this);
+    this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(this);
   };
 
   componentWillMount() {
@@ -225,6 +232,8 @@ class App extends Component {
     whitelistEmitter.removeAllListeners('whitelistCheck');
     ethEmitter.removeAllListeners('getSupportedERC20Tokens');
     wanEmitter.removeAllListeners('getSupportedWRC20Tokens');
+    crowdsaleEmitter.removeAllListeners('getCrowdSales');
+    crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -238,8 +247,12 @@ class App extends Component {
     wanEmitter.on('getWRC20Address', this.getWRC20AddressReturned);
     aionEmitter.on('getAionAddress', this.getAionAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
-
     whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
+    ethEmitter.on('getSupportedERC20Tokens', this.getSupportedERC20TokensReturned);
+    wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned);
+    crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
+    crowdsaleEmitter.on('getUserCrowdSaleContributions', this.getUserCrowdSaleContributionsReturned);
+
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -253,13 +266,15 @@ class App extends Component {
     emitter.on('getIp', this.getIpReturned);
     dispatcher.dispatch({ type: 'getIp' });
 
-    ethEmitter.on('getSupportedERC20Tokens', this.getSupportedERC20TokensReturned);
-    wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned);
-
-    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrc20Tokens == null)) {
+    if(this.state.user) {
       let content = {}
-      ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
-      wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+
+      if(this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
+        ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
+        wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+      }
+
+      crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
     }
   };
 
@@ -277,6 +292,44 @@ class App extends Component {
     //     this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
     //   }
     // }
+  };
+
+  getCrowdSalesReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({crowdsales: data.crowdSales})
+
+      data.crowdSales.map((crowdsale) => {
+        let content = {
+          userId: this.state.user.id,
+          crowdsaleID: crowdsale.id
+        }
+        crowdsaleDispatcher.dispatch({ type: 'getUserCrowdSaleContributions', content, token: this.state.user.token });
+      })
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getUserCrowdSaleContributionsReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data.success) {
+      this.state.crowdsales[0].totalContribution = data.totalContribution
+
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
+    }
   };
 
   getSupportedERC20TokensReturned(error, data) {
@@ -664,31 +717,32 @@ class App extends Component {
       }
     }
 
-    var content = {}
-    if((currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') && this.state.wanAddresses == null) {
-      content = {id: this.state.user.id};
-      wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
-    } else if ((currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') && this.state.ethAddresses == null) {
-      content = {id: this.state.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
-    } else if ((currentScreen == 'aionAccounts' || currentScreen == 'sendAion') && this.state.aionAddresses == null) {
-      content = {id: this.state.user.id};
-      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
-    } else if (currentScreen == 'contacts' && this.state.contacts == null) {
-      content = {id: this.state.user.id};
-      contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
-    }
-    //  else if (currentScreen == 'accounts') {
-    //   content = {id: this.state.user.id};
-    //   ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
-    //   wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
-    //   aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
-    // }
+    if(this.state.user) {
+      var content = {}
+      if((currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') && this.state.wanAddresses == null) {
+        content = {id: this.state.user.id};
+        wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
+      } else if ((currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') && this.state.ethAddresses == null) {
+        content = {id: this.state.user.id};
+        ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
+      } else if ((currentScreen == 'aionAccounts' || currentScreen == 'sendAion') && this.state.aionAddresses == null) {
+        content = {id: this.state.user.id};
+        aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
+      } else if (currentScreen == 'contacts' && this.state.contacts == null) {
+        content = {id: this.state.user.id};
+        contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
+      }
 
-    if(this.state.user && (this.state.erc20Tokens == null || this.state.wrc20Tokens == null)) {
-      let content = {}
-      ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
-      wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+      if(this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
+        content = {}
+        ethDispatcher.dispatch({ type: 'getSupportedERC20Tokens', content, token: this.state.user.token });
+        wanDispatcher.dispatch({ type: 'getSupportedWRC20Tokens', content, token: this.state.user.token });
+      }
+
+      if(this.state.crowdsales == null) {
+        content = {}
+        crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+      }
     }
 
     ReactGA.set({ page: window.location.pathname + window.location.hash })
@@ -772,7 +826,7 @@ class App extends Component {
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} whitelistState={this.state.whitelistState}/>);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} whitelistState={this.state.whitelistState} crowdsales={this.state.crowdsales}/>);
       case 'aionAccounts':
         return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':

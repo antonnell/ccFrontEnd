@@ -173,6 +173,7 @@ var Store = () => {
       toAddress: payload.content.toAddress
     }
 
+    console.log(postJson)
     this.callApi(url,
       'POST',
       postJson,
