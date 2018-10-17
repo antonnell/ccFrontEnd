@@ -19,7 +19,7 @@ class KYC extends Component {
       case 'post_processing':
         kycState = 'Your KYC documents are being reviewed by Netki. Once all documents have been reviewed, you will be notified on this page.'
         break;
-      case 'complete':
+      case 'completed':
         kycState = 'Your KYC process has completed successfullly.'
         break;
       case 'pending':
@@ -52,11 +52,6 @@ class KYC extends Component {
             <Grid item xs={12} align='center'>
               <Typography variant="title" align='justify'>
                 {this.returnStatus()}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
-              <Typography variant="title" align='center'>
-                {this.props.notes}
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>

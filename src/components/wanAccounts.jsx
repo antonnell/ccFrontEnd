@@ -506,11 +506,15 @@ class WanAccounts extends Component {
           onChange={this.props.selectAddress}
           disabled={this.props.investLoading} >
             <option key='' value=''><i>select</i></option>
-            {this.props.addresses.map((address) => {
-              return (
-                <option key={address.publicAddress} value={address.publicAddress}>{address.name}</option>
-            )
-          })}
+            {
+              this.props.addresses
+              .filter((address) => {
+                return address.isPrimary == true
+              })
+              .map((address) => {
+                return (<option key={address.publicAddress} value={address.publicAddress}>{address.name}</option>)
+              })
+            }
         </Select>
       <FormHelperText>{this.props.selectedAddressErrorMessage}</FormHelperText>
     </FormControl>)
@@ -545,7 +549,7 @@ class WanAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
-          {(this.props.whitelistState&&this.props.whitelistState.verificationResult&&this.props.whitelistState.verificationResult.verification_result=='completed')?this.renderICOS():this.renderICOUnavailable()}
+          {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
         <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />

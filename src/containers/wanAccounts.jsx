@@ -304,7 +304,7 @@ let WanAccounts = createReactClass({
         error = true
       }
 
-      if(this.state.selectedAddress == '' || this.state.selectedAddress == null) {
+      if(this.state.selectedAddress == '' || this.state.selectedAddress == null || this.state.selectedAddress == 'none') {
         this.setState({selectedAddressError: true, selectedAddressErrorMessage: 'Please select an address'})
         error = true
       }

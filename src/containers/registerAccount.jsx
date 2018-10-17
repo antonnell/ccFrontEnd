@@ -183,8 +183,12 @@ let RegisterAccount = createReactClass({
     if(!error) {
       this.setState({loading: true});
 
-      var whitelistContent = { emailAddress: this.state.emailAddress };
-      whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent});
+      // not called anymore. Check is included in existing registration call
+      // var whitelistContent = { emailAddress: this.state.emailAddress };
+      // whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent});
+
+      var content = {username: this.state.username, emailAddress: this.state.emailAddress, password: this.state.password};
+      dispatcher.dispatch({type: 'register', content});
     }
   },
 
@@ -225,8 +229,11 @@ let RegisterAccount = createReactClass({
       data.user.token = data.token;
       this.props.setUser(data.user);
 
-      var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
-      whitelistDispatcher.dispatch({type: 'whitelistRegister', content: whitelistContent });
+      // dont call this anymore
+      // var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
+      // whitelistDispatcher.dispatch({type: 'whitelistRegister', content: whitelistContent });
+
+      window.location.hash = 'createEth';
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, loading: false});
     } else {

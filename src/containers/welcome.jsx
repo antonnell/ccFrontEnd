@@ -219,12 +219,19 @@ let Welcome = createReactClass({
     if(data.success) {
       data.user.token = data.token;
       data.user.authOTP = this.state.code;
+      data.user.verificationResult = data.verificationResult
+      data.user.verificationUrl = data.verificationUrl
       this.props.setUser(data.user);
 
-      var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
-      whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
+      // not called anymore, we included it in the original login call
+      // var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
+      // whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
 
-      //window.location.hash = 'ethAccounts';
+      if (data.user.username == data.user.email) {
+        window.location.hash = 'setUsername';
+      } else {
+        window.location.hash = 'wanAccounts';
+      }
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {

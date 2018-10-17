@@ -46,6 +46,7 @@ var bip39 = require('bip39');
 
 
 let accountEmitter = require('./store/accountStore.js').default.emitter
+let accountDispatcher = require('./store/accountStore.js').default.dispatcher
 
 let contactsEmitter = require('./store/contactsStore.js').default.emitter
 let contactsDispatcher = require('./store/contactsStore.js').default.dispatcher
@@ -135,18 +136,6 @@ class App extends Component {
       user = JSON.parse(userString)
     }
 
-    var whitelistString = sessionStorage.getItem('cc_whiteliststate')
-    var whitelistState = null;
-    if (whitelistString != null) {
-      whitelistState = JSON.parse(whitelistString)
-
-      if(whitelistState.jwt && user && (user.whitelistToken == null || user.whitelistTokenKey == null)) {
-        user.whitelistToken = whitelistState.jwt.token;
-        user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
-        sessionStorage.setItem('cc_user', JSON.stringify(user));
-      }
-    }
-
     this.state = {
       drawerOpen: false,
       user: user,
@@ -155,7 +144,7 @@ class App extends Component {
       wanAddresses: null,
       aionAddresses: null,
       contacts: null,
-      whitelistState: whitelistState,
+      // whitelistState: whitelistState,
       uriParameters: {},
       ipValid: false,
       ipLoading: true,
@@ -196,6 +185,33 @@ class App extends Component {
 
     this.getCrowdSalesReturned = this.getCrowdSalesReturned.bind(this);
     this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(this);
+
+    this.verificationResultReturned = this.verificationResultReturned.bind(this);
+  };
+
+  verificationResultReturned(error, data)  {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      console.log(data)
+
+      let user = this.state.user
+      user.verificationResult = data.verificationResult
+
+      this.setUser(user)
+
+      if(this.state.user.verificationResult != 'complete') {
+        setTimeout(() => {
+          accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
+        }, 300000);
+      }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
   };
 
   componentWillMount() {
@@ -234,6 +250,7 @@ class App extends Component {
     wanEmitter.removeAllListeners('getSupportedWRC20Tokens');
     crowdsaleEmitter.removeAllListeners('getCrowdSales');
     crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
+    accountEmitter.removeAllListeners('verificationResult');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -252,6 +269,7 @@ class App extends Component {
     wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned);
     crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
     crowdsaleEmitter.on('getUserCrowdSaleContributions', this.getUserCrowdSaleContributionsReturned);
+    accountEmitter.on('verificationResult', this.verificationResultReturned);
 
 
     this.updateWindowDimensions();
@@ -275,6 +293,10 @@ class App extends Component {
       }
 
       crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+
+      if(this.state.user.verificationResult != 'complete') {
+        accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
+      }
     }
   };
 
@@ -367,12 +389,12 @@ class App extends Component {
     aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
     contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
 
-    if(this.state.whitelistState == null) {
-      if(user.whitelistToken != null && user.whitelistTokenKey != null) {
-        var whitelistContent = { emailAddress: user.email };
-        whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
-      }
-    }
+    // if(this.state.whitelistState == null) {
+    //   if(user.whitelistToken != null && user.whitelistTokenKey != null) {
+    //     var whitelistContent = { emailAddress: user.email };
+    //     whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
+    //   }
+    // }
   };
 
   getWhitelistStateReturned(error, data) {
@@ -628,6 +650,7 @@ class App extends Component {
   };
 
   setUser(user) {
+    console.log(user)
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
     this.getUserDetails(user);
@@ -767,7 +790,6 @@ class App extends Component {
     var drawer = null
     if(this.state.user != null) {
       drawer = (<AppDrawer
-        canWhitelist={this.state.whitelistState!=null&&this.state.whitelistState.user!=null?this.state.whitelistState.user.canWhitelist:false}
         navClicked={this.navClicked}
         currentScreen={this.state.currentScreen}
         closeDrawer={this.closeDrawer}
@@ -804,15 +826,15 @@ class App extends Component {
   renderScreen() {
     switch (this.state.currentScreen) {
       case 'welcome':
-        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
+        return (<Welcome setUser={this.setUser} />);
       case 'registerAccount':
-        return (<RegisterAccount setUser={this.setUser} setWhitelistState={this.setWhitelistState}/>);
+        return (<RegisterAccount setUser={this.setUser} />);
       case 'createEth':
         return (<CreateEth user={this.state.user} />);
       case 'createWan':
         return (<CreateWan user={this.state.user} />);
       case 'kyc':
-        return (<KYC user={this.state.user} setUser={this.setUser} whitelistState={this.state.whitelistState} setWhitelistState={this.setWhitelistState} />);
+        return (<KYC user={this.state.user} setUser={this.setUser}  />);
       case 'setUsername':
         return (<SetUsername user={this.state.user} setUser={this.setUser} />);
       case 'forgotPassword':
@@ -821,12 +843,12 @@ class App extends Component {
         return (<ForgotPasswordDone />);
       case 'resetPassword':
         return (<ResetPassword uriParameters={this.state.uriParameters} />);
-      case 'whitelist':
-        return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
+      // case 'whitelist':
+      //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} whitelistState={this.state.whitelistState} crowdsales={this.state.crowdsales}/>);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales}/>);
       case 'aionAccounts':
         return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':
@@ -884,9 +906,9 @@ class App extends Component {
       case 'whitelistStatus':
         return (<WhitelistCheck />)
       case 'logOut':
-        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
+        return (<Welcome setUser={this.setUser}  />);
       default:
-        return (<Welcome setUser={this.setUser} setWhitelistState={this.setWhitelistState} />);
+        return (<Welcome setUser={this.setUser}  />);
     }
   }
 

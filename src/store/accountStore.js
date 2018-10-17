@@ -50,8 +50,21 @@ var Store = () => {
     case 'updateUsername':
       this.updateUsername(payload)
       break;
+    case 'verificationResult':
+      this.verificationResult(payload)
+      break;
     }
   }.bind(this))
+
+  this.verificationResult = function(payload) {
+    var url = 'account/getVerificationResult/'+payload.content.userId
+
+    console.log(url)
+    this.callApi(url,
+      'GET',
+      null,
+      payload)
+  }
 
   this.login = function(payload) {
     var url = 'account/login'
