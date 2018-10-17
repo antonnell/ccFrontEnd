@@ -151,7 +151,8 @@ class App extends Component {
       rejectionReason: '',
       erc20Tokens: null,
       wrc20Tokens: null,
-      crowdsales: null
+      crowdsales: null,
+      verificationSearching: false
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -199,6 +200,7 @@ class App extends Component {
 
       let user = this.state.user
       user.verificationResult = data.verificationResult
+      user.verificationUrl = data.verificationUrl
 
       this.setUser(user)
 
@@ -294,7 +296,8 @@ class App extends Component {
 
       crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
 
-      if(this.state.user.verificationResult != 'complete') {
+      if(this.state.user.verificationResult != 'complete' && this.state.verificationSearching == false) {
+        this.setState({verificationSearching: true})
         accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
     }
@@ -765,6 +768,11 @@ class App extends Component {
       if(this.state.crowdsales == null) {
         content = {}
         crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+      }
+
+      if(this.state.user.verificationResult != 'complete' && this.state.verificationSearching == false) {
+        this.setState({verificationSearching: true})
+        accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
     }
 
