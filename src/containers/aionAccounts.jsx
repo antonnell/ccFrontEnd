@@ -308,10 +308,8 @@ let AionAccounts = createReactClass({
     if(value == '') {
       this.setState({ publicAddressError: true, publicAddressErrorMessage:'Aion public address is required' });
       return false;
-    } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Aion public address'});
-      return false;
     }
+    
     this.setState({ publicAddressValid: true });
     return true;
   },

@@ -118,7 +118,7 @@ class SetupEthereumPayment extends Component {
     return(<Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '24px'}}>
         <Grid item xs={12} align='left'>
           <Typography variant="subheading">
-            Select the beneficiary*
+            Select the contact*
           </Typography>
         </Grid>
         <Grid item xs={12} align='left'>
@@ -168,15 +168,6 @@ class SetupEthereumPayment extends Component {
           <Grid item xs={12} altign='left'>
             {this.renderAddresses()}
           </Grid>
-          <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-            <Typography variant="subheading">
-              Your reference*
-            </Typography>
-            <TextField required fullWidth={false} color="textSecondary" error={this.props.ownReferenceError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
-              id="ownReference" placeholder="Reference" value={this.props.ownReference}
-              onChange={(event) => { this.props.handleChange(event, 'ownReference'); }} margin="normal"
-              helperText={this.props.ownReferenceErrorMessage} onBlur={(event) => { this.props.validateField(event, 'ownReference'); }} />
-          </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
@@ -190,20 +181,11 @@ class SetupEthereumPayment extends Component {
               onChange={this.props.handleTabChange}
               indicatorColor="secondary"
               textColor="secondary" >
-              <Tab label="Beneficiary Payment" />
+              <Tab label="Contact Payment" />
               <Tab label="Public Address Payment" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderSelectBeneficiary()}
             {this.props.tabValue === 1 && this.renderEnterPublic()}
-          </Grid>
-          <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-            <Typography variant="subheading">
-              Their reference*
-            </Typography>
-            <TextField required fullWidth={false} color="textSecondary" error={this.props.beneficiaryReferenceError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
-              id="beneficiaryReference" placeholder="Reference" value={this.props.beneficiaryReference}
-              onChange={(event) => { this.props.handleChange(event, 'beneficiaryReference'); }} margin="normal"
-              helperText={this.props.beneficiaryReferenceErrorMessage} onBlur={(event) => { this.props.validateField(event, 'beneficiaryReference'); }} />
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
             <Typography variant="subheading">

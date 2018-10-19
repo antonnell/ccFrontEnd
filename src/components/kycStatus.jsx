@@ -57,7 +57,7 @@ class KYC extends Component {
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
               <Typography variant="title" align='justify'>
                 {this.props.kycState=='completed'?
-                  'Thank you for verifying your your KYC documents with us. You may now participate in the Curve ICO in the Wanchain Accounts screen.':
+                  'Thank you for verifying your KYC documents with us. You may now participate in the Curve ICO in the Wanchain Accounts screen.':
                   this.props.kycState!=null?
                   'Your documents will usually be verified within 24 hours. You will only be able to contribute to the Curve ICO once your documents are verified. You are able to continue and interact with the Curve Wallet until then.':
                   ''}

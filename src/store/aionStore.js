@@ -23,6 +23,9 @@ var Store = () => {
     case 'createAionAddress':
       this.createAionAddress(payload);
       break;
+    case 'importAionAddress':
+      this.importAionAddress(payload);
+      break;
     case 'updateAionAddress':
       this.updateAionAddress(payload);
       break;
@@ -53,6 +56,21 @@ var Store = () => {
       username: payload.content.username,
       isPrimary: payload.content.isPrimary,
       name: payload.content.name
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.importAionAddress = function(payload) {
+    var url = 'aion/importAddress'
+    var postJson = {
+      name: payload.content.name,
+      isPrimary: payload.content.isPrimary,
+      address: payload.content.publicAddress,
+      privateKey: payload.content.privateKey
     }
 
     this.callApi(url,

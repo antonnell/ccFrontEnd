@@ -196,17 +196,20 @@ class App extends Component {
     }
 
     if(data.success) {
-      console.log(data)
 
       let user = this.state.user
-      user.verificationResult = data.verificationResult
-      user.verificationUrl = data.verificationUrl
 
-      this.setUser(user)
+      if(user.verificationResult != data.verificationResult || user.verificationUrl != data.verificationUrl || user.whitelistStatus != data.WhitelistStatus) {
+        user.verificationResult = data.verificationResult
+        user.verificationUrl = data.verificationUrl
+        user.whitelistStatus = data.WhitelistStatus
 
-      if(this.state.user.verificationResult != 'complete') {
+        this.setUser(user)
+      }
+
+      if(user.verificationResult != 'complete' && user) {
         setTimeout(() => {
-          accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
+          accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: user.id }, token: user.token })
         }, 300000);
       }
     } else if (data.errorMsg) {

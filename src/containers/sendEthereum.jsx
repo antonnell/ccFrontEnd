@@ -49,16 +49,6 @@ let SendEther = createReactClass({
       gweiError: false,
       gweiErrorMessage: '',
 
-      ownReference: '',
-      ownReferenceValid: false,
-      ownReferenceError: false,
-      ownReferenceErrorMessage: '',
-
-      beneficiaryReference: '',
-      beneficiaryReferenceValid: false,
-      beneficiaryReferenceError: false,
-      beneficiaryReferenceErrorMessage: '',
-
       publicAddress: '',
       publicAddressValid: true,
       publicAddressError: false,
@@ -131,12 +121,6 @@ let SendEther = createReactClass({
           gwei={this.state.gwei}
           gweiError={this.state.gweiError}
           gweiErrorMessage={this.state.gweiErrorMessage}
-          ownReference={this.state.ownReference}
-          ownReferenceError={this.state.ownReferenceError}
-          ownReferenceErrorMessage={this.state.ownReferenceErrorMessage}
-          beneficiaryReference={this.state.beneficiaryReference}
-          beneficiaryReferenceError={this.state.beneficiaryReferenceError}
-          beneficiaryReferenceErrorMessage={this.state.beneficiaryReferenceErrorMessage}
           publicAddress={this.state.publicAddress}
           publicAddressError={this.state.publicAddressError}
           publicAddressErrorMessage={this.state.publicAddressErrorMessage}
@@ -159,14 +143,13 @@ let SendEther = createReactClass({
 
           amount={this.state.amount}
           gwei={this.state.gwei}
-          ownReference={this.state.ownReference}
-          beneficiaryReference={this.state.beneficiaryReference}
           publicAddress={this.state.publicAddress}
           />)
         case 'completeEthereumPayment':
           return (<CompleteEthereumPayment
             error={this.state.error}
             accountClicked={this.accountClicked}
+            paymentClicked={this.paymentClicked}
             transactionID={this.state.transactionID}/>)
         default:
           return(<SetupEthereumPayment
@@ -200,12 +183,6 @@ let SendEther = createReactClass({
             gwei={this.state.gwei}
             gweiError={this.state.gweiError}
             gweiErrorMessage={this.state.gweiErrorMessage}
-            ownReference={this.state.ownReference}
-            ownReferenceError={this.state.ownReferenceError}
-            ownReferenceErrorMessage={this.state.ownReferenceErrorMessage}
-            beneficiaryReference={this.state.beneficiaryReference}
-            beneficiaryReferenceError={this.state.beneficiaryReferenceError}
-            beneficiaryReferenceErrorMessage={this.state.beneficiaryReferenceErrorMessage}
             publicAddress={this.state.publicAddress}
             publicAddressError={this.state.publicAddressError}
             publicAddressErrorMessage={this.state.publicAddressErrorMessage}
@@ -299,8 +276,6 @@ let SendEther = createReactClass({
   },
 
   proceedClicked() {
-    this.validateOwnReference()
-    this.validateBeneficiaryReference()
     this.validateAmount()
     this.validateGas()
     this.validatePublicAddress()
@@ -366,6 +341,54 @@ let SendEther = createReactClass({
   accountClicked() {
     window.location.hash = 'ethAccounts'
   },
+  paymentClicked() {
+    this.setState({
+      loading: false,
+      error: null,
+
+      tabValue: 0,
+      currentScreen: 'setupEthereumPayment',
+      steps: ['Set up your payment', 'Confirm the details', 'Results of the payment'],
+      activeStep:  0,
+      completed: {},
+
+      contactValue: '',
+      contactValid: false,
+      contact: null,
+      contactError: false,
+      contactErrorMessage: '',
+
+      accountValue: '',
+      accountValid: false,
+      account: null,
+      accountError: false,
+      accountErrorMessage: '',
+
+      amount: '',
+      amountValid: false,
+      amountError: false,
+      amountErrorMessage: '',
+
+      gwei: '2',
+      gweiValid: true,
+      gweiError: false,
+      gweiErrorMessage: '',
+
+      publicAddress: '',
+      publicAddressValid: true,
+      publicAddressError: false,
+      publicAddressErrorMessage: '',
+
+      setupPaymentValid: false,
+
+      transactionID: '',
+
+      sendWRC20Symbol: '',
+      tokenValid: false,
+      tokenError: false,
+      tokenErrorMessage: ''
+    })
+  },
 
   handleChange (event, name) {
     if(event != null && event.target != null) {
@@ -397,11 +420,7 @@ let SendEther = createReactClass({
   },
 
   validateField(event, name) {
-    if (name==="ownReference") {
-      this.validateOwnReference(event.target.value)
-    } if (name==="beneficiaryReference") {
-      this.validateBeneficiaryReference(event.target.value)
-    } else if (name==="amount") {
+    if (name==="amount") {
       this.validateAmount(event.target.value)
     } else if (name==="gwei") {
       this.validateGas(event.target.value)
@@ -417,8 +436,7 @@ let SendEther = createReactClass({
   },
 
   validateSetupPayment() {
-    var valid = (this.state.accountValid && this.state.ownReferenceValid &&
-      this.state.contactValid && this.state.beneficiaryReferenceValid &&
+    var valid = (this.state.accountValid && this.state.contactValid &&
       this.state.amountValid && this.state.gweiValid && this.state.publicAddressValid);
     this.setState({ setupPaymentValid: valid });
     return valid;
@@ -433,22 +451,6 @@ let SendEther = createReactClass({
     if(value == null) {
       this.setState({accountError: true, accountErrorMessage:'Your account is required'});
       return false;
-    }
-
-    return true;
-  },
-
-  validateOwnReference(value) {
-    this.setState({ownReferenceError: false, ownReferenceErrorMessage:''});
-    if(value == null) {
-      value = this.state.ownReference;
-    }
-
-    if(value == '') {
-      this.setState({ownReferenceError: true, ownReferenceErrorMessage:'Your reference is requred'});
-      return false;
-    } else {
-      this.setState({ ownReferenceValid: true })
     }
 
     return true;
@@ -488,22 +490,6 @@ let SendEther = createReactClass({
       return false;
     } else {
       this.setState({ publicAddressValid: true })
-    }
-
-    return true;
-  },
-
-  validateBeneficiaryReference(value) {
-    this.setState({beneficiaryReferenceError: false, beneficiaryReferenceErrorMessage:''});
-    if(value == null) {
-      value = this.state.beneficiaryReference;
-    }
-
-    if(value == '') {
-      this.setState({beneficiaryReferenceError: true, beneficiaryReferenceErrorMessage:'Their reference is requred'});
-      return false;
-    } else {
-      this.setState({ beneficiaryReferenceValid: true })
     }
 
     return true;

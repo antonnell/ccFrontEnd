@@ -146,8 +146,8 @@ class Contacts extends Component {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align='right' style={{marginTop: '12px'}}>
-                    <Button disabled={contact.primaryAionAddress=='No primary eth address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendEtherClicked(contact) }}>Send Ether</Button>
-                    <Button disabled={contact.primaryAionAddress=='No primary wanchain address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendWanClicked(contact) }}>Send Wan</Button>
+                    <Button disabled={contact.primaryEthAddress=='No primary eth address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendEtherClicked(contact) }}>Send Ether</Button>
+                    <Button disabled={contact.primaryWanAddress=='No primary wan address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendWanClicked(contact) }}>Send Wan</Button>
                     <Button disabled={contact.primaryAionAddress=='No primary aion address set'} size="small" variant="flat" style={{border: '1px solid #ccc', marginLeft: '12px'}} color="primary" onClick={() => { this.props.sendAionClicked(contact) }}>Send Aion</Button>
                   </Grid>
                 </Grid>

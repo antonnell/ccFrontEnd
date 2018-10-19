@@ -8,7 +8,14 @@ let ResetPassword = createReactClass({
   getInitialState() {
     return {
       loading: false,
-      error: null
+      error: null,
+      password: '',
+      passwordError: false,
+      passwordErrorMessage: '',
+      confirmPassword: '',
+      confirmPasswordError: false,
+      confirmPasswordErrorMessage: ''
+
     };
   },
 
@@ -32,8 +39,10 @@ let ResetPassword = createReactClass({
         onResetKeyDown={this.onResetKeyDown}
         password={this.state.password}
         passwordError={this.state.passwordError}
+        passwordErrorMessage={this.state.passwordErrorMessage}
         confirmPassword={this.state.confirmPassword}
         confirmPasswordError={this.state.confirmPasswordError}
+        confirmPasswordErrorMessage={this.state.confirmPasswordErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
         />
@@ -58,15 +67,18 @@ let ResetPassword = createReactClass({
     var error = false;
 
     if(this.state.password == '') {
-      this.setState({passwordError: true});
+      this.setState({passwordError: true, passwordErrorMessage:'Password is required'});
       error = true;
+    } else if (this.state.password.length < 8) {
+      this.setState({ passwordError: true, passwordErrorMessage: 'Your password needs to be at least 8 characaters long'});
+      return false;
     }
     if(this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: true});
+      this.setState({confirmPasswordError: true, passwordErrorMessage:'Please confirm your password'});
         error = true;
     }
     if(this.state.password != this.state.confirmPassword) {
-      this.setState({passwordError: true, confirmPasswordError: true});
+      this.setState({passwordError: true, confirmPasswordError: true, confirmPasswordErrorMessage: 'Your passwords to do not match'});
       error = true;
     }
 

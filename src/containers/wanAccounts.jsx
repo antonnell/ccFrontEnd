@@ -47,7 +47,8 @@ let WanAccounts = createReactClass({
       investmentAmountErrorMessage: '',
       deleteOpen: false,
       ICOError: '',
-      investLoading: false
+      investLoading: false,
+      termsOpen: false
     }
   },
   render() {

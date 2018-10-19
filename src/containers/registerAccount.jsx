@@ -20,7 +20,7 @@ let RegisterAccount = createReactClass({
       usernameErrorMessage: 'This is your Curve ID',
       emailAddress: '',
       emailAddressError: false,
-      emailAddressErrorMessage: 'The email address that is approved for Presale participation',
+      emailAddressErrorMessage: 'The email address that is approved for participation',
       password: '',
       passwordError: false,
       passwordErrorMessage: 'This will be your account password for the Curve wallet',
@@ -140,7 +140,7 @@ let RegisterAccount = createReactClass({
       usernameError: false,
       usernameErrorMessage: 'This is your curve ID',
       emailAddressError: false,
-      emailAddressErrorMessage: 'The email address that is approved for Presale participation',
+      emailAddressErrorMessage: 'The email address that is approved for participation',
       passwordError: false,
       passwordErrorMessage: 'This will be your account password for the Curve wallet',
       confirmPasswordError: false,
@@ -204,10 +204,10 @@ let RegisterAccount = createReactClass({
           var content = {username: this.state.username, emailAddress: this.state.emailAddress, password: this.state.password};
           dispatcher.dispatch({type: 'register', content});
         } else {
-          this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
+          this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved email address"})
         }
       } else {
-        this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
+        this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved email address"})
       }
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg, loading: false});
@@ -217,7 +217,7 @@ let RegisterAccount = createReactClass({
   },
 
   whitelistUnauthorisedReturned(error, data) {
-    this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved presale email address"})
+    this.setState({loading: false, emailAddressError: true, emailAddressErrorMessage: "The email provided is not an approved email address"})
   },
 
   registerReturned(error, data) {
@@ -227,6 +227,9 @@ let RegisterAccount = createReactClass({
 
     if(data.success) {
       data.user.token = data.token;
+      data.user.verificationResult = data.verificationResult
+      data.user.verificationUrl = data.verificationUrl
+      data.user.whitelistStatus = data.WhitelistStatus
       this.props.setUser(data.user);
 
       // dont call this anymore

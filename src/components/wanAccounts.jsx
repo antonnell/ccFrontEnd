@@ -277,6 +277,15 @@ class WanAccounts extends Component {
         </ExpansionPanel>)
       }
 
+
+      // <ListItem button onClick={() => { this.props.updatePrimaryClicked(address) }}>
+      //   <ListItemText primary="Set Primary" />
+      // </ListItem>
+      // <Divider />
+      // <ListItem button onClick={() => { this.props.deleteKeyClicked(address.publicAddress) }}>
+      //   <ListItemText primary="Delete" />
+      // </ListItem>
+
       return (
         <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
           <Card style={{marginRight: '6px', marginBottom: '6px'}}>
@@ -323,15 +332,8 @@ class WanAccounts extends Component {
                       <ListItem button onClick={() => { this.props.editNameClicked(address) }}>
                         <ListItemText primary="Update Name" />
                       </ListItem>
-                      <ListItem button onClick={() => { this.props.updatePrimaryClicked(address) }}>
-                        <ListItemText primary="Set Primary" />
-                      </ListItem>
                       <ListItem button onClick={() => { this.props.exportWanchainKeyClicked(address.publicAddress) }}>
                         <ListItemText primary="View Private Key" />
-                      </ListItem>
-                      <Divider />
-                      <ListItem button onClick={() => { this.props.deleteKeyClicked(address.publicAddress) }}>
-                        <ListItemText primary="Delete" />
                       </ListItem>
                     </List>
                   </Popover>
@@ -362,17 +364,31 @@ class WanAccounts extends Component {
   };
 
   renderICOUnavailable() {
-    return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-        <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
-          <Typography variant="headline" color="inherit">
-            Wanchain ICOS
-          </Typography>
-        </Grid>
-        <Grid item xs={12} align='center'>
-          <Typography variant='headline' style={{margin: '48px'}}>Complete KYC to participate</Typography>
-        </Grid>
-      </Grid>)
+    if(this.props.user==null||this.props.user.verificationResult!='completed') {
+      return (
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+            <Typography variant="headline" color="inherit">
+              Wanchain ICOS
+            </Typography>
+          </Grid>
+          <Grid item xs={12} align='center'>
+            <Typography variant='headline' style={{margin: '48px'}}>Complete KYC to participate</Typography>
+          </Grid>
+        </Grid>)
+    } else {
+      return (
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+            <Typography variant="headline" color="inherit">
+              Wanchain ICOS
+            </Typography>
+          </Grid>
+          <Grid item xs={12} align='center'>
+            <Typography variant='headline' style={{margin: '48px'}}>Once your wanchain account is whitelisted, you will be able to contribute to the ICO</Typography>
+          </Grid>
+        </Grid>)
+    }
   };
 
   renderICOS() {
@@ -549,7 +565,7 @@ class WanAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
-          {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
+          {(this.props.user&&this.props.user.verificationResult=='completed'&&this.props.user.whitelistStatus=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
         <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />

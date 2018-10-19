@@ -17,14 +17,14 @@ class CreateEth extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="display1" color="inherit">
-                Create Ethereum Address
+                Create Ethereum Account
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
               <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.loading}
-                id="addressName" placeholder="Ethereum Address Name" value={this.props.addressName}
+                id="addressName" placeholder="Ethereum Account Name" value={this.props.addressName}
                 onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
                 helperText={this.props.addressNameErrorMessage} />
             </Grid>
@@ -32,10 +32,10 @@ class CreateEth extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" onClick={this.props.navigateSkip}>Skip</Button>
+              <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading} >Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.addressNameValid?"raised":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create address</Button>
+              <Button size="small" variant={this.props.addressNameValid?"raised":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create account</Button>
             </Grid>
           </Grid>
         </Grid>

@@ -149,6 +149,9 @@ class AppDrawer extends Component {
           <Grid item xs={12}>
             <div style={{width: '100%', height: '144px', padding: '24px', background: '#2c2c2c', position: 'relative'}} color='secondary'>
               <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
+              <Typography variant="body2" style={{position: 'absolute', bottom: '22px', color: '#FFFFFF', fontSize: '30px'}}>
+                {this.props.user.username}
+              </Typography>
               <Typography variant="body2" style={{position: 'absolute', bottom: '12px', color: '#FFFFFF'}}>
                 {this.props.user.email}
               </Typography>
@@ -156,36 +159,30 @@ class AppDrawer extends Component {
             <div>
               <List>
                 <ListSubheader>Accounts</ListSubheader>
-                <ListItem style={this.props.currentScreen=='wanAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
-                  <ListItemIcon>
-                    <WanIconPng />
-                  </ListItemIcon>
-                  <ListItemText primary="Wanchain Accounts" />
-                </ListItem>
-                <ListItem style={this.props.currentScreen=='ethAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
-                  <ListItemIcon>
-                    <EthIconPng />
-                  </ListItemIcon>
-                  <ListItemText primary="Eth Accounts" />
-                </ListItem>
                 <ListItem style={this.props.currentScreen=='aionAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'aionAccounts'); }}>
                   <ListItemIcon>
                     <AionIconPng />
                   </ListItemIcon>
                   <ListItemText primary="Aion Accounts" />
                 </ListItem>
-                <ListSubheader>Transact</ListSubheader>
-                <ListItem style={this.props.currentScreen=='sendWanchain'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWanchain'); }}>
+                <ListItem style={this.props.currentScreen=='ethAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
                   <ListItemIcon>
-                    <WanIconPng />
+                    <EthIconPng />
                   </ListItemIcon>
-                  <ListItemText primary="Send Wanchain" />
+                  <ListItemText primary="Ethereum Accounts" />
                 </ListItem>
-                <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
+                <ListItem style={this.props.currentScreen=='wanAccounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
                   <ListItemIcon>
                     <WanIconPng />
                   </ListItemIcon>
-                  <ListItemText primary="Send WRC20" />
+                  <ListItemText primary="Wanchain Accounts" />
+                </ListItem>
+                <ListSubheader>Transact</ListSubheader>
+                <ListItem style={this.props.currentScreen=='sendAion'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendAion'); }}>
+                  <ListItemIcon>
+                    <AionIconPng />
+                  </ListItemIcon>
+                  <ListItemText primary="Send Aion" />
                 </ListItem>
                 <ListItem onClick={this.openEth} style={this.props.currentScreen=='sendEthereum'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
                   <ListItemIcon>
@@ -199,11 +196,17 @@ class AppDrawer extends Component {
                   </ListItemIcon>
                   <ListItemText primary="Send ERC20" />
                 </ListItem>
-                <ListItem style={this.props.currentScreen=='sendAion'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendAion'); }}>
+                <ListItem style={this.props.currentScreen=='sendWanchain'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWanchain'); }}>
                   <ListItemIcon>
-                    <AionIconPng />
+                    <WanIconPng />
                   </ListItemIcon>
-                  <ListItemText primary="Send Aion" />
+                  <ListItemText primary="Send Wanchain" />
+                </ListItem>
+                <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
+                  <ListItemIcon>
+                    <WanIconPng />
+                  </ListItemIcon>
+                  <ListItemText primary="Send WRC20" />
                 </ListItem>
                 <ListSubheader>Profile</ListSubheader>
                 <ListItem style={this.props.currentScreen=='contacts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
