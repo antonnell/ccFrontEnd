@@ -48,7 +48,7 @@ let SendWRC20 = createReactClass({
       gweiValid: true,
       gweiError: false,
       gweiErrorMessage: '',
-      
+
       publicAddress: '',
       publicAddressValid: true,
       publicAddressError: false,
@@ -430,10 +430,10 @@ let SendWRC20 = createReactClass({
     if(event != null && event.target != null) {
 
       if(name==='amount') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       } else if (name==='gwei') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       }
 
@@ -456,15 +456,17 @@ let SendWRC20 = createReactClass({
   },
 
   validateField(event, name) {
-    if (name==="amount") {
-      this.validateAmount(event.target.value)
-    } else if (name==="gwei") {
-      this.validateGas(event.target.value)
-    } else if (name==='publicAddress') {
-      this.validatePublicAddress(event.target.value)
-    }
+    if(event.target.value != '') {
+      if (name==="amount") {
+        this.validateAmount(event.target.value)
+      } else if (name==="gwei") {
+        this.validateGas(event.target.value)
+      } else if (name==='publicAddress') {
+        this.validatePublicAddress(event.target.value)
+      }
 
-    this.validateSetupPayment()
+      this.validateSetupPayment()
+    }
   },
 
   isNumeric(n) {
@@ -553,14 +555,19 @@ let SendWRC20 = createReactClass({
     if(value == null) {
       value = this.state.amount;
     }
+    let tokenBalance = 0
 
-    if(value == '') {
+    if(this.state.account) {
+      tokenBalance = this.state.account.wrc20Tokens.filter((token) => { return token.symbol == this.state.sendWRC20Symbol })[0].balance
+    }
+
+    if(value == '' || value == '0') {
       this.setState({amountError: true, amountErrorMessage:'Amount is requred'});
       return false;
     } else if (!this.isNumeric(value)) {
       this.setState({amountError: true, amountErrorMessage:'Invalid amount'});
       return false;
-    } else if (this.state.account!=null && this.state.account.balance < value) {
+    } else if (this.state.account!=null && tokenBalance < value) {
       this.setState({amountError: true, amountErrorMessage:'Amount greater than current balance'});
       return false;
     } else {

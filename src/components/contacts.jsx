@@ -107,12 +107,12 @@ class Contacts extends Component {
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
                         <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Wanchain Address'}
+                          {'Aion Address'}
                         </Typography>
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
                         <Typography variant="body1" noWrap>
-                          {contact.primaryWanAddress}
+                          {contact.primaryAionAddress}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -135,12 +135,12 @@ class Contacts extends Component {
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
                         <Typography variant="body2" style={{fontWeight: 'bold'}}>
-                          {'Aion Address'}
+                          {'Wanchain Address'}
                         </Typography>
                       </Grid>
                       <Grid item xs={8} sm={9} md={8} lg={9} align='left' style={{marginTop: '2px'}}>
                         <Typography variant="body1" noWrap>
-                          {contact.primaryAionAddress}
+                          {contact.primaryWanAddress}
                         </Typography>
                       </Grid>
                     </Grid>

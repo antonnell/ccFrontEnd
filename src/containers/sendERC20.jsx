@@ -430,10 +430,10 @@ let SendERC20 = createReactClass({
     if(event != null && event.target != null) {
 
       if(name==='amount') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       } else if (name==='gwei') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       }
 
@@ -553,14 +553,19 @@ let SendERC20 = createReactClass({
     if(value == null) {
       value = this.state.amount;
     }
+    let tokenBalance = 0
 
-    if(value == '') {
+    if(this.state.account) {
+      tokenBalance = this.state.account.erc20Tokens.filter((token) => { return token.symbol == this.state.sendERC20Symbol })[0].balance
+    }
+
+    if(value == '' || value == '0') {
       this.setState({amountError: true, amountErrorMessage:'Amount is requred'});
       return false;
     } else if (!this.isNumeric(value)) {
       this.setState({amountError: true, amountErrorMessage:'Invalid amount'});
       return false;
-    } else if (this.state.account!=null && this.state.account.balance < value) {
+    } else if (tokenBalance < value) {
       this.setState({amountError: true, amountErrorMessage:'Amount greater than current balance'});
       return false;
     } else {

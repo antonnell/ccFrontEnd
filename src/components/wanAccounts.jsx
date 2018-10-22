@@ -36,6 +36,7 @@ import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import TermsModalComponent from './termsModalICO';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import moment from 'moment';
 
 const styles = {};
 
@@ -89,6 +90,21 @@ function KeyIcon(props) {
 
 class WanAccounts extends Component {
 
+  // <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
+  //   <FormControlLabel
+  //     control={
+  //       <Checkbox
+  //         disabled={this.props.createLoading}
+  //         checked={this.props.primary}
+  //         onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
+  //         value="primary"
+  //       />
+  //     }
+  //     label="Make this my primary account"
+  //   />
+  // </Grid>
+  //
+
   renderCreate() {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
@@ -102,19 +118,6 @@ class WanAccounts extends Component {
             id="addressName" label="Account Name" value={this.props.addressName}
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
             onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                disabled={this.props.createLoading}
-                checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-                value="primary"
-              />
-            }
-            label="Make this my primary account"
-          />
         </Grid>
         <Tooltip title='Create Wanchain Account'>
           <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
@@ -264,7 +267,7 @@ class WanAccounts extends Component {
                     return (
                       <TableRow key={n.symbol}>
                         <TableCell component="th" scope="row">
-                          {n.symbol}
+                          {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
                         <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
@@ -432,7 +435,7 @@ class WanAccounts extends Component {
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
               <Typography variant="body2" color="inherit">
-                Personal Cap
+                ICO Dates
               </Typography>
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
@@ -445,12 +448,22 @@ class WanAccounts extends Component {
                 Amount to Invest (WAN)
               </Typography>
             </Grid>
-            <Grid item xs={2} align='center' style={headerStyle}>
+            <Grid item xs={1} align='center' style={headerStyle}>
               <Typography variant="body2" color="inherit">
                 Token Amount
               </Typography>
             </Grid>
-            <Grid item xs={2} align='center' style={headerStyle}>
+            <Grid item xs={1} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit">
+                Personal Cap
+              </Typography>
+            </Grid>
+            <Grid item xs={1} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit">
+                Contributed Amount
+              </Typography>
+            </Grid>
+            <Grid item xs={1} align='center' style={headerStyle}>
               <Typography variant="body2" color="inherit">
                 Invest
               </Typography>
@@ -485,24 +498,34 @@ class WanAccounts extends Component {
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
             <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
-              {crowdsale.tokenRatio+' Curve / 1 ' + crowdsale.type}
+              {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
             </Typography>
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
             {this.renderAddressDropdown()}
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
-            <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading} error={this.props.investmentAmountError}
+            <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
               id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
               onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
           </Grid>
-          <Grid item xs={2} align='center' style={bodyStyle}>
+          <Grid item xs={1} align='center' style={bodyStyle}>
             <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
               {this.props.investmentAmount*crowdsale.tokenRatio} Curve
             </Typography>
           </Grid>
-          <Grid item xs={2} align='center' style={bodyStyle}>
-            <Button size="small" variant={"raised"} disabled={this.props.investLoading} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+              {crowdsale.userCap/10000000000000000+' Wan'}
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+              {10000} Curve
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
       </Grid>
@@ -520,7 +543,7 @@ class WanAccounts extends Component {
           native={true}
           value={this.props.selectedAddress}
           onChange={this.props.selectAddress}
-          disabled={this.props.investLoading} >
+          disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} >
             <option key='' value=''><i>select</i></option>
             {
               this.props.addresses
@@ -565,7 +588,7 @@ class WanAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
-          {(this.props.user&&this.props.user.verificationResult=='completed'&&this.props.user.whitelistStatus=='completed')?this.renderICOS():this.renderICOUnavailable()}
+          {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
         <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />

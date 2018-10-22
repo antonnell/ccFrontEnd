@@ -255,7 +255,7 @@ class EthAccounts extends Component {
                     return (
                       <TableRow key={n.symbol}>
                         <TableCell component="th" scope="row">
-                          {n.symbol}
+                          {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
                         <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>

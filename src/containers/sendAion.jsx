@@ -394,10 +394,10 @@ let SendAion = createReactClass({
     if(event != null && event.target != null) {
 
       if(name==='amount') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       } else if (name==='gwei') {
-        if(!this.isNumeric(event.target.value))
+        if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       }
 
