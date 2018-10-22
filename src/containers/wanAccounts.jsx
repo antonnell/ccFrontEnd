@@ -118,6 +118,7 @@ let WanAccounts = createReactClass({
         handleTermsAccepted={this.handleTermsAccepted}
         ICOError={this.state.ICOError}
         investLoading={this.state.investLoading}
+        size={this.props.size}
       />
     )
   },

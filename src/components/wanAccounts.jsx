@@ -410,6 +410,29 @@ class WanAccounts extends Component {
         </Grid>)
     }
 
+
+    if(['xs', 'sm', 'md'].includes(this.props.size)) {
+      return (
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+            <Typography variant="headline" color="inherit">
+              Wanchain ICOS
+            </Typography>
+          </Grid>
+
+          {this.props.crowdsales.map((crowdsale) => {
+            return this.renderICO(crowdsale, bodyStyle)
+          })}
+
+          <Grid item xs={12} align='right'>
+            <Typography style={{color: '#f44336'}} >
+              {this.props.ICOError}
+            </Typography>
+          </Grid>
+        </Grid>
+      )
+    }
+
     let headerStyle = {
       padding: '3px'
     }
@@ -438,6 +461,16 @@ class WanAccounts extends Component {
                 ICO Dates
               </Typography>
             </Grid>
+            <Grid item xs={1} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit">
+                Personal Cap
+              </Typography>
+            </Grid>
+            <Grid item xs={1} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit">
+                Contributed Amount
+              </Typography>
+            </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
               <Typography variant="body2" color="inherit">
                 Choose Wallet
@@ -451,16 +484,6 @@ class WanAccounts extends Component {
             <Grid item xs={1} align='center' style={headerStyle}>
               <Typography variant="body2" color="inherit">
                 Token Amount
-              </Typography>
-            </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
-                Personal Cap
-              </Typography>
-            </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
-                Contributed Amount
               </Typography>
             </Grid>
             <Grid item xs={1} align='center' style={headerStyle}>
@@ -488,6 +511,162 @@ class WanAccounts extends Component {
   };
 
   renderICO(crowdsale, bodyStyle) {
+
+    let styleA = {fontSize: '22px', fontWeight: 'bold'}
+    let styleB = {lineHeight: '33px', fontSize: '18px'}
+    let styleC = {minHeight: '80px'}
+
+    if(this.props.size == 'xs') {
+      return (
+        <Grid item xs={12} align='center'>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Name
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                ICO Dates
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Personal Cap
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.userCap/10000000000000000+' Wan'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Contributed Amount
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.totalContribution} Wan
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Choose Wallet
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {this.renderAddressDropdown()}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Amount to Invest (WAN)
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
+                  id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
+                  onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Token Amount
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {this.props.investmentAmount*crowdsale.tokenRatio} Curve
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Invest
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      )
+    }
+
+    if(this.props.size == 'sm' || this.props.size == 'md') {
+
+      return (
+        <Grid item xs={12} align='center'>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Name
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                ICO Dates
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Personal Cap
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.userCap/10000000000000000+' Wan'}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Choose Wallet
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {this.renderAddressDropdown()}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Token Amount
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {this.props.investmentAmount*crowdsale.tokenRatio} Curve
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Amount to Invest (WAN)
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
+                  id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
+                  onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Contributed Amount
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                {crowdsale.totalContribution} Wan
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} align='left' style={styleC}>
+              <Typography variant="header" color="inherit" style={styleA}>
+                Invest
+              </Typography>
+              <Typography variant="body1" color="inherit" style={styleB}>
+                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      )
+    }
+
     return (
       <Grid item xs={12} align='center'>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
@@ -499,6 +678,16 @@ class WanAccounts extends Component {
           <Grid item xs={2} align='center' style={bodyStyle}>
             <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
               {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+              {crowdsale.userCap/10000000000000000+' Wan'}
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+              {crowdsale.totalContribution} Wan
             </Typography>
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
@@ -515,16 +704,6 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
-              {crowdsale.userCap/10000000000000000+' Wan'}
-            </Typography>
-          </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
-              {10000} Curve
-            </Typography>
-          </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
             <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
@@ -538,8 +717,10 @@ class WanAccounts extends Component {
     }
 
     return (
-      <FormControl error={this.props.selectedAddressError}>
+      <FormControl error={this.props.selectedAddressError}
+        fullWidth={true}>
         <Select
+          fullWidth={true}
           native={true}
           value={this.props.selectedAddress}
           onChange={this.props.selectAddress}
@@ -555,11 +736,11 @@ class WanAccounts extends Component {
               })
             }
         </Select>
-      <FormHelperText>{this.props.selectedAddressErrorMessage}</FormHelperText>
+       {this.props.selectedAddressError==true?<FormHelperText>{this.props.selectedAddressErrorMessage}</FormHelperText>:null}
     </FormControl>)
   };
 
-  render() {
+  render() {3
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
