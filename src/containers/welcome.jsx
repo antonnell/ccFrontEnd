@@ -221,7 +221,7 @@ let Welcome = createReactClass({
       data.user.authOTP = this.state.code;
       data.user.verificationResult = data.verificationResult
       data.user.verificationUrl = data.verificationUrl
-      data.user.whitelistStatus = data.WhitelistStatus
+      data.user.whitelistStatus = data.whitelistStatus
       this.props.setUser(data.user);
 
       // not called anymore, we included it in the original login call

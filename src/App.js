@@ -199,10 +199,10 @@ class App extends Component {
 
       let user = this.state.user
 
-      if(user.verificationResult != data.verificationResult || user.verificationUrl != data.verificationUrl || user.whitelistStatus != data.WhitelistStatus) {
+      if(user.verificationResult != data.verificationResult || user.verificationUrl != data.verificationUrl || user.whitelistStatus != data.whitelistStatus) {
         user.verificationResult = data.verificationResult
         user.verificationUrl = data.verificationUrl
-        user.whitelistStatus = data.WhitelistStatus
+        user.whitelistStatus = data.whitelistStatus
 
         this.setUser(user)
       }

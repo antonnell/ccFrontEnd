@@ -424,6 +424,11 @@ class WanAccounts extends Component {
             return this.renderICO(crowdsale, bodyStyle)
           })}
 
+          <Grid item xs={12} align='center'>
+            <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
+              Please ensure that you provide enough allocation for gas fees.
+            </div>
+          </Grid>
           <Grid item xs={12} align='right'>
             <Typography style={{color: '#f44336'}} >
               {this.props.ICOError}
@@ -500,6 +505,11 @@ class WanAccounts extends Component {
         })}
 
 
+        <Grid item xs={12} align='center'>
+          <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
+            Please ensure that you provide enough allocation for gas fees.
+          </div>
+        </Grid>
         <Grid item xs={12} align='right'>
           <Typography style={{color: '#f44336'}} >
             {this.props.ICOError}
@@ -541,7 +551,7 @@ class WanAccounts extends Component {
                 Personal Cap
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                {crowdsale.userCap/10000000000000000+' Wan'}
+                {crowdsale.userCap/1000000000000000000+' Wan'}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -617,7 +627,7 @@ class WanAccounts extends Component {
                 Personal Cap
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                {crowdsale.userCap/10000000000000000+' Wan'}
+                {crowdsale.userCap/1000000000000000000+' Wan'}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -682,7 +692,7 @@ class WanAccounts extends Component {
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
             <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
-              {crowdsale.userCap/10000000000000000+' Wan'}
+              {crowdsale.userCap/1000000000000000000+' Wan'}
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
