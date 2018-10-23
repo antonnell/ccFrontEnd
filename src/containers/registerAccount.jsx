@@ -27,7 +27,7 @@ let RegisterAccount = createReactClass({
       confirmPassword: '',
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
-      accepted: false,
+      accepted: true,
       acceptedError: false,
       acceptedErrorMessage: '',
       termsOpen: false
