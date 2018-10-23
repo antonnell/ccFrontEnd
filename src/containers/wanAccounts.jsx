@@ -50,7 +50,8 @@ let WanAccounts = createReactClass({
       investLoading: false,
       termsOpen: false,
       thanksOpen: false,
-      investTransacstionID: ''
+      investTransacstionID: '',
+      minContribution: 0.5
     }
   },
   render() {
@@ -124,6 +125,7 @@ let WanAccounts = createReactClass({
         thanksOpen={this.state.thanksOpen}
         investTransacstionID={this.state.investTransacstionID}
         handleThanksClose={this.handleThanksClose}
+        minContribution={this.state.minContribution}
       />
     )
   },
@@ -312,7 +314,11 @@ let WanAccounts = createReactClass({
         error = true
       }
       if(this.state.investmentAmount > (currentCrowdsale.userCap/1000000000000000000)) {
-        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than contribution cap'})
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than maximum contribution cap'})
+        error = true
+      }
+      if(this.state.investmentAmount < this.state.minContribution) {
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is less than minimum contribution cap'})
         error = true
       }
 

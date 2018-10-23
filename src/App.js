@@ -303,6 +303,8 @@ class App extends Component {
         this.setState({verificationSearching: true})
         accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
+
+      this.constantRefresh(user)
     }
   };
 
@@ -396,6 +398,17 @@ class App extends Component {
     }
   };
 
+  constantRefresh(user) {
+    let content = {}
+
+    setTimeout(() => {
+      this.getUserDetails(this.state.user)
+      crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+
+      this.constantRefresh()
+    }, 300000);
+  };
+
   getUserDetails(user) {
     var content = {id: user.id};
     ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
@@ -403,12 +416,6 @@ class App extends Component {
     aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
     contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
 
-    // if(this.state.whitelistState == null) {
-    //   if(user.whitelistToken != null && user.whitelistTokenKey != null) {
-    //     var whitelistContent = { emailAddress: user.email };
-    //     whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
-    //   }
-    // }
   };
 
   getWhitelistStateReturned(error, data) {

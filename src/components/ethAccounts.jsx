@@ -233,7 +233,14 @@ class EthAccounts extends Component {
         }
       }
 
-      let erc20 = <div></div>
+      let erc20 = (<ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>ERC20 Tokens</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            Updating ERC20 tokens
+          </ExpansionPanelDetails>
+        </ExpansionPanel>)
       if(address.erc20Tokens) {
         erc20 = (
         <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
