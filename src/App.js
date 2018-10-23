@@ -344,14 +344,22 @@ class App extends Component {
     }
   };
 
-  getUserCrowdSaleContributionsReturned(error, data) {
+  getUserCrowdSaleContributionsReturned(error, data, id) {
     this.setState({ investLoading: false });
     if(error) {
       return this.setState({ICOError: error.toString()});
     }
 
     if(data.success) {
-      this.state.crowdsales[0].totalContribution = data.totalContribution
+      let crowdsales = this.state.crowdsales
+
+      crowdsales = this.state.crowdsales.map((crowdsale) => {
+        if(crowdsale.id == id) {
+          crowdsale.totalContribution = data.totalContribution
+        }
+
+        return crowdsale
+      })
 
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});
@@ -656,7 +664,6 @@ class App extends Component {
   };
 
   setUser(user) {
-    console.log(user)
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
     this.getUserDetails(user);

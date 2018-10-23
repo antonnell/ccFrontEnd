@@ -59,7 +59,6 @@ var Store = () => {
   this.verificationResult = function(payload) {
     var url = 'account/getVerificationResult/'+payload.content.userId
 
-    console.log(url)
     this.callApi(url,
       'GET',
       null,

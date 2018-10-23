@@ -48,7 +48,9 @@ let WanAccounts = createReactClass({
       deleteOpen: false,
       ICOError: '',
       investLoading: false,
-      termsOpen: false
+      termsOpen: false,
+      thanksOpen: false,
+      investTransacstionID: ''
     }
   },
   render() {
@@ -119,6 +121,9 @@ let WanAccounts = createReactClass({
         ICOError={this.state.ICOError}
         investLoading={this.state.investLoading}
         size={this.props.size}
+        thanksOpen={this.state.thanksOpen}
+        investTransacstionID={this.state.investTransacstionID}
+        handleThanksClose={this.handleThanksClose}
       />
     )
   },
@@ -256,6 +261,7 @@ let WanAccounts = createReactClass({
     if(data.success) {
 
       //update the contributed amounts? Show them a tx? I don't know...
+      this.setState({thanksOpen: true, investTransacstionID: data.transactionId})
 
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});
@@ -276,6 +282,10 @@ let WanAccounts = createReactClass({
 
   handleDeleteClose() {
     this.setState({deleteAddress: null, deleteOpen: false});
+  },
+
+  handleThanksClose() {
+    this.setState({thanksOpen: false})
   },
 
   exportWanchainKeyClicked(address) {
@@ -318,7 +328,6 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({ICOError: 'An error occurred'})
     }
-    //rather throw up a popup saying : Are you sure that you would like to invest? You need to accept our terms and conditions. etc.
   },
 
   handleTermsClose(){

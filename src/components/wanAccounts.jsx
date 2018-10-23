@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -32,11 +33,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import DeleteAccountConfirmation from './deleteAccountConfirmation';
-import TermsModalComponent from './termsModalICO';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import moment from 'moment';
+import DeleteAccountConfirmation from './deleteAccountConfirmation';
+import TermsModalComponent from './termsModalICO';
+import ThankYouICOModal from './thankYouICO';
 
 const styles = {};
 
@@ -528,7 +529,7 @@ class WanAccounts extends Component {
 
     if(this.props.size == 'xs') {
       return (
-        <Grid item xs={12} align='center'>
+        <Grid item xs={12} align='center' key={crowdsale.id}>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
               <Typography variant="header" color="inherit" style={styleA}>
@@ -567,7 +568,7 @@ class WanAccounts extends Component {
                 Choose Wallet
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                {this.renderAddressDropdown()}
+                {this.renderAddressDropdown(crowdsale)}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -575,7 +576,7 @@ class WanAccounts extends Component {
                 Amount to Invest (WAN)
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
+                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} error={this.props.investmentAmountError}
                   id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
                   onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
               </Typography>
@@ -593,7 +594,7 @@ class WanAccounts extends Component {
                 Invest
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
           </Grid>
@@ -635,7 +636,7 @@ class WanAccounts extends Component {
                 Choose Wallet
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                {this.renderAddressDropdown()}
+                {this.renderAddressDropdown(crowdsale)}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -651,7 +652,7 @@ class WanAccounts extends Component {
                 Amount to Invest (WAN)
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
+                <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} error={this.props.investmentAmountError}
                   id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
                   onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
               </Typography>
@@ -669,7 +670,7 @@ class WanAccounts extends Component {
                 Invest
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
           </Grid>
@@ -701,10 +702,10 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
-            {this.renderAddressDropdown()}
+            {this.renderAddressDropdown(crowdsale)}
           </Grid>
           <Grid item xs={2} align='center' style={bodyStyle}>
-            <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} error={this.props.investmentAmountError}
+            <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} error={this.props.investmentAmountError}
               id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
               onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
           </Grid>
@@ -714,14 +715,14 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
-            <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+            <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
       </Grid>
     )
   };
 
-  renderAddressDropdown() {
+  renderAddressDropdown(crowdsale) {
     if(this.props.addresses == null || this.props.addresses.length == 0) {
       return (<MenuItem value={'none'}>None</MenuItem>)
     }
@@ -734,7 +735,7 @@ class WanAccounts extends Component {
           native={true}
           value={this.props.selectedAddress}
           onChange={this.props.selectAddress}
-          disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'} >
+          disabled={this.props.investLoading||this.props.user.whitelistStatus!='completed'||crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000)} >
             <option key='' value=''><i>select</i></option>
             {
               this.props.addresses
@@ -781,6 +782,7 @@ class WanAccounts extends Component {
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
           {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
+        <ThankYouICOModal isOpen={this.props.thanksOpen} handleClose={this.props.handleThanksClose} investTransacstionID={this.props.investTransacstionID} />
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
         <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />
       </Grid>

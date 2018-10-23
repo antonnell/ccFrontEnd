@@ -73,7 +73,6 @@ class SetupWRC20Payment extends Component {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
 
-    console.log(this.props.wanAddresses)
     return (
       <FormControl error style={{minWidth: '300px', width: '100%'}}>
         <Select
