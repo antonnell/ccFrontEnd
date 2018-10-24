@@ -501,7 +501,7 @@ let SendWanchain = createReactClass({
       value = this.state.amount;
     }
 
-    if(value == '') {
+    if(value == '' || value == '0') {
       this.setState({amountError: true, amountErrorMessage:'Amount is requred'});
       return false;
     } else if (!this.isNumeric(value)) {

@@ -12,6 +12,7 @@ import Welcome from './containers/welcome.jsx';
 import RegisterAccount from './containers/registerAccount.jsx';
 import CreateEth from './containers/createEth.jsx';
 import CreateWan from './containers/createWan.jsx';
+import CreateAion from './containers/createAion.jsx';
 import KYC from './containers/kyc.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
@@ -858,6 +859,8 @@ class App extends Component {
         return (<CreateEth user={this.state.user} />);
       case 'createWan':
         return (<CreateWan user={this.state.user} />);
+      case 'createAion':
+        return (<CreateAion user={this.state.user} />);
       case 'kyc':
         return (<KYC user={this.state.user} setUser={this.setUser}  />);
       case 'setUsername':
