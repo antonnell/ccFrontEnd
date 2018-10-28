@@ -28,7 +28,7 @@ class CompleteAionPayment extends Component {
   };
 
   renderSuccess() {
-    var url = config.aionscanUrl+this.props.transactionID
+    var url = config.aionscanURL+this.props.transactionID
     return (<Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
       <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
         <Typography variant="body1">

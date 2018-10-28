@@ -63,11 +63,11 @@ let SendWanchain = createReactClass({
   },
 
   componentWillMount() {
-    wanEmitter.on('sendWanchain', this.sendWanchainReturned);
+    wanEmitter.on('sendWan', this.sendWanchainReturned);
   },
 
   componentWillUnmount() {
-    wanEmitter.removeAllListeners('sendWanchain');
+    wanEmitter.removeAllListeners('sendWan');
   },
 
   componentDidMount() {
@@ -307,11 +307,12 @@ let SendWanchain = createReactClass({
         gwei: this.state.gwei
       }
     } else {
+      this.setState({loading: false});
       return false;
     }
 
     //console.log(content)
-    wanDispatcher.dispatch({type: 'sendWanchain', content, token: this.props.user.token})
+    wanDispatcher.dispatch({type: 'sendWan', content, token: this.props.user.token})
   },
 
   sendWanchainReturned(error, data) {

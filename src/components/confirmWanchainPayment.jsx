@@ -11,7 +11,7 @@ class ConfirmWanchainPayment extends Component {
       To your beneficairy:
       <div style={{border: '1px solid #000', padding: '12px', marginTop: '12px'}}>
         <Typography variant="title" noWrap>
-          <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryEthAddress})
+          <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryWanAddress})
         </Typography>
       </div>
     </Grid>)

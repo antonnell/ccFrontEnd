@@ -51,7 +51,7 @@ let WanAccounts = createReactClass({
       termsOpen: false,
       thanksOpen: false,
       investTransacstionID: '',
-      minContribution: 0.5
+      minContribution: 25
     }
   },
   render() {
