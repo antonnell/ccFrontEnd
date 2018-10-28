@@ -43,6 +43,11 @@ class Enable2FA extends Component {
               {this.props.QRCodeLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             </Grid>
           </Grid>
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '24px'}}>
+            <Grid item xs={12} style={{position: 'relative'}}>
+              {this.props.secretKey}
+            </Grid>
+          </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={8}>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required autoFocus={true} fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code1" value={this.props.code1}
