@@ -271,10 +271,10 @@ class SetupWRC20Payment extends Component {
               Gas limit*
             </Typography>
             <TextField required fullWidth={false} color="textSecondary" error={this.props.gweiError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
-              id="gwei" placeholder="Gwei" value={this.props.gwei}
+              id="gwei" placeholder="Gwin" value={this.props.gwei}
               onChange={(event) => { this.props.handleChange(event, 'gwei'); }} margin="normal"
               helperText={this.props.gweiErrorMessage} onBlur={(event) => { this.props.validateField(event, 'gwei'); }} InputProps={{
-                endAdornment: <InputAdornment position="end">Gwei</InputAdornment>,
+                endAdornment: <InputAdornment position="end">Gwin</InputAdornment>,
               }} />
           </Grid>
         </Grid>
