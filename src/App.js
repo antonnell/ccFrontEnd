@@ -917,22 +917,22 @@ class App extends Component {
         return (<ComingSoon />);
       case 'fees':
         return (<ComingSoon />);
-      case 'add':
-        if(!this.state.ipValid) {
-          window.location.hash = 'addUnavailable'
-          return <div></div>
-        }
-        return (<WhitelistMe ipLoading={this.state.ipLoading} />);
-      case 'added':
-        return (<WhitelistMeDone />);
-      case 'addUnavailable':
-        if(this.state.ipValid == true) {
-          window.location.hash = 'add'
-          return <div></div>
-        }
-        return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
-      case 'whitelistStatus':
-        return (<WhitelistCheck />)
+      // case 'add':
+      //   if(!this.state.ipValid) {
+      //     window.location.hash = 'addUnavailable'
+      //     return <div></div>
+      //   }
+      //   return (<WhitelistMe ipLoading={this.state.ipLoading} />);
+      // case 'added':
+      //   return (<WhitelistMeDone />);
+      // case 'addUnavailable':
+      //   if(this.state.ipValid == true) {
+      //     window.location.hash = 'add'
+      //     return <div></div>
+      //   }
+      //   return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
+      // case 'whitelistStatus':
+      //   return (<WhitelistCheck />)
       case 'logOut':
         return (<Welcome setUser={this.setUser}  />);
       default:
