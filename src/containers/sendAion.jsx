@@ -485,9 +485,6 @@ let SendAion = createReactClass({
     if(value == null) {
       this.setState({publicAddressError: true, publicAddressErrorMessage:'Public address is requred'});
       return false;
-    } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Aion public address'});
-      return false;
     } else {
       this.setState({ publicAddressValid: true })
     }
