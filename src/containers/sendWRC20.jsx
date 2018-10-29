@@ -44,7 +44,7 @@ let SendWRC20 = createReactClass({
       amountError: false,
       amountErrorMessage: '',
 
-      gwei: '2',
+      gwei: '5',
       gweiValid: true,
       gweiError: false,
       gweiErrorMessage: '',
