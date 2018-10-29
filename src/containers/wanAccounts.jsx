@@ -348,7 +348,7 @@ let WanAccounts = createReactClass({
     var content = {
       fromAddress: this.state.selectedAddress,
       amount: this.state.investmentAmount,
-      gwei: 2,
+      gwei: 300,
       toAddress: this.state.icoContractAddress
     }
     wanDispatcher.dispatch({type: 'investICO', content, token: this.props.user.token });
