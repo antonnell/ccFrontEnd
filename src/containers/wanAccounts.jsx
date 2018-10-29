@@ -47,6 +47,7 @@ let WanAccounts = createReactClass({
       investmentAmountErrorMessage: '',
       deleteOpen: false,
       ICOError: '',
+      ICOSuccess: '',
       investLoading: false,
       termsOpen: false,
       thanksOpen: false,
@@ -120,6 +121,7 @@ let WanAccounts = createReactClass({
         handleTermsClose={this.handleTermsClose}
         handleTermsAccepted={this.handleTermsAccepted}
         ICOError={this.state.ICOError}
+        ICOSuccess={this.state.ICOSuccess}
         investLoading={this.state.investLoading}
         size={this.props.size}
         thanksOpen={this.state.thanksOpen}
@@ -263,7 +265,7 @@ let WanAccounts = createReactClass({
     if(data.success) {
 
       //update the contributed amounts? Show them a tx? I don't know...
-      this.setState({thanksOpen: true, investTransacstionID: data.transactionId})
+      this.setState({thanksOpen: true, investTransacstionID: data.transactionId, ICOSuccess: 'Your ICO contribution was successfully processed.'})
 
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});

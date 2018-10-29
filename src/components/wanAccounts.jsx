@@ -382,7 +382,7 @@ class WanAccounts extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
-              Wanchain ICOS
+              Wanchain ICOs
             </Typography>
           </Grid>
           <Grid item xs={12} align='center'>
@@ -394,7 +394,7 @@ class WanAccounts extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
-              Wanchain ICOS
+              Wanchain ICOs
             </Typography>
           </Grid>
           <Grid item xs={12} align='center'>
@@ -411,7 +411,7 @@ class WanAccounts extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
-              Wanchain ICOS
+              Wanchain ICOs
             </Typography>
           </Grid>
           <Grid item xs={12} align='center'>
@@ -426,7 +426,7 @@ class WanAccounts extends Component {
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
-              Wanchain ICOS
+              Wanchain ICOs
             </Typography>
           </Grid>
 
@@ -434,15 +434,20 @@ class WanAccounts extends Component {
             return this.renderICO(crowdsale, bodyStyle)
           })}
 
-          <Grid item xs={12} align='center'>
-            <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
-              Please ensure that you provide enough allocation for gas fees.
-            </div>
-          </Grid>
           <Grid item xs={12} align='right'>
             <Typography style={{color: '#f44336'}} >
               {this.props.ICOError}
             </Typography>
+          </Grid>
+          <Grid item xs={12} align='right'>
+            <Typography style={{color: '#4BB543'}} >
+              {this.props.ICOSuccess}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} align='center'>
+            <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
+              Please ensure that you provide enough allocation for gas fees.
+            </div>
           </Grid>
         </Grid>
       )
@@ -460,49 +465,49 @@ class WanAccounts extends Component {
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
           <Typography variant="headline" color="inherit">
-            Wanchain ICOS
+            Wanchain ICOs
           </Typography>
         </Grid>
 
         <Grid item xs={12} align='center'>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-            <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+            <Grid item xs={1} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Name
               </Typography>
             </Grid>
-            <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+            <Grid item xs={3} align='center' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 ICO Dates
               </Typography>
             </Grid>
             <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Personal Cap
               </Typography>
             </Grid>
             <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Contributed Amount
               </Typography>
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Choose Wallet
               </Typography>
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Amount to Invest (WAN)
               </Typography>
             </Grid>
             <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Token Amount
               </Typography>
             </Grid>
             <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit">
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Invest
               </Typography>
             </Grid>
@@ -515,15 +520,20 @@ class WanAccounts extends Component {
         })}
 
 
-        <Grid item xs={12} align='center'>
-          <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
-            Please ensure that you provide enough allocation for gas fees.
-          </div>
-        </Grid>
         <Grid item xs={12} align='right'>
           <Typography style={{color: '#f44336'}} >
             {this.props.ICOError}
           </Typography>
+        </Grid>
+        <Grid item xs={12} align='right'>
+          <Typography style={{color: '#4BB543'}} >
+            {this.props.ICOSuccess}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px', marginTop: '12px'}}>
+            Please ensure that you provide enough allocation for gas fees.
+          </div>
         </Grid>
       </Grid>
     );
@@ -690,23 +700,23 @@ class WanAccounts extends Component {
     return (
       <Grid item xs={12} align='center'>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-          <Grid item xs={2} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+          <Grid item xs={1} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px', fontSize: '17px'}}>
               {crowdsale.name}
             </Typography>
           </Grid>
-          <Grid item xs={2} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+          <Grid item xs={3} align='center' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px', fontSize: '17px'}}>
               {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px', fontSize: '17px'}}>
               {this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan'}
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px', fontSize: '17px'}}>
               {crowdsale.totalContribution} Wan
             </Typography>
           </Grid>
@@ -719,7 +729,7 @@ class WanAccounts extends Component {
               onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '33px'}}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '33px', fontSize: '17px'}}>
               {this.props.investmentAmount*crowdsale.tokenRatio} Curve
             </Typography>
           </Grid>
@@ -760,7 +770,7 @@ class WanAccounts extends Component {
     </FormControl>)
   };
 
-  render() {3
+  render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
