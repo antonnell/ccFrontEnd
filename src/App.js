@@ -899,8 +899,8 @@ class App extends Component {
         return (<SendERC20 user={this.state.user} sendERC20Symbol={this.state.sendERC20Symbol} erc20Tokens={this.state.erc20Tokens} sendERC20Contact={this.state.sendERC20Contact} sendERC20Account={this.state.sendERC20Account} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendWanchain':
         return (<SendWanchain user={this.state.user} sendWanchainContact={this.state.sendWanchainContact} sendWanchainAccount={this.state.sendWanchainAccount} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
-      case 'sendWRC20':
-        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      // case 'sendWRC20':
+      //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendAion':
         return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'about':

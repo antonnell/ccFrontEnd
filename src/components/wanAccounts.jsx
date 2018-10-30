@@ -280,7 +280,7 @@ class WanAccounts extends Component {
                           {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
-                        <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
+                        <TableCell numeric><Button size="small" variant="raised" color="primary" disabled onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
                       </TableRow>
                     );
                   })}

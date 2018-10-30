@@ -136,6 +136,15 @@ class AppDrawer extends Component {
     <ListItemText primary="Join Whitelist" />
   </ListItem>}
   {this.props.canWhitelist && <Divider />}
+
+
+  <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
+    <ListItemIcon>
+      <WanIconPng />
+    </ListItemIcon>
+    <ListItemText primary="Send WRC20" />
+  </ListItem>
+  
   */
 
   render() {
@@ -201,12 +210,6 @@ class AppDrawer extends Component {
                     <WanIconPng />
                   </ListItemIcon>
                   <ListItemText primary="Send Wanchain" />
-                </ListItem>
-                <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
-                  <ListItemIcon>
-                    <WanIconPng />
-                  </ListItemIcon>
-                  <ListItemText primary="Send WRC20" />
                 </ListItem>
                 <ListSubheader>Profile</ListSubheader>
                 <ListItem style={this.props.currentScreen=='contacts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
