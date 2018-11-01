@@ -779,7 +779,7 @@ class WanAccounts extends Component {
               {this.props.investmentAmount*crowdsale.tokenRatio} Curve
             </Typography>
           </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
+          <Grid item xs={1} align='center' style={Object.assign({}, bodyStyle, {padding: '15px'})}>
             <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
