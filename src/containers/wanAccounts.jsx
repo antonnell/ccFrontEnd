@@ -152,10 +152,10 @@ let WanAccounts = createReactClass({
     wanEmitter.on('getICOProgress', this.getICOProgressReturned);
   },
 
-  componentDidMount() {
-    let content = {}
-    wanDispatcher.dispatch({type: 'getICOProgress', content, token: this.props.user.token });
-  },
+  // componentDidMount() {
+  //   let content = {}
+  //   wanDispatcher.dispatch({type: 'getICOProgress', content, token: this.props.user.token });
+  // },
 
   resetInputs() {
     this.setState({
