@@ -48,6 +48,10 @@ var Store = () => {
       break;
     case 'investICO':
       this.investICO(payload)
+      break;
+    case 'getICOProgress':
+      this.getICOProgress(payload)
+      break;
     }
   }.bind(this))
 
@@ -177,6 +181,15 @@ var Store = () => {
     this.callApi(url,
       'POST',
       postJson,
+      payload)
+  }
+
+  this.getICOProgress = function(payload) {
+    var url = 'test/getcrowdsaleprogress'
+
+    this.callApi(url,
+      'GET',
+      null,
       payload)
   }
 

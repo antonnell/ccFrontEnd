@@ -52,7 +52,8 @@ let WanAccounts = createReactClass({
       termsOpen: false,
       thanksOpen: false,
       investTransacstionID: '',
-      minContribution: 25
+      minContribution: 25,
+      crowdasleProgress: null
     }
   },
   render() {
@@ -128,6 +129,7 @@ let WanAccounts = createReactClass({
         investTransacstionID={this.state.investTransacstionID}
         handleThanksClose={this.handleThanksClose}
         minContribution={this.state.minContribution}
+        crowdasleProgress={this.state.crowdasleProgress}
       />
     )
   },
@@ -139,6 +141,7 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners('exportWanchainKey');
     wanEmitter.removeAllListeners('deleteWanAddress');
     wanEmitter.removeAllListeners('investICO');
+    wanEmitter.removeAllListeners('getICOProgress');
 
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
@@ -146,6 +149,12 @@ let WanAccounts = createReactClass({
     wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
     wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
     wanEmitter.on('investICO', this.investICOReturned);
+    wanEmitter.on('getICOProgress', this.getICOProgressReturned);
+  },
+
+  componentDidMount() {
+    let content = {}
+    wanDispatcher.dispatch({type: 'getICOProgress', content, token: this.props.user.token });
   },
 
   resetInputs() {
@@ -267,6 +276,21 @@ let WanAccounts = createReactClass({
       //update the contributed amounts? Show them a tx? I don't know...
       this.setState({thanksOpen: true, investTransacstionID: data.transactionId, ICOSuccess: 'Your ICO contribution was successfully processed.'})
 
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
+    }
+  },
+
+  getICOProgressReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data) {
+      this.setState({crowdasleProgress: data})
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});
     } else {
