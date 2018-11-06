@@ -693,7 +693,7 @@ class WanAccounts extends Component {
                 Personal Cap
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                {this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan'}
+                {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan')}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -758,7 +758,7 @@ class WanAccounts extends Component {
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>
             <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
-              {this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan'}
+              {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan')}
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={bodyStyle}>

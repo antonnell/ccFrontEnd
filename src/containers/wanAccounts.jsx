@@ -339,7 +339,7 @@ let WanAccounts = createReactClass({
         this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Invalid investment amount'})
         error = true
       }
-      if(this.state.investmentAmount > (currentCrowdsale.userCap/1000000000000000000)) {
+      if(currentCrowdsale.userCap != 0 && this.state.investmentAmount > (currentCrowdsale.userCap/1000000000000000000)) {
         this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than maximum contribution cap'})
         error = true
       }

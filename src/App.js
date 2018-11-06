@@ -153,7 +153,8 @@ class App extends Component {
       erc20Tokens: null,
       wrc20Tokens: null,
       crowdsales: null,
-      verificationSearching: false
+      verificationSearching: false,
+      ethTransactions: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -189,6 +190,7 @@ class App extends Component {
     this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(this);
 
     this.verificationResultReturned = this.verificationResultReturned.bind(this);
+    this.getTransactionHistoryReturned = this.getTransactionHistoryReturned.bind(this);
   };
 
   verificationResultReturned(error, data)  {
@@ -213,6 +215,20 @@ class App extends Component {
           accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: user.id }, token: user.token })
         }, 300000);
       }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getTransactionHistoryReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({ethTransactions: data.transactions})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -257,6 +273,7 @@ class App extends Component {
     crowdsaleEmitter.removeAllListeners('getCrowdSales');
     crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
     accountEmitter.removeAllListeners('verificationResult');
+    ethEmitter.removeAllListeners('getTransactionHistory');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -276,7 +293,7 @@ class App extends Component {
     crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
     crowdsaleEmitter.on('getUserCrowdSaleContributions', this.getUserCrowdSaleContributionsReturned);
     accountEmitter.on('verificationResult', this.verificationResultReturned);
-
+    ethEmitter.on('getTransactionHistory', this.getTransactionHistoryReturned);
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -403,20 +420,24 @@ class App extends Component {
     let content = {}
 
     setTimeout(() => {
-      this.getUserDetails(this.state.user)
-      crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+      if(this.state.user) {
+        this.getUserDetails(this.state.user)
+        crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
 
-      this.constantRefresh()
+        this.constantRefresh()
+      }
     }, 300000);
   };
 
   getUserDetails(user) {
-    var content = {id: user.id};
-    ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
-    wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
-    aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
-    contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
-
+    if(user) {
+      var content = {id: user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
+      //ethDispatcher.dispatch({type: 'getTransactionHistory', content, token: user.token});
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
+      contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
+    }
   };
 
   getWhitelistStateReturned(error, data) {
@@ -874,7 +895,7 @@ class App extends Component {
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} />);
       case 'wanAccounts':
         return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size}/>);
       case 'aionAccounts':
