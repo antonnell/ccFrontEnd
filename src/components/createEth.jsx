@@ -35,7 +35,7 @@ class CreateEth extends Component {
               <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading} >Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.addressNameValid?"raised":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create account</Button>
+              <Button size="small" variant={this.props.addressNameValid?"contained":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create account</Button>
             </Grid>
           </Grid>
         </Grid>

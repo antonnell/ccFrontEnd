@@ -28,7 +28,7 @@ class ThankYouICO extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary" variant='raised'  >
+          <Button onClick={this.props.handleClose} color="primary" variant='contained'  >
             Continue
           </Button>
         </DialogActions>

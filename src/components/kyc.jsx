@@ -33,7 +33,7 @@ class KYC extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
-              <Button size="small" variant="raised" color="primary" onClick={this.props.KYC}>KYC</Button>
+              <Button size="small" variant="contained" color="primary" onClick={this.props.KYC}>KYC</Button>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
@@ -42,7 +42,7 @@ class KYC extends Component {
               <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading}>Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.kycClicked?"raised":"flat"} disabled={(!this.props.kycClicked)||this.props.loading} color="primary" onClick={this.props.navigateSkip}>Confirm</Button>
+              <Button size="small" variant={this.props.kycClicked?"contained":"flat"} disabled={(!this.props.kycClicked)||this.props.loading} color="primary" onClick={this.props.navigateSkip}>Confirm</Button>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>

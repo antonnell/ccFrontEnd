@@ -232,7 +232,7 @@ class SetupEthereumPayment extends Component {
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
           </Grid>
         </Grid>
       </div>

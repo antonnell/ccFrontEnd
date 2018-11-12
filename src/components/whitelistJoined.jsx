@@ -26,7 +26,7 @@ class WhitelistJoined extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.done}>Go to my account</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.done}>Go to my account</Button>
         </Grid>
       </Grid>
     )
@@ -90,13 +90,13 @@ class WhitelistJoined extends Component {
           <Grid container style={{marginTop: '24px'}}>
             <Grid item xs={12} align='center'>
               <Typography variant="body2">
-                <Button size="small" variant="raised" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
+                <Button size="small" variant="contained" color="primary" onClick={this.props.sendFromMEW}>Send from MyEtherWallet</Button>
               </Typography>
             </Grid>
           </Grid>
           :<div></div>}
         <Grid item xs={12} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.done}>Go to my account</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.done}>Go to my account</Button>
         </Grid>
       </Grid>
     )

@@ -34,6 +34,7 @@ import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 import WhitelistCheck from './containers/whitelistCheck.jsx';
 import SetUsername from './containers/setUsername.jsx';
+import EthTransactions from './containers/ethTransactions.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -433,7 +434,7 @@ class App extends Component {
     if(user) {
       var content = {id: user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
-      //ethDispatcher.dispatch({type: 'getTransactionHistory', content, token: user.token});
+      ethDispatcher.dispatch({type: 'getTransactionHistory', content, token: user.token});
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
       contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
@@ -895,7 +896,7 @@ class App extends Component {
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />);
       case 'wanAccounts':
         return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size}/>);
       case 'aionAccounts':
@@ -924,6 +925,8 @@ class App extends Component {
       //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendAion':
         return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'ethTransactions':
+        return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'about':
         return (<ComingSoon />);
       case 'press':

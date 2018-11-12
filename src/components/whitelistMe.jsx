@@ -335,7 +335,7 @@ class WhitelistMe extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitWhitelist} disabled={this.props.loading}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitWhitelist} disabled={this.props.loading}>
                 Whitelist
               </Button>
             </Grid>

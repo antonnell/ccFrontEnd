@@ -62,10 +62,10 @@ class CompleteERC20Payment extends Component {
         {this.props.error!=null&&this.renderError()}
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={6} align='left'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.paymentClicked}>Set up another payment</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.paymentClicked}>Set up another payment</Button>
           </Grid>
           <Grid item xs={6} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.accountClicked}>Back to accounts</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.accountClicked}>Back to accounts</Button>
           </Grid>
         </Grid>
       </div>

@@ -280,7 +280,7 @@ class WanAccounts extends Component {
                           {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
-                        <TableCell numeric><Button size="small" variant="raised" color="primary" disabled onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
+                        <TableCell numeric><Button size="small" variant="contained" color="primary" disabled onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
                       </TableRow>
                     );
                   })}
@@ -556,7 +556,7 @@ class WanAccounts extends Component {
     let styleB = {lineHeight: '33px', fontSize: '18px'}
     let styleC = {minHeight: '80px'}
 
-    // let ratio = this.props.crowdasleProgress!=null?this.props.crowdasleProgress.wanRaised*100/this.props.crowdasleProgress.saleCap:0
+    // let ratio = this.props.crowdasleProgress!=null?this.props.crowdasleProgress.wancontained*100/this.props.crowdasleProgress.saleCap:0
 
     /*
     <Grid item xs={12} sm={6} align='left' style={styleC}>
@@ -659,7 +659,7 @@ class WanAccounts extends Component {
                 Invest
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+                <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
           </Grid>
@@ -735,7 +735,7 @@ class WanAccounts extends Component {
                 Invest
               </Typography>
               <Typography variant="body1" color="inherit" style={styleB}>
-                <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+                <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
           </Grid>
@@ -780,7 +780,7 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={1} align='center' style={Object.assign({}, bodyStyle, {padding: '15px'})}>
-            <Button size="small" variant={"raised"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
+            <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
       </Grid>
@@ -802,7 +802,7 @@ class WanAccounts extends Component {
           value={this.props.selectedAddress}
           onChange={this.props.selectAddress}
           disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} >
-            <option key='' value=''><i>select</i></option>
+            <option key='' value=''>select</option>
             {
               this.props.addresses
               .filter((address) => {

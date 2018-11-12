@@ -90,6 +90,7 @@ let EthAccounts = createReactClass({
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
         ethTransactions={this.props.ethTransactions}
+        contacts={this.props.contacts}
       />
     )
   },

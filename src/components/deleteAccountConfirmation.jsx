@@ -23,7 +23,7 @@ class DeleteAccountConfirmation extends Component {
           <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" disabled={this.props.deleteLoading} >
             No
           </Button>
-          <Button onClick={this.props.confirmDelete} color="primary" variant='raised' disabled={this.props.deleteLoading} >
+          <Button onClick={this.props.confirmDelete} color="primary" variant='contained' disabled={this.props.deleteLoading} >
             Yes
           </Button>
         </DialogActions>

@@ -32,7 +32,7 @@ class ImportPublicEthAddress extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethPublicAddressValid?"raised":"flat"} disabled={!this.props.ethPublicAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Next</Button>
+          <Button size="small" variant={this.props.ethPublicAddressValid?"contained":"flat"} disabled={!this.props.ethPublicAddressValid} color="primary" onClick={this.props.importPublicEthAddress}>Next</Button>
         </Grid>
       </Grid>
     );

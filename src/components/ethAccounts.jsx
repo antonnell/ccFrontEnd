@@ -33,6 +33,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
+import EthTransactions from '../containers/ethTransactions';
 
 let config = require('../config')
 
@@ -268,7 +269,7 @@ class EthAccounts extends Component {
                           {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
-                        <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>
+                        <TableCell numeric><Button size="small" variant="contained" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>
                       </TableRow>
                     );
                   })}
@@ -514,6 +515,9 @@ class EthAccounts extends Component {
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
         </Grid>
+        <Grid item xs={12} >
+          <EthTransactions ethAddresses={this.props.addresses} ethTransactions={this.props.ethTransactions} contacts={this.props.contacts} />
+        </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>
     );
@@ -521,10 +525,7 @@ class EthAccounts extends Component {
 }
 
 /*
-
-<Grid item xs ={12}>
-  {this.renderTransactions()}
-</Grid>
+{this.renderTransactions()}
 */
 
 export default(EthAccounts);

@@ -80,7 +80,7 @@ class ConfirmERC20Payment extends Component {
             <Button size="medium" variant="flat" color="primary" onClick={this.props.backClicked} disabled={this.props.loading}>Back</Button>
           </Grid>
           <Grid item xs={6} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.confirmClicked} disabled={this.props.loading}>Confirm</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.confirmClicked} disabled={this.props.loading}>Confirm</Button>
           </Grid>
         </Grid>
       </div>
