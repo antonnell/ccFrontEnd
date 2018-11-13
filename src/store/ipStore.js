@@ -6,7 +6,7 @@ let Emitter = require('events').EventEmitter
 let dispatcher = new Dispatcher()
 let emitter = new Emitter()
 
-let apiUrl = 'http://api.ipapi.com/check?access_key=ade3c6119f9c5f1482eeb7f29f934217';
+let apiUrl = 'https://api.ipapi.com/check?access_key=ade3c6119f9c5f1482eeb7f29f934217';
 
 var Store = () => {
 

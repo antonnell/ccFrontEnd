@@ -39,6 +39,12 @@ let SendEther = createReactClass({
       accountError: false,
       accountErrorMessage: '',
 
+      ownAccountValue: '',
+      ownAccountValid: true,
+      ownAccount: null,
+      ownAccountError: false,
+      ownAccountErrorMessage: '',
+
       amount: '',
       amountValid: false,
       amountError: false,
@@ -99,6 +105,7 @@ let SendEther = createReactClass({
 
           proceedClicked={this.proceedClicked}
           selectAddress={this.selectAddress}
+          selectOwnAddress={this.selectOwnAddress}
           selectContact={this.selectContact}
 
           ethAddresses={this.props.ethAddresses}
@@ -110,6 +117,12 @@ let SendEther = createReactClass({
           account={this.state.account}
           accountError={this.state.accountError}
           accountErrorMessage={this.state.accountErrorMessage}
+
+          ownAccountValue={this.state.ownAccountValue}
+          ownAccount={this.state.ownAccount}
+          ownAccountError={this.state.ownAccountError}
+          ownAccountErrorMessage={this.state.ownAccountErrorMessage}
+
           contactValue={this.state.contactValue}
           contact={this.state.contact}
           contactError={this.state.contactError}
@@ -118,9 +131,11 @@ let SendEther = createReactClass({
           amount={this.state.amount}
           amountError={this.state.amountError}
           amountErrorMessage={this.state.amountErrorMessage}
+
           gwei={this.state.gwei}
           gweiError={this.state.gweiError}
           gweiErrorMessage={this.state.gweiErrorMessage}
+
           publicAddress={this.state.publicAddress}
           publicAddressError={this.state.publicAddressError}
           publicAddressErrorMessage={this.state.publicAddressErrorMessage}
@@ -139,6 +154,7 @@ let SendEther = createReactClass({
           tabValue={this.state.tabValue}
 
           account={this.state.account}
+          ownAccount={this.state.ownAccount}
           contact={this.state.contact}
 
           amount={this.state.amount}
@@ -161,6 +177,7 @@ let SendEther = createReactClass({
 
             proceedClicked={this.proceedClicked}
             selectAddress={this.selectAddress}
+            selectOwnAddress={this.selectOwnAddress}
             selectContact={this.selectContact}
 
             ethAddresses={this.props.ethAddresses}
@@ -172,6 +189,12 @@ let SendEther = createReactClass({
             account={this.state.account}
             accountError={this.state.accountError}
             accountErrorMessage={this.state.accountErrorMessage}
+
+            ownAccountValue={this.state.ownAccountValue}
+            ownAccount={this.state.ownAccount}
+            ownAccountError={this.state.ownAccountError}
+            ownAccountErrorMessage={this.state.ownAccountErrorMessage}
+
             contactValue={this.state.contactValue}
             contact={this.state.contact}
             contactError={this.state.contactError}
@@ -180,9 +203,11 @@ let SendEther = createReactClass({
             amount={this.state.amount}
             amountError={this.state.amountError}
             amountErrorMessage={this.state.amountErrorMessage}
+
             gwei={this.state.gwei}
             gweiError={this.state.gweiError}
             gweiErrorMessage={this.state.gweiErrorMessage}
+
             publicAddress={this.state.publicAddress}
             publicAddressError={this.state.publicAddressError}
             publicAddressErrorMessage={this.state.publicAddressErrorMessage}
@@ -245,6 +270,21 @@ let SendEther = createReactClass({
     )
   },
 
+  selectOwnAddress(event) {
+    var selectedAccount = this.props.ethAddresses.filter((address) => {
+      return address.address == event.target.value
+    })
+    if(selectedAccount.length > 0) {
+      selectedAccount = selectedAccount[0]
+    } else {
+      selectedAccount = null
+    }
+    this.setState({ownAccountValue: selectedAccount.address, ownAccount: selectedAccount, ownAccountValid: true});
+
+    this.validateOwnAccount(selectedAccount)
+    this.validateSetupPayment();
+  },
+
   selectAddress(event) {
     var selectedAccount = this.props.ethAddresses.filter((address) => {
       return address.address == event.target.value
@@ -280,6 +320,7 @@ let SendEther = createReactClass({
     this.validateGas()
     this.validatePublicAddress()
     this.validateAccount()
+    this.validateOwnAccount()
     this.validateContact()
 
     if(this.validateSetupPayment()) {
@@ -306,11 +347,19 @@ let SendEther = createReactClass({
         amount: this.state.amount,
         gwei: this.state.gwei
       }
+    } else if (this.state.tabValue == 2) {
+      content = {
+        fromAddress: this.state.accountValue,
+        toAddress: this.state.ownAccountValue,
+        amount: this.state.amount,
+        gwei: this.state.gwei
+      }
     } else {
+      this.setState({loading: false});
       return false;
     }
 
-    //console.log(content)
+    console.log(content)
     ethDispatcher.dispatch({type: 'sendEther', content, token: this.props.user.token})
   },
 
@@ -364,6 +413,12 @@ let SendEther = createReactClass({
       accountError: false,
       accountErrorMessage: '',
 
+      ownAccountValue: '',
+      ownAccountValid: true,
+      ownAccount: null,
+      ownAccountError: false,
+      ownAccountErrorMessage: '',
+
       amount: '',
       amountValid: false,
       amountError: false,
@@ -409,9 +464,11 @@ let SendEther = createReactClass({
 
   handleTabChange(event, tabValue) {
     if(tabValue == 0) {
-      this.setState({ tabValue, publicAddress: '', publicAddressError: false, publicAddressErrorMessage: '', publicAddressValid: true, contactValid: false});
+      this.setState({ tabValue, publicAddress: '', publicAddressError: false, publicAddressErrorMessage: '', ownAccount: null, ownAccountValue: '', ownAccountError: false, ownAccountErrorMessage: '', publicAddressValid: true, contactValid: false, ownAccountValid: true});
     } else if (tabValue == 1) {
-      this.setState({ tabValue, contact: null, contactValue: '', contactError: false, contactErrorMessage: '', publicAddressValid: false, contactValid: true});
+      this.setState({ tabValue, contact: null, contactValue: '', contactError: false, contactErrorMessage: '', ownAccount: null, ownAccountValue: '', ownAccountError: false, ownAccountErrorMessage: '', publicAddressValid: false, contactValid: true, ownAccountValid: true});
+    } else if (tabValue == 2) {
+      this.setState({ tabValue, contact: null, contactValue: '', contactError: false, contactErrorMessage: '', publicAddress: '', publicAddressError: false, publicAddressErrorMessage: '', publicAddressValid: true, contactValid: true, ownAccountValid: false});
     } else {
       this.setState({ tabValue });
     }
@@ -436,7 +493,7 @@ let SendEther = createReactClass({
   },
 
   validateSetupPayment() {
-    var valid = (this.state.accountValid && this.state.contactValid &&
+    var valid = (this.state.accountValid && this.state.ownAccountValid && this.state.contactValid &&
       this.state.amountValid && this.state.gweiValid && this.state.publicAddressValid);
     this.setState({ setupPaymentValid: valid });
     return valid;
@@ -456,10 +513,27 @@ let SendEther = createReactClass({
     return true;
   },
 
+  validateOwnAccount(value) {
+    this.setState({ownAccountError: false, ownAccountErrorMessage:''});
+    if(value == null) {
+      if(this.state.tabValue !== 2) {
+        return true;
+      }
+      value = this.state.ownAccount;
+    }
+
+    if(value == null) {
+      this.setState({ownAccountError: true, ownAccountErrorMessage:'Your account is required'});
+      return false;
+    }
+
+    return true;
+  },
+
   validateContact(value) {
     this.setState({contactError: false, contactErrorMessage:''});
     if(value == null) {
-      if(this.state.tabValue === 1) {
+      if(this.state.tabValue !== 0) {
         return true;
       }
       value = this.state.contact;
@@ -476,7 +550,7 @@ let SendEther = createReactClass({
   validatePublicAddress(value) {
     this.setState({publicAddressError: false, publicAddressErrorMessage:''});
     if(value == null) {
-      if(this.state.tabValue === 0) {
+      if(this.state.tabValue !== 1) {
         return true;
       }
       value = this.state.publicAddress;
@@ -501,7 +575,7 @@ let SendEther = createReactClass({
       value = this.state.amount;
     }
 
-    if(value == '') {
+    if(value == '' || value == '0') {
       this.setState({amountError: true, amountErrorMessage:'Amount is requred'});
       return false;
     } else if (!this.isNumeric(value)) {

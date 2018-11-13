@@ -29,12 +29,12 @@ class KYCIDDOcument extends Component {
           <input
             accept="image/*"
             style={{display: 'none'}}
-            id="raised-button-file"
+            id="contained-button-file"
             type="file"
             onChange={this.props.uploadIDDocument}
           />
-          <label htmlFor="raised-button-file">
-            <Button size="small" variant="raised" color="primary" component="span">Upload Document</Button>
+          <label htmlFor="contained-button-file">
+            <Button size="small" variant="contained" color="primary" component="span">Upload Document</Button>
           </label>
         </Grid>
         <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
@@ -44,7 +44,7 @@ class KYCIDDOcument extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.idDocumentImagePreviewUrl?"raised":"flat"} disabled={!this.props.idDocumentImagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Next</Button>
+          <Button size="small" variant={this.props.idDocumentImagePreviewUrl?"contained":"flat"} disabled={!this.props.idDocumentImagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Next</Button>
         </Grid>
       </Grid>
     );

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-class CreateWan extends Component {
+class CreateAion extends Component {
 
   render() {
     return (
@@ -14,14 +14,14 @@ class CreateWan extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="display1" color="inherit">
-                Create Wanchain Account
+                Create Aion Account
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
               <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.loading}
-                id="addressName" placeholder="Name your Wanchain account" value={this.props.addressName}
+                id="addressName" placeholder="Name your Aion account" value={this.props.addressName}
                 onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateKeyDown}
                 helperText={this.props.addressNameErrorMessage} />
             </Grid>
@@ -32,7 +32,7 @@ class CreateWan extends Component {
               <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading}>Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.addressNameValid?"contained":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create account</Button>
+              <Button size="small" variant={this.props.addressNameValid?"contained":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createAionAddress}>Create account</Button>
             </Grid>
           </Grid>
         </Grid>
@@ -41,4 +41,4 @@ class CreateWan extends Component {
   }
 }
 
-export default (CreateWan);
+export default (CreateAion);

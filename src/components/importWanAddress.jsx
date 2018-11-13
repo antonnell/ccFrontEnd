@@ -37,7 +37,7 @@ class ImportWanAddress extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateCreateWanAddress}>Create one</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.importWanAddress}>Import my address</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.importWanAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

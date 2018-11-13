@@ -26,7 +26,7 @@ class StoreWanAddress extends Component {
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateImportPublicWanAddress} style={{marginRight: '12px'}}>No, thank you</Button>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateImportPrivateTypeWanAddress}>Yes, please</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.navigateImportPrivateTypeWanAddress}>Yes, please</Button>
         </Grid>
       </Grid>
     );

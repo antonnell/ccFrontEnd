@@ -29,12 +29,12 @@ class KYCPhoto extends Component {
           <input
             accept="image/*"
             style={{display: 'none'}}
-            id="raised-button-file"
+            id="contained-button-file"
             type="file"
             onChange={this.props.uploadPhoto}
           />
-          <label htmlFor="raised-button-file">
-            <Button size="small" variant="raised" color="primary" component="span">Upload Photo</Button>
+          <label htmlFor="contained-button-file">
+            <Button size="small" variant="contained" color="primary" component="span">Upload Photo</Button>
           </label>
         </Grid>
         <Grid item xs={12} align='center' style={{marginTop: '24px '}}>
@@ -44,7 +44,7 @@ class KYCPhoto extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.photoImagePreviewUrl?"raised":"flat"} disabled={!this.props.photoImagePreviewUrl}  color="primary" onClick={this.props.navigateJoinWhitelist}>Whitest me now</Button>
+          <Button size="small" variant={this.props.photoImagePreviewUrl?"contained":"flat"} disabled={!this.props.photoImagePreviewUrl}  color="primary" onClick={this.props.navigateJoinWhitelist}>Whitest me now</Button>
         </Grid>
       </Grid>
     );

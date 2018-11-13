@@ -73,7 +73,6 @@ class SetupWRC20Payment extends Component {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
 
-    console.log(this.props.wanAddresses)
     return (
       <FormControl error style={{minWidth: '300px', width: '100%'}}>
         <Select
@@ -272,16 +271,16 @@ class SetupWRC20Payment extends Component {
               Gas limit*
             </Typography>
             <TextField required fullWidth={false} color="textSecondary" error={this.props.gweiError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
-              id="gwei" placeholder="Gwei" value={this.props.gwei}
+              id="gwei" placeholder="Gwin" value={this.props.gwei}
               onChange={(event) => { this.props.handleChange(event, 'gwei'); }} margin="normal"
               helperText={this.props.gweiErrorMessage} onBlur={(event) => { this.props.validateField(event, 'gwei'); }} InputProps={{
-                endAdornment: <InputAdornment position="end">Gwei</InputAdornment>,
+                endAdornment: <InputAdornment position="end">Gwin</InputAdornment>,
               }} />
           </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
           </Grid>
         </Grid>
       </div>

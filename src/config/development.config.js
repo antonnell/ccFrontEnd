@@ -4,7 +4,7 @@ var config = {
   apiUrl: "https://api.testnet.cryptocurve.network",
   etherscanUrl: "https://ropsten.etherscan.io/tx/",
   wanscanURL: "https://explorer.cryptocurve.xyz/tx/",
-  aionscanURL: "https://mainnet.aion.network/#/transaction/"
+  aionscanURL: "https://mastery.aion.network/#/transaction/"
 };
 
 module.exports = config;

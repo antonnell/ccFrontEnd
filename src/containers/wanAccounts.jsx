@@ -47,8 +47,13 @@ let WanAccounts = createReactClass({
       investmentAmountErrorMessage: '',
       deleteOpen: false,
       ICOError: '',
+      ICOSuccess: '',
       investLoading: false,
-      termsOpen: false
+      termsOpen: false,
+      thanksOpen: false,
+      investTransacstionID: '',
+      minContribution: 25,
+      crowdasleProgress: null
     }
   },
   render() {
@@ -117,7 +122,14 @@ let WanAccounts = createReactClass({
         handleTermsClose={this.handleTermsClose}
         handleTermsAccepted={this.handleTermsAccepted}
         ICOError={this.state.ICOError}
+        ICOSuccess={this.state.ICOSuccess}
         investLoading={this.state.investLoading}
+        size={this.props.size}
+        thanksOpen={this.state.thanksOpen}
+        investTransacstionID={this.state.investTransacstionID}
+        handleThanksClose={this.handleThanksClose}
+        minContribution={this.state.minContribution}
+        crowdasleProgress={this.state.crowdasleProgress}
       />
     )
   },
@@ -129,6 +141,7 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners('exportWanchainKey');
     wanEmitter.removeAllListeners('deleteWanAddress');
     wanEmitter.removeAllListeners('investICO');
+    wanEmitter.removeAllListeners('getICOProgress');
 
     wanEmitter.on('createWanAddress', this.createWanAddressReturned);
     wanEmitter.on('importWanAddress', this.importWanAddressReturned);
@@ -136,7 +149,13 @@ let WanAccounts = createReactClass({
     wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
     wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
     wanEmitter.on('investICO', this.investICOReturned);
+    wanEmitter.on('getICOProgress', this.getICOProgressReturned);
   },
+
+  // componentDidMount() {
+  //   let content = {}
+  //   wanDispatcher.dispatch({type: 'getICOProgress', content, token: this.props.user.token });
+  // },
 
   resetInputs() {
     this.setState({
@@ -255,7 +274,23 @@ let WanAccounts = createReactClass({
     if(data.success) {
 
       //update the contributed amounts? Show them a tx? I don't know...
+      this.setState({thanksOpen: true, investTransacstionID: data.transactionId, ICOSuccess: 'Your ICO contribution was successfully processed.'})
 
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
+    }
+  },
+
+  getICOProgressReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data) {
+      this.setState({crowdasleProgress: data})
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});
     } else {
@@ -275,6 +310,10 @@ let WanAccounts = createReactClass({
 
   handleDeleteClose() {
     this.setState({deleteAddress: null, deleteOpen: false});
+  },
+
+  handleThanksClose() {
+    this.setState({thanksOpen: false})
   },
 
   exportWanchainKeyClicked(address) {
@@ -300,8 +339,12 @@ let WanAccounts = createReactClass({
         this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Invalid investment amount'})
         error = true
       }
-      if(this.state.investmentAmount > currentCrowdsale.userCap) {
-        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than contribution cap'})
+      if(currentCrowdsale.userCap != 0 && this.state.investmentAmount > (currentCrowdsale.userCap/1000000000000000000)) {
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is greater than maximum contribution cap'})
+        error = true
+      }
+      if(this.state.investmentAmount < this.state.minContribution) {
+        this.setState({investmentAmountError: true, investmentAmountErrorMessage: 'Investment amount is less than minimum contribution cap'})
         error = true
       }
 
@@ -317,7 +360,6 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({ICOError: 'An error occurred'})
     }
-    //rather throw up a popup saying : Are you sure that you would like to invest? You need to accept our terms and conditions. etc.
   },
 
   handleTermsClose(){
@@ -330,7 +372,7 @@ let WanAccounts = createReactClass({
     var content = {
       fromAddress: this.state.selectedAddress,
       amount: this.state.investmentAmount,
-      gwei: 2,
+      gwei: 300,
       toAddress: this.state.icoContractAddress
     }
     wanDispatcher.dispatch({type: 'investICO', content, token: this.props.user.token });

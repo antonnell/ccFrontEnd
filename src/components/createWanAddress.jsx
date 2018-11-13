@@ -46,7 +46,7 @@ class CreateWan extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanAddressNameValid?"raised":"flat"} disabled={(!this.props.wanAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
+          <Button size="small" variant={this.props.wanAddressNameValid?"contained":"flat"} disabled={(!this.props.wanAddressNameValid)||this.props.loading} color="primary" onClick={this.props.createWanAddress}>Create address</Button>
         </Grid>
       </Grid>
     );

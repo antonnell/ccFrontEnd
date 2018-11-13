@@ -88,6 +88,7 @@ let Manage2FA = createReactClass({
           loading={this.state.loading}
           error={this.state.error}
           codeValid={this.state.codeValid}
+          secretKey={this.state.secretKey}
         />)
     }
   },

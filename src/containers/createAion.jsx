@@ -1,33 +1,33 @@
 import React from 'react';
-import CreateEthComponent from '../components/createEth';
+import CreateAionComponent from '../components/createAion';
 import bip39 from 'bip39';
 
 const crypto = require('crypto');
 const sha256 = require('sha256');
 
 const createReactClass = require('create-react-class');
-const isEthereumAddress  = require('is-ethereum-address');
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
 
-let CreateEth = createReactClass({
+let aionEmitter = require('../store/aionStore.js').default.emitter;
+let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
+
+let AionAccounts = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
       addressName: '',
       addressNameError: false,
-      addressNameErrorMessage: 'This is the name of your new Ethereum account',
+      addressNameErrorMessage: 'This is the name of your new Aion account',
       addressNameValid: false
     }
   },
   render() {
     return (
-      <CreateEthComponent
+      <CreateAionComponent
         handleChange={this.handleChange}
         onCreateKeyDown={this.onCreateKeyDown}
-        createEthAddress={this.createEthAddress}
+        createAionAddress={this.createAionAddress}
         navigateSkip={this.navigateSkip}
         loading={this.state.loading}
         error={this.state.error}
@@ -40,18 +40,18 @@ let CreateEth = createReactClass({
   },
 
   componentWillMount() {
-    ethEmitter.removeAllListeners('createEthAddress');
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
+    aionEmitter.removeAllListeners('createAionAddress');
+    aionEmitter.on('createAionAddress', this.createAionAddressReturned);
   },
 
   resetInputs() {
     this.setState({
       addressName: '',
-      addressNameError: false
+      addressNameError: false,
     })
   },
 
-  createEthAddressReturned(error, data) {
+  createAionAddressReturned(error, data) {
     this.setState({loading: false});
     if(error) {
       return this.setState({error: error.toString()});
@@ -60,9 +60,9 @@ let CreateEth = createReactClass({
     if(data.success) {
       this.resetInputs();
       var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
-      window.location.hash = 'createWan'
+      window.location.hash = 'kyc'
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -71,17 +71,17 @@ let CreateEth = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = 'createWan'
+    window.location.hash = 'kyc'
   },
 
   onCreateKeyDown(event) {
     if (event.which == 13) {
-      this.createEthAddress()
+      this.createAionAddress()
     }
   },
 
   validateAddressName(value) {
-    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'This is the name of your new Ethereum account' });
+    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'This is the name of your new Aion account' });
     if(value==null) {
       value = this.state.addressName;
     }
@@ -93,11 +93,11 @@ let CreateEth = createReactClass({
     return true;
   },
 
-  createEthAddress() {
+  createAionAddress() {
     if(this.validateAddressName()) {
       this.setState({loading: true});
       var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+      aionDispatcher.dispatch({type: 'createAionAddress', content, token: this.props.user.token });
     }
   },
 
@@ -111,7 +111,7 @@ let CreateEth = createReactClass({
         this.validateAddressName(event.target.value)
       }
     }
-  }
+  },
 })
 
 function decrypt(text,seed){
@@ -121,4 +121,4 @@ function decrypt(text,seed){
   return dec;
 }
 
-export default (CreateEth);
+export default (AionAccounts);

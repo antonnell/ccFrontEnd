@@ -12,6 +12,7 @@ import Welcome from './containers/welcome.jsx';
 import RegisterAccount from './containers/registerAccount.jsx';
 import CreateEth from './containers/createEth.jsx';
 import CreateWan from './containers/createWan.jsx';
+import CreateAion from './containers/createAion.jsx';
 import KYC from './containers/kyc.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
@@ -33,6 +34,7 @@ import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 import WhitelistCheck from './containers/whitelistCheck.jsx';
 import SetUsername from './containers/setUsername.jsx';
+import EthTransactions from './containers/ethTransactions.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -152,7 +154,8 @@ class App extends Component {
       erc20Tokens: null,
       wrc20Tokens: null,
       crowdsales: null,
-      verificationSearching: false
+      verificationSearching: false,
+      ethTransactions: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -188,6 +191,7 @@ class App extends Component {
     this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(this);
 
     this.verificationResultReturned = this.verificationResultReturned.bind(this);
+    this.getTransactionHistoryReturned = this.getTransactionHistoryReturned.bind(this);
   };
 
   verificationResultReturned(error, data)  {
@@ -199,10 +203,10 @@ class App extends Component {
 
       let user = this.state.user
 
-      if(user.verificationResult != data.verificationResult || user.verificationUrl != data.verificationUrl || user.whitelistStatus != data.WhitelistStatus) {
+      if(user.verificationResult != data.verificationResult || user.verificationUrl != data.verificationUrl || user.whitelistStatus != data.whitelistStatus) {
         user.verificationResult = data.verificationResult
         user.verificationUrl = data.verificationUrl
-        user.whitelistStatus = data.WhitelistStatus
+        user.whitelistStatus = data.whitelistStatus
 
         this.setUser(user)
       }
@@ -212,6 +216,20 @@ class App extends Component {
           accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: user.id }, token: user.token })
         }, 300000);
       }
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getTransactionHistoryReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({ethTransactions: data.transactions})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -256,6 +274,7 @@ class App extends Component {
     crowdsaleEmitter.removeAllListeners('getCrowdSales');
     crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
     accountEmitter.removeAllListeners('verificationResult');
+    ethEmitter.removeAllListeners('getTransactionHistory');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -275,7 +294,7 @@ class App extends Component {
     crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
     crowdsaleEmitter.on('getUserCrowdSaleContributions', this.getUserCrowdSaleContributionsReturned);
     accountEmitter.on('verificationResult', this.verificationResultReturned);
-
+    ethEmitter.on('getTransactionHistory', this.getTransactionHistoryReturned);
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -303,6 +322,8 @@ class App extends Component {
         this.setState({verificationSearching: true})
         accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
+
+      this.constantRefresh(user)
     }
   };
 
@@ -344,14 +365,22 @@ class App extends Component {
     }
   };
 
-  getUserCrowdSaleContributionsReturned(error, data) {
+  getUserCrowdSaleContributionsReturned(error, data, id) {
     this.setState({ investLoading: false });
     if(error) {
       return this.setState({ICOError: error.toString()});
     }
 
     if(data.success) {
-      this.state.crowdsales[0].totalContribution = data.totalContribution
+      let crowdsales = this.state.crowdsales
+
+      crowdsales = this.state.crowdsales.map((crowdsale) => {
+        if(crowdsale.id == id) {
+          crowdsale.totalContribution = data.totalContribution
+        }
+
+        return crowdsale
+      })
 
     } else if (data.errorMsg) {
       this.setState({ICOError: data.errorMsg});
@@ -388,19 +417,28 @@ class App extends Component {
     }
   };
 
-  getUserDetails(user) {
-    var content = {id: user.id};
-    ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
-    wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
-    aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
-    contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
+  constantRefresh(user) {
+    let content = {}
 
-    // if(this.state.whitelistState == null) {
-    //   if(user.whitelistToken != null && user.whitelistTokenKey != null) {
-    //     var whitelistContent = { emailAddress: user.email };
-    //     whitelistDispatcher.dispatch({type: 'getWhitelistState', content: whitelistContent, token: user.whitelistToken, tokenKey: user.whitelistTokenKey });
-    //   }
-    // }
+    setTimeout(() => {
+      if(this.state.user) {
+        this.getUserDetails(this.state.user)
+        crowdsaleDispatcher.dispatch({ type: 'getCrowdSales', content, token: this.state.user.token });
+
+        this.constantRefresh()
+      }
+    }, 300000);
+  };
+
+  getUserDetails(user) {
+    if(user) {
+      var content = {id: user.id};
+      ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
+      ethDispatcher.dispatch({type: 'getTransactionHistory', content, token: user.token});
+      wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
+      aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
+      contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
+    }
   };
 
   getWhitelistStateReturned(error, data) {
@@ -656,7 +694,6 @@ class App extends Component {
   };
 
   setUser(user) {
-    console.log(user)
     this.setState({user});
     sessionStorage.setItem('cc_user', JSON.stringify(user));
     this.getUserDetails(user);
@@ -844,6 +881,8 @@ class App extends Component {
         return (<CreateEth user={this.state.user} />);
       case 'createWan':
         return (<CreateWan user={this.state.user} />);
+      case 'createAion':
+        return (<CreateAion user={this.state.user} />);
       case 'kyc':
         return (<KYC user={this.state.user} setUser={this.setUser}  />);
       case 'setUsername':
@@ -857,9 +896,9 @@ class App extends Component {
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} />);
+        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales}/>);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size}/>);
       case 'aionAccounts':
         return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
       case 'contacts':
@@ -882,10 +921,12 @@ class App extends Component {
         return (<SendERC20 user={this.state.user} sendERC20Symbol={this.state.sendERC20Symbol} erc20Tokens={this.state.erc20Tokens} sendERC20Contact={this.state.sendERC20Contact} sendERC20Account={this.state.sendERC20Account} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendWanchain':
         return (<SendWanchain user={this.state.user} sendWanchainContact={this.state.sendWanchainContact} sendWanchainAccount={this.state.sendWanchainAccount} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
-      case 'sendWRC20':
-        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      // case 'sendWRC20':
+      //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendAion':
         return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'ethTransactions':
+        return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'about':
         return (<ComingSoon />);
       case 'press':
@@ -900,22 +941,22 @@ class App extends Component {
         return (<ComingSoon />);
       case 'fees':
         return (<ComingSoon />);
-      case 'add':
-        if(!this.state.ipValid) {
-          window.location.hash = 'addUnavailable'
-          return <div></div>
-        }
-        return (<WhitelistMe ipLoading={this.state.ipLoading} />);
-      case 'added':
-        return (<WhitelistMeDone />);
-      case 'addUnavailable':
-        if(this.state.ipValid == true) {
-          window.location.hash = 'add'
-          return <div></div>
-        }
-        return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
-      case 'whitelistStatus':
-        return (<WhitelistCheck />)
+      // case 'add':
+      //   if(!this.state.ipValid) {
+      //     window.location.hash = 'addUnavailable'
+      //     return <div></div>
+      //   }
+      //   return (<WhitelistMe ipLoading={this.state.ipLoading} />);
+      // case 'added':
+      //   return (<WhitelistMeDone />);
+      // case 'addUnavailable':
+      //   if(this.state.ipValid == true) {
+      //     window.location.hash = 'add'
+      //     return <div></div>
+      //   }
+      //   return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
+      // case 'whitelistStatus':
+      //   return (<WhitelistCheck />)
       case 'logOut':
         return (<Welcome setUser={this.setUser}  />);
       default:

@@ -38,14 +38,14 @@ class WhitelistCheck extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
             <Grid item xs={12} align='center'>
-              <Typography style={{color: (this.props.whitelistedMessage == 'This email has been registered as a Whitelist candidate. You will be emailed once your Whitelist status has been approved.'?'#51ab63':'#f44336')}} >
+              <Typography style={{color: (this.props.whitelistedMessage == 'You are whitelisted!'?'#51ab63':'#f44336')}} >
                 {this.props.whitelistedMessage}
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitWhitelist} disabled={this.props.loading}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitWhitelist} disabled={this.props.loading}>
                 Check status
               </Button>
             </Grid>

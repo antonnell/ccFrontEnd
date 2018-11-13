@@ -18,7 +18,7 @@ let WanAccounts = createReactClass({
       error: null,
       addressName: '',
       addressNameError: false,
-      addressNameErrorMessage: '',
+      addressNameErrorMessage: 'This is the name of your new Wanchain account',
       addressNameValid: false
     }
   },
@@ -62,7 +62,7 @@ let WanAccounts = createReactClass({
       var content = {id: this.props.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
 
-      window.location.hash = 'kyc'
+      window.location.hash = 'createAion'
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -71,7 +71,7 @@ let WanAccounts = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = 'kyc'
+    window.location.hash = 'createAion'
   },
 
   onCreateKeyDown(event) {
@@ -81,7 +81,7 @@ let WanAccounts = createReactClass({
   },
 
   validateAddressName(value) {
-    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'' });
+    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'This is the name of your new Wanchain account' });
     if(value==null) {
       value = this.state.addressName;
     }

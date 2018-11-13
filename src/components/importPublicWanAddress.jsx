@@ -32,7 +32,7 @@ class ImportPublicWanAddress extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanPublicAddressValid?"raised":"flat"} disabled={!this.props.wanPublicAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Next</Button>
+          <Button size="small" variant={this.props.wanPublicAddressValid?"contained":"flat"} disabled={!this.props.wanPublicAddressValid} color="primary" onClick={this.props.importPublicWanAddress}>Next</Button>
         </Grid>
       </Grid>
     );

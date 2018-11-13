@@ -78,7 +78,7 @@ class HaveWanAddress extends Component {
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateExistingWanAddress} style={{marginRight: '12px'}}>I have one</Button>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.navigateCreateWanAddress}>Create Wanchain Address</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.navigateCreateWanAddress}>Create Wanchain Address</Button>
         </Grid>
       </Grid>
     );

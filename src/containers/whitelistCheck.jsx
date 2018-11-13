@@ -99,6 +99,9 @@ let WhitelistCheck = createReactClass({
       this.setState({ loading: false })
 
       //disply whitelist status
+      if(data.message == 'This email has been registered as a Whitelist candidate. You will be emailed once your Whitelist status has been approved.') {
+        data.message = 'You are whitelisted!'
+      }
       this.setState({whitelistedMessage: data.message, loading: false})
     } else if (data.requires2fa) {
       this.setState({ requires2fa: true, loading: false });

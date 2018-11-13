@@ -21,7 +21,7 @@ class Disable2FaConfirmation extends Component {
           <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" >
             No
           </Button>
-          <Button onClick={this.props.confirmDisable} color="primary" variant='raised' >
+          <Button onClick={this.props.confirmDisable} color="primary" variant='contained' >
             Yes
           </Button>
         </DialogActions>

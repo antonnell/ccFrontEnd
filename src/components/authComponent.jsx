@@ -78,7 +78,7 @@ class AuthComponent extends Component {
               </Button>
             </Grid>
             <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitLogin} disabled={(this.props.loading||!this.props.codeValid)}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitLogin} disabled={(this.props.loading||!this.props.codeValid)}>
                 Login
               </Button>
             </Grid>

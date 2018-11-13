@@ -16,7 +16,7 @@ import InputAdornment  from '@material-ui/core/InputAdornment';
 
 class SetupAionPayment extends Component {
 
-  renderAddresses() {
+  renderAddresses(accountValue, error, errorMessage, onChange) {
     if(this.props.aionAddresses == null || this.props.aionAddresses.length == 0) {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
@@ -24,10 +24,14 @@ class SetupAionPayment extends Component {
     return (
       <FormControl error style={{minWidth: '300px', width: '100%'}}>
         <Select
-        error={this.props.accountError}
-        value={this.props.accountValue}
-        onChange={this.props.selectAddress}
+        error={error}
+        value={accountValue}
+        onChange={onChange}
         renderValue={(value) => {
+
+          if(!value) {
+            return <div></div>
+          }
           var selectedAddress = this.props.aionAddresses.filter((address) => {
             return address.address == value
           })[0]
@@ -64,7 +68,7 @@ class SetupAionPayment extends Component {
           )
         })}
       </Select>
-      <FormHelperText>{this.props.accountErrorMessage}</FormHelperText>
+      <FormHelperText>{errorMessage}</FormHelperText>
     </FormControl>)
   };
 
@@ -113,6 +117,19 @@ class SetupAionPayment extends Component {
       </Select>
       <FormHelperText>{this.props.contactErrorMessage}</FormHelperText>
     </FormControl>)
+  };
+
+  renderSelectOwn() {
+    return (<Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+      <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
+        <Typography variant="subheading">
+          Select your recipient account*
+        </Typography>
+      </Grid>
+      <Grid item xs={12} altign='left'>
+        {this.renderAddresses(this.props.ownAccountValue, this.props.ownAccountError, this.props.ownAccountErrorMessage, this.props.selectOwnAddress)}
+      </Grid>
+    </Grid>)
   };
 
   renderSelectBeneficiary() {
@@ -167,7 +184,7 @@ class SetupAionPayment extends Component {
             </Typography>
           </Grid>
           <Grid item xs={12} altign='left'>
-            {this.renderAddresses()}
+            {this.renderAddresses(this.props.accountValue, this.props.accountError, this.props.accountErrorMessage, this.props.selectAddress)}
           </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
@@ -184,9 +201,11 @@ class SetupAionPayment extends Component {
               textColor="secondary" >
               <Tab label="Contact Payment" />
               <Tab label="Public Address Payment" />
+              <Tab label="Own Account Payment" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderSelectBeneficiary()}
             {this.props.tabValue === 1 && this.renderEnterPublic()}
+            {this.props.tabValue === 2 && this.renderSelectOwn()}
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
             <Typography variant="subheading">
@@ -213,7 +232,7 @@ class SetupAionPayment extends Component {
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.proceedClicked}>Proceed</Button>
           </Grid>
         </Grid>
       </div>

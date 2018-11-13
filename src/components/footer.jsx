@@ -28,8 +28,6 @@ class Footer extends Component {
               <Typography variant='subheading' style={headingStyle}>ACCOUNT</Typography>
               <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'welcome'); }}>{login}</Typography>
               <Typography color="inherit" variant='body1' style={{marginBottom: '6px', textDecoration: 'line-through'}} >Register</Typography>
-              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, (this.props.ipValid?'add':'addUnavailable')); }}>Whitelist</Typography>
-              <Typography color="inherit" variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'whitelistStatus'); }}>Whitelist Status</Typography>
             </Grid>
             <Grid item xs={3} align='left'>
               <Typography variant='subheading' style={headingStyle}>ABOUT</Typography>
@@ -54,7 +52,7 @@ class Footer extends Component {
         </Grid>
         <div style={{position: 'absolute', bottom: '0px', right: '3px'}}>
           <Typography style={{color:'#FFFFFF'}}>
-            Version: 1.1.6
+            Version: 1.1.14
           </Typography>
         </div>
       </Grid>

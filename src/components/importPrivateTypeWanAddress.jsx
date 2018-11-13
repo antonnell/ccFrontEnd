@@ -22,13 +22,13 @@ class ImportPrivateTypeWanAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('privateKey')}}>Private Key</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('privateKey')}}>Private Key</Button>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('mnemonic')}}>Mnemonic</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('mnemonic')}}>Mnemonic</Button>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('jsonV3')}}>JSONv3</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('jsonV3')}}>JSONv3</Button>
         </Grid>
         <Grid item xs={12} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>

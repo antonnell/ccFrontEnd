@@ -55,7 +55,7 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitLogin} disabled={this.props.loading}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitLogin} disabled={this.props.loading}>
                 LOGIN
               </Button>
             </Grid>

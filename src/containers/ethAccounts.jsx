@@ -89,6 +89,8 @@ let EthAccounts = createReactClass({
         confirmDelete={this.confirmDelete}
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
+        ethTransactions={this.props.ethTransactions}
+        contacts={this.props.contacts}
       />
     )
   },

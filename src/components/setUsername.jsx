@@ -44,7 +44,7 @@ class SerUsername extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitUpdateUsername}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitUpdateUsername}>
                 Set Username
               </Button>
             </Grid>

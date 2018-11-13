@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -32,6 +33,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
+import EthTransactions from '../containers/ethTransactions';
+
+let config = require('../config')
 
 function ExpandMoreIcon(props) {
   return (
@@ -233,7 +237,14 @@ class EthAccounts extends Component {
         }
       }
 
-      let erc20 = <div></div>
+      let erc20 = (<ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>ERC20 Tokens</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            Updating ERC20 tokens
+          </ExpansionPanelDetails>
+        </ExpansionPanel>)
       if(address.erc20Tokens) {
         erc20 = (
         <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px'}}>
@@ -258,7 +269,7 @@ class EthAccounts extends Component {
                           {n.name}
                         </TableCell>
                         <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
-                        <TableCell numeric><Button size="small" variant="raised" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>
+                        <TableCell numeric><Button size="small" variant="contained" color="primary" onClick={(event) => { this.props.sendERC20(n.symbol, address); }}>Send</Button></TableCell>
                       </TableRow>
                     );
                   })}
@@ -352,6 +363,130 @@ class EthAccounts extends Component {
     })
   };
 
+  renderTransactions() {
+
+    if(this.props.ethTransactions == null) {
+      return (
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+            <Typography variant="headline" color="inherit">
+              Transactions
+            </Typography>
+          </Grid>
+          <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>
+        </Grid>);
+    }
+
+    if(this.props.ethTransactions.length == 0) {
+      return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
+        <Typography variant="display1">We couldn't find any transactions for you.</Typography>
+      </Grid>);
+    }
+
+    let headerStyle = {
+      padding: '3px'
+    }
+    let bodyStyle = {
+      padding: '3px',
+      backgroundColor: '#f5f4f4',
+      minHeight: '40px'
+    }
+
+    return(
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+          <Typography variant="headline" color="inherit">
+            Transactions
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12} align='center'>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+            <Grid item xs={2} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                Date
+              </Typography>
+            </Grid>
+            <Grid item xs={2} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                From Account
+              </Typography>
+            </Grid>
+            <Grid item xs={2} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                To Account
+              </Typography>
+            </Grid>
+            <Grid item xs={1} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                Amount
+              </Typography>
+            </Grid>
+            <Grid item xs={1} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                Status
+              </Typography>
+            </Grid>
+            <Grid item xs={4} align='left' style={headerStyle}>
+              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                Transaction ID
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {this.props.ethTransactions.map((transaction) => {
+          return this.renderTransaction(transaction, bodyStyle)
+        })}
+
+      </Grid>
+    );
+  };
+
+  renderTransaction(transaction, bodyStyle) {
+
+    let styleA = {fontSize: '22px', fontWeight: 'bold'}
+    let styleB = {lineHeight: '33px', fontSize: '18px'}
+    let styleC = {minHeight: '80px'}
+
+    return (
+      <Grid item xs={12} align='center'>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+          <Grid item xs={2} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              {moment(transaction.timestamp).format('YYYY/MM/DD hh:mm')}
+            </Typography>
+          </Grid>
+          <Grid item xs={2} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              {transaction.fromDisplayName}
+            </Typography>
+          </Grid>
+          <Grid item xs={2} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              {transaction.toDisplayName}
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              {transaction.value} Eth
+            </Typography>
+          </Grid>
+          <Grid item xs={1} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              {transaction.status}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} align='left' style={bodyStyle}>
+            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+              <a href={config.etherscanUrl+transaction.transactionId} target="_blank">{transaction.transactionId}</a>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
+  };
+
   render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
@@ -380,10 +515,17 @@ class EthAccounts extends Component {
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
         </Grid>
+        <Grid item xs={12} >
+          <EthTransactions ethAddresses={this.props.addresses} ethTransactions={this.props.ethTransactions} contacts={this.props.contacts} />
+        </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>
     );
   }
 }
+
+/*
+{this.renderTransactions()}
+*/
 
 export default(EthAccounts);

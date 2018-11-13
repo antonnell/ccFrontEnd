@@ -25,7 +25,7 @@ class JoinWhitelist extends Component {
           <Button size="small" variant="flat" onClick={this.props.notNow}>Not now</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={this.props.joinWhitelist}>Join now!</Button>
+          <Button size="small" variant="contained" color="primary" onClick={this.props.joinWhitelist}>Join now!</Button>
         </Grid>
       </Grid>
     );

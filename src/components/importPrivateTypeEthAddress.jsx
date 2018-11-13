@@ -22,13 +22,13 @@ class ImportPrivateTypeEthAddress extends Component {
           </Typography>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('privateKey')}}>Private Key</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('privateKey')}}>Private Key</Button>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('mnemonic')}}>Mnemonic</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('mnemonic')}}>Mnemonic</Button>
         </Grid>
         <Grid item xs={4} align='center' style={{marginTop: '24px '}}>
-          <Button size="small" variant="raised" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('jsonV3')}}>JSONv3</Button>
+          <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateEthAddress('jsonV3')}}>JSONv3</Button>
         </Grid>
         <Grid item xs={12} align='left' style={{marginTop: '24px '}}>
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>

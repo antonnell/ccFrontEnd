@@ -41,10 +41,11 @@ var Store = () => {
     this.callApi(url,
       'GET',
       null,
-      payload)
+      payload,
+      payload.content.crowdsaleID)
   }
 
-  this.callApi = function(url, method, postData, payload) {
+  this.callApi = function(url, method, postData, payload, extraData) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = ''
@@ -96,7 +97,7 @@ var Store = () => {
     })
     .then(res => res.json())
     .then((res) => {
-      emitter.emit(payload.type, null, res)
+      emitter.emit(payload.type, null, res, extraData)
     })
     .catch((error) => {
       emitter.emit(payload.type, error, null)

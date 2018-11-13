@@ -21,7 +21,7 @@ class ImportPrivateEthAddress extends Component {
       password = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.ethPasswordError} disabled={this.props.loading}
         id="ethPassword" placeholder="Password" value={this.props.ethPassword} type='password'
         onChange={(event) => { this.props.handleChange(event, 'ethPassword'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} helperText='Your key is password protected. Please provide us with the password.'/>
-      unlockButton = <Button size="small" variant={this.props.ethPasswordValid?"raised":"flat"} disabled={!(this.props.ethPasswordValid||this.props.unlockLoading)} color="primary" onClick={this.props.unlockPrivateEthAddress}>Unlock</Button>
+      unlockButton = <Button size="small" variant={this.props.ethPasswordValid?"contained":"flat"} disabled={!(this.props.ethPasswordValid||this.props.unlockLoading)} color="primary" onClick={this.props.unlockPrivateEthAddress}>Unlock</Button>
     }
 
     switch (this.props.keyType) {
@@ -67,7 +67,7 @@ class ImportPrivateEthAddress extends Component {
           <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.ethPrivateAddressValid&&this.props.passwordCorrect?"raised":"flat"} disabled={!(this.props.ethPrivateAddressValid&&this.props.passwordCorrect)} color="primary" onClick={this.props.importPrivateEthAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.ethPrivateAddressValid&&this.props.passwordCorrect?"contained":"flat"} disabled={!(this.props.ethPrivateAddressValid&&this.props.passwordCorrect)} color="primary" onClick={this.props.importPrivateEthAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );

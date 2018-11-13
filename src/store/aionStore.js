@@ -110,14 +110,18 @@ var Store = () => {
   this.sendAion = function(payload) {
     var url = 'aion/sendAion'
     var postJson = {
-      address: payload.content.address,
-      contactUserName: payload.content.contactUserName,
-      aionAddressID: payload.content.aionAddressID,
-      password: payload.content.password,
+      fromAddress: payload.content.fromAddress,
       amount: payload.content.amount,
       gwei: payload.content.gwei
     }
+    if(payload.content.toAddress != null) {
+      postJson.toAddress = payload.content.toAddress
+    }
+    if(payload.content.contactUserName != null) {
+      postJson.contactUsername = payload.content.contactUserName
+    }
 
+    console.log(postJson)
     this.callApi(url,
       'POST',
       postJson,

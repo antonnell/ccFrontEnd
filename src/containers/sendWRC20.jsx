@@ -44,7 +44,7 @@ let SendWRC20 = createReactClass({
       amountError: false,
       amountErrorMessage: '',
 
-      gwei: '2',
+      gwei: '200',
       gweiValid: true,
       gweiError: false,
       gweiErrorMessage: '',
@@ -405,7 +405,7 @@ let SendWRC20 = createReactClass({
       amountError: false,
       amountErrorMessage: '',
 
-      gwei: '2',
+      gwei: '200',
       gweiValid: true,
       gweiError: false,
       gweiErrorMessage: '',
@@ -540,9 +540,6 @@ let SendWRC20 = createReactClass({
     if(value == null) {
       this.setState({publicAddressError: true, publicAddressErrorMessage:'Public address is requred'});
       return false;
-    } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid WRC20 public address'});
-      return false;
     } else {
       this.setState({ publicAddressValid: true })
     }
@@ -562,13 +559,13 @@ let SendWRC20 = createReactClass({
     }
 
     if(value == '' || value == '0') {
-      this.setState({amountError: true, amountErrorMessage:'Amount is requred'});
+      this.setState({amountValid: false, amountError: true, amountErrorMessage:'Amount is requred'});
       return false;
     } else if (!this.isNumeric(value)) {
-      this.setState({amountError: true, amountErrorMessage:'Invalid amount'});
+      this.setState({amountValid: false, amountError: true, amountErrorMessage:'Invalid amount'});
       return false;
     } else if (this.state.account!=null && tokenBalance < value) {
-      this.setState({amountError: true, amountErrorMessage:'Amount greater than current balance'});
+      this.setState({amountValid: false, amountError: true, amountErrorMessage:'Amount greater than current balance'});
       return false;
     } else {
       this.setState({ amountValid: true })
@@ -584,11 +581,13 @@ let SendWRC20 = createReactClass({
     }
 
     if(value == '') {
-      this.setState({gweiError: true, gweiErrorMessage:'Gas is requred'});
+      this.setState({gweiValid: false, gweiError: true, gweiErrorMessage:'Gas is requred'});
       return false;
     } else if (!this.isNumeric(value)) {
-      this.setState({gweiError: true, gweiErrorMessage:'Invalid gas'});
+      this.setState({gweiValid: false, gweiError: true, gweiErrorMessage:'Invalid gas'});
       return false;
+    } else if (value < 200) {
+      this.setState({gweiValid: false, gweiError: true, gweiErrorMessage:'Minimum gas amount is 200'});
     } else {
       this.setState({ gweiValid: true })
     }

@@ -14,6 +14,22 @@ import TermsModalComponent from './termsModal';
 const styles = {};
 
 class RegisterAccount extends Component {
+  // <FormControl component="accepted" required error={this.props.acceptedError}>
+  //   <FormControlLabel
+  //     style={{ textAlign: 'justify', marginRight: '0px' }}
+  //     control={
+  //       <Checkbox
+  //         error={this.props.acceptedError}
+  //         disabled={this.props.loading}
+  //         checked={this.props.accepted}
+  //         onChange={ (event) => { this.props.handleChecked(event, 'accepted'); }}
+  //         value="accepted"
+  //       />
+  //     }
+  //     label="I accept the Terms & Conditions"
+  //   />
+  // <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
+  // </FormControl>
   render() {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '100px', marginBottom: '100px'}}>
@@ -43,22 +59,7 @@ class RegisterAccount extends Component {
                 id="confirmPassword" label="Confirm Password" value={this.props.confirmPassword}
                 onChange={(event) => { this.props.handleChange(event, 'confirmPassword'); }} margin="normal" onKeyDown={this.props.onRegisterKeyDown}
                 helperText={this.props.confirmPasswordErrorMessage} />
-              <FormControl component="accepted" required error={this.props.acceptedError}>
-                <FormControlLabel
-                  style={{ textAlign: 'justify', marginRight: '0px' }}
-                  control={
-                    <Checkbox
-                      error={this.props.acceptedError}
-                      disabled={this.props.loading}
-                      checked={this.props.accepted}
-                      onChange={ (event) => { this.props.handleChecked(event, 'accepted'); }}
-                      value="accepted"
-                    />
-                  }
-                  label="I accept the Terms & Conditions"
-                />
-              <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
-              </FormControl>
+
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
@@ -76,7 +77,7 @@ class RegisterAccount extends Component {
               </Button>
             </Grid>
               <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitRegister} disabled={this.props.loading}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitRegister} disabled={this.props.loading}>
                 Register
               </Button>
             </Grid>

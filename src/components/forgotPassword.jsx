@@ -49,7 +49,7 @@ class ForgotPassword extends Component {
               </Button>
             </Grid>
             <Grid item xs={6} align='right'>
-              <Button variant="raised" size='large' color='primary' onClick={this.props.submitReset} disabled={this.props.loading}>
+              <Button variant="contained" size='large' color='primary' onClick={this.props.submitReset} disabled={this.props.loading}>
                 Reset
               </Button>
             </Grid>

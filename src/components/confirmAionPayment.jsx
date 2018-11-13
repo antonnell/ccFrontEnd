@@ -11,7 +11,7 @@ class ConfirmAionPayment extends Component {
       To your beneficairy:
       <div style={{border: '1px solid #000', padding: '12px', marginTop: '12px'}}>
         <Typography variant="title" noWrap>
-          <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryEthAddress})
+          <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryAionAddress})
         </Typography>
       </div>
     </Grid>)
@@ -23,6 +23,17 @@ class ConfirmAionPayment extends Component {
       <div style={{border: '1px solid #000', padding: '12px'}}>
         <Typography variant="title" noWrap>
           <b>{this.props.publicAddress}</b>
+        </Typography>
+      </div>
+    </Grid>)
+  };
+
+  renderOwnAccount() {
+    return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
+      To your own account:
+      <div style={{border: '1px solid #000', padding: '12px', marginTop: '12px'}}>
+        <Typography variant="title" noWrap>
+          <b>{this.props.ownAccount.name}</b> ({this.props.ownAccount.address})
         </Typography>
       </div>
     </Grid>)
@@ -61,6 +72,7 @@ class ConfirmAionPayment extends Component {
           </Grid>
           {this.props.tabValue===0&&this.renderBeneficiary()}
           {this.props.tabValue===1&&this.renderPublic()}
+          {this.props.tabValue===2&&this.renderOwnAccount()}
         </Grid>
         {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
@@ -68,7 +80,7 @@ class ConfirmAionPayment extends Component {
             <Button size="medium" variant="flat" color="primary" onClick={this.props.backClicked} disabled={this.props.loading}>Back</Button>
           </Grid>
           <Grid item xs={6} align='right'>
-            <Button size="medium" variant="raised" color="primary" onClick={this.props.confirmClicked} disabled={this.props.loading}>Confirm</Button>
+            <Button size="medium" variant="contained" color="primary" onClick={this.props.confirmClicked} disabled={this.props.loading}>Confirm</Button>
           </Grid>
         </Grid>
       </div>
