@@ -427,7 +427,7 @@ class EnhancedTable extends React.Component {
                         </TableCell>
                         <TableCell >
                           <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
-                            <a href={config.aionscanUrl+n.transactionId} target="_blank">{n.transactionId}</a>
+                            <a href={config.aionscanURL+n.transactionId} target="_blank">{n.transactionId}</a>
                           </Typography>
                         </TableCell>
                       </TableRow>
