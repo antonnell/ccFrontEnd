@@ -35,6 +35,8 @@ import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 import WhitelistCheck from './containers/whitelistCheck.jsx';
 import SetUsername from './containers/setUsername.jsx';
 import EthTransactions from './containers/ethTransactions.jsx';
+import WanTransactions from './containers/wanTransactions.jsx';
+import AionTransactions from './containers/aionTransactions.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -155,7 +157,9 @@ class App extends Component {
       wrc20Tokens: null,
       crowdsales: null,
       verificationSearching: false,
-      ethTransactions: null
+      ethTransactions: null,
+      wanTransactions: null,
+      aionTransactions: null
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -191,7 +195,9 @@ class App extends Component {
     this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(this);
 
     this.verificationResultReturned = this.verificationResultReturned.bind(this);
-    this.getTransactionHistoryReturned = this.getTransactionHistoryReturned.bind(this);
+    this.getEthTransactionHistoryReturned = this.getEthTransactionHistoryReturned.bind(this);
+    this.getWanTransactionHistoryReturned = this.getWanTransactionHistoryReturned.bind(this);
+    this.getAionTransactionHistoryReturned = this.getAionTransactionHistoryReturned.bind(this);
   };
 
   verificationResultReturned(error, data)  {
@@ -223,13 +229,41 @@ class App extends Component {
     }
   };
 
-  getTransactionHistoryReturned(error, data) {
+  getEthTransactionHistoryReturned(error, data) {
     if(error) {
       return this.setState({error: error.toString()});
     }
 
     if(data.success) {
       this.setState({ethTransactions: data.transactions})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getWanTransactionHistoryReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({wanTransactions: data.transactions})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg});
+    } else {
+      this.setState({error: data.statusText})
+    }
+  };
+
+  getAionTransactionHistoryReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({aionTransactions: data.transactions})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -274,7 +308,9 @@ class App extends Component {
     crowdsaleEmitter.removeAllListeners('getCrowdSales');
     crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
     accountEmitter.removeAllListeners('verificationResult');
-    ethEmitter.removeAllListeners('getTransactionHistory');
+    ethEmitter.removeAllListeners('getEthTransactionHistory');
+    wanEmitter.removeAllListeners('getWanTransactionHistory');
+    aionEmitter.removeAllListeners('getAionTransactionHistory');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -294,7 +330,9 @@ class App extends Component {
     crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
     crowdsaleEmitter.on('getUserCrowdSaleContributions', this.getUserCrowdSaleContributionsReturned);
     accountEmitter.on('verificationResult', this.verificationResultReturned);
-    ethEmitter.on('getTransactionHistory', this.getTransactionHistoryReturned);
+    ethEmitter.on('getEthTransactionHistory', this.getEthTransactionHistoryReturned);
+    wanEmitter.on('getWanTransactionHistory', this.getWanTransactionHistoryReturned);
+    aionEmitter.on('getAionTransactionHistory', this.getAionTransactionHistoryReturned);
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -434,10 +472,12 @@ class App extends Component {
     if(user) {
       var content = {id: user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: user.token });
-      ethDispatcher.dispatch({type: 'getTransactionHistory', content, token: user.token});
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: user.token });
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: user.token });
       contactsDispatcher.dispatch({type: 'getContacts', content, token: user.token });
+      ethDispatcher.dispatch({type: 'getEthTransactionHistory', content, token: user.token});
+      wanDispatcher.dispatch({type: 'getWanTransactionHistory', content, token: user.token});
+      aionDispatcher.dispatch({type: 'getAionTransactionHistory', content, token: user.token});
     }
   };
 
@@ -898,9 +938,9 @@ class App extends Component {
       case 'ethAccounts':
         return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size}/>);
+        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size} wanTransactions={this.state.wanTransactions} contacts={this.state.contacts}/>);
       case 'aionAccounts':
-        return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} />);
+        return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} aionTransactions={this.state.aionTransactions} contacts={this.state.contacts} />);
       case 'contacts':
         return (<Contacts user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} openSendWanchain={this.openSendWanchain} openSendAion={this.openSendAion} />);
       case 'updatePassword':

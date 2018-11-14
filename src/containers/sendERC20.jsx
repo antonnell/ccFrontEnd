@@ -479,9 +479,15 @@ let SendERC20 = createReactClass({
     if(event != null && event.target != null) {
 
       if(name==='amount') {
+        if(event.target.value.charAt(0) == '.') {
+          event.target.value = '0'+event.target.value
+        }
         if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       } else if (name==='gwei') {
+        if(event.target.value.charAt(0) == '.') {
+          event.target.value = '0'+event.target.value
+        }
         if(!this.isNumeric(event.target.value) && event.target.value != '')
           return false
       }

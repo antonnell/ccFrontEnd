@@ -32,6 +32,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
+import AionTransactions from '../containers/aionTransactions';
 
 function MoreIcon(props) {
   return (
@@ -333,6 +334,9 @@ class AionAccounts extends Component {
             {this.props.tabValue === 1 && this.renderImport()}
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
+        </Grid>
+        <Grid item xs={12} >
+          <AionTransactions aionAddresses={this.props.addresses} aionTransactions={this.props.aionTransactions} contacts={this.props.contacts} />
         </Grid>
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
       </Grid>

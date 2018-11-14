@@ -38,6 +38,9 @@ var Store = () => {
     case 'exportAionKey':
       this.exportAionKey(payload);
       break;
+    case 'getAionTransactionHistory':
+      this.getAionTransactionHistory(payload);
+      break;
     }
   }.bind(this))
 
@@ -138,6 +141,15 @@ var Store = () => {
     this.callApi(url,
       'POST',
       postJson,
+      payload)
+  }
+
+  this.getAionTransactionHistory = function(payload)  {
+    var url = 'aion/getTransactionHistory/'+payload.content.id
+
+    this.callApi(url,
+      'GET',
+      null,
       payload)
   }
 

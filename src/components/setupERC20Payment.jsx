@@ -68,7 +68,7 @@ class SetupERC20Payment extends Component {
     </FormControl>)
   };
 
-  renderAddresses(accountValue, error, errorMessage, onChange) {
+  renderAddresses(accountValue, error, errorMessage, onChange, type) {
     if(this.props.ethAddresses == null || this.props.ethAddresses.length == 0) {
       return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
@@ -110,6 +110,11 @@ class SetupERC20Payment extends Component {
             </Grid>)
         }} >
         {this.props.ethAddresses.map((address) => {
+
+          if(type == 'own' && address.address == this.props.accountValue) {
+            return false
+          }
+
           return (
             <MenuItem value={address.address} key={address.address}>
               <ListItemText primary={address.name} secondary={address.address} />
@@ -179,7 +184,7 @@ class SetupERC20Payment extends Component {
         </Typography>
       </Grid>
       <Grid item xs={12} altign='left'>
-        {this.renderAddresses(this.props.ownAccountValue, this.props.ownAccountError, this.props.ownAccountErrorMessage, this.props.selectOwnAddress)}
+        {this.renderAddresses(this.props.ownAccountValue, this.props.ownAccountError, this.props.ownAccountErrorMessage, this.props.selectOwnAddress, 'own')}
       </Grid>
     </Grid>)
   };
@@ -251,7 +256,7 @@ class SetupERC20Payment extends Component {
             </Typography>
           </Grid>
           <Grid item xs={12} altign='left'>
-            {this.renderAddresses(this.props.accountValue, this.props.accountError, this.props.accountErrorMessage, this.props.selectAddress)}
+            {this.renderAddresses(this.props.accountValue, this.props.accountError, this.props.accountErrorMessage, this.props.selectAddress, 'from')}
           </Grid>
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>

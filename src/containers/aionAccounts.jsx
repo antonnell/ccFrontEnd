@@ -88,6 +88,8 @@ let AionAccounts = createReactClass({
         confirmDelete={this.confirmDelete}
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
+        aionTransactions={this.props.aionTransactions}
+        contacts={this.props.contacts}
       />
     )
   },
@@ -309,7 +311,7 @@ let AionAccounts = createReactClass({
       this.setState({ publicAddressError: true, publicAddressErrorMessage:'Aion public address is required' });
       return false;
     }
-    
+
     this.setState({ publicAddressValid: true });
     return true;
   },

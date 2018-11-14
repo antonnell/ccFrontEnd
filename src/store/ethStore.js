@@ -51,8 +51,8 @@ var Store = () => {
     case 'getSupportedERC20Tokens':
       this.getSupportedERC20Tokens(payload);
       break;
-    case 'getTransactionHistory':
-      this.getTransactionHistory(payload);
+    case 'getEthTransactionHistory':
+      this.getEthTransactionHistory(payload);
       break;
     }
   }.bind(this))
@@ -206,8 +206,8 @@ var Store = () => {
       payload)
   }
 
-  this.getTransactionHistory = function(payload)  {
-    var url = '/ethereum/getTransactionHistory/'+payload.content.id
+  this.getEthTransactionHistory = function(payload)  {
+    var url = 'ethereum/getTransactionHistory/'+payload.content.id
 
     this.callApi(url,
       'GET',

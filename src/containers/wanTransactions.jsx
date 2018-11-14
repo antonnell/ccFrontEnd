@@ -1,17 +1,17 @@
 import React from 'react';
-import EthTransactionsComponent from '../components/ethTransactions';
+import WanTransactionsComponent from '../components/wanTransactions';
 
 const createReactClass = require('create-react-class');
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+let wanEmitter = require('../store/wanStore.js').default.emitter;
+let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
 
-let EthTransactions = createReactClass({
+let WanTransactions = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
-      ethTransactions: this.props.ethTransactions,
+      wanTransactions: this.props.wanTransactions,
       selectedAddress: '',
       selectedAddressError: false,
       selectedAddressErrorMessage: '',
@@ -24,12 +24,12 @@ let EthTransactions = createReactClass({
   },
   render() {
     return (
-      <EthTransactionsComponent
+      <WanTransactionsComponent
         handleChange={this.handleChange}
         loading={this.state.loading}
         error={this.state.error}
-        ethAddresses={this.props.ethAddresses}
-        ethTransactions={this.props.ethTransactions}
+        wanAddresses={this.props.wanAddresses}
+        wanTransactions={this.props.wanTransactions}
         selectedAddress={this.state.selectedAddress}
         selectedAddressError={this.state.selectedAddressError}
         selectedAddressErrorMessage={this.state.selectedAddressErrorMessage}
@@ -62,4 +62,4 @@ let EthTransactions = createReactClass({
   },
 })
 
-export default (EthTransactions);
+export default (WanTransactions);

@@ -38,6 +38,7 @@ import FormControl from '@material-ui/core/FormControl';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import TermsModalComponent from './termsModalICO';
 import ThankYouICOModal from './thankYouICO';
+import WanTransactions from '../containers/wanTransactions';
 
 const styles = {};
 
@@ -844,6 +845,9 @@ class WanAccounts extends Component {
             {this.props.tabValue === 1 && this.renderImportCommingSoon()}
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
+        </Grid>
+        <Grid item xs={12} >
+          <WanTransactions wanAddresses={this.props.addresses} wanTransactions={this.props.wanTransactions} contacts={this.props.contacts} />
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
           {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}

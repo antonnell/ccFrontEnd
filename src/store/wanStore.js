@@ -52,6 +52,9 @@ var Store = () => {
     case 'getICOProgress':
       this.getICOProgress(payload)
       break;
+    case 'getWanTransactionHistory':
+      this.getWanTransactionHistory(payload);
+      break;
     }
   }.bind(this))
 
@@ -195,6 +198,15 @@ var Store = () => {
 
   this.getSupportedWRC20Tokens = function(payload) {
     var url = 'wanchain/getSupportedWrc20Tokens'
+
+    this.callApi(url,
+      'GET',
+      null,
+      payload)
+  }
+
+  this.getWanTransactionHistory = function(payload)  {
+    var url = 'wanchain/getTransactionHistory/'+payload.content.id
 
     this.callApi(url,
       'GET',

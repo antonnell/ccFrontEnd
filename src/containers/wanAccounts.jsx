@@ -130,6 +130,8 @@ let WanAccounts = createReactClass({
         handleThanksClose={this.handleThanksClose}
         minContribution={this.state.minContribution}
         crowdasleProgress={this.state.crowdasleProgress}
+        wanTransactions={this.props.wanTransactions}
+        contacts={this.props.contacts}
       />
     )
   },

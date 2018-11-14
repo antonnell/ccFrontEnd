@@ -1,17 +1,17 @@
 import React from 'react';
-import EthTransactionsComponent from '../components/ethTransactions';
+import AionTransactionsComponent from '../components/aionTransactions';
 
 const createReactClass = require('create-react-class');
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+let aionEmitter = require('../store/aionStore.js').default.emitter;
+let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
 
-let EthTransactions = createReactClass({
+let AionTransactions = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
-      ethTransactions: this.props.ethTransactions,
+      aionTransactions: this.props.aionTransactions,
       selectedAddress: '',
       selectedAddressError: false,
       selectedAddressErrorMessage: '',
@@ -24,12 +24,12 @@ let EthTransactions = createReactClass({
   },
   render() {
     return (
-      <EthTransactionsComponent
+      <AionTransactionsComponent
         handleChange={this.handleChange}
         loading={this.state.loading}
         error={this.state.error}
-        ethAddresses={this.props.ethAddresses}
-        ethTransactions={this.props.ethTransactions}
+        aionAddresses={this.props.aionAddresses}
+        aionTransactions={this.props.aionTransactions}
         selectedAddress={this.state.selectedAddress}
         selectedAddressError={this.state.selectedAddressError}
         selectedAddressErrorMessage={this.state.selectedAddressErrorMessage}
@@ -62,4 +62,4 @@ let EthTransactions = createReactClass({
   },
 })
 
-export default (EthTransactions);
+export default (AionTransactions);
