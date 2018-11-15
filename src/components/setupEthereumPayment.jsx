@@ -206,7 +206,7 @@ class SetupEthereumPayment extends Component {
               textColor="secondary" >
               <Tab label="Contact Payment" />
               <Tab label="Public Address Payment" />
-              <Tab label="Own Account Payment" />
+              <Tab label="Account Transfer" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderSelectBeneficiary()}
             {this.props.tabValue === 1 && this.renderEnterPublic()}

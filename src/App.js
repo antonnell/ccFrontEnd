@@ -811,7 +811,19 @@ class App extends Component {
       sessionStorage.removeItem('cc_user');
       sessionStorage.removeItem('cc_whiteliststate');
 
-      this.setState({drawerOpen: false, user: null, contacts: null, ethAddresses: null, wanAddress: null, aionAddresses: null});
+      this.setState({
+        drawerOpen: false,
+        user: null,
+        contacts: null,
+        addresses:null,
+        ethAddresses: null,
+        wanAddresses: null,
+        aionAddresses: null,
+        ethTransactions: null,
+        wanTransactions: null,
+        aionTransactions: null
+      });
+
       if(currentScreen != 'registerAccount') {
         this.setState({currentScreen: 'welcome'});
       }
@@ -825,16 +837,19 @@ class App extends Component {
 
     if(this.state.user) {
       var content = {}
-      if((currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain') && this.state.wanAddresses == null) {
+      if((currentScreen == 'wanAccounts' || currentScreen == 'sendWanchain')) {
         content = {id: this.state.user.id};
         wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.state.user.token });
-      } else if ((currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum') && this.state.ethAddresses == null) {
+        wanDispatcher.dispatch({type: 'getWanTransactionHistory', content, token: this.state.user.token });
+      } else if ((currentScreen == 'ethAccounts' || currentScreen == 'sendEthereum')) {
         content = {id: this.state.user.id};
         ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.state.user.token });
-      } else if ((currentScreen == 'aionAccounts' || currentScreen == 'sendAion') && this.state.aionAddresses == null) {
+        ethDispatcher.dispatch({type: 'getEthTransactionHistory', content, token: this.state.user.token });
+      } else if ((currentScreen == 'aionAccounts' || currentScreen == 'sendAion')) {
         content = {id: this.state.user.id};
         aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.state.user.token });
-      } else if (currentScreen == 'contacts' && this.state.contacts == null) {
+        aionDispatcher.dispatch({type: 'getAionTransactionHistory', content, token: this.state.user.token });
+      } else if (currentScreen == 'contacts') {
         content = {id: this.state.user.id};
         contactsDispatcher.dispatch({type: 'getContacts', content, token: this.state.user.token });
       }

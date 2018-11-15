@@ -846,11 +846,11 @@ class WanAccounts extends Component {
             {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           </Grid>
         </Grid>
-        <Grid item xs={12} >
-          <WanTransactions wanAddresses={this.props.addresses} wanTransactions={this.props.wanTransactions} contacts={this.props.contacts} />
-        </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
           {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
+        </Grid>
+        <Grid item xs={12} >
+          <WanTransactions wanAddresses={this.props.addresses} wanTransactions={this.props.wanTransactions} contacts={this.props.contacts} />
         </Grid>
         <ThankYouICOModal isOpen={this.props.thanksOpen} handleClose={this.props.handleThanksClose} investTransacstionID={this.props.investTransacstionID} />
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
