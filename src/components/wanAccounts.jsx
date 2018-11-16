@@ -381,7 +381,7 @@ class WanAccounts extends Component {
     if(this.props.user==null||this.props.user.verificationResult!='completed') {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+          <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
               Wanchain ICOs
             </Typography>
@@ -393,7 +393,7 @@ class WanAccounts extends Component {
     } else {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+          <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
               Wanchain ICOs
             </Typography>
@@ -410,7 +410,7 @@ class WanAccounts extends Component {
     if(this.props.crowdsales == null || this.props.crowdsales.length == 0) {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+          <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
               Wanchain ICOs
             </Typography>
@@ -425,7 +425,7 @@ class WanAccounts extends Component {
     if(['xs', 'sm', 'md'].includes(this.props.size)) {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-          <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+          <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
             <Typography variant="headline" color="inherit">
               Wanchain ICOs
             </Typography>
@@ -474,7 +474,7 @@ class WanAccounts extends Component {
     */
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-        <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
+        <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
           <Typography variant="headline" color="inherit">
             Wanchain ICOs
           </Typography>
