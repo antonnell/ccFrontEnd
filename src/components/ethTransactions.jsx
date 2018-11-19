@@ -122,7 +122,7 @@ class EnhancedTableHead extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
-                    <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                    <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                       {row.label}
                     </Typography>
                   </TableSortLabel>
@@ -281,7 +281,7 @@ let EnhancedTableToolbar = props => {
       })}
     >
       <div className={classes.title}>
-        <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+        <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
           Filters
         </Typography>
       </div>
@@ -307,10 +307,10 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 const styles = theme => ({
   root: {
-    padding: '24px'
+    margin: '12px'
   },
   table: {
-    minWidth: 1020,
+
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -351,8 +351,6 @@ class EnhancedTable extends React.Component {
     this.setState({ filtersVisible: !this.state.filtersVisible })
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
-
   render() {
     const { classes } = this.props;
     const { order, orderBy, selected, rowsPerPage, page, filtersVisible } = this.state;
@@ -361,7 +359,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
+        <Typography variant="headline"  style={{marginBottom: '20px'}}>
           Ethereum Transactions
         </Typography>
         <Paper>
@@ -390,44 +388,40 @@ class EnhancedTable extends React.Component {
                 {stableSort(filtering(data, this.props), getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
-                    const isSelected = this.isSelected(n.id);
                     return (
                       <TableRow
                         hover
-                        role="checkbox"
-                        aria-checked={isSelected}
                         tabIndex={-1}
                         key={n.id}
-                        selected={isSelected}
                       >
                         <TableCell>
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
                             {moment(n.timestamp).format('YYYY/MM/DD hh:mm')}
                           </Typography>
                         </TableCell>
                         <TableCell >
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
                             {n.fromDisplayName}
                           </Typography>
                         </TableCell>
                         <TableCell >
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
                             {n.toDisplayName}
                           </Typography>
                         </TableCell>
                         <TableCell numeric>
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
                             {n.value}
                           </Typography>
                         </TableCell>
                         <TableCell >
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
                             {n.status}
                           </Typography>
                         </TableCell>
                         <TableCell >
-                          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
-                            <a href={config.etherscanUrl+n.transactionId} target="_blank">{n.transactionId}</a>
+                          <Typography style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+                            <a href={config.etherscanUrl+n.transactionId} target="_blank">View</a>
                           </Typography>
                         </TableCell>
                       </TableRow>

@@ -20,7 +20,7 @@ class WhitelistMeDone extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3}>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" color="inherit">
+              <Typography variant="display1">
                 You have been added
               </Typography>
             </Grid>

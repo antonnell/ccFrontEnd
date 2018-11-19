@@ -39,7 +39,7 @@ class EthTransactions extends Component {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='left'>
-            <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
+            <Typography variant="headline"  style={{marginBottom: '20px'}}>
               Ethereum Transactions
             </Typography>
           </Grid>
@@ -67,10 +67,10 @@ class EthTransactions extends Component {
         <Grid item xs={12} align='left'>
           <ExpansionPanel style={{boxShadow: 'none', marginLeft: '-24px', marginRight: '-24px', backgroundColor: '#fafafa'}}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
+              <Typography variant="headline"  style={{marginBottom: '20px'}}>
                 Ethereum Transactions
               </Typography>
-              <Typography variant="body2" color="inherit" style={{marginLeft: '20px', marginBottom: '20px', lineHeight: '40px'}}>
+              <Typography variant="body2"  style={{marginLeft: '20px', marginBottom: '20px', lineHeight: '40px'}}>
                 Filters
               </Typography>
             </ExpansionPanelSummary>
@@ -120,32 +120,32 @@ class EthTransactions extends Component {
           <Card style={{padding: 12}}>
             <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
               <Grid item xs={2} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   Date
                 </Typography>
               </Grid>
               <Grid item xs={2} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   From Account
                 </Typography>
               </Grid>
               <Grid item xs={2} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   To Account
                 </Typography>
               </Grid>
               <Grid item xs={1} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   Amount
                 </Typography>
               </Grid>
               <Grid item xs={1} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   Status
                 </Typography>
               </Grid>
               <Grid item xs={4} align='left' style={headerStyle}>
-                <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+                <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                   Transaction ID
                 </Typography>
               </Grid>
@@ -169,32 +169,32 @@ class EthTransactions extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
         <Grid item xs={2} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             {moment(transaction.timestamp).format('YYYY/MM/DD hh:mm')}
           </Typography>
         </Grid>
         <Grid item xs={2} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             {transaction.fromDisplayName}
           </Typography>
         </Grid>
         <Grid item xs={2} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             {transaction.toDisplayName}
           </Typography>
         </Grid>
         <Grid item xs={1} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             {transaction.value} Eth
           </Typography>
         </Grid>
         <Grid item xs={1} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             {transaction.status}
           </Typography>
         </Grid>
         <Grid item xs={4} align='left' style={bodyStyle}>
-          <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+          <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
             <a href={config.etherscanUrl+transaction.transactionId} target="_blank">{transaction.transactionId}</a>
           </Typography>
         </Grid>

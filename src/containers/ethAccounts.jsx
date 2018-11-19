@@ -16,7 +16,6 @@ let EthAccounts = createReactClass({
     return {
       createLoading: false,
       error: null,
-      tabValue: 0,
       addressName: '',
       addressNameError: false,
       addressNameErrorMessage: '',
@@ -36,7 +35,9 @@ let EthAccounts = createReactClass({
       currentAccountKey:  '',
       optionsAccount: null,
       loadingAccount: null,
-      deleteOpen: false
+      deleteOpen: false,
+      createOpen: false,
+      importOpen: false
     }
   },
   render() {
@@ -47,7 +48,6 @@ let EthAccounts = createReactClass({
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
         exportEthereumKeyClicked={this.exportEthereumKeyClicked}
-        tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
@@ -91,6 +91,12 @@ let EthAccounts = createReactClass({
         deleteLoading={this.state.deleteLoading}
         ethTransactions={this.props.ethTransactions}
         contacts={this.props.contacts}
+        handleCreateOpen={this.handleCreateOpen}
+        handleImportOpen={this.handleImportOpen}
+        createOpen={this.state.createOpen}
+        handleCreateClose={this.handleCreateClose}
+        importOpen={this.state.importOpen}
+        handleImportClose={this.handleImportClose}
       />
     )
   },
@@ -133,7 +139,7 @@ let EthAccounts = createReactClass({
       var content = {id: this.props.user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({createOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -152,7 +158,7 @@ let EthAccounts = createReactClass({
       var content = {id: this.props.user.id};
       ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({createOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -217,6 +223,20 @@ let EthAccounts = createReactClass({
     }
   },
 
+  handleCreateOpen() {
+    this.setState({createOpen: true});
+  },
+  handleCreateClose() {
+    this.setState({createOpen: false})
+  },
+
+  handleImportOpen() {
+    this.setState({importOpen: true});
+  },
+  handleImportClose() {
+    this.setState({importOpen: false})
+  },
+
   deleteKeyClicked(address) {
     this.setState({deleteAddress: address, deleteOpen: true});
   },
@@ -246,7 +266,7 @@ let EthAccounts = createReactClass({
   },
 
   createImportClicked() {
-    if(this.state.tabValue === 0) {
+    if(this.state.createOpen === true) {
       this.createEthAddress();
     } else {
       this.importEthAddress();

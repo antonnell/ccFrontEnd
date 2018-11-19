@@ -5,18 +5,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel  from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Card  from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
-import CardActions  from '@material-ui/core/CardActions';
 import CircularProgress  from '@material-ui/core/CircularProgress';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';
-import PrivateKeyModal from './privateKeyModal.jsx';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -35,10 +29,13 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import PrivateKeyModal from './privateKeyModal.jsx';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import TermsModalComponent from './termsModalICO';
 import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
+import CreateModal from './createModal';
+import ImportModal from './importModal';
 
 const styles = {};
 
@@ -74,127 +71,7 @@ function SetPrimaryIcon(props) {
   );
 }
 
-function EditIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-    </SvgIcon>
-  );
-}
-
-function KeyIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
-    </SvgIcon>
-  );
-}
-
 class WanAccounts extends Component {
-
-  // <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-  //   <FormControlLabel
-  //     control={
-  //       <Checkbox
-  //         disabled={this.props.createLoading}
-  //         checked={this.props.primary}
-  //         onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-  //         value="primary"
-  //       />
-  //     }
-  //     label="Make this my primary account"
-  //   />
-  // </Grid>
-  //
-
-  renderCreate() {
-    return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-        <Grid item xs={12} align='left'>
-          <Typography variant="headline" color="inherit">
-            Create Wanchain Account
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
-        </Grid>
-        <Tooltip title='Create Wanchain Account'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
-            +
-          </Button>
-        </Tooltip>
-        <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
-          <Grid item xs={12} align='left'>
-            <Typography style={{color: '#f44336'}} >
-              {this.props.error}
-            </Typography>
-          </Grid>
-        </Grid>
-        <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
-      </Grid>
-    );
-  };
-
-  renderImportCommingSoon() {
-    return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px',  position: 'relative'}}>
-        <Grid item xs={12} align='left'>
-          <Typography variant="headline" color="inherit">
-            Import Wanchain Account
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='center'>
-          <Typography variant='headline' style={{marginTop: '48px'}}>Coming Soon...</Typography>
-        </Grid>
-      </Grid>
-    )
-  };
-
-  renderImport() {
-    return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px',  position: 'relative'}}>
-        <Grid item xs={12} align='left'>
-          <Typography variant="headline" color="inherit">
-            Import Wanchain Account
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.publicAddressError} disabled={this.props.createLoading}
-            id="publicAddress" label="Public Address" value={this.props.publicAddress}
-            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'publicAddress'); }} helperText={this.props.publicAddressErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.createLoading}
-            id="privateKey" label="Private Key" value={this.props.privateKey}
-            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'privateKey'); }} helperText={this.props.privateKeyErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                disabled={this.props.createLoading}
-                checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-                value="primary"
-              />
-            }
-            label="Make this my primary account"
-          />
-        </Grid>
-      </Grid>
-    );
-  };
 
   renderAddresses() {
 
@@ -301,10 +178,10 @@ class WanAccounts extends Component {
       // </ListItem>
 
       return (
-        <Grid item xs={12} xl={6} align='left' key={address.publicAddress}>
-          <Card style={{marginRight: '6px', marginBottom: '6px'}}>
+        <Grid item xs={12} lg={6} align='left' key={address.publicAddress} >
+          <Card style={{margin: '12px'}}>
             <CardContent style={{position: 'relative'}}>
-              <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+              <Grid container justify="flex-start" alignItems="flex-start" direction="row">
                 <Grid item xs={11} align='left'>
                   {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.isPrimary===true&& <Tooltip title='This is your primary Wanchain account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
@@ -318,7 +195,7 @@ class WanAccounts extends Component {
                 </Grid>
                 <Grid item xs={1} align='right'>
                   <IconButton
-                    style={{verticalAlign: 'top', marginRight: '-20px'}}
+                    style={{verticalAlign: 'top', marginRight: '-20px', marginTop: '-11px'}}
                     color="primary"
                     aria-label="More"
                     buttonRef={node => {
@@ -380,9 +257,9 @@ class WanAccounts extends Component {
   renderICOUnavailable() {
     if(this.props.user==null||this.props.user.verificationResult!='completed') {
       return (
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{padding: '12px'}}>
           <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
-            <Typography variant="headline" color="inherit">
+            <Typography variant="headline" >
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -392,9 +269,9 @@ class WanAccounts extends Component {
         </Grid>)
     } else {
       return (
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{padding: '24px'}}>
           <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
-            <Typography variant="headline" color="inherit">
+            <Typography variant="headline" >
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -409,9 +286,9 @@ class WanAccounts extends Component {
 
     if(this.props.crowdsales == null || this.props.crowdsales.length == 0) {
       return (
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{padding: '12px', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
-            <Typography variant="headline" color="inherit">
+            <Typography variant="headline" >
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -424,9 +301,9 @@ class WanAccounts extends Component {
 
     if(['xs', 'sm', 'md'].includes(this.props.size)) {
       return (
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{padding: '12px', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
-            <Typography variant="headline" color="inherit">
+            <Typography variant="headline" >
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -459,66 +336,65 @@ class WanAccounts extends Component {
     }
     let bodyStyle = {
       padding: '3px',
-      backgroundColor: '#f5f4f4',
       minHeight: '40px'
     }
 
     /*
 
     <Grid item xs={1} align='center' style={headerStyle}>
-      <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+      <Typography variant="body2" style={{fontSize: '17px', fontWeight: 'bold'}}>
         Total Contribution
       </Typography>
     </Grid>
 
     */
     return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{padding: '12px', marginTop: '24px'}}>
         <Grid item xs={12} align='left' style={{marginBottom: '24px'}}>
-          <Typography variant="headline" color="inherit">
+          <Typography variant="headline" >
             Wanchain ICOs
           </Typography>
         </Grid>
 
         <Grid item xs={12} align='center'>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row">
+            <Grid item xs={1} align='left' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Name
               </Typography>
             </Grid>
-            <Grid item xs={3} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+            <Grid item xs={3} align='left' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 ICO Dates
               </Typography>
             </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+            <Grid item xs={1} align='right' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Personal Cap
               </Typography>
             </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
-                Contributed Amount
+            <Grid item xs={1} align='right' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
+                Contributed
               </Typography>
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Choose Wallet
               </Typography>
             </Grid>
             <Grid item xs={2} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Amount to Invest (WAN)
               </Typography>
             </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+            <Grid item xs={1} align='left' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Token Amount
               </Typography>
             </Grid>
-            <Grid item xs={1} align='center' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+            <Grid item xs={1} align='left' style={headerStyle}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Invest
               </Typography>
             </Grid>
@@ -553,21 +429,21 @@ class WanAccounts extends Component {
 
   renderICO(crowdsale, bodyStyle) {
 
-    let styleA = {fontSize: '22px', fontWeight: 'bold'}
-    let styleB = {lineHeight: '33px', fontSize: '18px'}
+    let styleA = {fontSize: '20px', fontWeight: 'bold'}
+    let styleB = {lineHeight: '33px', fontSize: '16px'}
     let styleC = {minHeight: '80px'}
 
     // let ratio = this.props.crowdasleProgress!=null?this.props.crowdasleProgress.wancontained*100/this.props.crowdasleProgress.saleCap:0
 
     /*
     <Grid item xs={12} sm={6} align='left' style={styleC}>
-      <Typography variant="header" color="inherit" style={styleA}>
+      <Typography variant="header"  style={styleA}>
         Total Contribution
       </Typography>
       <div style={{width: '100%', height: '10px', background: '#333', border: '1px solid #000', borderRadius: '4px', lineHeight: '10px', marginTop: '8px', textAlign: 'center'}}>
         <div style={{width: ratio+'%', height: '100%', background: 'linear-gradient(to right, #2ad4dc, #0082ff)', float: 'left', borderRadius: '4px'}}></div>
       </div>
-      <Typography variant="header" color="inherit" style={Object.assign({}, styleB, {textAlign: 'center'})}>
+      <Typography variant="header"  style={Object.assign({}, styleB, {textAlign: 'center'})}>
         {ratio+'%'}
       </Typography>
     </Grid>
@@ -576,7 +452,7 @@ class WanAccounts extends Component {
       <div style={{width: '10px', height: '300px', background: '#333', border: '1px solid #000', borderRadius: '4px', lineHeight: '10px', position: 'relative', display: 'table-cell', verticalAlign: 'middle'}}>
         <div style={{width: '100%', height: ratio+'%', background: 'linear-gradient(#2ad4dc, #0082ff)', borderRadius: '4px', position: 'absolute', bottom: '0px'}}></div>
       </div>
-      <Typography variant="header" color="inherit" style={Object.assign({}, styleB, {verticalAlign: 'middle'})}>
+      <Typography variant="header"  style={Object.assign({}, styleB, {verticalAlign: 'middle'})}>
         {ratio+'%'}
       </Typography>
     </Grid>
@@ -586,7 +462,7 @@ class WanAccounts extends Component {
       <div style={{width: '100%', height: '10px', background: '#333', border: '1px solid #000', borderRadius: '4px', lineHeight: '10px', marginTop: '13px'}}>
         <div style={{width: ratio+'%', height: '100%', background: 'linear-gradient(to right, #2ad4dc, #0082ff)', float: 'left', borderRadius: '4px'}}></div>
       </div>
-      <Typography variant="header" color="inherit" style={Object.assign({}, styleB, {textAlign: 'center'})}>
+      <Typography variant="header"  style={Object.assign({}, styleB, {textAlign: 'center'})}>
         {ratio+'%'}
       </Typography>
     </Grid>
@@ -596,70 +472,70 @@ class WanAccounts extends Component {
     if(this.props.size == 'xs') {
       return (
         <Grid item xs={12} align='center' key={crowdsale.id}>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row">
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Name
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {crowdsale.name}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 ICO Dates
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Personal Cap
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
-                {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan')}
+              <Typography variant="body1"  style={styleB}>
+                {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' - ' + crowdsale.userCap/1000000000000000000+' Wan')}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Contributed Amount
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {crowdsale.totalContribution} Wan
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Choose Wallet
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {this.renderAddressDropdown(crowdsale)}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Amount to Invest (WAN)
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} error={this.props.investmentAmountError}
                   id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
                   onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Token Amount
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {this.props.investmentAmount*crowdsale.tokenRatio} Curve
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Invest
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
@@ -672,70 +548,70 @@ class WanAccounts extends Component {
 
       return (
         <Grid item xs={12} align='center'>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row">
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Name
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {crowdsale.name}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 ICO Dates
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Personal Cap
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
-                {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan')}
+              <Typography variant="body1"  style={styleB}>
+                {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' - ' + crowdsale.userCap/1000000000000000000+' Wan')}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Choose Wallet
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {this.renderAddressDropdown(crowdsale)}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Token Amount
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {this.props.investmentAmount*crowdsale.tokenRatio} Curve
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Amount to Invest (WAN)
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} error={this.props.investmentAmountError}
                   id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
                   onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Contributed Amount
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 {crowdsale.totalContribution} Wan
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header" color="inherit" style={styleA}>
+              <Typography variant="header"  style={styleA}>
                 Invest
               </Typography>
-              <Typography variant="body1" color="inherit" style={styleB}>
+              <Typography variant="body1"  style={styleB}>
                 <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
               </Typography>
             </Grid>
@@ -746,41 +622,41 @@ class WanAccounts extends Component {
 
     return (
       <Grid item xs={12} align='center'>
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
-          <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
+        <Grid container justify="flex-start" alignItems="flex-start" direction="row">
+          <Grid item xs={1} align='left' style={bodyStyle}>
+            <Typography style={{lineHeight: '57px', fontSize: '17px'}}>
               {crowdsale.name}
             </Typography>
           </Grid>
-          <Grid item xs={3} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
+          <Grid item xs={3} align='left' style={bodyStyle}>
+            <Typography style={{lineHeight: '57px', fontSize: '17px'}}>
               {moment(crowdsale.startDate).format('YYYY/MM/DD hh:mm') + ' - ' + moment(crowdsale.endDate).format('YYYY/MM/DD hh:mm')}
             </Typography>
           </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
-              {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' Wan - ' + crowdsale.userCap/1000000000000000000+' Wan')}
+          <Grid item xs={1} align='right' style={bodyStyle}>
+            <Typography style={{lineHeight: '57px', fontSize: '17px'}}>
+              {crowdsale.userCap == 0?'Unlimited':(this.props.minContribution + ' - ' + crowdsale.userCap/1000000000000000000+' Wan')}
             </Typography>
           </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
+          <Grid item xs={1} align='right' style={bodyStyle}>
+            <Typography style={{lineHeight: '57px', fontSize: '17px'}}>
               {crowdsale.totalContribution} Wan
             </Typography>
           </Grid>
-          <Grid item xs={2} align='center' style={bodyStyle}>
+          <Grid item xs={2} align='left' style={bodyStyle}>
             {this.renderAddressDropdown(crowdsale)}
           </Grid>
-          <Grid item xs={2} align='center' style={Object.assign({}, bodyStyle, {lineHeight: '45px', paddingTop: '15px'})}>
+          <Grid item xs={2} align='left' style={Object.assign({}, bodyStyle, {lineHeight: '45px', paddingTop: '15px'})}>
             <TextField fullWidth={true} color="textSecondary" disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} error={this.props.investmentAmountError}
               id="investmentAmount" placeholder="Amount" value={this.props.investmentAmount} helperText={this.props.investmentAmountErrorMessage}
               onChange={(event) => { this.props.handleChange(event, 'investmentAmount'); }} />
           </Grid>
-          <Grid item xs={1} align='center' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}}>
+          <Grid item xs={1} align='left' style={bodyStyle}>
+            <Typography style={{lineHeight: '57px', fontSize: '17px'}}>
               {this.props.investmentAmount*crowdsale.tokenRatio} Curve
             </Typography>
           </Grid>
-          <Grid item xs={1} align='center' style={Object.assign({}, bodyStyle, {padding: '15px'})}>
+          <Grid item xs={1} align='left' style={Object.assign({}, bodyStyle, {paddingTop: '15px'})}>
             <Button size="small" variant={"contained"} disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} color="primary" onClick={() => { this.props.investClicked(crowdsale.contractAddress)}}>Invest</Button>
           </Grid>
         </Grid>
@@ -820,41 +696,68 @@ class WanAccounts extends Component {
 
   render() {
     return (
-      <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Grid item xs={12} align='left'>
-              <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
-                Wanchain Accounts
-              </Typography>
-            </Grid>
-            {this.renderAddresses()}
-          </Grid>
+      <Grid container justify="center" alignItems="flex-start" direction="row" >
+        <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid #6be6fd', display: 'flex' }}>
+          <div style={{flex: 1}}>
+            <Typography variant='display1'>
+              Wanchain Accounts
+            </Typography>
+          </div>
+          <div>
+            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create</Button>
+            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import</Button>
+          </div>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '470px'}}>
-          <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Tabs
-              value={this.props.tabValue}
-              onChange={this.props.handleTabChange}
-              indicatorColor="primary"
-              textColor="primary" >
-              <Tab label="Create Account" />
-              <Tab label="Import Account" />
-            </Tabs>
-            {this.props.tabValue === 0 && this.renderCreate()}
-            {this.props.tabValue === 1 && this.renderImportCommingSoon()}
-            {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} align='center'>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{paddingTop: '24px'}} >
+            {this.renderAddresses()}
           </Grid>
         </Grid>
         <Grid item xs={12} align='center' style={{position: 'relative', minHeight: '200px'}}>
           {(this.props.user&&this.props.user.verificationResult=='completed')?this.renderICOS():this.renderICOUnavailable()}
         </Grid>
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <WanTransactions wanAddresses={this.props.addresses} wanTransactions={this.props.wanTransactions} contacts={this.props.contacts} />
         </Grid>
         <ThankYouICOModal isOpen={this.props.thanksOpen} handleClose={this.props.handleThanksClose} investTransacstionID={this.props.investTransacstionID} />
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
         <TermsModalComponent isOpen={this.props.termsOpen} handleClose={this.props.handleTermsClose} handleTermsAccepted={this.props.handleTermsAccepted} />
+        <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
+        <CreateModal
+          isOpen={this.props.createOpen}
+          handleClose={this.props.handleCreateClose}
+          handleDone={this.props.createImportClicked}
+          createLoading={this.props.createLoading}
+          addressName={this.props.addressName}
+          addressNameError={this.props.addressNameError}
+          addressNameErrorMessage={this.props.addressNameErrorMessage}
+          primary={this.props.primary}
+          handleChange={this.props.handleChange}
+          handleChecked={this.props.handleChecked}
+          validateField={this.props.validateField}
+          handleCreate={this.props.createImportClicked}
+        />
+        <ImportModal
+          isOpen={this.props.importOpen}
+          handleClose={this.props.handleImportClose}
+          handleDone={this.props.createImportClicked}
+          createLoading={this.props.createLoading}
+          addressName={this.props.addressName}
+          addressNameError={this.props.addressNameError}
+          addressNameErrorMessage={this.props.addressNameErrorMessage}
+          publicAddress={this.props.publicAddress}
+          publicAddressError={this.props.publicAddressError}
+          publicAddressErrorMessage={this.props.publicAddressErrorMessage}
+          privateKey={this.props.privateKey}
+          privateKeyError={this.props.privateKeyError}
+          privateKeyErrorMessage={this.props.privateKeyErrorMessage}
+          primary={this.props.primary}
+          handleChange={this.props.handleChange}
+          handleChecked={this.props.handleChecked}
+          validateField={this.props.validateField}
+          handleImport={this.props.createImportClicked}
+        />
+
       </Grid>
     );
   }

@@ -16,7 +16,6 @@ let AionAccounts = createReactClass({
     return {
       createLoading: false,
       error: null,
-      tabValue: 0,
       addressName: '',
       addressNameError: false,
       addressNameErrorMessage: '',
@@ -36,7 +35,9 @@ let AionAccounts = createReactClass({
       currentAccountKey:  '',
       optionsAccount: null,
       loadingAccount: null,
-      deleteOpen: false
+      deleteOpen: false,
+      createOpen: false,
+      importOpen: false
     }
   },
   render() {
@@ -47,7 +48,6 @@ let AionAccounts = createReactClass({
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
         exportAionKeyClicked={this.exportAionKeyClicked}
-        tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
@@ -90,6 +90,12 @@ let AionAccounts = createReactClass({
         deleteLoading={this.state.deleteLoading}
         aionTransactions={this.props.aionTransactions}
         contacts={this.props.contacts}
+        handleCreateOpen={this.handleCreateOpen}
+        handleImportOpen={this.handleImportOpen}
+        createOpen={this.state.createOpen}
+        handleCreateClose={this.handleCreateClose}
+        importOpen={this.state.importOpen}
+        handleImportClose={this.handleImportClose}
       />
     )
   },
@@ -132,7 +138,7 @@ let AionAccounts = createReactClass({
       var content = {id: this.props.user.id};
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({createOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -151,7 +157,7 @@ let AionAccounts = createReactClass({
       var content = {id: this.props.user.id};
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({createOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -216,6 +222,20 @@ let AionAccounts = createReactClass({
     }
   },
 
+  handleCreateOpen() {
+    this.setState({createOpen: true});
+  },
+  handleCreateClose() {
+    this.setState({createOpen: false})
+  },
+
+  handleImportOpen() {
+    this.setState({importOpen: true});
+  },
+  handleImportClose() {
+    this.setState({importOpen: false})
+  },
+
   deleteKeyClicked(address) {
     this.setState({deleteAddress: address, deleteOpen: true});
   },
@@ -245,7 +265,7 @@ let AionAccounts = createReactClass({
   },
 
   createImportClicked() {
-    if(this.state.tabValue === 0) {
+    if(this.state.createOpen === true) {
       this.createAionAddress();
     } else {
       this.importAionAddress();

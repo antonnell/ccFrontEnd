@@ -130,6 +130,155 @@ const theme = createMuiTheme({
   }
 });
 
+const themeDark = createMuiTheme({
+  type: 'dark',
+  overrides: {
+    MuiStepIcon: {
+      root: {
+        '&-active': {
+          color: "#2ad4dc"
+        }
+      },
+      active: {
+        color: "#2ad4dc !important"
+      },
+      completed: {
+        color: "#2ad4dc !important"
+      }
+    },
+    MuiInput: {
+      underline: {
+        '&:before': { //underline color when textfield is inactive
+          backgroundColor: '#6be6fd',
+          height: '2px'
+        },
+        '&:hover:not($disabled):before': { //underline color when hovered
+          backgroundColor: '#6be6fd',
+          height: '2px'
+        },
+      }
+    },
+    MuiButton: {
+      root: {
+        borderRadius: '20px'
+      },
+      label: {
+        fontSize: '12px'
+      },
+      sizeSmall: {
+        padding: '10px 20px'
+      }
+    },
+    MuiCard: {
+      root: {
+        borderRadius: 0
+      }
+    }
+  },
+  typography: {
+    // Use the system font over Roboto.
+    fontFamily: 'Abel, sans-serif',
+    button: {
+      fontWeight: 500
+    },
+    display1: {
+      color: '#fff'
+    },
+    body1: {
+      color: '#fff'
+    },
+    subheading: {
+      color: '#fff'
+    },
+    display1: {
+      color: '#fff',
+      fontSize: '26px'
+    },
+    headline:  {
+      color: '#fff'
+    }
+  },
+  palette: {
+    primary: {
+      light: '#a3ffff',
+      main: '#6be6fd',
+      dark: '#27b4ca',
+      contrastText: '#000000',
+    },
+    secondary: {
+      light: '#bb93ff',
+      main: '#8864d8',
+      dark: '#5638a6',
+      contrastText: '#000000',
+    },
+    background:{
+      paper: '#30333a',
+      default: '#1a191d'
+    },
+    text: {
+      primary: '#6be6fd',
+      secondary: '#fff'
+    }
+  }
+});
+
+const themeLight = createMuiTheme({
+  overrides: {
+    MuiStepIcon: {
+      root: {
+        '&-active': {
+          color: "#2ad4dc"
+        }
+      },
+      active: {
+        color: "#2ad4dc !important"
+      },
+      completed: {
+        color: "#2ad4dc !important"
+      }
+    },
+    MuiInput: {
+      underline: {
+        '&:before': { //underline color when textfield is inactive
+          backgroundColor: 'black',
+          height: '2px'
+        },
+        '&:hover:not($disabled):before': { //underline color when hovered
+          backgroundColor: 'black',
+          height: '2px'
+        },
+      }
+    },
+    MuiButton: {
+      root: {
+        transition: "1s ease",
+        '&:hover:not($disabled)' : {
+          backgroundColor: "#2ad4dc",
+          color: 'black'
+        }
+      }
+    }
+  },
+  typography: {
+    // Use the system font over Roboto.
+    fontFamily: 'Abel, sans-serif',
+  },
+  palette: {
+    primary: {
+      light: '#2c2c2c',
+      main: '#000000',
+      dark: '#000000',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      light: '#72ffff',
+      main: '#2ad4dc',
+      dark: '#00a2aa',
+      contrastText: '#000000',
+    }
+  }
+});
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -886,6 +1035,8 @@ class App extends Component {
     return (<TheAppBar
       menuClicked={menuClicked}
       user={this.state.user}
+      size={this.state.size}
+      title={this.state.title}
     />)
   };
 
@@ -898,6 +1049,7 @@ class App extends Component {
         closeDrawer={this.closeDrawer}
         user={this.state.user}
         open={this.state.drawerOpen}
+        size={this.state.size}
       />)
     }
     return drawer;
@@ -912,15 +1064,17 @@ class App extends Component {
 
   render() {
     return (
-      <MuiThemeProvider theme={theme}>
-        {this.renderAppBar()}
-        {this.renderDrawer()}
+      <MuiThemeProvider theme={themeDark}>
         <CssBaseline />
-        <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0} style={{minHeight: '622px', position: 'relative'}}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            {this.renderScreen()}
+        <div style={{display: 'flex', padding: this.state.size=='xs'||this.state.size=='sm'?'0px':'24px', backgroundImage: 'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)'}}>
+          {this.renderDrawer()}
+          <Grid container justify="space-around" alignItems="flex-start" direction="row" style={{minHeight: '622px', position: 'relative', flex: 1}}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              {this.state.user==null?null:this.renderAppBar()}
+              {this.renderScreen()}
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
         {this.renderFooter()}
       </MuiThemeProvider>
     )

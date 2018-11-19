@@ -4,18 +4,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel  from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Card  from '@material-ui/core/Card';
 import CardContent  from '@material-ui/core/CardContent';
-import CardActions  from '@material-ui/core/CardActions';
 import CircularProgress  from '@material-ui/core/CircularProgress';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';
-import PrivateKeyModal from './privateKeyModal.jsx';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,8 +26,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import PrivateKeyModal from './privateKeyModal.jsx';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import EthTransactions from '../containers/ethTransactions';
+import CreateModal from './createModal';
+import ImportModal from './importModal';
 
 let config = require('../config')
 
@@ -69,122 +66,7 @@ function SetPrimaryIcon(props) {
   );
 }
 
-function EditIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-    </SvgIcon>
-  );
-}
-
-function KeyIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
-    </SvgIcon>
-  );
-}
-
 class EthAccounts extends Component {
-
-  renderCreate() {
-    return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-        <Grid item xs={12} align='left'>
-          <Typography variant="headline" color="inherit">
-            Create Ethereum Account
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                disabled={this.props.createLoading}
-                checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-                value="primary"
-              />
-            }
-            label="Make this my primary account"
-          />
-        </Grid>
-        <Tooltip title='Create Ethereum Account'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
-            +
-          </Button>
-        </Tooltip>
-        <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
-          <Grid item xs={12} align='left'>
-            <Typography style={{color: '#f44336'}} >
-              {this.props.error}
-            </Typography>
-          </Grid>
-        </Grid>
-        <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
-      </Grid>
-    );
-  }
-
-  renderImport() {
-    return(
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-        <Grid item xs={12} align='left'>
-          <Typography variant="headline" color="inherit">
-            Import Ethereum Account
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.publicAddressError} disabled={this.props.createLoading}
-            id="publicAddress" label="Public Address" value={this.props.publicAddress}
-            onChange={(event) => { this.props.handleChange(event, 'publicAddress'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'publicAddress'); }} helperText={this.props.publicAddressErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.privateKeyError} disabled={this.props.createLoading}
-            id="privateKey" label="Private Key" value={this.props.privateKey}
-            onChange={(event) => { this.props.handleChange(event, 'privateKey'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'privateKey'); }} helperText={this.props.privateKeyErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <TextField fullWidth={true} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.createLoading}
-            id="addressName" label="Account Name" value={this.props.addressName}
-            onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onCreateImportKeyDown}
-            onBlur={(event) => { this.props.validateField(event, 'addressName'); }} helperText={this.props.addressNameErrorMessage} />
-        </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                disabled={this.props.createLoading}
-                checked={this.props.primary}
-                onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-                value="primary"
-              />
-            }
-            label="Make this my primary account"
-          />
-        </Grid>
-        <Tooltip title='Import Ethereum Account'>
-          <Button variant="fab" color='secondary' style={{position: 'absolute', bottom:'0px', right: '48px'}} disabled={this.props.createLoading} onClick={this.props.createImportClicked}>
-            +
-          </Button>
-        </Tooltip>
-        <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
-          <Grid item xs={12} align='left'>
-            <Typography style={{color: '#f44336'}} >
-              {this.props.error}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
-  };
 
   renderAddresses() {
 
@@ -280,8 +162,8 @@ class EthAccounts extends Component {
       }
 
       return (
-        <Grid item xs={12} xl={6} align='left' key={address.address}>
-          <Card style={{marginRight: '6px', marginBottom: '6px'}}>
+        <Grid item xs={12} lg={6} align='left' key={address.address}>
+          <Card style={{margin: '12px'}}>
             <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={11} align='left'>
@@ -297,7 +179,7 @@ class EthAccounts extends Component {
                 </Grid>
                 <Grid item xs={1} align='right'>
                   <IconButton
-                    style={{verticalAlign: 'top', marginRight: '-20px'}}
+                    style={{verticalAlign: 'top', marginRight: '-20px', marginTop: '-11px'}}
                     color="primary"
                     aria-label="More"
                     buttonRef={node => {
@@ -369,7 +251,7 @@ class EthAccounts extends Component {
       return (
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
           <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
-            <Typography variant="headline" color="inherit">
+            <Typography variant="headline" >
               Transactions
             </Typography>
           </Grid>
@@ -395,7 +277,7 @@ class EthAccounts extends Component {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='center' style={{marginBottom: '24px'}}>
-          <Typography variant="headline" color="inherit">
+          <Typography variant="headline" >
             Transactions
           </Typography>
         </Grid>
@@ -403,32 +285,32 @@ class EthAccounts extends Component {
         <Grid item xs={12} align='center'>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
             <Grid item xs={2} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Date
               </Typography>
             </Grid>
             <Grid item xs={2} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 From Account
               </Typography>
             </Grid>
             <Grid item xs={2} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 To Account
               </Typography>
             </Grid>
             <Grid item xs={1} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Amount
               </Typography>
             </Grid>
             <Grid item xs={1} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Status
               </Typography>
             </Grid>
             <Grid item xs={4} align='left' style={headerStyle}>
-              <Typography variant="body2" color="inherit" style={{fontSize: '17px', fontWeight: 'bold'}}>
+              <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                 Transaction ID
               </Typography>
             </Grid>
@@ -453,32 +335,32 @@ class EthAccounts extends Component {
       <Grid item xs={12} align='center'>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
           <Grid item xs={2} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               {moment(transaction.timestamp).format('YYYY/MM/DD hh:mm')}
             </Typography>
           </Grid>
           <Grid item xs={2} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               {transaction.fromDisplayName}
             </Typography>
           </Grid>
           <Grid item xs={2} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               {transaction.toDisplayName}
             </Typography>
           </Grid>
           <Grid item xs={1} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               {transaction.value} Eth
             </Typography>
           </Grid>
           <Grid item xs={1} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               {transaction.status}
             </Typography>
           </Grid>
           <Grid item xs={4} align='left' style={bodyStyle}>
-            <Typography variant="body2" color="inherit" style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+            <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
               <a href={config.etherscanUrl+transaction.transactionId} target="_blank">{transaction.transactionId}</a>
             </Typography>
           </Grid>
@@ -489,36 +371,62 @@ class EthAccounts extends Component {
 
   render() {
     return (
-      <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='center'>
-          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Grid item xs={12} align='left'>
-              <Typography variant="headline" color="inherit" style={{marginBottom: '20px'}}>
-                Ethereum Accounts
-              </Typography>
-            </Grid>
+      <Grid container justify="center" alignItems="flex-start" direction="row">
+        <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid #6be6fd', display: 'flex' }}>
+          <div style={{flex: 1}}>
+            <Typography variant='display1'>
+              Ethereum Accounts
+            </Typography>
+          </div>
+          <div>
+            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create</Button>
+            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import</Button>
+          </div>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '24px'}}>
             {this.renderAddresses()}
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4} align='center' style={{position: 'relative', minHeight: '470px'}}>
-          <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0} style={{padding: '24px'}}>
-            <Tabs
-              value={this.props.tabValue}
-              onChange={this.props.handleTabChange}
-              indicatorColor="primary"
-              textColor="primary" >
-              <Tab label="Create Account" />
-              <Tab label="Import Account" />
-            </Tabs>
-            {this.props.tabValue === 0 && this.renderCreate()}
-            {this.props.tabValue === 1 && this.renderImport()}
-            {this.props.createLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
-          </Grid>
-        </Grid>
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <EthTransactions ethAddresses={this.props.addresses} ethTransactions={this.props.ethTransactions} contacts={this.props.contacts} />
         </Grid>
+        <PrivateKeyModal isOpen={this.props.keyOpen} handleClose={this.props.handleKeyClose} currentAccountKey={this.props.currentAccountKey} copyKey={this.props.copyKey} />
         <DeleteAccountConfirmation isOpen={this.props.deleteOpen} handleClose={this.props.handleDeleteClose} confirmDelete={this.props.confirmDelete} deleteLoading={this.props.deleteLoading} />
+        <CreateModal
+          isOpen={this.props.createOpen}
+          handleClose={this.props.handleCreateClose}
+          handleDone={this.props.createImportClicked}
+          createLoading={this.props.createLoading}
+          addressName={this.props.addressName}
+          addressNameError={this.props.addressNameError}
+          addressNameErrorMessage={this.props.addressNameErrorMessage}
+          primary={this.props.primary}
+          handleChange={this.props.handleChange}
+          handleChecked={this.props.handleChecked}
+          validateField={this.props.validateField}
+          handleCreate={this.props.createImportClicked}
+        />
+        <ImportModal
+          isOpen={this.props.importOpen}
+          handleClose={this.props.handleImportClose}
+          handleDone={this.props.createImportClicked}
+          createLoading={this.props.createLoading}
+          addressName={this.props.addressName}
+          addressNameError={this.props.addressNameError}
+          addressNameErrorMessage={this.props.addressNameErrorMessage}
+          publicAddress={this.props.publicAddress}
+          publicAddressError={this.props.publicAddressError}
+          publicAddressErrorMessage={this.props.publicAddressErrorMessage}
+          privateKey={this.props.privateKey}
+          privateKeyError={this.props.privateKeyError}
+          privateKeyErrorMessage={this.props.privateKeyErrorMessage}
+          primary={this.props.primary}
+          handleChange={this.props.handleChange}
+          handleChecked={this.props.handleChecked}
+          validateField={this.props.validateField}
+          handleImport={this.props.createImportClicked}
+        />
       </Grid>
     );
   }

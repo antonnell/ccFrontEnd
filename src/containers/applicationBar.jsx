@@ -11,6 +11,8 @@ let ApplicationBar = createReactClass({
       <ApplicationBarComponent
         menuClicked={this.props.menuClicked}
         user={this.props.user}
+        size={this.props.size}
+        title={this.props.title}
       />
     )
   },

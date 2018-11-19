@@ -16,12 +16,12 @@ class AuthComponent extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" color="inherit">
+              <Typography variant="display1" >
                 Two Factor Authentication Required
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2" color="inherit" style={{marginTop: '24px'}}>
+              <Typography variant="body2" style={{marginTop: '24px'}}>
                 Enter the 6 digit code that Google Authenticator generates for your CryptoCurve account
               </Typography>
             </Grid>

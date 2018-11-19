@@ -19,7 +19,6 @@ let WanAccounts = createReactClass({
     return {
       createLoading: false,
       error: null,
-      tabValue: 0,
       addressName: '',
       addressNameError: false,
       addressNameErrorMessage: '',
@@ -53,7 +52,9 @@ let WanAccounts = createReactClass({
       thanksOpen: false,
       investTransacstionID: '',
       minContribution: 25,
-      crowdasleProgress: null
+      crowdasleProgress: null,
+      createOpen: false,
+      importOpen: false
     }
   },
   render() {
@@ -64,7 +65,6 @@ let WanAccounts = createReactClass({
         onCreateImportKeyDown={this.onCreateImportKeyDown}
         createImportClicked={this.createImportClicked}
         exportWanchainKeyClicked={this.exportWanchainKeyClicked}
-        tabValue={this.state.tabValue}
         createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
@@ -132,6 +132,12 @@ let WanAccounts = createReactClass({
         crowdasleProgress={this.state.crowdasleProgress}
         wanTransactions={this.props.wanTransactions}
         contacts={this.props.contacts}
+        handleCreateOpen={this.handleCreateOpen}
+        handleImportOpen={this.handleImportOpen}
+        createOpen={this.state.createOpen}
+        handleCreateClose={this.handleCreateClose}
+        importOpen={this.state.importOpen}
+        handleImportClose={this.handleImportClose}
       />
     )
   },
@@ -183,7 +189,7 @@ let WanAccounts = createReactClass({
       var content = {id: this.props.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({createOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -202,7 +208,7 @@ let WanAccounts = createReactClass({
       var content = {id: this.props.user.id};
       wanDispatcher.dispatch({type: 'getWanAddress', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({importOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -300,6 +306,20 @@ let WanAccounts = createReactClass({
     }
   },
 
+  handleCreateOpen() {
+    this.setState({createOpen: true});
+  },
+  handleCreateClose() {
+    this.setState({createOpen: false})
+  },
+
+  handleImportOpen() {
+    this.setState({importOpen: true});
+  },
+  handleImportClose() {
+    this.setState({importOpen: false})
+  },
+
   deleteKeyClicked(address) {
     this.setState({deleteAddress: address, deleteOpen: true});
   },
@@ -387,7 +407,7 @@ let WanAccounts = createReactClass({
   },
 
   createImportClicked() {
-    if(this.state.tabValue === 0) {
+    if(this.state.createOpen === true) {
       this.createWanAddress();
     } else {
       this.importWanAddress();

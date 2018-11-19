@@ -14,14 +14,14 @@ class ForgotPasswordDone extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="headline" color="inherit">
+              <Typography variant="headline" >
                 Update Password
               </Typography>
             </Grid>
           </Grid>
           <Grid containe justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
-              <Typography color="inherit" variant="Body2" >Your password has been updated.</Typography>
+              <Typography  variant="Body2" >Your password has been updated.</Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>

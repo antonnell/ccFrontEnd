@@ -23,7 +23,7 @@ class Welcome extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} >
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" color="inherit">
+              <Typography variant="display1">
                 Login
               </Typography>
             </Grid>
@@ -40,7 +40,7 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='right'>
-              <Typography color="inherit" style={{fontSize: '12px', cursor: 'pointer'}} onClick={forgotPasswordClicked}>
+              <Typography variant='body1' style={{fontSize: '12px', cursor: 'pointer'}} onClick={forgotPasswordClicked}>
                 Forgot Password
               </Typography>
             </Grid>
@@ -48,7 +48,7 @@ class Welcome extends Component {
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{minHeight: '30px'}}>
             <Grid item xs={12} align='center'>
-              <Typography style={{color: '#f44336'}} >
+              <Typography variant='body1' color='error'>
                 {this.props.error}
               </Typography>
             </Grid>
@@ -62,7 +62,7 @@ class Welcome extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='center'>
-              <Typography color="inherit" style={{fontSize: '14px', cursor: 'pointer', display: 'inline-block'}} onClick={registerClicked}>
+              <Typography variant='body1' style={{fontSize: '14px', cursor: 'pointer', display: 'inline-block'}} onClick={registerClicked}>
                 No account yet? Click here to register!
               </Typography>
             </Grid>

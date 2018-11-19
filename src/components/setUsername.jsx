@@ -16,12 +16,12 @@ class SerUsername extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="headline" color="inherit">
+              <Typography variant="headline" >
                 Set Username
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2" color="inherit" style={{marginTop: '24px'}}>
+              <Typography variant="body2"  style={{marginTop: '24px'}}>
                 Your username will be used so that contacts can easilly transfer funds to your account. Enter your username below.
               </Typography>
             </Grid>

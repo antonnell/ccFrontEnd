@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {};
 
@@ -19,15 +20,18 @@ class ApplicationBar extends Component {
 
   render() {
     //<img src='account-logo.png' width='158px' height='24pox' alt='CRPTOCURVE.IO'/>
-    return (
-      <AppBar position="static" color="primary">
+    if(this.props.size == 'xs' || this.props.size == 'sm') {
+      return (<AppBar position="static" color="secondary">
         <Toolbar>
-          {this.props.menuClicked != null ? (<IconButton color="inherit" aria-label="Menu" onClick={this.props.menuClicked}>
+          {this.props.menuClicked != null ? (<IconButton aria-label="Menu" onClick={this.props.menuClicked}>
             <MenuIcon />
           </IconButton>) : null}
           <img src="./cryptocurve-logo-white2.png" alt="CryptoCurve.io" heigth="43px" width="164px" />
         </Toolbar>
-      </AppBar>
+      </AppBar>)
+    }
+    return (
+      <div></div>
     );
   };
 }

@@ -16,12 +16,12 @@ class ForgotPassword extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" color="inherit">
+              <Typography variant="display1" >
                 Forgot Password
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2" color="inherit" style={{marginTop: '24px'}}>
+              <Typography variant="body2"  style={{marginTop: '24px'}}>
                 Enter your email address associated with your account to receive a password reset email.
               </Typography>
             </Grid>
