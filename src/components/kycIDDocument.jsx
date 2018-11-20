@@ -41,10 +41,10 @@ class KYCIDDOcument extends Component {
           {imagePreview}
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.idDocumentImagePreviewUrl?"contained":"flat"} disabled={!this.props.idDocumentImagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Next</Button>
+          <Button size="small" variant={this.props.idDocumentImagePreviewUrl?"contained":"text"} disabled={!this.props.idDocumentImagePreviewUrl} color="primary" onClick={this.props.navigateUploadPhoto}>Next</Button>
         </Grid>
       </Grid>
     );

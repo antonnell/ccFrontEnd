@@ -22,17 +22,23 @@ class Disable2FA extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '24px'}}>
-              2 Factor Authentication is currently enabled on your account. It provides you with increased security so that your account remains safe.
+              <Typography>
+                2 Factor Authentication is currently enabled on your account. It provides you with increased security so that your account remains safe.
+              </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '24px', fontWeight: 'bold'}}>
-              We strongly recomend that you keep 2FA enabled on your account.
+              <Typography>
+                We strongly recomend that you keep 2FA enabled on your account.
+              </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
-              Turn off 2 Factor Authentication? <Button variant="flat" style={{border: '1px solid #ccc'}} size='medium' color='primary' onClick={this.props.submitDisable} disabled={this.props.loading}>Turn Off</Button>
+              <Typography>
+                Turn off 2 Factor Authentication? <Button variant="text" style={{border: '1px solid #ccc'}} size='medium' color='primary' onClick={this.props.submitDisable} disabled={this.props.loading}>Turn Off</Button>
+              </Typography>
             </Grid>
           </Grid>
           {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}

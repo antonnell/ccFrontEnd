@@ -13,7 +13,7 @@ class Disable2FaConfirmation extends Component {
       <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
         <DialogTitle id="alert-dialog-title">{"Disable 2FA"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" style={{ color: '#333'}}>
+          <DialogContentText id="alert-dialog-description">
             Are you sure you would like to disable Two Factor Authentication?
           </DialogContentText>
         </DialogContent>

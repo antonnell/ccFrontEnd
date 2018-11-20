@@ -19,14 +19,14 @@ class ForgotPasswordDone extends Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid containe justify="space-around" alignItems="center" direction="row" spacing={ 0 }>
+          <Grid container justify="space-around" alignItems="center" direction="row" spacing={ 0 }>
             <Grid item xs={ 12 } style={ { marginTop: '50px' } }>
-              <Typography  variant="Body2">If the chosen email address exists, password reset instructions have been send to the address provided.</Typography>
+              <Typography variant="body1">If the chosen email address exists, password reset instructions have been send to the address provided.</Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={ 0 } style={ { marginTop: '40px' } }>
             <Grid item xs={ 12 } align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={ this.props.submitLoginNavigate }>
+              <Button variant="text" size='large' color='primary' onClick={ this.props.submitLoginNavigate }>
                 Back
               </Button>
             </Grid>

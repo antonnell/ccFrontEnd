@@ -34,7 +34,7 @@ class ImportWanAddress extends Component {
             onChange={(event) => { this.props.handleChange(event, 'addressName'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} />
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateCreateWanAddress}>Create one</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateCreateWanAddress}>Create one</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
           <Button size="small" variant="contained" color="primary" onClick={this.props.importWanAddress}>Import my address</Button>

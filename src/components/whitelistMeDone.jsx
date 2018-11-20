@@ -37,7 +37,7 @@ class WhitelistMeDone extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={this.props.submitBack} disabled={this.props.loading}>
+              <Button variant="text" size='large' color='primary' onClick={this.props.submitBack} disabled={this.props.loading}>
                 Back
               </Button>
             </Grid>

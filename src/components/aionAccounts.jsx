@@ -34,7 +34,7 @@ import ImportModal from './importModal';
 function MoreIcon(props) {
   return (
     <SvgIcon {...props}>
-      <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+      <path fill='#b5b5b5' d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
     </SvgIcon>
   );
 };
@@ -112,9 +112,9 @@ class AionAccounts extends Component {
         <Grid item xs={12} lg={6} align='left' key={address.address}>
           <Card style={{margin: '12px'}}>
             <CardContent style={{position: 'relative'}}>
-              <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
+              <Grid container justify="flex-start" alignItems="flex-start" direction="row">
                 <Grid item xs={11} align='left'>
-                  {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
+                  {address.editing!==true&& <Typography noWrap variant="display2" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.isPrimary===true&& <Tooltip title='This is your primary Aion account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
                     {address.isPrimary===false&& <Tooltip title='Make this account my primary Aion account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
@@ -168,17 +168,17 @@ class AionAccounts extends Component {
                   </Popover>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px'}}>
+                  <Typography noWrap variant="subheading" color="textSecondary" style={{minHeight: '32px'}}>
                     {address.address}
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} style={{marginTop: '6px'}}>
                   <Typography variant="headline" noWrap>
                     {address.balance+' Aion ($'+address.usdBalance.toFixed(2)+')'}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} align='right' >
-                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendAionClicked(null, address) }} >Send Aion</Button>
+                  <Button size="small" variant="text" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendAionClicked(null, address) }} >Send Aion</Button>
                 </Grid>
               </Grid>
               {loading}
@@ -199,8 +199,8 @@ class AionAccounts extends Component {
             </Typography>
           </div>
           <div>
-            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create</Button>
-            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import</Button>
+            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create Account</Button>
+            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import Account</Button>
           </div>
         </Grid>
         <Grid item xs={12} align='center'>
@@ -226,6 +226,7 @@ class AionAccounts extends Component {
           handleChecked={this.props.handleChecked}
           validateField={this.props.validateField}
           handleCreate={this.props.createImportClicked}
+          error={this.props.error}
         />
         <ImportModal
           isOpen={this.props.importOpen}
@@ -246,6 +247,7 @@ class AionAccounts extends Component {
           handleChecked={this.props.handleChecked}
           validateField={this.props.validateField}
           handleImport={this.props.createImportClicked}
+          error={this.props.error}
         />
       </Grid>
     );

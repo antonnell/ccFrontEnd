@@ -38,7 +38,7 @@ let WanAccounts = createReactClass({
       currentAccountKey:  '',
       optionsAccount: null,
       loadingAccount: null,
-      selectedAddress: null,
+      selectedAddress: '',
       selectedAddressError: false,
       selectedAddressErrorMessage: '',
       investmentAmount: '',

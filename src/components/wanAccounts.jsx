@@ -42,7 +42,7 @@ const styles = {};
 function ExpandMoreIcon(props) {
   return (
     <SvgIcon {...props}>
-      <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+      <path fill='#b5b5b5' d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
     </SvgIcon>
   );
 }
@@ -50,7 +50,7 @@ function ExpandMoreIcon(props) {
 function MoreIcon(props) {
   return (
     <SvgIcon {...props}>
-      <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+      <path fill='#b5b5b5' d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
     </SvgIcon>
   );
 };
@@ -145,19 +145,17 @@ class WanAccounts extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Symbol</TableCell>
-                    <TableCell numeric>Balance</TableCell>
-                    <TableCell numeric>Send</TableCell>
+                    <TableCell><Typography variant='body2'>Symbol</Typography></TableCell>
+                    <TableCell numeric><Typography variant='body2'>Balance</Typography></TableCell>
+                    <TableCell numeric><Typography variant='body2'>Send</Typography></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {address.wrc20Tokens.map(n => {
                     return (
                       <TableRow key={n.symbol}>
-                        <TableCell component="th" scope="row">
-                          {n.name}
-                        </TableCell>
-                        <TableCell numeric>{n.balance+' '+n.symbol}</TableCell>
+                        <TableCell component="th" scope="row"><Typography variant='body1'>{n.name}</Typography></TableCell>
+                        <TableCell numeric><Typography variant='body1'>{n.balance+' '+n.symbol}</Typography></TableCell>
                         <TableCell numeric><Button size="small" variant="contained" color="primary" disabled onClick={(event) => { this.props.sendWRC20(n.symbol, address); }}>Send</Button></TableCell>
                       </TableRow>
                     );
@@ -183,7 +181,7 @@ class WanAccounts extends Component {
             <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row">
                 <Grid item xs={11} align='left'>
-                  {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
+                  {address.editing!==true&& <Typography noWrap variant="display2" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.isPrimary===true&& <Tooltip title='This is your primary Wanchain account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
                     {address.isPrimary===false&& <Tooltip title='Wanchain account'><SetPrimaryIcon onClick={() => { /*this.props.updatePrimaryClicked(address)*/ }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
@@ -230,17 +228,17 @@ class WanAccounts extends Component {
                   </Popover>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px'}}>
+                  <Typography noWrap variant="subheading" color="textSecondary" style={{minHeight: '32px'}}>
                     {address.publicAddress}
                   </Typography>
                 </Grid>
-                <Grid item xs={6} align='left'>
+                <Grid item xs={6} style={{marginTop: '6px'}}>
                   <Typography variant="headline" noWrap>
                     {address.balance+' WAN ($'+address.usdBalance.toFixed(2)+')'}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} align='right' >
-                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendWanchainClicked(null, address) }} >Send Wan</Button>
+                  <Button size="small" variant="text" style={{border: '1px solid #ccc'}} disabled={this.props.loadingAccount||this.props.cardLoading||this.props.privateKeyLoading} onClick={() => { this.props.sendWanchainClicked(null, address) }} >Send Wan</Button>
                 </Grid>
                 <Grid item xs={12} align='left'>
                   {wrc20}
@@ -429,7 +427,7 @@ class WanAccounts extends Component {
 
   renderICO(crowdsale, bodyStyle) {
 
-    let styleA = {fontSize: '20px', fontWeight: 'bold'}
+    let styleA = {fontSize: '20px'}
     let styleB = {lineHeight: '33px', fontSize: '16px'}
     let styleC = {minHeight: '80px'}
 
@@ -474,7 +472,7 @@ class WanAccounts extends Component {
         <Grid item xs={12} align='center' key={crowdsale.id}>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row">
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Name
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -482,7 +480,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 ICO Dates
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -490,7 +488,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Personal Cap
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -498,7 +496,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Contributed Amount
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -506,7 +504,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Choose Wallet
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -514,7 +512,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Amount to Invest (WAN)
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -524,7 +522,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Token Amount
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -532,7 +530,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Invest
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -550,7 +548,7 @@ class WanAccounts extends Component {
         <Grid item xs={12} align='center'>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row">
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Name
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -558,7 +556,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 ICO Dates
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -566,7 +564,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Personal Cap
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -574,7 +572,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Choose Wallet
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -582,7 +580,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Token Amount
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -590,7 +588,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Amount to Invest (WAN)
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -600,7 +598,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Contributed Amount
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -608,7 +606,7 @@ class WanAccounts extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} align='left' style={styleC}>
-              <Typography variant="header"  style={styleA}>
+              <Typography variant="subheading"  style={styleA}>
                 Invest
               </Typography>
               <Typography variant="body1"  style={styleB}>
@@ -675,18 +673,17 @@ class WanAccounts extends Component {
         style={{paddingBottom: '13px', paddingTop: '12px'}}>
         <Select
           fullWidth={true}
-          native={true}
           value={this.props.selectedAddress}
           onChange={this.props.selectAddress}
           disabled={this.props.investLoading||this.props.user.whitelistStatus==null||this.props.user.whitelistStatus!='completed'||(crowdsale.totalContribution>=(crowdsale.userCap/1000000000000000000) && crowdsale.userCap != 0)} >
-            <option key='' value=''>select</option>
+            <MenuItem key='' value=''>select</MenuItem>
             {
               this.props.addresses
               .filter((address) => {
                 return address.isPrimary == true
               })
               .map((address) => {
-                return (<option key={address.publicAddress} value={address.publicAddress}>{address.name}</option>)
+                return (<MenuItem key={address.publicAddress} value={address.publicAddress}>{address.name}</MenuItem>)
               })
             }
         </Select>
@@ -704,8 +701,8 @@ class WanAccounts extends Component {
             </Typography>
           </div>
           <div>
-            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create</Button>
-            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import</Button>
+            <Button size="small" variant='contained' color="primary" onClick={this.props.handleCreateOpen}>Create Account</Button>
+            <Button style={{marginLeft: '12px'}} size="small" variant='contained' color="secondary" onClick={this.props.handleImportOpen}>Import Account</Button>
           </div>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} align='center'>
@@ -736,6 +733,7 @@ class WanAccounts extends Component {
           handleChecked={this.props.handleChecked}
           validateField={this.props.validateField}
           handleCreate={this.props.createImportClicked}
+          error={this.props.error}
         />
         <ImportModal
           isOpen={this.props.importOpen}
@@ -756,6 +754,7 @@ class WanAccounts extends Component {
           handleChecked={this.props.handleChecked}
           validateField={this.props.validateField}
           handleImport={this.props.createImportClicked}
+          error={this.props.error}
         />
 
       </Grid>

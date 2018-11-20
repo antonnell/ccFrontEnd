@@ -8,3 +8,7 @@ body {
   font-size: 48px !important;
   text-align: center;
 }
+
+div {
+  position: relative;
+}

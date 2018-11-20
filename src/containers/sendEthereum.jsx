@@ -262,8 +262,8 @@ let SendEther = createReactClass({
 
   render() {
     return (
-      <Grid container justify="center" alignItems="center" direction="row" spacing={0} style={{marginTop: '0px'}}>
-        <Grid item xs={12} sm={10} md={8} lg={6} xl={6} align='center'>
+      <Grid container justify="center" alignItems="center" direction="row">
+        <Grid item xs={12} sm={12} md={12} lg={9} xl={8} align='center'>
           {this.renderStepper()}
         </Grid>
       </Grid>

@@ -31,7 +31,7 @@ class ImportPrivateTypeWanAddress extends Component {
           <Button size="small" variant="contained" color="primary" onClick={() => {this.props.navigateImportPrivateWanAddress('jsonV3')}}>JSONv3</Button>
         </Grid>
         <Grid item xs={12} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
       </Grid>
     );

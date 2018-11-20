@@ -21,7 +21,8 @@ let Contacts = createReactClass({
       displayNameErrorMessage: "",
       notes: "",
       notesError: false,
-      notesErrorMessage: ""
+      notesErrorMessage: "",
+      addOpen: false
     }
   },
 
@@ -59,7 +60,7 @@ let Contacts = createReactClass({
       var content = {id: this.props.user.id};
       contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
 
-      //show sncakbar?
+      this.setState({addOpen: false})
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -93,8 +94,18 @@ let Contacts = createReactClass({
         error={this.state.error}
         contacts={this.props.contacts}
         validateField={this.validateField}
+        handleAddOpen={this.handleAddOpen}
+        addOpen={this.state.addOpen}
+        handleAddClose={this.handleAddClose}
         />
     )
+  },
+
+  handleAddOpen() {
+    this.setState({addOpen: true});
+  },
+  handleAddClose() {
+    this.setState({addOpen: false})
   },
 
   onAddKeyDown(event) {

@@ -15,7 +15,7 @@ class CreateModal extends Component {
   render() {
     var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
     return (
-      <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
+      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} >
         <DialogContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='left'>

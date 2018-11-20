@@ -16,7 +16,7 @@ let Welcome = createReactClass({
     return {
       loading: false,
       error: null,
-
+ 
       username: '',
       usernameError: false,
       usernameErrorMessage: false,

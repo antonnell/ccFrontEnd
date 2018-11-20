@@ -18,7 +18,7 @@ class Footer extends Component {
     var aStyle = { textDecoration: 'none', color: 'white' }
 
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{backgroundColor: '#000000', color: '#FFFFFF', position: 'relative'}}>
+      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{backgroundColor: '#000000', color: '#FFFFFF', position: 'relative', minHeight: '299px'}}>
         <Grid item xs={12} sm={4} md={4} lg={4} align='center' style={{padding: '40px'}}>
           <img src="footer-logo.png" alt="" width="150px" height="166px" />
         </Grid>

@@ -141,7 +141,7 @@ class AppDrawer extends Component {
 
   renderGridList() {
     return (
-      <Grid container justifyContent="space-around">
+      <Grid container>
         <Grid item xs={12}>
           <Card style={{height: '210px', padding: '24px', position: 'relative', marginBottom: '8px'}} >
             <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />

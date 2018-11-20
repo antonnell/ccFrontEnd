@@ -21,7 +21,7 @@ class UpdatePassword extends Component {
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2"  style={{marginTop: '24px'}}>
+              <Typography variant="body1"  style={{marginTop: '24px'}}>
                 Enter your new password below.
               </Typography>
             </Grid>

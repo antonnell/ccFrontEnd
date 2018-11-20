@@ -25,6 +25,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
 
 let config = require('../config')
 
@@ -200,16 +201,15 @@ let EnhancedFilterBar = props => {
           <InputLabel shrink={true}>Address</InputLabel>
           <Select
             fullWidth={true}
-            native={true}
             value={selectedAddress}
             onChange={selectAddress}
             disabled={loading} >
-              <option key='' value=''>--</option>
+              <MenuItem key='a' value=''>--</MenuItem>
               {
                 wanAddresses?
                 wanAddresses
-                .map((address) => {
-                  return (<option key={address.publicAddress} value={address.publicAddress}>{address.name}</option>)
+                .map((address) => { 
+                  return (<MenuItem key={address.name} value={address.name}>{address.name}</MenuItem>)
                 }):''
               }
           </Select>
@@ -223,16 +223,15 @@ let EnhancedFilterBar = props => {
           <InputLabel shrink={true}>Contact</InputLabel>
           <Select
             fullWidth={true}
-            native={true}
             value={selectedContact}
             onChange={selectContact}
             disabled={loading} >
-              <option key='' value=''>--</option>
+              <MenuItem key='b' value=''>--</MenuItem>
               {
                 contacts?
                 contacts
                 .map((contact) => {
-                  return (<option key={contact.id} value={contact.id}>{contact.displayName}</option>)
+                  return (<MenuItem key={contact.displayName} value={contact.displayName}>{contact.displayName}</MenuItem>)
                 }):''
               }
           </Select>
@@ -289,7 +288,7 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         <Tooltip title="Filter list">
           <IconButton aria-label="Filter list" onClick={toggleFilters}>
-            <FilterListIcon />
+            <FilterListIcon style={{color: '#b5b5b5'}} />
           </IconButton>
         </Tooltip>
       </div>

@@ -22,10 +22,10 @@ class AcceptTermsAndConditions extends Component {
           </Typography>
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.termsOpened?"flat":"contained"} color={this.props.termsOpened?"default":"primary"} onClick={this.props.readTerms}>T's & C's</Button>
+          <Button size="small" variant={this.props.termsOpened?"text":"contained"} color={this.props.termsOpened?"default":"primary"} onClick={this.props.readTerms}>T's & C's</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.termsOpened?"contained":"flat"} disabled={!this.props.termsOpened} color="primary" onClick={this.props.acceptTerms}>I Accept</Button>
+          <Button size="small" variant={this.props.termsOpened?"contained":"text"} disabled={!this.props.termsOpened} color="primary" onClick={this.props.acceptTerms}>I Accept</Button>
         </Grid>
       </Grid>
     );

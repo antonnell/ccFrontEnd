@@ -135,15 +135,16 @@ const themeDark = createMuiTheme({
   overrides: {
     MuiStepIcon: {
       root: {
+        color: '#b5b5b5',
         '&-active': {
-          color: "#2ad4dc"
+          color: "#6be6fd"
         }
       },
       active: {
-        color: "#2ad4dc !important"
+        color: "#6be6fd !important"
       },
       completed: {
-        color: "#2ad4dc !important"
+        color: "#6be6fd !important"
       }
     },
     MuiInput: {
@@ -156,6 +157,11 @@ const themeDark = createMuiTheme({
           backgroundColor: '#6be6fd',
           height: '2px'
         },
+      }
+    },
+    MuiInputBase: {
+      root: {
+        color: '#fff'
       }
     },
     MuiButton: {
@@ -173,19 +179,21 @@ const themeDark = createMuiTheme({
       root: {
         borderRadius: 0
       }
-    }
+    },
   },
   typography: {
     // Use the system font over Roboto.
     fontFamily: 'Abel, sans-serif',
     button: {
-      fontWeight: 500
+      fontWeight: 700
     },
-    display1: {
-      color: '#fff'
+    display2: {
+      color: '#fff',
+      fontSize: '26px',
+      color: '#6be6fd'
     },
     body1: {
-      color: '#fff'
+      color: '#b5b5b5'
     },
     subheading: {
       color: '#fff'

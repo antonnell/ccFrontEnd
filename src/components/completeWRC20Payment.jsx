@@ -52,9 +52,9 @@ class CompleteWRC20Payment extends Component {
     return (
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
-          <Grid item xs={12} align='center'>
-            <Typography variant="headline">
-              Payment results
+          <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
+            <Typography variant="display1">
+              Payment Results
             </Typography>
           </Grid>
         </Grid>

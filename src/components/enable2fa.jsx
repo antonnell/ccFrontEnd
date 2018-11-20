@@ -45,7 +45,9 @@ class Enable2FA extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '24px'}}>
             <Grid item xs={12} style={{position: 'relative'}}>
-              {this.props.secretKey}
+              <Typography>
+                {this.props.secretKey}
+              </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={8}>

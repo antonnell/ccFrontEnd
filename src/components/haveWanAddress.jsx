@@ -74,10 +74,10 @@ class HaveWanAddress extends Component {
           {this.renderMessage()}
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateExistingWanAddress} style={{marginRight: '12px'}}>I have one</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateExistingWanAddress} style={{marginRight: '12px'}}>I have one</Button>
           <Button size="small" variant="contained" color="primary" onClick={this.props.navigateCreateWanAddress}>Create Wanchain Address</Button>
         </Grid>
       </Grid>

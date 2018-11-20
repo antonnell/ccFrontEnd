@@ -39,10 +39,10 @@ class SetupAionPayment extends Component {
           return (
             <Grid container justify="center" alignItems="center" direction="row">
               <Grid item xs={8} align='left'>
-                <Typography variant='display1' noWrap color='secondary'>
+                <Typography variant='display2' noWrap>
                   {selectedAddress.name}
                 </Typography>
-                <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
+                <Typography variant='body1' noWrap>
                   {selectedAddress.address}
                 </Typography>
               </Grid>
@@ -67,7 +67,9 @@ class SetupAionPayment extends Component {
             <MenuItem value={address.address} key={address.address}>
               <ListItemText primary={address.name} secondary={address.address} />
               <ListItemSecondaryAction style={{right: '24px'}}>
-                {address.balance+" AION"}
+                <Typography>
+                  {address.balance+" AION"}
+                </Typography>
               </ListItemSecondaryAction>
             </MenuItem>
           )
@@ -97,10 +99,10 @@ class SetupAionPayment extends Component {
           return (
             <Grid container justify="center" alignItems="center" direction="row">
               <Grid item xs={8} align='left'>
-                <Typography variant='display1' noWrap color='secondary'>
+                <Typography variant='display2' noWrap>
                   {selectedContact.displayName}
                 </Typography>
-                <Typography variant='subheading' noWrap style={{color: 'rgba(0, 0, 0, 0.54)'}}>
+                <Typography variant='body1' noWrap>
                   {selectedContact.primaryAionAddress}
                 </Typography>
               </Grid>
@@ -153,7 +155,7 @@ class SetupAionPayment extends Component {
   renderEnterPublic() {
     return(<Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '24px'}}>
         <Grid item xs={12} align='left'>
-          <div style={{background: '#dedede', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px'}}>
+          <div style={{background: '#b5b5b5', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px'}}>
             {this.props.disclaimer}
           </div>
           <Typography variant="subheading">
@@ -171,15 +173,8 @@ class SetupAionPayment extends Component {
     return (
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
-          <Grid item xs={12} align='center'>
-            <Typography variant="headline">
-              Set up your Aion payment
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="title">
+            <Typography variant="display1">
               Your details
             </Typography>
           </Grid>
@@ -194,7 +189,7 @@ class SetupAionPayment extends Component {
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="title">
+            <Typography variant="display1">
               Payment details
             </Typography>
           </Grid>
@@ -202,8 +197,8 @@ class SetupAionPayment extends Component {
             <Tabs
               value={this.props.tabValue}
               onChange={this.props.handleTabChange}
-              indicatorColor="secondary"
-              textColor="secondary" >
+              indicatorColor="primary"
+              textColor="primary" >
               <Tab label="Contact Payment" />
               <Tab label="Public Address Payment" />
               <Tab label="Account Transfer" />

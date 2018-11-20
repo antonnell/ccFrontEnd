@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress  from '@material-ui/core/CircularProgress';
-
-
-const styles = {};
 
 class Welcome extends Component {
 
@@ -21,6 +17,7 @@ class Welcome extends Component {
     return (
       <Grid container justify="space-around" direction="row" spacing={0} style={{marginTop: '100px'}}>
         <Grid item xs={10} sm={6} md={4} lg={3} >
+
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
               <Typography variant="display1">
@@ -67,10 +64,11 @@ class Welcome extends Component {
               </Typography>
             </Grid>
           </Grid>
+
         </Grid>
       </Grid>
     );
   };
 }
 
-export default withStyles(styles)(Welcome);
+export default (Welcome);

@@ -8,9 +8,11 @@ class ConfirmERC20Payment extends Component {
 
   renderBeneficiary() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-      To your beneficairy:
-      <div style={{border: '1px solid #000', padding: '12px', marginTop: '12px'}}>
-        <Typography variant="title" noWrap>
+      <Typography>
+        To your beneficairy:
+      </Typography>
+      <div style={{border: '1px solid #6be6fd', padding: '12px', marginTop: '12px'}}>
+        <Typography variant="display1" noWrap>
           <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryEthAddress})
         </Typography>
       </div>
@@ -19,9 +21,11 @@ class ConfirmERC20Payment extends Component {
 
   renderPublic() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-      To public address:
-      <div style={{border: '1px solid #000', padding: '12px'}}>
-        <Typography variant="title" noWrap>
+      <Typography>
+        To public address:
+      </Typography>
+      <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
+        <Typography variant="display1" noWrap>
           <b>{this.props.publicAddress}</b>
         </Typography>
       </div>
@@ -30,9 +34,11 @@ class ConfirmERC20Payment extends Component {
 
   renderOwnAccount() {
     return (<Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-      To your own account:
-      <div style={{border: '1px solid #000', padding: '12px', marginTop: '12px'}}>
-        <Typography variant="title" noWrap>
+      <Typography>
+        To your own account:
+      </Typography>
+      <div style={{border: '1px solid #6be6fd', padding: '12px', marginTop: '12px'}}>
+        <Typography variant="display1" noWrap>
           <b>{this.props.ownAccount.name}</b> ({this.props.ownAccount.address})
         </Typography>
       </div>
@@ -43,29 +49,33 @@ class ConfirmERC20Payment extends Component {
     return (
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
-          <Grid item xs={12} align='center'>
-            <Typography variant="headline">
+          <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
+            <Typography variant="display1">
               Confirm your {this.props.sendERC20Symbol} payment
             </Typography>
           </Grid>
         </Grid>
         <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            You would like to send:
+            <Typography>
+              You would like to send:
+            </Typography>
           </Grid>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            <div style={{border: '1px solid #000', padding: '12px'}}>
-              <Typography variant="title" noWrap>
+            <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
+              <Typography variant="display1" noWrap>
                 <b>{this.props.amount+" "+this.props.sendERC20Symbol}</b>
               </Typography>
             </div>
           </Grid>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            From your address:
+            <Typography>
+              From your address:
+            </Typography>
           </Grid>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-            <div style={{border: '1px solid #000', padding: '12px'}}>
-              <Typography variant="title" noWrap>
+            <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
+              <Typography variant="display1" noWrap>
                 <b>{this.props.account.name}</b> ({this.props.account.address})
               </Typography>
             </div>
@@ -77,7 +87,7 @@ class ConfirmERC20Payment extends Component {
         {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={6} align='left'>
-            <Button size="medium" variant="flat" color="primary" onClick={this.props.backClicked} disabled={this.props.loading}>Back</Button>
+            <Button size="medium" variant="text" color="primary" onClick={this.props.backClicked} disabled={this.props.loading}>Back</Button>
           </Grid>
           <Grid item xs={6} align='right'>
             <Button size="medium" variant="contained" color="primary" onClick={this.props.confirmClicked} disabled={this.props.loading}>Confirm</Button>

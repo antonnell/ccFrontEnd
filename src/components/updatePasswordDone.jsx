@@ -21,12 +21,12 @@ class ForgotPasswordDone extends Component {
           </Grid>
           <Grid containe justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}}>
-              <Typography  variant="Body2" >Your password has been updated.</Typography>
+              <Typography  variant="body1" >Your password has been updated.</Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '40px'}}>
             <Grid item xs={12} align='left'>
-              <Button variant="flat" size='large' color='primary' onClick={this.props.submitUpdatePasswordNavigate}>
+              <Button variant="text" size='large' color='primary' onClick={this.props.submitUpdatePasswordNavigate}>
                 Back
               </Button>
             </Grid>

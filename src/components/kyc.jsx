@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const styles = {};
 
 class KYC extends Component {
-
+x
   render() {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '100px', marginBottom: '100px'}}>
@@ -22,13 +22,13 @@ class KYC extends Component {
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
-              <Typography variant="title" align='justify'>
+              <Typography variant="body1" align='justify'>
                 Welcome to the Curve KYC Process powered by our partner Netki.
                 Please click on the KYC button below and follow the instructions to complete the KYC process.
               </Typography>
             </Grid>
             <Grid item xs={12} align='center' style={{marginTop: '50px'}}>
-              <Typography variant="title" align='justify'>
+              <Typography variant="body1" align='justify'>
                 Your documents will usually be verified within 24 hours. You will only be able to contribute to the Curve ICO once your documents are verified. You are able to continue and interact with the Curve Wallet until then.
               </Typography>
             </Grid>
@@ -39,15 +39,15 @@ class KYC extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading}>Skip</Button>
+              <Button size="small" variant="text" onClick={this.props.navigateSkip} disabled={this.props.loading}>Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.kycClicked?"contained":"flat"} disabled={(!this.props.kycClicked)||this.props.loading} color="primary" onClick={this.props.navigateSkip}>Confirm</Button>
+              <Button size="small" variant={this.props.kycClicked?"contained":"text"} disabled={(!this.props.kycClicked)||this.props.loading} color="primary" onClick={this.props.navigateSkip}>Confirm</Button>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2">
+              <Typography variant="body1">
                 Note: You will not be able to participate in the token sale until KYC is complete.
               </Typography>
             </Grid>

@@ -32,10 +32,10 @@ class CreateEth extends Component {
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             {this.props.loading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
             <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-              <Button size="small" variant="flat" onClick={this.props.navigateSkip} disabled={this.props.loading} >Skip</Button>
+              <Button size="small" variant="text" onClick={this.props.navigateSkip} disabled={this.props.loading} >Skip</Button>
             </Grid>
             <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-              <Button size="small" variant={this.props.addressNameValid?"contained":"flat"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create account</Button>
+              <Button size="small" variant={this.props.addressNameValid?"contained":"text"} disabled={(!this.props.addressNameValid)||this.props.loading} color="primary" onClick={this.props.createEthAddress}>Create account</Button>
             </Grid>
           </Grid>
         </Grid>

@@ -219,7 +219,7 @@ class Accounts extends Component {
             <CardActions>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={12} align='right' >
-                  <Button size="small" variant="flat" style={{border: '1px solid #ccc'}} onClick={() => { this.props.sendClicked(null, address) }} >{'Send '+address.type}</Button>
+                  <Button size="small" variant="text" style={{border: '1px solid #ccc'}} onClick={() => { this.props.sendClicked(null, address) }} >{'Send '+address.type}</Button>
                 </Grid>
               </Grid>
             </CardActions>

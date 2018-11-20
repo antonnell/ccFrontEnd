@@ -71,10 +71,10 @@ class HaveEthAddress extends Component {
           {this.renderMessage()}
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateExistingEthAddress} style={{marginRight: '12px'}}>I already have one</Button>
           <Button size="small" variant="contained" color="primary" onClick={this.props.navigateCreateEthAddress}>Create Ethereum Address</Button>
         </Grid>
       </Grid>

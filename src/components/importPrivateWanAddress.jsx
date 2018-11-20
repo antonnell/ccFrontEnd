@@ -21,7 +21,7 @@ class ImportPrivateWanAddress extends Component {
       password = <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.wanPasswordError} disabled={this.props.loading}
         id="wanPassword" placeholder="Password" value={this.props.wanPassword} type='password'
         onChange={(event) => { this.props.handleChange(event, 'wanPassword'); }} margin="normal" onKeyDown={this.props.onImportKeyDown} helperText='Your key is password protected. Please provide us with the password.'/>
-      unlockButton = <Button size="small" variant={this.props.wanPasswordValid?"raised":"flat"} disabled={!(this.props.wanPasswordValid||this.props.unlockLoading)} color="primary" onClick={this.props.unlockPrivateWanAddress}>Unlock</Button>
+      unlockButton = <Button size="small" variant={this.props.wanPasswordValid?"raised":"text"} disabled={!(this.props.wanPasswordValid||this.props.unlockLoading)} color="primary" onClick={this.props.unlockPrivateWanAddress}>Unlock</Button>
     }
 
     switch (this.props.keyType) {
@@ -66,10 +66,10 @@ class ImportPrivateWanAddress extends Component {
           {unlockButton}
         </Grid>
         <Grid item xs={3} align='left' style={{marginTop: '24px '}}>
-          <Button size="small" variant="flat" onClick={this.props.navigateBack}>Back</Button>
+          <Button size="small" variant="text" onClick={this.props.navigateBack}>Back</Button>
         </Grid>
         <Grid item xs={9} align='right' style={{marginTop: '24px '}}>
-          <Button size="small" variant={this.props.wanPrivateAddressValid&&this.props.passwordCorrect?"raised":"flat"} disabled={!(this.props.wanPrivateAddressValid&&this.props.passwordCorrect)} color="primary" onClick={this.props.importPrivateWanAddress}>Import my address</Button>
+          <Button size="small" variant={this.props.wanPrivateAddressValid&&this.props.passwordCorrect?"raised":"text"} disabled={!(this.props.wanPrivateAddressValid&&this.props.passwordCorrect)} color="primary" onClick={this.props.importPrivateWanAddress}>Import my address</Button>
         </Grid>
       </Grid>
     );
