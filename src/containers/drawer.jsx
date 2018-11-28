@@ -23,6 +23,7 @@ let Drawer = createReactClass({
         user={this.props.user}
         open={this.props.open}
         size={this.props.size}
+        theme={this.props.theme}
       />
     )
   },

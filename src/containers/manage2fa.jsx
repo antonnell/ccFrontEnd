@@ -1,7 +1,7 @@
 import React from 'react'
 import Enable2FAComponent from '../components/enable2fa'
 import Disable2FAComponent from '../components/disable2fa'
-import Disable2FaConfirmation from '../components/disable2faConfirmation'
+import Disable2FAConfirmation from '../components/disable2faConfirmation'
 const createReactClass = require('create-react-class')
 
 var QRCode = require('qrcode');
@@ -67,7 +67,7 @@ let Manage2FA = createReactClass({
             loading={this.state.loading}
             error={this.state.error}
           />
-          <Disable2FaConfirmation isOpen={this.state.disable2FAOpen} confirmDisable={this.confirmDisable} handleClose={this.handleClose} />
+          <Disable2FAConfirmation isOpen={this.state.disable2FAOpen} confirmDisable={this.confirmDisable} handleClose={this.handleClose} />
         </div>
         )
     } else {

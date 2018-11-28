@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,8 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
-
-const styles = {};
 
 function EthIconPng(props) {
   return (
@@ -44,24 +41,10 @@ function ContactIcon(props) {
     </SvgIcon>
   );
 }
-function Manage2FAIcon(props) {
+function SettingsIcon(props) {
   return (
     <SvgIcon {...props}>
-      <path fill="#fff" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
-    </SvgIcon>
-  );
-}
-function PoolIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path fill="#fff" d="M2,18C4.22,17 6.44,16 8.67,16C10.89,16 13.11,18 15.33,18C17.56,18 19.78,16 22,16V19C19.78,19 17.56,21 15.33,21C13.11,21 10.89,19 8.67,19C6.44,19 4.22,20 2,21V18M2,12C4.22,11 6.44,10 8.67,10C10.89,10 13.11,12 15.33,12C17.56,12 19.78,10 22,10V13C19.78,13 17.56,15 15.33,15C13.11,15 10.89,13 8.67,13C6.44,13 4.22,14 2,15V12M2,6C4.22,5 6.44,4 8.67,4C10.89,4 13.11,6 15.33,6C17.56,6 19.78,4 22,4V7C19.78,7 17.56,9 15.33,9C13.11,9 10.89,7 8.67,7C6.44,7 4.22,8 2,9V6Z" />
-    </SvgIcon>
-  );
-}
-function PasswordIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path fill="#fff" d="M17,7H22V17H17V19A1,1 0 0,0 18,20H20V22H17.5C16.95,22 16,21.55 16,21C16,21.55 15.05,22 14.5,22H12V20H14A1,1 0 0,0 15,19V5A1,1 0 0,0 14,4H12V2H14.5C15.05,2 16,2.45 16,3C16,2.45 16.95,2 17.5,2H20V4H18A1,1 0 0,0 17,5V7M2,7H13V9H4V15H13V17H2V7M20,15V9H17V15H20M8.5,12A1.5,1.5 0 0,0 7,10.5A1.5,1.5 0 0,0 5.5,12A1.5,1.5 0 0,0 7,13.5A1.5,1.5 0 0,0 8.5,12M13,10.89C12.39,10.33 11.44,10.38 10.88,11C10.32,11.6 10.37,12.55 11,13.11C11.55,13.63 12.43,13.63 13,13.11V10.89Z" />
+      <path fill="#fff" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
     </SvgIcon>
   );
 }
@@ -72,10 +55,17 @@ function LogoutIcon(props) {
     </SvgIcon>
   );
 }
-function KYCIcon(props) {
+function PoolingIcon(props) {
   return (
     <SvgIcon {...props}>
-      <path fill="#fff" d="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z" />
+      <path fill="#fff" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" />
+    </SvgIcon>
+  )
+}
+function IcoIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path fill="#fff" d="M9.29,21H12.12L21,12.12V9.29M19,21C19.55,21 20.05,20.78 20.41,20.41C20.78,20.05 21,19.55 21,19V17L17,21M5,3A2,2 0 0,0 3,5V7L7,3M11.88,3L3,11.88V14.71L14.71,3M19.5,3.08L3.08,19.5C3.17,19.85 3.35,20.16 3.59,20.41C3.84,20.65 4.15,20.83 4.5,20.92L20.93,4.5C20.74,3.8 20.2,3.26 19.5,3.08Z" />
     </SvgIcon>
   )
 }
@@ -87,38 +77,6 @@ class AppDrawer extends Component {
       window.location.hash = 'welcome'
     }
   };
-
-  /*
-  <ListItem style={this.props.currentScreen=='accounts'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'accounts'); }}>
-    <ListItemIcon>
-      <WanchainIcon />
-    </ListItemIcon>
-    <ListItemText primary="Accounts" />
-  </ListItem>
-  <ListItem style={this.props.currentScreen=='manageEthPools'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'manageEthPools'); }}>
-    <ListItemIcon>
-      <PoolIcon />
-    </ListItemIcon>
-    <ListItemText primary="Ethereum Pools" />
-  </ListItem>
-
-  {this.props.canWhitelist===true && <ListItem style={this.props.currentScreen=='whitelist'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'whitelist'); }}>
-    <ListItemIcon>
-      <WhitelistIcon />
-    </ListItemIcon>
-    <ListItemText primary="Join Whitelist" />
-  </ListItem>}
-  {this.props.canWhitelist && <Divider />}
-
-
-  <ListItem style={this.props.currentScreen=='sendWRC20'?{background: '#DDDDDD'}:{}} button onClick={(event) => { this.props.navClicked(event, 'sendWRC20'); }}>
-    <ListItemIcon>
-      <WanIconPng />
-    </ListItemIcon>
-    <ListItemText primary="Send WRC20" />
-  </ListItem>
-
-  */
 
   render() {
     if(this.props.user == null) {
@@ -139,101 +97,132 @@ class AppDrawer extends Component {
     );
   };
 
+  renderTop() {
+    if(this.props.theme.name == 'dark') {
+      return (<Card style={{height: '210px', padding: '24px', position: 'relative', marginBottom: '8px'}} >
+        <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
+        <Typography variant="subheading" style={{position: 'absolute', bottom: '22px', fontSize: '30px'}}>
+          {this.props.user.username}
+        </Typography>
+        <Typography variant="subheading" style={{position: 'absolute', bottom: '12px'}}>
+          {this.props.user.email}
+        </Typography>
+      </Card>)
+    } else {
+      return (
+        <div style={{height: '210px', padding: '24px', position: 'relative', marginBottom: '8px'}} >
+          <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
+          <Typography variant="subheading" style={{position: 'absolute', bottom: '22px', fontSize: '30px'}}>
+            {this.props.user.username}
+          </Typography>
+          <Typography variant="subheading" style={{position: 'absolute', bottom: '12px'}}>
+            {this.props.user.email}
+          </Typography>
+        </div>
+      )
+    }
+  }
+
+  renderBottom() {
+    if(this.props.theme.name == 'dark') {
+      return (<Card>
+        {this.renderList()}
+      </Card>)
+    } else {
+      return this.renderList()
+    }
+  }
+
+  renderList() {
+    return (<List>
+      <ListSubheader>Accounts</ListSubheader>
+      <ListItem selected={this.props.currentScreen=='aionAccounts'} button onClick={(event) => { this.props.navClicked(event, 'aionAccounts'); }}>
+        <ListItemIcon>
+          <AionIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Aion Accounts" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='ethAccounts'} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
+        <ListItemIcon>
+          <EthIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Ethereum Accounts" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='wanAccounts'} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
+        <ListItemIcon>
+          <WanIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Wanchain Accounts" />
+      </ListItem>
+      <ListSubheader>Transact</ListSubheader>
+      <ListItem selected={this.props.currentScreen=='sendAion'} button onClick={(event) => { this.props.navClicked(event, 'sendAion'); }}>
+        <ListItemIcon>
+          <AionIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Send Aion" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='sendEthereum'} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
+        <ListItemIcon>
+          <EthIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Send Ethereum" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='sendERC20'} button onClick={(event) => { this.props.navClicked(event, 'sendERC20'); }}>
+        <ListItemIcon>
+          <EthIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Send ERC20" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='sendWanchain'} button onClick={(event) => { this.props.navClicked(event, 'sendWanchain'); }}>
+        <ListItemIcon>
+          <WanIconPng />
+        </ListItemIcon>
+        <ListItemText primary="Send Wanchain" />
+      </ListItem>
+      <ListSubheader>Invest</ListSubheader>
+      <ListItem selected={this.props.currentScreen=='ico'} button onClick={(event) => { this.props.navClicked(event, 'ico'); }}>
+        <ListItemIcon>
+          <IcoIcon />
+        </ListItemIcon>
+        <ListItemText primary="ICO Contributions" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='pooling'} button onClick={(event) => { this.props.navClicked(event, 'pooling'); }}>
+        <ListItemIcon>
+          <PoolingIcon />
+        </ListItemIcon>
+        <ListItemText primary="Pooling" />
+      </ListItem>
+      <ListSubheader>Profile</ListSubheader>
+      <ListItem selected={this.props.currentScreen=='contacts'} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
+        <ListItemIcon>
+          <ContactIcon />
+        </ListItemIcon>
+        <ListItemText primary="Contacts" />
+      </ListItem>
+      <ListItem selected={this.props.currentScreen=='settings'} button onClick={(event) => { this.props.navClicked(event, 'settings'); }}>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Settings" />
+      </ListItem>
+      <Divider />
+      <ListItem button onClick={(event) => { this.props.navClicked(event, 'logOut'); }}>
+        <ListItemIcon>
+          <LogoutIcon />
+        </ListItemIcon>
+        <ListItemText primary="Log Out" />
+      </ListItem>
+    </List>)
+  }
+
   renderGridList() {
     return (
-      <Grid container>
+      <Grid container style={this.props.theme.custom.drawer}>
         <Grid item xs={12}>
-          <Card style={{height: '210px', padding: '24px', position: 'relative', marginBottom: '8px'}} >
-            <img src='./footer-logo.png' alt='' style={{position: 'absolute', left: '0px', bottom: '0px', top: '0px', right: '0px', opacity: '0.1', margin: 'auto', maxWidth: '100%', maxHeight: '100%'}} />
-            <Typography variant="body2" style={{position: 'absolute', bottom: '22px', color: '#FFFFFF', fontSize: '30px'}}>
-              {this.props.user.username}
-            </Typography>
-            <Typography variant="body2" style={{position: 'absolute', bottom: '12px', color: '#FFFFFF'}}>
-              {this.props.user.email}
-            </Typography>
-          </Card>
+          {this.renderTop()}
         </Grid>
         <Grid item xs={12}>
-          <Card>
-            <List>
-              <ListSubheader>Accounts</ListSubheader>
-              <ListItem selected={this.props.currentScreen=='aionAccounts'} button onClick={(event) => { this.props.navClicked(event, 'aionAccounts'); }}>
-                <ListItemIcon>
-                  <AionIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Aion Accounts" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='ethAccounts'} button onClick={(event) => { this.props.navClicked(event, 'ethAccounts'); }}>
-                <ListItemIcon>
-                  <EthIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Ethereum Accounts" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='wanAccounts'} button onClick={(event) => { this.props.navClicked(event, 'wanAccounts'); }}>
-                <ListItemIcon>
-                  <WanIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Wanchain Accounts" />
-              </ListItem>
-              <ListSubheader>Transact</ListSubheader>
-              <ListItem selected={this.props.currentScreen=='sendAion'} button onClick={(event) => { this.props.navClicked(event, 'sendAion'); }}>
-                <ListItemIcon>
-                  <AionIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Send Aion" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='sendEthereum'} button onClick={(event) => { this.props.navClicked(event, 'sendEthereum'); }}>
-                <ListItemIcon>
-                  <EthIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Send Ethereum" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='sendERC20'} button onClick={(event) => { this.props.navClicked(event, 'sendERC20'); }}>
-                <ListItemIcon>
-                  <EthIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Send ERC20" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='sendWanchain'} button onClick={(event) => { this.props.navClicked(event, 'sendWanchain'); }}>
-                <ListItemIcon>
-                  <WanIconPng />
-                </ListItemIcon>
-                <ListItemText primary="Send Wanchain" />
-              </ListItem>
-              <ListSubheader>Profile</ListSubheader>
-              <ListItem selected={this.props.currentScreen=='contacts'} button onClick={(event) => { this.props.navClicked(event, 'contacts'); }}>
-                <ListItemIcon>
-                  <ContactIcon />
-                </ListItemIcon>
-                <ListItemText primary="Contacts" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='kyc'} button onClick={(event) => { this.props.navClicked(event, 'kyc'); }}>
-                <ListItemIcon>
-                  <KYCIcon />
-                </ListItemIcon>
-                <ListItemText primary="KYC" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='updatePassword'} button onClick={(event) => { this.props.navClicked(event, 'updatePassword'); }}>
-                <ListItemIcon>
-                  <PasswordIcon />
-                </ListItemIcon>
-                <ListItemText primary="Update Password" />
-              </ListItem>
-              <ListItem selected={this.props.currentScreen=='manage2FA'} button onClick={(event) => { this.props.navClicked(event, 'manage2FA'); }}>
-                <ListItemIcon>
-                  <Manage2FAIcon />
-                </ListItemIcon>
-                <ListItemText primary="Manage 2FA" />
-              </ListItem>
-              <Divider />
-              <ListItem button onClick={(event) => { this.props.navClicked(event, 'logOut'); }}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Log Out" />
-              </ListItem>
-            </List>
-          </Card>
+          {this.renderBottom()}
         </Grid>
       </Grid>
     )
@@ -241,4 +230,4 @@ class AppDrawer extends Component {
   }
 }
 
-export default withStyles(styles)(AppDrawer);
+export default (AppDrawer);

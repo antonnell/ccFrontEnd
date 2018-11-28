@@ -43,6 +43,7 @@ let AionAccounts = createReactClass({
   render() {
     return (
       <AionAccountsComponent
+        theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}

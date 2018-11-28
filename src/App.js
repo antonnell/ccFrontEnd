@@ -17,7 +17,6 @@ import KYC from './containers/kyc.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import ResetPassword from './containers/resetPassword.jsx';
-//import Accounts from './containers/accounts.jsx';
 import EthAccounts from './containers/ethAccounts.jsx';
 import WanAccounts from './containers/wanAccounts.jsx';
 import AionAccounts from './containers/aionAccounts.jsx';
@@ -34,9 +33,13 @@ import WhitelistMe from './containers/whitelistMe.jsx';
 import WhitelistMeDone from './containers/whitelistMeDone.jsx';
 import WhitelistCheck from './containers/whitelistCheck.jsx';
 import SetUsername from './containers/setUsername.jsx';
-import EthTransactions from './containers/ethTransactions.jsx';
-import WanTransactions from './containers/wanTransactions.jsx';
-import AionTransactions from './containers/aionTransactions.jsx';
+import Settings from './containers/settings.jsx';
+// import EthTransactions from './containers/ethTransactions.jsx';
+// import WanTransactions from './containers/wanTransactions.jsx';
+// import AionTransactions from './containers/aionTransactions.jsx';
+import Pooling from './containers/pooling.jsx';
+import PoolCreate from './containers/poolCreate.jsx';
+import PoolBrowse from './containers/poolBrowse.jsx';
 
 import WhitelistMeUnavailable from './components/whitelistMeUnavailable.jsx'
 import ComingSoon from './components/comingSoon.jsx';
@@ -44,6 +47,8 @@ import PrivacyPolicy from './components/privacyPolicy.jsx';
 import CookiePolicy from './components/cookiePolicy.jsx';
 import TermsAndConditions from './components/termsAndConditions.jsx';
 import ContactUs from './components/contactUs.jsx';
+import curveTheme from './theme'
+
 var sha256 = require('sha256');
 var crypto = require('crypto');
 var bip39 = require('bip39');
@@ -70,222 +75,12 @@ let whitelistDispatcher = require('./store/whitelistStore.js').default.dispatche
 let crowdsaleEmitter = require('./store/crowdsaleStore.js').default.emitter
 let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default.dispatcher
 
+let poolingEmitter = require('./store/poolingStore.js').default.emitter
+let poolingDispatcher = require('./store/poolingStore.js').default.dispatcher
+
+
 let emitter = require('./store/ipStore.js').default.emitter
 let dispatcher = require('./store/ipStore.js').default.dispatcher
-
-const theme = createMuiTheme({
-  overrides: {
-    MuiStepIcon: {
-      root: {
-        '&-active': {
-          color: "#2ad4dc"
-        }
-      },
-      active: {
-        color: "#2ad4dc !important"
-      },
-      completed: {
-        color: "#2ad4dc !important"
-      }
-    },
-    MuiInput: {
-      underline: {
-        '&:before': { //underline color when textfield is inactive
-          backgroundColor: 'black',
-          height: '2px'
-        },
-        '&:hover:not($disabled):before': { //underline color when hovered
-          backgroundColor: 'black',
-          height: '2px'
-        },
-      }
-    },
-    MuiButton: {
-      root: {
-        transition: "1s ease",
-        '&:hover:not($disabled)' : {
-          backgroundColor: "#2ad4dc",
-          color: 'black'
-        }
-      }
-    }
-  },
-  typography: {
-    // Use the system font over Roboto.
-    fontFamily: 'Abel, sans-serif',
-  },
-  palette: {
-    primary: {
-      light: '#2c2c2c',
-      main: '#000000',
-      dark: '#000000',
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      light: '#72ffff',
-      main: '#2ad4dc',
-      dark: '#00a2aa',
-      contrastText: '#000000',
-    }
-  }
-});
-
-const themeDark = createMuiTheme({
-  type: 'dark',
-  overrides: {
-    MuiStepIcon: {
-      root: {
-        color: '#b5b5b5',
-        '&-active': {
-          color: "#6be6fd"
-        }
-      },
-      active: {
-        color: "#6be6fd !important"
-      },
-      completed: {
-        color: "#6be6fd !important"
-      }
-    },
-    MuiInput: {
-      underline: {
-        '&:before': { //underline color when textfield is inactive
-          backgroundColor: '#6be6fd',
-          height: '2px'
-        },
-        '&:hover:not($disabled):before': { //underline color when hovered
-          backgroundColor: '#6be6fd',
-          height: '2px'
-        },
-      }
-    },
-    MuiInputBase: {
-      root: {
-        color: '#fff'
-      }
-    },
-    MuiButton: {
-      root: {
-        borderRadius: '20px'
-      },
-      label: {
-        fontSize: '12px'
-      },
-      sizeSmall: {
-        padding: '10px 20px'
-      }
-    },
-    MuiCard: {
-      root: {
-        borderRadius: 0
-      }
-    },
-  },
-  typography: {
-    // Use the system font over Roboto.
-    fontFamily: 'Abel, sans-serif',
-    button: {
-      fontWeight: 700
-    },
-    display2: {
-      color: '#fff',
-      fontSize: '26px',
-      color: '#6be6fd'
-    },
-    body1: {
-      color: '#b5b5b5'
-    },
-    subheading: {
-      color: '#fff'
-    },
-    display1: {
-      color: '#fff',
-      fontSize: '26px'
-    },
-    headline:  {
-      color: '#fff'
-    }
-  },
-  palette: {
-    primary: {
-      light: '#a3ffff',
-      main: '#6be6fd',
-      dark: '#27b4ca',
-      contrastText: '#000000',
-    },
-    secondary: {
-      light: '#bb93ff',
-      main: '#8864d8',
-      dark: '#5638a6',
-      contrastText: '#000000',
-    },
-    background:{
-      paper: '#30333a',
-      default: '#1a191d'
-    },
-    text: {
-      primary: '#6be6fd',
-      secondary: '#fff'
-    }
-  }
-});
-
-const themeLight = createMuiTheme({
-  overrides: {
-    MuiStepIcon: {
-      root: {
-        '&-active': {
-          color: "#2ad4dc"
-        }
-      },
-      active: {
-        color: "#2ad4dc !important"
-      },
-      completed: {
-        color: "#2ad4dc !important"
-      }
-    },
-    MuiInput: {
-      underline: {
-        '&:before': { //underline color when textfield is inactive
-          backgroundColor: 'black',
-          height: '2px'
-        },
-        '&:hover:not($disabled):before': { //underline color when hovered
-          backgroundColor: 'black',
-          height: '2px'
-        },
-      }
-    },
-    MuiButton: {
-      root: {
-        transition: "1s ease",
-        '&:hover:not($disabled)' : {
-          backgroundColor: "#2ad4dc",
-          color: 'black'
-        }
-      }
-    }
-  },
-  typography: {
-    // Use the system font over Roboto.
-    fontFamily: 'Abel, sans-serif',
-  },
-  palette: {
-    primary: {
-      light: '#2c2c2c',
-      main: '#000000',
-      dark: '#000000',
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      light: '#72ffff',
-      main: '#2ad4dc',
-      dark: '#00a2aa',
-      contrastText: '#000000',
-    }
-  }
-});
 
 class App extends Component {
   constructor(props) {
@@ -316,7 +111,11 @@ class App extends Component {
       verificationSearching: false,
       ethTransactions: null,
       wanTransactions: null,
-      aionTransactions: null
+      aionTransactions: null,
+      myPools: null,
+      availablePools: null,
+      currentTheme: 'dark',
+      theme: curveTheme.dark
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -355,6 +154,9 @@ class App extends Component {
     this.getEthTransactionHistoryReturned = this.getEthTransactionHistoryReturned.bind(this);
     this.getWanTransactionHistoryReturned = this.getWanTransactionHistoryReturned.bind(this);
     this.getAionTransactionHistoryReturned = this.getAionTransactionHistoryReturned.bind(this);
+
+    this.getEtherPoolsReturned = this.getEtherPoolsReturned.bind(this);
+    this.getAvailableEtherPoolsReturned = this.getAvailableEtherPoolsReturned.bind(this);
   };
 
   verificationResultReturned(error, data)  {
@@ -468,12 +270,15 @@ class App extends Component {
     ethEmitter.removeAllListeners('getEthTransactionHistory');
     wanEmitter.removeAllListeners('getWanTransactionHistory');
     aionEmitter.removeAllListeners('getAionTransactionHistory');
+    poolingEmitter.removeAllListeners('getEtherPools');
+    poolingEmitter.removeAllListeners('getAvailableEtherPools');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
     wanEmitter.on('Unauthorised', this.logUserOut);
     aionEmitter.on('Unauthorised', this.logUserOut);
     accountEmitter.on('Unauthorised', this.logUserOut);
+    poolingEmitter.on('Unauthorised', this.logUserOut);
 
     ethEmitter.on('getEthAddress', this.getEthAddressReturned);
     ethEmitter.on('getERC20Address', this.getERC20AddressReturned);
@@ -490,6 +295,8 @@ class App extends Component {
     ethEmitter.on('getEthTransactionHistory', this.getEthTransactionHistoryReturned);
     wanEmitter.on('getWanTransactionHistory', this.getWanTransactionHistoryReturned);
     aionEmitter.on('getAionTransactionHistory', this.getAionTransactionHistoryReturned);
+    poolingEmitter.on('getEtherPools', this.getEtherPoolsReturned)
+    poolingEmitter.on('getAvailableEtherPools', this.getAvailableEtherPoolsReturned)
 
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -517,6 +324,9 @@ class App extends Component {
         this.setState({verificationSearching: true})
         accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
+
+      content = { id: this.state.user.id };
+      accountDispatcher.dispatch({type: 'generate2faKey', content, token: this.state.user.token});
 
       this.constantRefresh(user)
     }
@@ -635,6 +445,36 @@ class App extends Component {
       ethDispatcher.dispatch({type: 'getEthTransactionHistory', content, token: user.token});
       wanDispatcher.dispatch({type: 'getWanTransactionHistory', content, token: user.token});
       aionDispatcher.dispatch({type: 'getAionTransactionHistory', content, token: user.token});
+      poolingDispatcher.dispatch({type: 'getEtherPools', content, token: user.token});
+      poolingDispatcher.dispatch({type: 'getAvailableEtherPools', content, token: user.token});
+    }
+  };
+
+  getEtherPoolsReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({myPools: data.etherPools})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, contacts: []});
+    } else {
+      this.setState({error: data.statusText, contacts: []})
+    }
+  };
+
+  getAvailableEtherPoolsReturned(error, data) {
+    if(error) {
+      return this.setState({error: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({availablePools: data.etherPools})
+    } else if (data.errorMsg) {
+      this.setState({error: data.errorMsg, contacts: []});
+    } else {
+      this.setState({error: data.statusText, contacts: []})
     }
   };
 
@@ -1058,6 +898,7 @@ class App extends Component {
         user={this.state.user}
         open={this.state.drawerOpen}
         size={this.state.size}
+        theme={this.state.theme}
       />)
     }
     return drawer;
@@ -1072,9 +913,9 @@ class App extends Component {
 
   render() {
     return (
-      <MuiThemeProvider theme={themeDark}>
+      <MuiThemeProvider theme={createMuiTheme(this.state.theme.mui)}>
         <CssBaseline />
-        <div style={{display: 'flex', padding: this.state.size=='xs'||this.state.size=='sm'?'0px':'24px', backgroundImage: 'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)'}}>
+        <div style={{display: 'flex', padding: this.state.size=='xs'||this.state.size=='sm'?'0px':this.state.theme.custom.page.padding, backgroundImage: this.state.currentTheme=='light'?'$fff':'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)'}}>
           {this.renderDrawer()}
           <Grid container justify="space-around" alignItems="flex-start" direction="row" style={{minHeight: '622px', position: 'relative', flex: 1}}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -1113,25 +954,23 @@ class App extends Component {
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case 'ethAccounts':
-        return (<EthAccounts user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />);
+        return (<EthAccounts theme={this.state.theme} user={this.state.user} ethAddresses={this.state.ethAddresses} openSendEther={this.openSendEther} openSendERC={this.openSendERC} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />);
       case 'wanAccounts':
-        return (<WanAccounts user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size} wanTransactions={this.state.wanTransactions} contacts={this.state.contacts}/>);
+        return (<WanAccounts theme={this.state.theme} user={this.state.user} wanAddresses={this.state.wanAddresses} openSendWanchain={this.openSendWanchain} openSendWRC={this.openSendWRC} crowdsales={this.state.crowdsales} size={this.state.size} wanTransactions={this.state.wanTransactions} contacts={this.state.contacts}/>);
       case 'aionAccounts':
-        return (<AionAccounts user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} aionTransactions={this.state.aionTransactions} contacts={this.state.contacts} />);
+        return (<AionAccounts theme={this.state.theme} user={this.state.user} aionAddresses={this.state.aionAddresses} openSendAion={this.openSendAion} aionTransactions={this.state.aionTransactions} contacts={this.state.contacts} />);
       case 'contacts':
-        return (<Contacts user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} openSendWanchain={this.openSendWanchain} openSendAion={this.openSendAion} />);
-      case 'updatePassword':
-        return (<UpdatePassword user={this.state.user} />);
-      case 'manage2FA':
-        return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
+        return (<Contacts theme={this.state.theme} user={this.state.user} contacts={this.state.contacts} openSendEther={this.openSendEther} openSendWanchain={this.openSendWanchain} openSendAion={this.openSendAion} />);
+      // case 'updatePassword':
+      //   return (<UpdatePassword user={this.state.user} />);
+      // case 'manage2FA':
+      //   return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
       case 'privacyPolicy':
         return (<PrivacyPolicy />);
       case 'cookiePolicy':
         return (<CookiePolicy />);
       case 'termsAndConditions':
         return (<TermsAndConditions />);
-      case 'manageEthPools':
-        return (<ComingSoon />);
       case 'sendEthereum':
         return (<SendEthereum user={this.state.user} sendEtherContact={this.state.sendEtherContact} sendEtherAccount={this.state.sendEtherAccount} ethAddresses={this.state.ethAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendERC20':
@@ -1142,8 +981,18 @@ class App extends Component {
       //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case 'sendAion':
         return (<SendAion user={this.state.user} sendAionContact={this.state.sendAionContact} sendAionAccount={this.state.sendAionAccount} aionAddresses={this.state.aionAddresses} size={this.state.size} contacts={this.state.contacts}/>)
-      case 'ethTransactions':
-        return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
+      // case 'ethTransactions':
+      //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
+      case 'pooling':
+        return (<Pooling theme={this.state.theme} user={this.state.user} pools={this.state.myPools} />);
+      case 'createPool':
+        return (<PoolCreate theme={this.state.theme} user={this.state.user} ethAddresses={this.state.ethAddresses} />);
+      case 'browsePools':
+        return (<PoolBrowse theme={this.state.theme} user={this.state.user} pools={this.state.availablePools} />);
+      case 'ico':
+        return (<ComingSoon />);
+      case 'settings':
+        return (<Settings theme={this.state.theme} user={this.state.user} setUser={this.setUser} />);
       case 'about':
         return (<ComingSoon />);
       case 'press':

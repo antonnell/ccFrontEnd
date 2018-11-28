@@ -71,6 +71,7 @@ let Contacts = createReactClass({
   render() {
     return (
       <ContactsComponent
+        theme={this.props.theme}
         handleChange={this.handleChange}
         onAddKeyDown={this.onAddKeyDown}
         addClicked={this.addClicked}

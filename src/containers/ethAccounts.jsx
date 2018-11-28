@@ -43,6 +43,7 @@ let EthAccounts = createReactClass({
   render() {
     return (
       <EthAccountsComponent
+        theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}

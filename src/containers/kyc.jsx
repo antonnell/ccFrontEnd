@@ -13,7 +13,6 @@ const createReactClass = require('create-react-class')
 let KYC = createReactClass({
   getInitialState() {
     return {
-      url: this.props.user!=null?this.props.user.verificationUrl:null,
       kycClicked: false
     }
   },
@@ -45,7 +44,8 @@ let KYC = createReactClass({
   },
 
   KYC() {
-    window.open(this.state.url, '_blank')
+    let url = this.props.user!=null?this.props.user.verificationUrl:null
+    window.open(url, '_blank')
     this.setState({kycClicked: true})
   },
 

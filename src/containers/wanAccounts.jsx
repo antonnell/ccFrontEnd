@@ -60,6 +60,7 @@ let WanAccounts = createReactClass({
   render() {
     return (
       <WanAccountsComponent
+        theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
         onCreateImportKeyDown={this.onCreateImportKeyDown}
