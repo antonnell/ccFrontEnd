@@ -10,7 +10,7 @@ let UpdatePassword = createReactClass({
     return {
       loading: false,
       error: null,
-      passwordUpdated: false,
+      snackOpen: false,
 
       password: '',
       passwordError: false,
@@ -31,11 +31,6 @@ let UpdatePassword = createReactClass({
   },
 
   render() {
-    if(this.state.passwordUpdated === true) {
-      return(<UpdatePasswordDoneComponent
-          submitUpdatePasswordNavigate={this.submitUpdatePasswordNavigate}
-        />)
-    }
     return (
       <UpdatePasswordComponent
         handleChange={this.handleChange}
@@ -50,8 +45,14 @@ let UpdatePassword = createReactClass({
         error={this.state.error}
         loading={this.state.loading}
         validateField={this.validateField}
+        snackOpen={this.state.snackOpen}
+        handleSnackClose={this.handleSnackClose}
       />
     )
+  },
+
+  handleSnackClose() {
+    this.setState({ snackOpen: false });
   },
 
   onUpdateKeyDown(event) {
@@ -107,7 +108,7 @@ let UpdatePassword = createReactClass({
     }
 
     if(data.success) {
-      this.setState({passwordUpdated: true})
+      this.setState({snackOpen: true, password: '', confirmPassword: ''})
 
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});

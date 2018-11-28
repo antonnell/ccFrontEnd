@@ -53,6 +53,9 @@ var Store = () => {
     case 'verificationResult':
       this.verificationResult(payload)
       break;
+    case 'updateEmail':
+      this.updateEmail(payload)
+      break;
     }
   }.bind(this))
 
@@ -97,6 +100,19 @@ var Store = () => {
     var postJson = {
       username: payload.content.username,
       password: payload.content.password
+    }
+
+    this.callApi(url,
+      'POST',
+      postJson,
+      payload)
+  }
+
+  this.updateEmail = function(payload) {
+    var url = 'account/updateEmail'
+    var postJson = {
+      username: payload.content.username,
+      email: payload.content.emailAddress
     }
 
     this.callApi(url,

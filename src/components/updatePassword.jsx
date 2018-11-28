@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress  from '@material-ui/core/CircularProgress';
-
-const styles = {};
+import Snackbar from '@material-ui/core/Snackbar';
 
 class UpdatePassword extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '50px'}}>
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={6} md={8} lg={6} xl={4} align='left'>
-          <Typography variant="display1" >
+          <Typography variant="display2" >
             Password
           </Typography>
-          <Typography variant="body2"  style={{marginTop: '24px', fontWeight: 'bold'}}>
+          <Typography variant="body2"  style={{marginTop: '48px', fontWeight: 'bold'}}>
             Change password
           </Typography>
-          <Grid container justify="space-around" alignItems="flex-start" direction="row" spacing={0}>
-            <Grid item xs={12} style={{marginTop: '12px'}} align='left'>
+          <Grid container justify="space-around" alignItems="flex-start" direction="row">
+            <Grid item xs={12} align='left'>
               <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
                 id="password" label="New Password" value={this.props.password}
                 onChange={(event) => { this.props.handleChange(event, 'password'); }} margin="normal" onKeyDown={this.props.onUpdateKeyDown}
@@ -40,9 +38,17 @@ class UpdatePassword extends Component {
             Update Password
           </Button>
         </Grid>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal:'center' }}
+          open={this.props.snackOpen}
+          onClose={this.props.handleSnackClose}
+          message={<Typography style={{color: '#000', fontWeight: 'bold'}}>
+            Your password has been updated
+          </Typography>}
+        />
       </Grid>
     );
   }
 }
 
-export default withStyles(styles)(UpdatePassword);
+export default (UpdatePassword);

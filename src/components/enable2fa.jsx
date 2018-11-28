@@ -12,23 +12,23 @@ class Enable2FA extends Component {
 
   render() {
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '50px'}}>
+      <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} align='left'>
-          <Typography variant="display1" >
+          <Typography variant="display2" >
             2FA
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} align='left'>
-          <Typography variant="body2"  style={{marginTop: '24px'}}>
+          <Typography variant="body2" style={{marginTop: '48px'}}>
             1. Add CryptoCurve to Google Authenticator
           </Typography>
-          <Typography variant="body1"  style={{marginTop: '6px'}}>
+          <Typography variant="body1" style={{marginTop: '6px'}}>
             Open Google Authenticator and add CryptoCurve by scanning the QR Code shown.
           </Typography>
-          <Typography variant="body2"  style={{marginTop: '24px'}}>
+          <Typography variant="body2" style={{marginTop: '24px'}}>
             2. Enter the 6 digit code that Google Authenticator generates
           </Typography>
-          <Typography variant="body1"  style={{marginTop: '6px'}}>
+          <Typography variant="body1" style={{marginTop: '6px'}}>
             Verify that CryptoCurve is added correctly in Google Authenticator by entering the 6 digit code which Google Authenticator generates for CryptoCurve below, and then click Enable.
           </Typography>
         </Grid>

@@ -6,7 +6,7 @@ let theme =  {
       overrides: {
         MuiStepIcon: {
           root: {
-            color: '#b5b5b5',
+            color: '#888888',
             '&-active': {
               color: "#3cabff"
             }
@@ -16,6 +16,11 @@ let theme =  {
           },
           completed: {
             color: "#3cabff !important"
+          }
+        },
+        MuiStepLabel: {
+          label: {
+            color: '#000'
           }
         },
         MuiInput: {
@@ -63,6 +68,11 @@ let theme =  {
           selected: {
             color: '#000'
           }
+        },
+        MuiSnackbarContent: {
+          root: {
+            backgroundColor: '#3cabff'
+          }
         }
       },
       typography: {
@@ -73,23 +83,25 @@ let theme =  {
         },
         display1: {
           color: '#1a191d',
-          fontSize: '26px'
+          fontSize: '22px',
+          fontWeight: 'bold'
         },
         display2: {
-          fontSize: '26px',
-          color: '#3cabff'
+          fontSize: '22px',
+          color: '#3cabff',
+          fontWeight: 'bold'
         },
         display3: {
           fontSize: '20px',
           color: '#3cabff'
         },
         body1: {
-          color: '#b5b5b5',
-          fontSize: '18px'
+          color: '#888888',
+          fontSize: '16px'
         },
         body2: {
           color: '#000',
-          fontSize: '18px'
+          fontSize: '16px'
         },
         subheading: {
           color: '#1a191d'
@@ -180,12 +192,21 @@ let theme =  {
             borderRadius: 0
           }
         },
+        MuiSnackbarContent: {
+          root: {
+            backgroundColor: '#6be6fd'
+          }
+        }
       },
       typography: {
         // Use the system font over Roboto.
         fontFamily: 'Abel, sans-serif',
         button: {
           fontWeight: 700
+        },
+        display1: {
+          color: '#fff',
+          fontSize: '26px'
         },
         display2: {
           fontSize: '26px',
@@ -196,14 +217,15 @@ let theme =  {
           color: '#6be6fd'
         },
         body1: {
-          color: '#b5b5b5'
+          color: '#b5b5b5',
+          fontSize: '16px'
+        },
+        body2: {
+          color: '#fff',
+          fontSize: '16px'
         },
         subheading: {
           color: '#fff'
-        },
-        display1: {
-          color: '#fff',
-          fontSize: '26px'
         },
         headline:  {
           color: '#fff'

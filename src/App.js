@@ -325,8 +325,8 @@ class App extends Component {
         accountDispatcher.dispatch({ type: 'verificationResult', content:{ userId: this.state.user.id }, token: this.state.user.token })
       }
 
-      content = { id: this.state.user.id };
-      accountDispatcher.dispatch({type: 'generate2faKey', content, token: this.state.user.token});
+      content = { id: user.id };
+      accountDispatcher.dispatch({type: 'generate2faKey', content, token: user.token});
 
       this.constantRefresh(user)
     }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -36,8 +35,6 @@ import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
 import CreateModal from './createModal';
 import ImportModal from './importModal';
-
-const styles = {};
 
 function ExpandMoreIcon(props) {
   return (
@@ -762,4 +759,4 @@ class WanAccounts extends Component {
   }
 }
 
-export default withStyles(styles)(WanAccounts);
+export default (WanAccounts);

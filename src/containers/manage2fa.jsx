@@ -96,7 +96,7 @@ let Manage2FA = createReactClass({
   generate2faKeyReturned(error, data) {
     this.setState({QRCodeLoading: false})
     if(error) {
-      return this.setState({error: error.toString()});
+      return // this.setState({error: error.toString()});
     }
 
     if(data.success) {
