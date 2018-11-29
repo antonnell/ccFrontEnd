@@ -85,10 +85,16 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    var userString = sessionStorage.getItem('cc_user')
-    var user = null;
+    let userString = sessionStorage.getItem('cc_user')
+    let user = null;
     if (userString != null) {
       user = JSON.parse(userString)
+    }
+
+    let themeString = localStorage.getItem('cc_theme')
+    let theme = 'light'
+    if(themeString != null) {
+      theme = themeString
     }
 
     this.state = {
@@ -113,8 +119,8 @@ class App extends Component {
       aionTransactions: null,
       myPools: null,
       availablePools: null,
-      currentTheme: 'light',
-      theme: curveTheme.light
+      currentTheme: theme,
+      theme: curveTheme[theme]
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -791,10 +797,13 @@ class App extends Component {
 
     let theme = this.state.currentTheme
 
+
     this.setState({
       currentTheme: theme=='dark'?'light':'dark',
       theme: theme=='dark'?curveTheme.light:curveTheme.dark
     })
+
+    localStorage.setItem('cc_theme', theme=='dark'?'light':'dark')
   };
 
   locationHashChanged() {
@@ -919,7 +928,8 @@ class App extends Component {
     return <AppFooter
       user={this.state.user}
       navClicked={this.navClicked}
-      ipValid={this.state.ipValid} />
+      ipValid={this.state.ipValid}
+      theme={this.state.theme} />
   };
 
   render() {

@@ -148,6 +148,9 @@ let theme =  {
       },
       headingBorder: {
         color: '#3cabff'
+      },
+      footer: {
+        background: '#2b323c'
       }
     }
   },
@@ -277,6 +280,9 @@ let theme =  {
       },
       headingBorder: {
         color: '#6be6fd'
+      },
+      footer: {
+        background: '#30333a'
       }
     }
   }
