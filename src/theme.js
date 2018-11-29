@@ -73,6 +73,14 @@ let theme =  {
           root: {
             backgroundColor: '#3cabff'
           }
+        },
+        MuiPaper: {
+          elevation1: {
+            boxShadow: '1px 3px 5px 2px rgba(0, 0, 0, 0.2), 5px 4px 2px 0px rgba(0, 0, 0, 0.14), 3px 6px 2px 2px rgba(0, 0, 0, 0.12)'
+          },
+          elevation2: {
+            boxShadow: '1px 3px 5px 2px rgba(0, 0, 0, 0.2), 5px 4px 2px 0px rgba(0, 0, 0, 0.14), 3px 6px 2px 2px rgba(0, 0, 0, 0.12)'
+          }
         }
       },
       typography: {
@@ -134,6 +142,9 @@ let theme =  {
       },
       drawer: {
         background: '#e8e9f3'
+      },
+      drawerIcon: {
+        color: '#333'
       },
       headingBorder: {
         color: '#3cabff'
@@ -260,6 +271,9 @@ let theme =  {
       },
       drawer: {
 
+      },
+      drawerIcon: {
+        color: '#fff'
       },
       headingBorder: {
         color: '#6be6fd'

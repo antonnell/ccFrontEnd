@@ -53,7 +53,6 @@ var sha256 = require('sha256');
 var crypto = require('crypto');
 var bip39 = require('bip39');
 
-
 let accountEmitter = require('./store/accountStore.js').default.emitter
 let accountDispatcher = require('./store/accountStore.js').default.dispatcher
 
@@ -114,8 +113,8 @@ class App extends Component {
       aionTransactions: null,
       myPools: null,
       availablePools: null,
-      currentTheme: 'dark',
-      theme: curveTheme.dark
+      currentTheme: 'light',
+      theme: curveTheme.light
     };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -157,6 +156,8 @@ class App extends Component {
 
     this.getEtherPoolsReturned = this.getEtherPoolsReturned.bind(this);
     this.getAvailableEtherPoolsReturned = this.getAvailableEtherPoolsReturned.bind(this);
+
+    this.changeTheme = this.changeTheme.bind(this);
   };
 
   verificationResultReturned(error, data)  {
@@ -786,6 +787,16 @@ class App extends Component {
     window.location.hash = 'sendAion'
   };
 
+  changeTheme() {
+
+    let theme = this.state.currentTheme
+
+    this.setState({
+      currentTheme: theme=='dark'?'light':'dark',
+      theme: theme=='dark'?curveTheme.light:curveTheme.dark
+    })
+  };
+
   locationHashChanged() {
     var uriParameters = {}
     var currentScreen = ''
@@ -912,10 +923,16 @@ class App extends Component {
   };
 
   render() {
+    let background = '#fff'
+    let backgroundImage = null
+    if(this.state.currentTheme=='dark') {
+      backgroundImage = 'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)'
+    }
+
     return (
       <MuiThemeProvider theme={createMuiTheme(this.state.theme.mui)}>
         <CssBaseline />
-        <div style={{display: 'flex', padding: this.state.size=='xs'||this.state.size=='sm'?'0px':this.state.theme.custom.page.padding, backgroundImage: this.state.currentTheme=='light'?'$fff':'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)'}}>
+        <div style={{display: 'flex', padding: (this.state.size=='xs'||this.state.size=='sm'?'0px':this.state.theme.custom.page.padding), background: background, backgroundImage: backgroundImage}}>
           {this.renderDrawer()}
           <Grid container justify="space-around" alignItems="flex-start" direction="row" style={{minHeight: '622px', position: 'relative', flex: 1}}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -992,7 +1009,7 @@ class App extends Component {
       case 'ico':
         return (<ComingSoon />);
       case 'settings':
-        return (<Settings theme={this.state.theme} user={this.state.user} setUser={this.setUser} />);
+        return (<Settings theme={this.state.theme} user={this.state.user} setUser={this.setUser} changeTheme={this.changeTheme} />);
       case 'about':
         return (<ComingSoon />);
       case 'press':

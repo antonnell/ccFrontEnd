@@ -20,6 +20,7 @@ let Settings = createReactClass({
         handleTabChange={this.handleTabChange}
         user={this.props.user}
         setUser={this.props.setUser}
+        changeTheme={this.props.changeTheme}
       />
     )
   },
