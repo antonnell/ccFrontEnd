@@ -90,7 +90,7 @@ class AppDrawer extends Component {
           {this.renderGridList()}
         </Drawer>
         :
-        <div style={{minWidth: '300px', marginRight: '24px'}}>
+        <div style={{minWidth: '300px', marginRight: '24px', display: 'flex'}}>
           {this.renderGridList()}
         </div>
 
@@ -217,14 +217,10 @@ class AppDrawer extends Component {
 
   renderGridList() {
     return (
-      <Grid container style={this.props.theme.custom.drawer}>
-        <Grid item xs={12}>
-          {this.renderTop()}
-        </Grid>
-        <Grid item xs={12}>
-          {this.renderBottom()}
-        </Grid>
-      </Grid>
+      <div style={this.props.theme.custom.drawer}>
+        {this.renderTop()}
+        {this.renderBottom()}
+      </div>
     )
 
   }

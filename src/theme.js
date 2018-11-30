@@ -141,7 +141,8 @@ let theme =  {
         padding: '0px'
       },
       drawer: {
-        background: '#e8e9f3'
+        background: '#e8e9f3',
+        flex: '1'
       },
       drawerIcon: {
         color: '#333'

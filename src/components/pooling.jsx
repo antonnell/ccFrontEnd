@@ -55,7 +55,7 @@ class Pooling extends Component {
           <div>
             <Button size="small" variant='contained' color="primary" onClick={this.props.handleNewPool}>New Pool</Button>
             <IconButton
-              style={{verticalAlign: 'top', marginRight: '-20px', marginTop: '-7px'}}
+              style={{verticalAlign: 'top', marginTop: '-7px'}}
               color="primary"
               aria-label="More"
               buttonRef={node => {

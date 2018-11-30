@@ -62,7 +62,7 @@ let AionAccounts = createReactClass({
       var content = {id: this.props.user.id};
       aionDispatcher.dispatch({type: 'getAionAddress', content, token: this.props.user.token });
 
-      window.location.hash = 'kyc'
+      window.location.hash = 'wanAccounts'
     } else if (data.errorMsg) {
       this.setState({error: data.errorMsg});
     } else {
@@ -71,7 +71,7 @@ let AionAccounts = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = 'kyc'
+    window.location.hash = 'wanAccounts'
   },
 
   onCreateKeyDown(event) {
