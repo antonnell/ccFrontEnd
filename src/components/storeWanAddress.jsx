@@ -12,12 +12,12 @@ class StoreWanAddress extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
-          <Typography variant="title">
+          <Typography variant="h6">
             Great! We just need to know your Wanchain address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Typography variant="body2">
+          <Typography variant="body1">
             Would you like us to store your private key for you?
           </Typography>
         </Grid>

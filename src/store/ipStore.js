@@ -15,8 +15,9 @@ var Store = () => {
     case 'getIp':
       this.getIp(payload);
       break;
+      default: {}
     }
-  }.bind(this))
+  }.bind(this));
 
   this.getIp = function(payload) {
     this.callApi('',

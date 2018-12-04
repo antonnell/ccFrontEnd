@@ -19,12 +19,12 @@ class KYCNetki extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
-          <Typography variant="title">
+          <Typography variant="h6">
             You're almost done.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Typography variant="body2">
+          <Typography variant="body1">
             We are now going to go through the KYC Verification process. The KYC process is handled by our partner Netki. Please press the KYC button below and follow the instructions to provide your KYC information.
           </Typography>
         </Grid>

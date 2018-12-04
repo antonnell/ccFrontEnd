@@ -48,7 +48,7 @@ class Pooling extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{flex: 1}}>
-            <Typography variant='display1'>
+            <Typography variant="h1">
               Pooling
             </Typography>
           </div>

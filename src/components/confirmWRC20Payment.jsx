@@ -12,7 +12,7 @@ class ConfirmWRC20Payment extends Component {
         To your beneficairy:
       </Typography>
       <div style={{border: '1px solid #6be6fd', padding: '12px', marginTop: '12px'}}>
-        <Typography variant="display1" noWrap>
+        <Typography variant="h1" noWrap>
           <b>{this.props.contact.displayName}</b> ({this.props.contact.primaryWanAddress})
         </Typography>
       </div>
@@ -25,7 +25,7 @@ class ConfirmWRC20Payment extends Component {
         To public address:
       </Typography>
       <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
-        <Typography variant="display1" noWrap>
+        <Typography variant="h1" noWrap>
           <b>{this.props.publicAddress}</b>
         </Typography>
       </div>
@@ -38,7 +38,7 @@ class ConfirmWRC20Payment extends Component {
         To your own account:
       </Typography>
       <div style={{border: '1px solid #6be6fd', padding: '12px', marginTop: '12px'}}>
-        <Typography variant="display1" noWrap>
+        <Typography variant="h1" noWrap>
           <b>{this.props.ownAccount.name}</b> ({this.props.ownAccount.address})
         </Typography>
       </div>
@@ -50,7 +50,7 @@ class ConfirmWRC20Payment extends Component {
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="display1">
+            <Typography variant="h1">
               Confirm your {this.props.sendWRC20Symbol} payment
             </Typography>
           </Grid>
@@ -63,7 +63,7 @@ class ConfirmWRC20Payment extends Component {
           </Grid>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
             <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
-              <Typography variant="display1" noWrap>
+              <Typography variant="h1" noWrap>
                 <b>{this.props.amount+" "+this.props.sendWRC20Symbol}</b>
               </Typography>
             </div>
@@ -75,7 +75,7 @@ class ConfirmWRC20Payment extends Component {
           </Grid>
           <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
             <div style={{border: '1px solid #6be6fd', padding: '12px'}}>
-              <Typography variant="display1" noWrap>
+              <Typography variant="h1" noWrap>
                 <b>{this.props.account.name}</b> ({this.props.account.publicAddress})
               </Typography>
             </div>

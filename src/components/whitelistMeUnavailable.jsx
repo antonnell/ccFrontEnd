@@ -19,7 +19,7 @@ class WhitelistMeUnabailable extends Component {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '150px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='center'>
-          <Typography variant='headline'>{this.props.rejectionReason}</Typography>
+          <Typography variant="h5">{this.props.rejectionReason}</Typography>
         </Grid>
       </Grid>
     );

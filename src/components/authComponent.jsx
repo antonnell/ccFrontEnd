@@ -16,12 +16,12 @@ class AuthComponent extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1" >
+              <Typography variant="h1" >
                 Two Factor Authentication Required
               </Typography>
             </Grid>
             <Grid item xs={12} align='center'>
-              <Typography variant="body2" style={{marginTop: '24px'}}>
+              <Typography variant="body1" style={{marginTop: '24px'}}>
                 Enter the 6 digit code that Google Authenticator generates for your CryptoCurve account
               </Typography>
             </Grid>
@@ -58,7 +58,7 @@ class AuthComponent extends Component {
                 InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onLoginKeyDown}/>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="display1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
+              <Typography variant="h1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
                 {this.props.codeErrorMessage}
               </Typography>
             </Grid>

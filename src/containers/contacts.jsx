@@ -110,7 +110,7 @@ let Contacts = createReactClass({
   },
 
   onAddKeyDown(event) {
-    if (event.which == 13) {
+    if (event.which === 13) {
       this.addClicked()
     }
   },
@@ -164,7 +164,7 @@ let Contacts = createReactClass({
     if(value==null) {
       value = this.state.username;
     }
-    if(value == '') {
+    if(value === '') {
       this.setState({ usernameError: true, usernameErrorMessage:'Username is required' });
       return false;
     }
@@ -177,7 +177,7 @@ let Contacts = createReactClass({
     if(value==null) {
       value = this.state.emailAddress;
     }
-    if(value == '') {
+    if(value === '') {
       this.setState({ emailAddressError: true, emailAddressErrorMessage:'Email address is required' });
       return false;
     }
@@ -190,7 +190,7 @@ let Contacts = createReactClass({
     if(value==null) {
       value = this.state.displayName;
     }
-    if(value == '') {
+    if(value === '') {
       this.setState({ displayNameError: true, displayNameErrorMessage:'Display name is required' });
       return false;
     }
@@ -203,7 +203,7 @@ let Contacts = createReactClass({
     if(value==null) {
       value = this.state.notes;
     }
-    if(value == '') {
+    if(value === '') {
       this.setState({ notesError: true, notesErrorMessage:'Note is required' });
       return false;
     }

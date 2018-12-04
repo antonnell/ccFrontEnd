@@ -84,22 +84,23 @@ let theme =  {
         }
       },
       typography: {
+        useNextVariants: true,
         // Use the system font over Roboto.
         fontFamily: 'Abel, sans-serif',
         button: {
           fontWeight: 700
         },
-        display1: {
+        h4: {
           color: '#1a191d',
           fontSize: '22px',
           fontWeight: 'bold'
         },
-        display2: {
+        h3: {
           fontSize: '22px',
           color: '#3cabff',
           fontWeight: 'bold'
         },
-        display3: {
+        h2: {
           fontSize: '20px',
           color: '#3cabff'
         },
@@ -111,10 +112,10 @@ let theme =  {
           color: '#000',
           fontSize: '16px'
         },
-        subheading: {
+        subtitle1: {
           color: '#1a191d'
         },
-        headline:  {
+        h5:  {
           color: '#1a191d'
         }
       },
@@ -156,6 +157,9 @@ let theme =  {
     }
   },
   dark: {
+    typography: {
+      useNextVariants: true,
+    },
     name: 'dark',
     mui: {
       type: 'dark',
@@ -214,20 +218,21 @@ let theme =  {
         }
       },
       typography: {
+        useNextVariants: true,
         // Use the system font over Roboto.
         fontFamily: 'Abel, sans-serif',
         button: {
           fontWeight: 700
         },
-        display1: {
+        h4: {
           color: '#fff',
           fontSize: '26px'
         },
-        display2: {
+        h3: {
           fontSize: '26px',
           color: '#6be6fd'
         },
-        display3: {
+        h2: {
           fontSize: '20px',
           color: '#6be6fd'
         },
@@ -239,10 +244,10 @@ let theme =  {
           color: '#fff',
           fontSize: '16px'
         },
-        subheading: {
+        subtitle1: {
           color: '#fff'
         },
-        headline:  {
+        h5:  {
           color: '#fff'
         }
       },

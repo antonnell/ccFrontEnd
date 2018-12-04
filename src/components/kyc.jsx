@@ -29,10 +29,10 @@ class KYC extends Component {
     return (
       <Grid container justify="flex-start" alignItems="center" direction="row" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} md={10} lg={10} align='left'>
-          <Typography variant="display2">
+          <Typography variant="h3">
             KYC
           </Typography>
-          <Typography variant="body2" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
+          <Typography variant="body1" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
             Status
           </Typography>
           <Typography variant="body1" align='justify' style={{marginTop: '6px'}}>

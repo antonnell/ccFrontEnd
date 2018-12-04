@@ -9,28 +9,28 @@ const styles = {};
 class WhitelistMeDone extends Component {
 
   render() {
-    var forgotPasswordClicked = this.props.submitForgotPasswordNavigate
-    var registerClicked = this.props.submitRegisterNavigate
-    if(this.props.loading) {
-      forgotPasswordClicked = null
-      registerClicked = null
-    }
+    // let forgotPasswordClicked = this.props.submitForgotPasswordNavigate;
+    // let registerClicked = this.props.submitRegisterNavigate;
+    // if(this.props.loading) {
+    //   forgotPasswordClicked = null
+    //   registerClicked = null
+    // }
     return (
       <Grid container justify="space-around" direction="row" spacing={0} style={{marginTop: '100px'}}>
         <Grid item xs={10} sm={6} md={4} lg={3}>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1">
+              <Typography variant="h1">
                 You have been added
               </Typography>
             </Grid>
           </Grid>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} style={{marginTop: '50px'}} align="center">
-              <Typography variant="subheading">
+              <Typography variant="subtitle1">
                 Thank you for filling out our whitelist application form.
               </Typography>
-              <Typography variant="subheading" style={{marginTop: '12px'}}>
+              <Typography variant="subtitle1" style={{marginTop: '12px'}}>
                 We will keep in contact with you via your provided email address
               </Typography>
             </Grid>

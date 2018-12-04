@@ -123,7 +123,7 @@ class EnhancedTableHead extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
-                    <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
+                    <Typography variant="body1"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                       {row.label}
                     </Typography>
                   </TableSortLabel>
@@ -280,7 +280,7 @@ let EnhancedTableToolbar = props => {
       })}
     >
       <div className={classes.title}>
-        <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+        <Typography variant="body1"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
           Filters
         </Typography>
       </div>
@@ -358,7 +358,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="headline"  style={{marginBottom: '20px'}}>
+        <Typography variant="h5"  style={{marginBottom: '20px'}}>
           Ethereum Transactions
         </Typography>
         <Paper>

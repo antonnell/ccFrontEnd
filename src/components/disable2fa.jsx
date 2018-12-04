@@ -26,18 +26,18 @@ class Disable2FA extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} align='left'>
-          <Typography variant="display2">
+          <Typography variant="h3">
             2FA
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} style={{marginTop: '24px'}}>
-          <Typography variant="body2" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
+          <Typography variant="body1" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
             Status
           </Typography>
           <Typography variant="body1" align='justify' style={{marginTop: '6px'}}>
             Activated {<PositiveIcon style={{verticalAlign: 'bottom', marginLeft: '12px'}} />}
           </Typography>
-          <Typography variant='display2' style={{fontSize: '16px', cursor: 'pointer', textDecoration: 'underline', marginTop: '6px', width: '100px'}} onClick={this.props.submitDisable}>
+          <Typography variant="h3" style={{fontSize: '16px', cursor: 'pointer', textDecoration: 'underline', marginTop: '6px', width: '100px'}} onClick={this.props.submitDisable}>
             Deactivate
           </Typography>
         </Grid>

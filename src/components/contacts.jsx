@@ -19,7 +19,7 @@ class Contacts extends Component {
 
     if(this.props.contacts.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1" >Oh no, we couldn't find any contacts for you. Why don't you add one?</Typography>
+        <Typography variant="h1" >Oh no, we couldn't find any contacts for you. Why don't you add one?</Typography>
       </Grid>);
     }
 
@@ -31,7 +31,7 @@ class Contacts extends Component {
                 <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                   <Grid item xs={12} align='left'>
                     <Tooltip placement='top-start' title={contact.userName}>
-                      <Typography noWrap variant="display2" style={{minHeight: '32px'}}>
+                      <Typography noWrap variant="h3" style={{minHeight: '32px'}}>
                         {contact.displayName}
                       </Typography>
                     </Tooltip>
@@ -44,7 +44,7 @@ class Contacts extends Component {
                   <Grid item xs={12} align='center'>
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
-                        <Typography variant="subheading">
+                        <Typography variant="subtitle1">
                           {'Aion Address'}
                         </Typography>
                       </Grid>
@@ -58,7 +58,7 @@ class Contacts extends Component {
                   <Grid item xs={12} align='center'>
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
-                        <Typography variant="subheading">
+                        <Typography variant="subtitle1">
                           {'Ethereum Address'}
                         </Typography>
                       </Grid>
@@ -72,7 +72,7 @@ class Contacts extends Component {
                   <Grid item xs={12} align='center'>
                     <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{paddingTop: '12px'}}>
                       <Grid item xs={4} sm={3} md={4} lg={3} align='left'>
-                        <Typography variant="subheading">
+                        <Typography variant="subtitle1">
                           {'Wanchain Address'}
                         </Typography>
                       </Grid>
@@ -101,7 +101,7 @@ class Contacts extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px'}}>
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{flex: 1}}>
-            <Typography variant='display1'>
+            <Typography variant="h1">
               Your contacts
             </Typography>
           </div>

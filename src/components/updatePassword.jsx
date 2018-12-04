@@ -12,10 +12,10 @@ class UpdatePassword extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={6} md={8} lg={6} xl={4} align='left'>
-          <Typography variant="display2" >
+          <Typography variant="h3" >
             Password
           </Typography>
-          <Typography variant="body2"  style={{marginTop: '48px', fontWeight: 'bold'}}>
+          <Typography variant="body1"  style={{marginTop: '48px', fontWeight: 'bold'}}>
             Change password
           </Typography>
           <Grid container justify="space-around" alignItems="flex-start" direction="row">

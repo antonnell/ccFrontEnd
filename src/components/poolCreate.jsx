@@ -40,7 +40,7 @@ class PoolCreate extends Component {
       <Grid item xs={12} md={5} align='left' style={{margin: '12px'}}>
         <Grid container justify="space-between" alignItems="flex-start" direction="row" >
           <Grid item xs={12}>
-            <Typography variant='display3'>
+            <Typography variant="h2">
               Settings
             </Typography>
           </Grid>
@@ -91,7 +91,7 @@ class PoolCreate extends Component {
       <Grid item xs={12} md={5} align='left' style={{margin: '12px'}}>
         <Grid container justify="space-between" alignItems="flex-start" direction="row" >
           <Grid item xs={12}>
-            <Typography variant='display3'>
+            <Typography variant="h2">
               Options
             </Typography>
           </Grid>
@@ -125,7 +125,7 @@ class PoolCreate extends Component {
     return (<Grid item xs={12} md={5} align='left' style={{margin: '12px', marginTop: '48px'}}>
       <Grid container justify="space-between" alignItems="flex-start" direction="row" >
         <Grid item xs={12}>
-          <Typography variant='display3'>
+          <Typography variant="h2">
             Allocations
           </Typography>
         </Grid>
@@ -162,7 +162,7 @@ class PoolCreate extends Component {
       <Grid item xs={12} md={5} align='left' style={{margin: '12px', marginTop: '48px'}}>
         <Grid container justify="space-between" alignItems="flex-start" direction="row" >
           <Grid item xs={12}>
-            <Typography variant='display3'>
+            <Typography variant="h2">
               Add Users
             </Typography>
           </Grid>
@@ -182,7 +182,7 @@ class PoolCreate extends Component {
       <Grid item xs={12} md={5} align='left' style={{margin: '12px', marginTop: '48px'}}>
         <Grid container justify="space-between" alignItems="flex-start" direction="row" >
           <Grid item xs={12}>
-            <Typography variant='display3'>
+            <Typography variant="h2">
               Custom List
             </Typography>
           </Grid>
@@ -218,7 +218,7 @@ class PoolCreate extends Component {
       <Grid item xs={12} align='left' style={{margin: '12px', marginTop: '48px'}}>
         <Grid container justify="space-between" alignItems="flex-start" direction="row" >
           <Grid item xs={12}>
-            <Typography variant='display3'>
+            <Typography variant="h2">
               Added Users
             </Typography>
           </Grid>
@@ -249,7 +249,7 @@ class PoolCreate extends Component {
       <Grid container justify="space-between" alignItems="flex-start" direction="row">
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{flex: 1}}>
-            <Typography variant='display1'>
+            <Typography variant="h1">
               Create Pool
             </Typography>
           </div>

@@ -13,7 +13,7 @@ class PrivacyPolicy extends Component {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant='display1' align='center'>
+          <Typography variant="h1" align='center'>
             CRYPTOCURVE PRIVACY POLICY
           </Typography>
           <p style={{paragraphStyle, fontWeight: 'bold'}}>
@@ -139,7 +139,6 @@ class PrivacyPolicy extends Component {
                   <a name="a599551">Contact details</a>
               </p>
               <p style={paragraphStyle}>
-                  <a name="a501999"></a>
                   <a name="a199685">Full name of legal entity:</a>
                   CryptoCurve Ltd.
               </p>

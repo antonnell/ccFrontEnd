@@ -17,8 +17,8 @@ import InputAdornment  from '@material-ui/core/InputAdornment';
 class SetupEthereumPayment extends Component {
 
   renderAddresses(accountValue, error, errorMessage, onChange, type) {
-    if(this.props.ethAddresses == null || this.props.ethAddresses.length == 0) {
-      return (<Typography variant="subheading" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
+    if(this.props.ethAddresses == null || this.props.ethAddresses.length === 0) {
+      return (<Typography variant="subtitle1" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>)
     }
 
     return (
@@ -33,13 +33,13 @@ class SetupEthereumPayment extends Component {
             return <div></div>
           }
           var selectedAddress = this.props.ethAddresses.filter((address) => {
-            return address.address == value
+            return address.address === value
           })[0]
 
           return (
             <Grid container justify="center" alignItems="center" direction="row">
               <Grid item xs={8} align='left'>
-                <Typography variant='display2' noWrap>
+                <Typography variant="h3" noWrap>
                   {selectedAddress.name}
                 </Typography>
                 <Typography variant='body1' noWrap>
@@ -48,10 +48,10 @@ class SetupEthereumPayment extends Component {
               </Grid>
               <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
                 <div></div>
-                <Typography variant='title' noWrap>
+                <Typography variant='h6' noWrap>
                   {selectedAddress.balance+" ETH"}
                 </Typography>
-                <Typography variant='subheading' noWrap>
+                <Typography variant="subtitle1" noWrap>
                   Available Balance
                 </Typography>
               </Grid>
@@ -59,7 +59,7 @@ class SetupEthereumPayment extends Component {
         }} >
         {this.props.ethAddresses.map((address) => {
 
-          if(type == 'own' && address.address == this.props.accountValue) {
+          if(type === 'own' && address.address === this.props.accountValue) {
             return false
           }
 
@@ -80,8 +80,8 @@ class SetupEthereumPayment extends Component {
   };
 
   renderContacts() {
-    if(this.props.contacts == null || this.props.contacts.length == 0) {
-      return (<Typography variant="subheading" >Oh no, we couldn't find any contacts for you. Why don't you create/import one?</Typography>)
+    if(this.props.contacts == null || this.props.contacts.length === 0) {
+      return (<Typography variant="subtitle1" >Oh no, we couldn't find any contacts for you. Why don't you create/import one?</Typography>)
     }
 
     return (
@@ -93,13 +93,13 @@ class SetupEthereumPayment extends Component {
         style={{minWidth: '300px', width: '100%'}}
         renderValue={(value) => {
           var selectedContact = this.props.contacts.filter((contact) => {
-            return contact.primaryEthAddress == value
+            return contact.primaryEthAddress === value
           })[0]
 
           return (
             <Grid container justify="center" alignItems="center" direction="row">
               <Grid item xs={8} align='left'>
-                <Typography variant='display2' noWrap>
+                <Typography variant="h3" noWrap>
                   {selectedContact.displayName}
                 </Typography>
                 <Typography variant='body1' noWrap>
@@ -108,7 +108,7 @@ class SetupEthereumPayment extends Component {
               </Grid>
               <Grid item xs={4} style={{borderLeft: '1px solid #dedede'}} align='center'>
                 <div></div>
-                <Typography variant='subheading' >
+                <Typography variant="subtitle1" >
                   {selectedContact.notes}
                 </Typography>
               </Grid>
@@ -129,7 +129,7 @@ class SetupEthereumPayment extends Component {
   renderSelectOwn() {
     return (<Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
       <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-        <Typography variant="subheading">
+        <Typography variant="subtitle1">
           Select your recipient account*
         </Typography>
       </Grid>
@@ -142,7 +142,7 @@ class SetupEthereumPayment extends Component {
   renderSelectBeneficiary() {
     return(<Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '24px'}}>
         <Grid item xs={12} align='left'>
-          <Typography variant="subheading">
+          <Typography variant="subtitle1">
             Select the contact*
           </Typography>
         </Grid>
@@ -158,7 +158,7 @@ class SetupEthereumPayment extends Component {
           <div style={{background: '#b5b5b5', width: '100%', padding: '12px', fontStyle: 'italic', marginBottom: '12px'}}>
             {this.props.disclaimer}
           </div>
-          <Typography variant="subheading">
+          <Typography variant="subtitle1">
             Recipient's Public Address*
           </Typography>
           <TextField required fullWidth={false} color="textSecondary" error={this.props.publicAddressError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
@@ -174,12 +174,12 @@ class SetupEthereumPayment extends Component {
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="display1">
+            <Typography variant="h1">
               Your details
             </Typography>
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               Select your account*
             </Typography>
           </Grid>
@@ -189,7 +189,7 @@ class SetupEthereumPayment extends Component {
         </Grid>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '48px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="display1">
+            <Typography variant="h1">
               Payment details
             </Typography>
           </Grid>
@@ -208,7 +208,7 @@ class SetupEthereumPayment extends Component {
             {this.props.tabValue === 2 && this.renderSelectOwn()}
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               Payment amount*
             </Typography>
             <TextField required fullWidth={false} color="textSecondary" error={this.props.amountError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}
@@ -219,7 +219,7 @@ class SetupEthereumPayment extends Component {
               }} />
           </Grid>
           <Grid item xs={12} align='left' style={{marginTop: '24px'}}>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               Gas limit*
             </Typography>
             <TextField required fullWidth={false} color="textSecondary" error={this.props.gweiError} style={{minWidth: '300px', maxWidth: '400px', marginTop: '0px'}}

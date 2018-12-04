@@ -19,7 +19,7 @@ class CreateContactModal extends Component {
         <DialogContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='left'>
-              <Typography variant="headline">
+              <Typography variant="h5">
                 Add Contact
               </Typography>
             </Grid>

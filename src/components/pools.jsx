@@ -86,7 +86,7 @@ class EnhancedTableHead extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
-                    <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
+                    <Typography variant="body1"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                       {row.label}
                     </Typography>
                   </TableSortLabel>
@@ -161,7 +161,7 @@ class EnhancedTable extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data?data.length:0 - page * rowsPerPage);
     return (
       <div className={classes.root}>
-        <Typography variant="headline"  style={{marginBottom: '20px'}}>
+        <Typography variant="h5"  style={{marginBottom: '20px'}}>
           My Pools
         </Typography>
         <Paper>

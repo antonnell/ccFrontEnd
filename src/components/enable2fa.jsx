@@ -14,18 +14,18 @@ class Enable2FA extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} align='left'>
-          <Typography variant="display2" >
+          <Typography variant="h3" >
             2FA
           </Typography>
         </Grid>
         <Grid item xs={12} sm={10} align='left'>
-          <Typography variant="body2" style={{marginTop: '48px'}}>
+          <Typography variant="body1" style={{marginTop: '48px'}}>
             1. Add CryptoCurve to Google Authenticator
           </Typography>
           <Typography variant="body1" style={{marginTop: '6px'}}>
             Open Google Authenticator and add CryptoCurve by scanning the QR Code shown.
           </Typography>
-          <Typography variant="body2" style={{marginTop: '24px'}}>
+          <Typography variant="body1" style={{marginTop: '24px'}}>
             2. Enter the 6 digit code that Google Authenticator generates
           </Typography>
           <Typography variant="body1" style={{marginTop: '6px'}}>
@@ -74,7 +74,7 @@ class Enable2FA extends Component {
                 InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="display1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
+              <Typography variant="h1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
                 {this.props.codeErrorMessage}
               </Typography>
             </Grid>

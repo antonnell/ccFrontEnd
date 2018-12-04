@@ -14,7 +14,7 @@ class ForgotPasswordDone extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='center'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="headline" >
+              <Typography variant="h5" >
                 Update Password
               </Typography>
             </Grid>

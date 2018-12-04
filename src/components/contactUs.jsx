@@ -11,11 +11,11 @@ class ContactUs extends Component {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='center'>
-          <Typography variant='headline'>Contact Us</Typography>
+          <Typography variant="h5">Contact Us</Typography>
           <br />
-          <Typography variant='Subheading' style={{fontWeight: 'bold'}}>CryptoCurve</Typography>
+          <Typography variant="subtitle1" style={{fontWeight: 'bold'}}>CryptoCurve</Typography>
           <br />
-          <Typography variant='Subheading'>Email us at support@cryptocurve.io</Typography>
+          <Typography variant="subtitle1">Email us at support@cryptocurve.io</Typography>
         </Grid>
       </Grid>
     );

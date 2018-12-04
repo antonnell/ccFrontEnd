@@ -55,7 +55,7 @@ class Accounts extends Component {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
-          <Typography variant="headline" >
+          <Typography variant="h5" >
             Create Account
           </Typography>
         </Grid>
@@ -99,7 +99,7 @@ class Accounts extends Component {
     return(
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
         <Grid item xs={12} align='left'>
-          <Typography variant="headline">
+          <Typography variant="h5">
             Import Account
           </Typography>
         </Grid>
@@ -159,7 +159,7 @@ class Accounts extends Component {
 
     if(this.props.addresses.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>
+        <Typography variant="h1" >Oh no, we couldn't find any addresses for you. Why don't you create/import one?</Typography>
       </Grid>);
     }
 
@@ -191,7 +191,7 @@ class Accounts extends Component {
             <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0}>
                 <Grid item xs={9} align='left'>
-                  {address.editing!==true&& <Typography noWrap variant="headline" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
+                  {address.editing!==true&& <Typography noWrap variant="h5" component="h2" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.isPrimary===true&& <Tooltip title={'This is your primary '+address.type+' account'}><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
                     {address.isPrimary===false&& <Tooltip title={'Make this account my primary '+address.type+' account'}><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
@@ -203,12 +203,12 @@ class Accounts extends Component {
                     onBlur={(event) => { this.props.onEditAddressNameBlur(event, address); }} helperText={this.props.editAddressNameErrorMessage} />}
                 </Grid>
                 <Grid item xs={3} align='right'>
-                  <Typography variant="headline" noWrap>
+                  <Typography variant="h5" noWrap>
                     {address.balance+' '+address.extension}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap variant="title" color="textSecondary" style={{minHeight: '32px', display: 'inline-block'}}>
+                  <Typography noWrap variant="h6" color="textSecondary" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.address}
                   </Typography>
                   <Tooltip style={{verticalAlign: 'top'}} title='Show Private Key'><IconButton disabled={this.props.privateKeyLoading} style={{ marginTop: '-13px', verticalAlign: 'top'}} onClick={() => { this.props.exportKeyClicked(address.address) }}><KeyIcon /></IconButton></Tooltip>
@@ -233,7 +233,7 @@ class Accounts extends Component {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row" spacing={0} style={{marginTop: '0px', padding: '24px'}}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={8} align='left'>
-          <Typography variant="headline" style={{marginBottom: '20px'}}>
+          <Typography variant="h5" style={{marginBottom: '20px'}}>
             Your Accounts
           </Typography>
           <Grid container>

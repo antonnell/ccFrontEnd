@@ -8,12 +8,10 @@ const styles = {};
 class CookiePolicy extends Component {
 
   render() {
-    var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
- 
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant='display1' align='center'>
+          <Typography variant="h1" align='center'>
             CRYPTOCURVE COOKIE POLICY
           </Typography>
           <ol style={{paddingLeft: '0px'}}>

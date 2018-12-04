@@ -12,12 +12,12 @@ class AcceptTermsAndConditions extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
-          <Typography variant="title">
+          <Typography variant="h6">
             Congratulations on being selected for the CryptoCurve presale! Just a few steps to make sure we have everything we need.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Typography variant="body2">
+          <Typography variant="body1">
             First, we need you to read through our terms and conditions. Do you accept our terms and conditions?
           </Typography>
         </Grid>

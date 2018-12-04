@@ -20,7 +20,7 @@ class Welcome extends Component {
 
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="display1">
+              <Typography variant="h1">
                 Login
               </Typography>
             </Grid>

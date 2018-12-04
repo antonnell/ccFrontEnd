@@ -1,40 +1,26 @@
 import React from 'react';
-import Stepper, { Step, StepLabel, StepContent } from '@material-ui/core/Stepper';
+import Stepper from '@material-ui/core/Stepper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Card, {  CardContent } from '@material-ui/core/Card';
-
+import Card from '@material-ui/core/Card';
 import AcceptTermsAndConditions from '../components/acceptTermsAndConditions.jsx';
 import TermsModal from '../components/termsModal.jsx';
-
-import HaveEthAddress from '../components/haveEthAddress.jsx';
-import StoreEthAddress from '../components/storeEthAddress.jsx';
 import ImportPublicEthAddress from '../components/importPublicEthAddress.jsx';
-import ImportPrivateTypeEthAddress from '../components/importPrivateTypeEthAddress.jsx';
-import ImportPrivateEthAddress from '../components/importPrivateEthAddress.jsx';
-import CreateEthAddres from '../components/createEthAddress.jsx';
-
 import HaveWanAddress from '../components/haveWanAddress.jsx';
-import StoreWanAddress from '../components/storeWanAddress.jsx';
 import ImportPublicWanAddress from '../components/importPublicWanAddress.jsx';
-import ImportPrivateTypeWanAddress from '../components/importPrivateTypeWanAddress.jsx';
-import ImportPrivateWanAddress from '../components/importPrivateWanAddress.jsx';
 import CreateWanAddress from '../components/createWanAddress.jsx';
-
 import KYCIDDocument from '../components/kycIDDocument.jsx';
 import KYCPhoto from '../components/kycPhoto.jsx';
-
 import KYCNetki from '../components/kycNetki.jsx';
-
 import JoinWhitelist from '../components/joinWhitelist.jsx';
 import WhitelistJoined from '../components/whitelistJoined.jsx';
-
-const createReactClass = require('create-react-class')
-const { sha3, isValidPrivate } = require('ethereumjs-util');
-
-var sha256 = require('sha256');
-var crypto = require('crypto');
-var bip39 = require('bip39');
+import { sha3 } from 'ethereumjs-util';
+import createReactClass from 'create-react-class';
+import crypto from 'crypto';
+import CardContent from '@material-ui/core/CardContent/CardContent';
+import Step from '@material-ui/core/Step/Step';
+import StepLabel from '@material-ui/core/StepLabel/StepLabel';
+import StepContent from '@material-ui/core/StepContent/StepContent';
 
 let ethEmitter = require('../store/ethStore.js').default.emitter
 let ethDispatcher = require('../store/ethStore.js').default.dispatcher
@@ -920,7 +906,7 @@ let Whitelist = createReactClass({
 
   renderStepper() {
     if(this.props.whitelistObject == null) {
-      return (<Typography variant='headline' style={{marginTop: '150px'}}>Unfortunately you do not qualify for our presale.</Typography>)
+      return (<Typography variant="h5" style={{marginTop: '150px'}}>Unfortunately you do not qualify for our presale.</Typography>)
     }
 
     if(['xs', 'sm'].includes(this.props.size)) {

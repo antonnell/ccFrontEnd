@@ -23,7 +23,7 @@ class PrivateKeyModal extends Component {
     return (
       <Dialog open={this.props.isOpen} title="Export" onClose={this.props.handleClose} >
         <DialogTitle id="alert-dialog-title">
-          <Typography variant='title' align='center'>
+          <Typography variant='h6' align='center'>
             Export private keys at your own risk
           </Typography>
         </DialogTitle>

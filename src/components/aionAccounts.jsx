@@ -67,7 +67,7 @@ class AionAccounts extends Component {
 
     if(this.props.addresses.length == 0) {
       return (<Grid item xs={12} xl={12} align='center' style={{minHeight: '190px', paddingTop: '100px'}}>
-        <Typography variant="display1" >Oh no, we couldn't find any accounts for you. Why don't you create/import one?</Typography>
+        <Typography variant="h1" >Oh no, we couldn't find any accounts for you. Why don't you create/import one?</Typography>
       </Grid>);
     }
 
@@ -114,7 +114,7 @@ class AionAccounts extends Component {
             <CardContent style={{position: 'relative'}}>
               <Grid container justify="flex-start" alignItems="flex-start" direction="row">
                 <Grid item xs={11} align='left'>
-                  {address.editing!==true&& <Typography noWrap variant="display2" style={{minHeight: '32px', display: 'inline-block'}}>
+                  {address.editing!==true&& <Typography noWrap variant="h3" style={{minHeight: '32px', display: 'inline-block'}}>
                     {address.isPrimary===true&& <Tooltip title='This is your primary Aion account'><PrimaryIcon style={{ marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}}/></Tooltip>}
                     {address.isPrimary===false&& <Tooltip title='Make this account my primary Aion account'><SetPrimaryIcon onClick={() => { this.props.updatePrimaryClicked(address) }} style={{ cursor: 'pointer', marginTop: '3.5px', marginRight: '5px', verticalAlign: 'top'}} /></Tooltip>}
                     {address.name}
@@ -168,12 +168,12 @@ class AionAccounts extends Component {
                   </Popover>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography noWrap variant="subheading" color="textSecondary" style={{minHeight: '32px'}}>
+                  <Typography noWrap variant="subtitle1" color="textSecondary" style={{minHeight: '32px'}}>
                     {address.address}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} style={{marginTop: '6px'}}>
-                  <Typography variant="headline" noWrap>
+                  <Typography variant="h5" noWrap>
                     {address.balance+' Aion ($'+address.usdBalance.toFixed(2)+')'}
                   </Typography>
                 </Grid>
@@ -194,7 +194,7 @@ class AionAccounts extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row">
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{flex: 1}}>
-            <Typography variant='display1'>
+            <Typography variant="h1">
               Aion Accounts
             </Typography>
           </div>

@@ -59,7 +59,7 @@ class Settings extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row">
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{marginRight: '12px', marginTop: '8px'}}>
-            <Typography variant='display1'>
+            <Typography variant="h1">
               Settings
             </Typography>
           </div>

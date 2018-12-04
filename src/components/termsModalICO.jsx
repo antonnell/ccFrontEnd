@@ -9,11 +9,10 @@ import Typography from '@material-ui/core/Typography';
 class TermsModalICO extends Component {
 
   render() {
-    var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
     return (
       <Dialog open={this.props.isOpen} title="Disclaimer" onClose={this.props.handleClose} >
         <DialogTitle id="alert-dialog-title">
-          <Typography variant='title' align='center'>
+          <Typography variant='h6' align='center'>
             CURV SALE TERMS & CONDITIONS
           </Typography>
         </DialogTitle>

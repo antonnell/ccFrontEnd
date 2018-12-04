@@ -20,7 +20,7 @@ class CompleteERC20Payment extends Component {
         </Typography>
       </Grid>
       <Grid item xs={12} align='center' style={{ marginTop: '12px' }}>
-        <Typography variant="subheading" style={{color: '#f44336'}}>
+        <Typography variant="subtitle1" style={{color: '#f44336'}}>
           {this.props.error}
         </Typography>
       </Grid>
@@ -53,7 +53,7 @@ class CompleteERC20Payment extends Component {
       <div>
         <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{position: 'relative', marginTop: '24px'}}>
           <Grid item xs={12} align='left' style={{ borderBottom: '1px solid #aaaaaa', paddingBottom: '12px' }}>
-            <Typography variant="display1">
+            <Typography variant="h1">
               Payment Results
             </Typography>
           </Grid>

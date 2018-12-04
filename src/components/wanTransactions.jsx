@@ -13,10 +13,8 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import TextField from '@material-ui/core/TextField';
@@ -123,7 +121,7 @@ class EnhancedTableHead extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
-                    <Typography variant="body2"  style={{fontSize: '17px', fontWeight: 'bold'}}>
+                    <Typography variant="body1"  style={{fontSize: '17px', fontWeight: 'bold'}}>
                       {row.label}
                     </Typography>
                   </TableSortLabel>
@@ -208,7 +206,7 @@ let EnhancedFilterBar = props => {
               {
                 wanAddresses?
                 wanAddresses
-                .map((address) => { 
+                .map((address) => {
                   return (<MenuItem key={address.name} value={address.name}>{address.name}</MenuItem>)
                 }):''
               }
@@ -280,7 +278,7 @@ let EnhancedTableToolbar = props => {
       })}
     >
       <div className={classes.title}>
-        <Typography variant="body2"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
+        <Typography variant="body1"  style={{lineHeight: '57px', fontSize: '17px'}} noWrap>
           Filters
         </Typography>
       </div>
@@ -358,7 +356,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="headline" style={{marginBottom: '20px'}}>
+        <Typography variant="h5" style={{marginBottom: '20px'}}>
           Wanchain Transactions
         </Typography>
         <Paper>

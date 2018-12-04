@@ -13,7 +13,7 @@ class TermsAndConditions extends Component {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant='display1' align='center'>
+          <Typography variant="h1" align='center'>
             CURV SALE TERMS &amp; CONDITIONS
           </Typography>
           <p>

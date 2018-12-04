@@ -27,13 +27,13 @@ class Footer extends Component {
         <Grid item xs={12} sm={8} md={8} lg={8} align='center' style={{marginBottom: '100px'}}>
           <Grid container justify="space-around" alignItems="stretch" direction="row" spacing={0}>
             <Grid item xs={3} align='left'>
-              <Typography variant='subheading' style={headingStyle}>ACCOUNT</Typography>
+              <Typography variant="subtitle1" style={headingStyle}>ACCOUNT</Typography>
               <div style={line}></div>
               <Typography  variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'welcome'); }}>{login}</Typography>
               <Typography  variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}>Register</Typography>
             </Grid>
             <Grid item xs={3} align='left'>
-              <Typography variant='subheading' style={headingStyle}>ABOUT</Typography>
+              <Typography variant="subtitle1" style={headingStyle}>ABOUT</Typography>
               <div style={line}></div>
               <Typography  variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'privacyPolicy'); }}>Privacy Policy</Typography>
               <Typography  variant='body1' style={linkStyle} onClick={(event) => { this.props.navClicked(event, 'cookiePolicy'); }}>Cookie Policy</Typography>
@@ -42,7 +42,7 @@ class Footer extends Component {
               <a style={aStyle} href={'https://www.google.co.za/search?tbm=nws&q=cryptocurve&oq=cryptocurve'} target="_blank"><Typography  variant='body1' style={linkStyle} >Press</Typography></a>
             </Grid>
             <Grid item xs={3} align='left'>
-              <Typography variant='subheading' style={headingStyle}>RESOURCES</Typography>
+              <Typography variant="subtitle1" style={headingStyle}>RESOURCES</Typography>
               <div style={line}></div>
               <a style={aStyle} href={'https://cryptocurve.io/contact'} target="_blank"><Typography  variant='body1' style={linkStyle} >Contact Us</Typography></a>
               <a style={aStyle} href={'https://cryptocurve.io/blog'} target="_blank"><Typography  variant='body1' style={linkStyle} >Blog</Typography></a>
@@ -51,10 +51,10 @@ class Footer extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12} align='right' style={{background: '#95e2f1', padding: '12px'}}>
-          <Typography variant="body2" align='justify' style={{fontWeight:  'bold', display: 'inline-block', color: '#000', marginRight: '12px'}} >
+          <Typography variant="body1" align='justify' style={{fontWeight:  'bold', display: 'inline-block', color: '#000', marginRight: '12px'}} >
             © 2018 CryptoCurve
           </Typography>
-          <Typography variant="body2" align='justify' style={{fontWeight:  'bold', display: 'inline-block', color: '#000'}} >
+          <Typography variant="body1" align='justify' style={{fontWeight:  'bold', display: 'inline-block', color: '#000'}} >
             V1.1.14-beta
           </Typography>
         </Grid>

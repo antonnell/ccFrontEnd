@@ -11,14 +11,14 @@ class Profile extends Component {
     return (
       <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0}  style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} md={10} lg={10} align='left'>
-          <Typography variant="display2">
+          <Typography variant="h3">
             Profile Picture
           </Typography>
           <div style={{margin: '48px 12px', display: 'flex'}}>
             <div style={{width: '120px', height: '120px', borderRadius: '60px', marginRight: '24px', background: '#dedede'}}>
             </div>
             <div style={{flex: 1}}>
-              <Typography variant='display2' style={{fontSize: '14px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginTop: '36px'}} onClick={this.props.uploadClicked}>
+              <Typography variant="h3" style={{fontSize: '14px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginTop: '36px'}} onClick={this.props.uploadClicked}>
                 Upload a new image
               </Typography>
               <Typography variant="body1" align='justify' style={{fontSize: '14px', marginTop: '12px'}}>
@@ -27,17 +27,17 @@ class Profile extends Component {
             </div>
           </div>
 
-          <Typography variant="display2">
+          <Typography variant="h3">
             Personal Info
           </Typography>
-          <Typography variant="body2" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
+          <Typography variant="body1" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
             Email
           </Typography>
           <Typography variant="body1" align='justify' style={{marginTop: '6px'}}>
             {this.props.user.email}
 
           </Typography>
-          <Typography variant="body2" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
+          <Typography variant="body1" align='justify' style={{marginTop: '24px', fontWeight:  'bold'}}>
             Username
           </Typography>
           <Typography variant="body1" align='justify' style={{marginTop: '6px'}}>
@@ -61,7 +61,7 @@ class Profile extends Component {
 }
 
 /*
-<Typography variant='display2' style={{fontSize: '16px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginLeft: '12px'}} onClick={this.props.editEmail}>
+<Typography variant="h3" style={{fontSize: '16px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginLeft: '12px'}} onClick={this.props.editEmail}>
   Edit
 </Typography>
 */

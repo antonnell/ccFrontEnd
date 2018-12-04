@@ -14,17 +14,17 @@ class CreateEth extends Component {
     return (
       <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={40} style={{position: 'relative', padding:20}}>
         <Grid item xs={12} align='center' style={{marginBottom: '12px'}}>
-          <Typography variant="title">
+          <Typography variant="h6">
             Good choice! Let use create an address for you.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Typography variant="body2">
+          <Typography variant="body1">
             In order to make this as simple as possible, we just need a friendly name for your address.
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Typography variant="body2">
+          <Typography variant="body1">
             What would you like to name your new Ethereum address?
           </Typography>
         </Grid>
