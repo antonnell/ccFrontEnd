@@ -368,7 +368,7 @@ class AionAccounts extends Component {
           }}
         >
           <div style={{ flex: 1 }}>
-            <Typography variant="h1">Aion Accounts</Typography>
+            <Typography variant="h6">Aion Accounts</Typography>
           </div>
           <div>
             <Button
