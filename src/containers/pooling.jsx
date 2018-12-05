@@ -1,16 +1,16 @@
-import React from 'react'
-import PoolingComponent from '../components/pooling'
-const createReactClass = require('create-react-class')
+import React from "react";
+import PoolingComponent from "../components/pooling";
+const createReactClass = require("create-react-class");
 
-let poolingEmitter = require('../store/poolingStore.js').default.emitter
-let poolingDispatcher = require('../store/poolingStore.js').default.dispatcher
+// let poolingEmitter = require('../store/poolingStore.js').default.emitter
+// let poolingDispatcher = require('../store/poolingStore.js').default.dispatcher
 
 let Pooling = createReactClass({
   getInitialState() {
     return {
-      error: '',
-      open: false,
-    }
+      error: "",
+      open: false
+    };
   },
 
   render() {
@@ -27,28 +27,26 @@ let Pooling = createReactClass({
         browsePoolsClicked={this.browsePoolsClicked}
         myInvitesClicked={this.myInvitesClicked}
       />
-    )
+    );
   },
 
   handleNewPool() {
-    window.location.hash='createPool'
+    window.location.hash = "createPool";
   },
 
   optionsClicked() {
-    this.setState({open: true})
+    this.setState({ open: true });
   },
 
   optionsClosed() {
-    this.setState({open: false})
+    this.setState({ open: false });
   },
 
   browsePoolsClicked() {
-    window.location.hash = 'browsePools'
+    window.location.hash = "browsePools";
   },
 
-  myInvitesClicked(){
+  myInvitesClicked() {}
+});
 
-  },
-})
-
-export default (Pooling);
+export default Pooling;

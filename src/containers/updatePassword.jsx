@@ -1,9 +1,8 @@
-import React from 'react'
-import UpdatePasswordComponent from '../components/updatePassword'
-import UpdatePasswordDoneComponent from '../components/updatePasswordDone'
-const createReactClass = require('create-react-class')
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+import React from "react";
+import UpdatePasswordComponent from "../components/updatePassword";
+const createReactClass = require("create-react-class");
+let emitter = require("../store/accountStore.js").default.emitter;
+let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let UpdatePassword = createReactClass({
   getInitialState() {
@@ -12,22 +11,22 @@ let UpdatePassword = createReactClass({
       error: null,
       snackOpen: false,
 
-      password: '',
+      password: "",
       passwordError: false,
-      passwordErrorMessage: '',
+      passwordErrorMessage: "",
 
-      confirmPassword: '',
+      confirmPassword: "",
       confirmPasswordError: false,
-      confirmPasswordErrorMessage: '',
+      confirmPasswordErrorMessage: ""
     };
   },
 
   componentWillMount() {
-    emitter.on('updatePassword', this.updatePasswordReturned);
+    emitter.on("updatePassword", this.updatePasswordReturned);
   },
 
   componentWillUnmount() {
-    emitter.removeAllListeners('updatePassword');
+    emitter.removeAllListeners("updatePassword");
   },
 
   render() {
@@ -48,7 +47,7 @@ let UpdatePassword = createReactClass({
         snackOpen={this.state.snackOpen}
         handleSnackClose={this.handleSnackClose}
       />
-    )
+    );
   },
 
   handleSnackClose() {
@@ -56,21 +55,32 @@ let UpdatePassword = createReactClass({
   },
 
   onUpdateKeyDown(event) {
-    if (event.which == 13) {
+    if (event.which === 13) {
       this.submitUpdatePassword();
     }
   },
 
   validatePassword(value) {
-    this.setState({ passwordValid: false, passwordError: false, passwordErrorMessage:'' });
-    if(value==null) {
+    this.setState({
+      passwordValid: false,
+      passwordError: false,
+      passwordErrorMessage: ""
+    });
+    if (value == null) {
       value = this.state.password;
     }
-    if(value == '') {
-      this.setState({ passwordError: true, passwordErrorMessage:'Password is required' });
+    if (value === "") {
+      this.setState({
+        passwordError: true,
+        passwordErrorMessage: "Password is required"
+      });
       return false;
     } else if (value.length < 8) {
-      this.setState({ passwordError: true, passwordErrorMessage: 'Your password needs to be at least 8 characaters long'});
+      this.setState({
+        passwordError: true,
+        passwordErrorMessage:
+          "Your password needs to be at least 8 characaters long"
+      });
       return false;
     }
     this.setState({ passwordValid: true });
@@ -78,15 +88,26 @@ let UpdatePassword = createReactClass({
   },
 
   validateConfirmPassword(value) {
-    this.setState({ confirmPasswordValid: false, confirmPasswordError: false, confirmPasswordErrorMessage:'' });
-    if(value==null) {
+    this.setState({
+      confirmPasswordValid: false,
+      confirmPasswordError: false,
+      confirmPasswordErrorMessage: ""
+    });
+    if (value == null) {
       value = this.state.confirmPassword;
     }
-    if(value == '') {
-      this.setState({ confirmPasswordError: true, confirmPasswordErrorMessage:'Please confirm your password' });
+    if (value === "") {
+      this.setState({
+        confirmPasswordError: true,
+        confirmPasswordErrorMessage: "Please confirm your password"
+      });
       return false;
-    } else if(this.state.password != value) {
-      this.setState({ passwordError: true, confirmPasswordError: true, confirmPasswordErrorMessage: 'Your passwords to do not match'});
+    } else if (this.state.password !== value) {
+      this.setState({
+        passwordError: true,
+        confirmPasswordError: true,
+        confirmPasswordErrorMessage: "Your passwords to do not match"
+      });
       return false;
     }
     this.setState({ confirmPasswordValid: true });
@@ -94,49 +115,55 @@ let UpdatePassword = createReactClass({
   },
 
   submitUpdatePassword() {
-    if(this.validatePassword() & this.validateConfirmPassword()) {
-      this.setState({loading: true});
-      var content = {username: this.props.user.username, password: this.state.password};
-      dispatcher.dispatch({type: 'updatePassword', content, token: this.props.user.token});
+    if (this.validatePassword() && this.validateConfirmPassword()) {
+      this.setState({ loading: true });
+      var content = {
+        username: this.props.user.username,
+        password: this.state.password
+      };
+      dispatcher.dispatch({
+        type: "updatePassword",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
   updatePasswordReturned(error, data) {
-    this.setState({loading: false})
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
-      this.setState({snackOpen: true, password: '', confirmPassword: ''})
-
+    if (data.success) {
+      this.setState({ snackOpen: true, password: "", confirmPassword: "" });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
-  submitUpdatePasswordNavigate(error, data) {
-    window.location.hash = 'ethAccounts';
+  submitUpdatePasswordNavigate() {
+    window.location.hash = "ethAccounts";
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
     }
   },
 
-  validateField (event, name) {
-    if (name==="validatePassword") {
-      this.validatePassword(event.target.value)
-    } if (name==="confirmPassword") {
-      this.validateConfirmPassword(event.target.value)
+  validateField(event, name) {
+    if (name === "validatePassword") {
+      this.validatePassword(event.target.value);
+    }
+    if (name === "confirmPassword") {
+      this.validateConfirmPassword(event.target.value);
     }
   }
+});
 
-})
-
-export default (UpdatePassword);
+export default UpdatePassword;

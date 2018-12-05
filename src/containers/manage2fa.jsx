@@ -1,29 +1,29 @@
-import React from 'react'
-import Enable2FAComponent from '../components/enable2fa'
-import Disable2FAComponent from '../components/disable2fa'
-import Disable2FAConfirmation from '../components/disable2faConfirmation'
-const createReactClass = require('create-react-class')
+import React from "react";
+import Enable2FAComponent from "../components/enable2fa";
+import Disable2FAComponent from "../components/disable2fa";
+import Disable2FAConfirmation from "../components/disable2faConfirmation";
+const createReactClass = require("create-react-class");
 
-var QRCode = require('qrcode');
+var QRCode = require("qrcode");
 
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+let emitter = require("../store/accountStore.js").default.emitter;
+let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let Manage2FA = createReactClass({
   getInitialState() {
     return {
-      code1: '',
-      code2: '',
-      code3: '',
-      code4: '',
-      code5: '',
-      code6: '',
+      code1: "",
+      code2: "",
+      code3: "",
+      code4: "",
+      code5: "",
+      code6: "",
       codeArray: [],
-      code: '',
+      code: "",
       codeError: false,
       codeValid: false,
 
-      password: '',
+      password: "",
       passwordError: false,
       loading: false,
       error: null,
@@ -31,31 +31,35 @@ let Manage2FA = createReactClass({
       QRCodeLoading: false,
       barcodeUrl: null,
       secretKey: null
-    }
+    };
   },
 
   componentWillMount() {
-    emitter.on('enable2fa', this.enable2faReturned);
-    emitter.on('disable2fa', this.disable2faReturned);
-    emitter.on('generate2faKey', this.generate2faKeyReturned);
+    emitter.on("enable2fa", this.enable2faReturned);
+    emitter.on("disable2fa", this.disable2faReturned);
+    emitter.on("generate2faKey", this.generate2faKeyReturned);
   },
 
   componentDidMount() {
-    if(this.props.user && this.props.user.isGoogle2faEnabled !== true) {
-      this.setState({ QRCodeLoading: true })
+    if (this.props.user && this.props.user.isGoogle2faEnabled !== true) {
+      this.setState({ QRCodeLoading: true });
       var content = { id: this.props.user.id };
-      dispatcher.dispatch({type: 'generate2faKey', content, token: this.props.user.token});
+      dispatcher.dispatch({
+        type: "generate2faKey",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
   componentWillUnmount() {
-    emitter.removeAllListeners('enable2fa');
-    emitter.removeAllListeners('disable2fa');
-    emitter.removeAllListeners('generate2faKey');
+    emitter.removeAllListeners("enable2fa");
+    emitter.removeAllListeners("disable2fa");
+    emitter.removeAllListeners("generate2faKey");
   },
 
   render() {
-    if(this.props.user && this.props.user.isGoogle2faEnabled === true) {
+    if (this.props.user && this.props.user.isGoogle2faEnabled === true) {
       return (
         <div>
           <Disable2FAComponent
@@ -67,9 +71,13 @@ let Manage2FA = createReactClass({
             loading={this.state.loading}
             error={this.state.error}
           />
-          <Disable2FAConfirmation isOpen={this.state.disable2FAOpen} confirmDisable={this.confirmDisable} handleClose={this.handleClose} />
+          <Disable2FAConfirmation
+            isOpen={this.state.disable2FAOpen}
+            confirmDisable={this.confirmDisable}
+            handleClose={this.handleClose}
+          />
         </div>
-        )
+      );
     } else {
       return (
         <Enable2FAComponent
@@ -89,28 +97,29 @@ let Manage2FA = createReactClass({
           error={this.state.error}
           codeValid={this.state.codeValid}
           secretKey={this.state.secretKey}
-        />)
+        />
+      );
     }
   },
 
   generate2faKeyReturned(error, data) {
-    this.setState({QRCodeLoading: false})
-    if(error) {
-      return // this.setState({error: error.toString()});
+    this.setState({ QRCodeLoading: false });
+    if (error) {
+      return; // this.setState({error: error.toString()});
     }
 
-    if(data.success) {
-      var barcodeUrl = decodeURIComponent(data.barcodeUrl)
-      this.setState({ secretKey: data.secretKey, barcodeUrl })
+    if (data.success) {
+      var barcodeUrl = decodeURIComponent(data.barcodeUrl);
+      this.setState({ secretKey: data.secretKey, barcodeUrl });
 
-      var canvas = document.getElementById('canvas')
-      QRCode.toCanvas(canvas, barcodeUrl, function (error) {
-        if (error) console.error(error)
-      })
+      var canvas = document.getElementById("canvas");
+      QRCode.toCanvas(canvas, barcodeUrl, function(error) {
+        if (error) console.error(error);
+      });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
@@ -119,24 +128,27 @@ let Manage2FA = createReactClass({
       this.submitEnable();
     } else if (event.which === 8) {
       var name = event.target.id;
-      if(name.indexOf('code') > -1) {
-        var index = name.substring(4)
+      if (name.indexOf("code") > -1) {
+        var index = name.substring(4);
 
-        var codeArray = this.state.codeArray
-        if(this.state[name].length > 0) {
+        var codeArray = this.state.codeArray;
+        if (this.state[name].length > 0) {
+          codeArray[index - 1] = "";
 
-          codeArray[index-1] = ''
-
-          this.setState({codeArray, code: codeArray.join(''), [name]: ''})
-          if(index > 1) {
-            document.getElementById(name).focus()
+          this.setState({ codeArray, code: codeArray.join(""), [name]: "" });
+          if (index > 1) {
+            document.getElementById(name).focus();
           }
         } else {
-          codeArray[index-2] = '';
+          codeArray[index - 2] = "";
 
-          this.setState({codeArray, code: codeArray.join(''), ['code'+(Number(index)-1)]: ''});
-          if(index > 1) {
-            document.getElementById('code'+(Number(index)-1)).focus()
+          this.setState({
+            codeArray,
+            code: codeArray.join(""),
+            ["code" + (Number(index) - 1)]: ""
+          });
+          if (index > 1) {
+            document.getElementById("code" + (Number(index) - 1)).focus();
           }
         }
       }
@@ -148,36 +160,56 @@ let Manage2FA = createReactClass({
   },
 
   submitEnable() {
-    this.setState({codeError: false, codeErrorMessage: '', error: ''});
+    this.setState({ codeError: false, codeErrorMessage: "", error: "" });
     var error = false;
 
-    if(this.state.code === '' || this.state.code.length !== 6) {
-      this.setState({codeError: true, codeErrorMessage: 'The 6 digit code generated by your authenticator application'});
+    if (this.state.code === "" || this.state.code.length !== 6) {
+      this.setState({
+        codeError: true,
+        codeErrorMessage:
+          "The 6 digit code generated by your authenticator application"
+      });
       error = true;
     }
 
-    if(!error) {
-      this.setState({loading: true});
-      var content = { id: this.props.user.id, code: this.state.code, secretKey: this.state.secretKey};
-      dispatcher.dispatch({type: 'enable2fa', content, token: this.props.user.token});
+    if (!error) {
+      this.setState({ loading: true });
+      var content = {
+        id: this.props.user.id,
+        code: this.state.code,
+        secretKey: this.state.secretKey
+      };
+      dispatcher.dispatch({
+        type: "enable2fa",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
   enable2faReturned(error, data) {
-    this.setState({loading: false, codeError: false, codeErrorMessage: ''});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false, codeError: false, codeErrorMessage: "" });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       data.user.token = data.token;
       data.user.authOTP = this.state.code;
       this.props.setUser(data.user);
-      this.setState({code1: '', code2: '', code3: '', code4: '', code5: '', code6: '', code: ''});
+      this.setState({
+        code1: "",
+        code2: "",
+        code3: "",
+        code4: "",
+        code5: "",
+        code6: "",
+        code: ""
+      });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
@@ -197,55 +229,63 @@ let Manage2FA = createReactClass({
   },
 
   confirmDisable() {
-    this.setState({disable2FAOpen: false, loading: true, error: ''});
+    this.setState({ disable2FAOpen: false, loading: true, error: "" });
     var content = { id: this.props.user.id };
-    dispatcher.dispatch({type: 'disable2fa', content, token: this.props.user.token});
+    dispatcher.dispatch({
+      type: "disable2fa",
+      content,
+      token: this.props.user.token
+    });
   },
 
   disable2faReturned(error, data) {
-    this.setState({loading: false})
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
-      var user = this.props.user
+    if (data.success) {
+      var user = this.props.user;
       user.isGoogle2faEnabled = false;
 
       this.props.setUser(user);
 
-      this.setState({ QRCodeLoading: true })
+      this.setState({ QRCodeLoading: true });
       var content = { id: user.id };
-      dispatcher.dispatch({type: 'generate2faKey', content, token: this.props.user.token});
+      dispatcher.dispatch({
+        type: "generate2faKey",
+        content,
+        token: this.props.user.token
+      });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
-  handleChange (event, name) {
+  handleChange(event, name) {
     let codeArray;
-    if(event != null && event.target != null) {
-      if(name.indexOf('code') > -1) {
-        if(!this.isNumeric(event.target.value)) {
-          return false
+    if (event != null && event.target != null) {
+      if (name.indexOf("code") > -1) {
+        if (!this.isNumeric(event.target.value)) {
+          return false;
         }
 
-        if(event.target.value.length <= 1) {
+        if (event.target.value.length <= 1) {
           this.setState({
             [name]: event.target.value
           });
 
-          var index = name.substring(4)
-          codeArray = this.state.codeArray
-          codeArray[index-1] = event.target.value
-          this.setState({codeArray, code: codeArray.join('')});
-          if(index < 6 && event.target.value.length === 1) {
-            document.getElementById('code'+(Number(index)+1)).focus()
+          var index = name.substring(4);
+          codeArray = this.state.codeArray;
+          codeArray[index - 1] = event.target.value;
+          this.setState({ codeArray, code: codeArray.join("") });
+          if (index < 6 && event.target.value.length === 1) {
+            document.getElementById("code" + (Number(index) + 1)).focus();
           }
-        } else if(event.target.value.length === 6) {
-          codeArray = event.target.value.split('')
+        } else if (event.target.value.length === 6) {
+          codeArray = event.target.value.split("");
           var state = {
             code1: codeArray[0],
             code2: codeArray[1],
@@ -256,12 +296,12 @@ let Manage2FA = createReactClass({
             codeArray,
             code: event.target.value
           };
-          document.getElementById('code6').focus()
-          this.setState(state)
+          document.getElementById("code6").focus();
+          this.setState(state);
         }
 
-        if(codeArray && codeArray.length == 6) {
-          this.validateAuthCode(codeArray.join(''))
+        if (codeArray && codeArray.length === 6) {
+          this.validateAuthCode(codeArray.join(""));
         }
       } else {
         this.setState({
@@ -272,13 +312,12 @@ let Manage2FA = createReactClass({
   },
 
   validateAuthCode(code) {
-    if(code.length === 6 && this.isNumeric(code)) {
-      this.setState({codeValid: true})
+    if (code.length === 6 && this.isNumeric(code)) {
+      this.setState({ codeValid: true });
     } else {
-      this.setState({codeValid: false})
+      this.setState({ codeValid: false });
     }
   }
+});
 
-})
-
-export default (Manage2FA);
+export default Manage2FA;

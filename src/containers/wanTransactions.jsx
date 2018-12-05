@@ -1,10 +1,10 @@
-import React from 'react';
-import WanTransactionsComponent from '../components/wanTransactions';
+import React from "react";
+import WanTransactionsComponent from "../components/wanTransactions";
 
-const createReactClass = require('create-react-class');
+const createReactClass = require("create-react-class");
 
-let wanEmitter = require('../store/wanStore.js').default.emitter;
-let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
+// let wanEmitter = require('../store/wanStore.js').default.emitter;
+// let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
 
 let WanTransactions = createReactClass({
   getInitialState() {
@@ -12,15 +12,15 @@ let WanTransactions = createReactClass({
       loading: false,
       error: null,
       wanTransactions: this.props.wanTransactions,
-      selectedAddress: '',
+      selectedAddress: "",
       selectedAddressError: false,
-      selectedAddressErrorMessage: '',
-      selectedContact: '',
+      selectedAddressErrorMessage: "",
+      selectedContact: "",
       selectedContactError: false,
-      selectedContactErrorMessage: '',
-      fromDate: '',
-      toDate: ''
-    }
+      selectedContactErrorMessage: "",
+      fromDate: "",
+      toDate: ""
+    };
   },
   render() {
     return (
@@ -42,11 +42,11 @@ let WanTransactions = createReactClass({
         selectContact={this.selectContact}
         selectAddress={this.selectAddress}
       />
-    )
+    );
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -54,12 +54,12 @@ let WanTransactions = createReactClass({
   },
 
   selectAddress(event) {
-    this.setState({selectedAddress: event.target.value})
+    this.setState({ selectedAddress: event.target.value });
   },
 
   selectContact(event) {
-    this.setState({selectedContact: event.target.value})
-  },
-})
+    this.setState({ selectedContact: event.target.value });
+  }
+});
 
-export default (WanTransactions);
+export default WanTransactions;

@@ -129,7 +129,7 @@ class WanAccounts extends Component {
       }
 
       if (this.props.loadingAccount != null) {
-        if (address.publicAddress == this.props.loadingAccount.publicAddress) {
+        if (address.publicAddress === this.props.loadingAccount.publicAddress) {
           loading = (
             <CircularProgress
               size={36}
@@ -146,7 +146,7 @@ class WanAccounts extends Component {
       }
 
       if (this.props.editAccount != null) {
-        if (address.publicAddress == this.props.editAccount.publicAddress) {
+        if (address.publicAddress === this.props.editAccount.publicAddress) {
           address.editing = true;
           if (this.props.cardLoading) {
             loading = (
@@ -166,7 +166,7 @@ class WanAccounts extends Component {
       }
 
       if (this.props.exportKeyAccount != null) {
-        if (address.publicAddress == this.props.exportKeyAccount) {
+        if (address.publicAddress === this.props.exportKeyAccount) {
           if (this.props.privateKeyLoading) {
             loading = (
               <CircularProgress
@@ -245,7 +245,7 @@ class WanAccounts extends Component {
                             variant="contained"
                             color="primary"
                             disabled
-                            onClick={event => {
+                            onClick={() => {
                               this.props.sendWRC20(n.symbol, address);
                             }}
                           >
@@ -451,7 +451,7 @@ class WanAccounts extends Component {
   renderICOUnavailable() {
     if (
       this.props.user == null ||
-      this.props.user.verificationResult != "completed"
+      this.props.user.verificationResult !== "completed"
     ) {
       return (
         <Grid
@@ -495,7 +495,7 @@ class WanAccounts extends Component {
   }
 
   renderICOS() {
-    if (this.props.crowdsales == null || this.props.crowdsales.length == 0) {
+    if (this.props.crowdsales == null || this.props.crowdsales.length === 0) {
       return (
         <Grid
           container
@@ -737,7 +737,7 @@ class WanAccounts extends Component {
 
     */
 
-    if (this.props.size == "xs") {
+    if (this.props.size === "xs") {
       return (
         <Grid item xs={12} align="center" key={crowdsale.id}>
           <Grid
@@ -769,7 +769,7 @@ class WanAccounts extends Component {
                 Personal Cap
               </Typography>
               <Typography variant="body1" style={styleB}>
-                {crowdsale.userCap == 0
+                {crowdsale.userCap === 0
                   ? "Unlimited"
                   : this.props.minContribution +
                     " - " +
@@ -803,11 +803,11 @@ class WanAccounts extends Component {
                   color="textSecondary"
                   disabled={
                     this.props.investLoading ||
-                    this.props.user.whitelistStatus == null ||
-                    this.props.user.whitelistStatus != "completed" ||
+                    this.props.user.whitelistStatus === null ||
+                    this.props.user.whitelistStatus !== "completed" ||
                     (crowdsale.totalContribution >=
                       crowdsale.userCap / 1000000000000000000 &&
-                      crowdsale.userCap != 0)
+                      crowdsale.userCap !== 0)
                   }
                   error={this.props.investmentAmountError}
                   id="investmentAmount"
@@ -838,11 +838,11 @@ class WanAccounts extends Component {
                   variant={"contained"}
                   disabled={
                     this.props.investLoading ||
-                    this.props.user.whitelistStatus == null ||
-                    this.props.user.whitelistStatus != "completed" ||
+                    this.props.user.whitelistStatus === null ||
+                    this.props.user.whitelistStatus !== "completed" ||
                     (crowdsale.totalContribution >=
                       crowdsale.userCap / 1000000000000000000 &&
-                      crowdsale.userCap != 0)
+                      crowdsale.userCap !== 0)
                   }
                   color="primary"
                   onClick={() => {
@@ -858,7 +858,7 @@ class WanAccounts extends Component {
       );
     }
 
-    if (this.props.size == "sm" || this.props.size == "md") {
+    if (this.props.size === "sm" || this.props.size === "md") {
       return (
         <Grid item xs={12} align="center">
           <Grid
@@ -928,7 +928,7 @@ class WanAccounts extends Component {
                     this.props.user.whitelistStatus !== "completed" ||
                     (crowdsale.totalContribution >=
                       crowdsale.userCap / 1000000000000000000 &&
-                      crowdsale.userCap != 0)
+                      crowdsale.userCap !== 0)
                   }
                   error={this.props.investmentAmountError}
                   id="investmentAmount"
@@ -963,7 +963,7 @@ class WanAccounts extends Component {
                     this.props.user.whitelistStatus !== "completed" ||
                     (crowdsale.totalContribution >=
                       crowdsale.userCap / 1000000000000000000 &&
-                      crowdsale.userCap != 0)
+                      crowdsale.userCap !== 0)
                   }
                   color="primary"
                   onClick={() => {
@@ -1035,7 +1035,7 @@ class WanAccounts extends Component {
                 this.props.user.whitelistStatus !== "completed" ||
                 (crowdsale.totalContribution >=
                   crowdsale.userCap / 1000000000000000000 &&
-                  crowdsale.userCap != 0)
+                  crowdsale.userCap !== 0)
               }
               error={this.props.investmentAmountError}
               id="investmentAmount"
@@ -1067,7 +1067,7 @@ class WanAccounts extends Component {
                 this.props.user.whitelistStatus !== "completed" ||
                 (crowdsale.totalContribution >=
                   crowdsale.userCap / 1000000000000000000 &&
-                  crowdsale.userCap != 0)
+                  crowdsale.userCap !== 0)
               }
               color="primary"
               onClick={() => {
@@ -1103,7 +1103,7 @@ class WanAccounts extends Component {
             this.props.user.whitelistStatus !== "completed" ||
             (crowdsale.totalContribution >=
               crowdsale.userCap / 1000000000000000000 &&
-              crowdsale.userCap != 0)
+              crowdsale.userCap !== 0)
           }
         >
           <MenuItem key="" value="">

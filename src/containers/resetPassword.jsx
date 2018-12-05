@@ -1,33 +1,35 @@
-import React from 'react'
-import ResetPasswordComponent from '../components/resetPassword'
-const createReactClass = require('create-react-class')
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+import React from "react";
+import ResetPasswordComponent from "../components/resetPassword";
+const createReactClass = require("create-react-class");
+let emitter = require("../store/accountStore.js").default.emitter;
+let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let ResetPassword = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
-      password: '',
+      password: "",
       passwordError: false,
-      passwordErrorMessage: '',
-      confirmPassword: '',
+      passwordErrorMessage: "",
+      confirmPassword: "",
       confirmPasswordError: false,
-      confirmPasswordErrorMessage: ''
-
+      confirmPasswordErrorMessage: ""
     };
   },
 
   componentWillMount() {
-    if(this.props.uriParameters.token == null || this.props.uriParameters.code == null) {
-      window.location.hash = 'welcome';
+    if (
+      this.props.uriParameters.token == null ||
+      this.props.uriParameters.code == null
+    ) {
+      window.location.hash = "welcome";
     }
-    return emitter.on('resetPassword', this.resetPasswordReturned);
+    return emitter.on("resetPassword", this.resetPasswordReturned);
   },
 
   componentWillUnmount() {
-    emitter.removeAllListeners('resetPassword');
+    emitter.removeAllListeners("resetPassword");
   },
 
   render() {
@@ -45,12 +47,12 @@ let ResetPassword = createReactClass({
         confirmPasswordErrorMessage={this.state.confirmPasswordErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
-        />
-    )
+      />
+    );
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -58,55 +60,73 @@ let ResetPassword = createReactClass({
   },
 
   onResetKeyDown(event) {
-    if (event.which == 13) {
-      this.submitReset()
+    if (event.which === 13) {
+      this.submitReset();
     }
   },
 
   submitReset() {
     var error = false;
 
-    if(this.state.password == '') {
-      this.setState({passwordError: true, passwordErrorMessage:'Password is required'});
+    if (this.state.password === "") {
+      this.setState({
+        passwordError: true,
+        passwordErrorMessage: "Password is required"
+      });
       error = true;
     } else if (this.state.password.length < 8) {
-      this.setState({ passwordError: true, passwordErrorMessage: 'Your password needs to be at least 8 characaters long'});
+      this.setState({
+        passwordError: true,
+        passwordErrorMessage:
+          "Your password needs to be at least 8 characaters long"
+      });
       return false;
     }
-    if(this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: true, passwordErrorMessage:'Please confirm your password'});
-        error = true;
+    if (this.state.confirmPassword === "") {
+      this.setState({
+        confirmPasswordError: true,
+        passwordErrorMessage: "Please confirm your password"
+      });
+      error = true;
     }
-    if(this.state.password != this.state.confirmPassword) {
-      this.setState({passwordError: true, confirmPasswordError: true, confirmPasswordErrorMessage: 'Your passwords to do not match'});
+    if (this.state.password !== this.state.confirmPassword) {
+      this.setState({
+        passwordError: true,
+        confirmPasswordError: true,
+        confirmPasswordErrorMessage: "Your passwords to do not match"
+      });
       error = true;
     }
 
-    if(!error) {
-      this.setState({loading: true});
-      var content = { token: this.props.uriParameters.token, code: this.props.uriParameters.code, password: this.state.password};
-      dispatcher.dispatch({type: 'resetPassword', content});
+    if (!error) {
+      this.setState({ loading: true });
+      var content = {
+        token: this.props.uriParameters.token,
+        code: this.props.uriParameters.code,
+        password: this.state.password
+      };
+      dispatcher.dispatch({ type: "resetPassword", content });
     }
   },
 
   resetPasswordReturned(error, data) {
-    this.setState({loading: false})
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
-      window.location.hash = 'account'; //or show 'Your password has been updated'
+    if (data.success) {
+      window.location.hash = "account"; //or show 'Your password has been updated'
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   submitLoginNavigate() {
-    window.location.hash = 'welcome';
-  },
-})
+    window.location.hash = "welcome";
+  }
+});
 
-export default (ResetPassword);
+export default ResetPassword;

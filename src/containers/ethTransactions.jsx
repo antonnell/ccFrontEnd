@@ -1,10 +1,10 @@
-import React from 'react';
-import EthTransactionsComponent from '../components/ethTransactions';
+import React from "react";
+import EthTransactionsComponent from "../components/ethTransactions";
 
-const createReactClass = require('create-react-class');
+const createReactClass = require("create-react-class");
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+// let ethEmitter = require('../store/ethStore.js').default.emitter;
+// let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
 
 let EthTransactions = createReactClass({
   getInitialState() {
@@ -12,15 +12,15 @@ let EthTransactions = createReactClass({
       loading: false,
       error: null,
       ethTransactions: this.props.ethTransactions,
-      selectedAddress: '',
+      selectedAddress: "",
       selectedAddressError: false,
-      selectedAddressErrorMessage: '',
-      selectedContact: '',
+      selectedAddressErrorMessage: "",
+      selectedContact: "",
       selectedContactError: false,
-      selectedContactErrorMessage: '',
-      fromDate: '',
-      toDate: ''
-    }
+      selectedContactErrorMessage: "",
+      fromDate: "",
+      toDate: ""
+    };
   },
   render() {
     return (
@@ -42,11 +42,11 @@ let EthTransactions = createReactClass({
         selectContact={this.selectContact}
         selectAddress={this.selectAddress}
       />
-    )
+    );
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -54,12 +54,12 @@ let EthTransactions = createReactClass({
   },
 
   selectAddress(event) {
-    this.setState({selectedAddress: event.target.value})
+    this.setState({ selectedAddress: event.target.value });
   },
 
   selectContact(event) {
-    this.setState({selectedContact: event.target.value})
-  },
-})
+    this.setState({ selectedContact: event.target.value });
+  }
+});
 
-export default (EthTransactions);
+export default EthTransactions;

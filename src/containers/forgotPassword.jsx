@@ -1,8 +1,8 @@
-import React from 'react'
-import ForgotPasswordComponent from '../components/forgotPassword'
-const createReactClass = require('create-react-class')
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+import React from "react";
+import ForgotPasswordComponent from "../components/forgotPassword";
+const createReactClass = require("create-react-class");
+let emitter = require("../store/accountStore.js").default.emitter;
+let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 const email = require("email-validator");
 
@@ -12,18 +12,18 @@ let ForgotPassword = createReactClass({
       loading: false,
       error: null,
 
-      emailAddress: '',
+      emailAddress: "",
       emailAddressError: false,
-      emailAddressErrorMessage: ''
+      emailAddressErrorMessage: ""
     };
   },
 
   componentWillMount() {
-    emitter.on('sendResetPasswordEmail', this.sendResetPasswordEmailReturned);
+    emitter.on("sendResetPasswordEmail", this.sendResetPasswordEmailReturned);
   },
 
   componentWillUnmount() {
-    emitter.removeAllListeners('sendResetPasswordEmail');
+    emitter.removeAllListeners("sendResetPasswordEmail");
   },
 
   render() {
@@ -38,12 +38,12 @@ let ForgotPassword = createReactClass({
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
-        />
-    )
+      />
+    );
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -51,48 +51,55 @@ let ForgotPassword = createReactClass({
   },
 
   onResetKeyDown(event) {
-    if (event.which == 13) {
-      this.submitReset()
+    if (event.which === 13) {
+      this.submitReset();
     }
   },
 
   submitReset() {
     var error = false;
-    this.setState({emailAddressError: false, emailAddressErrorMessage:  ''})
+    this.setState({ emailAddressError: false, emailAddressErrorMessage: "" });
 
-    if(this.state.emailAddress == '') {
-      this.setState({emailAddressError: true, emailAddressErrorMessage: 'Email address is required'});
+    if (this.state.emailAddress === "") {
+      this.setState({
+        emailAddressError: true,
+        emailAddressErrorMessage: "Email address is required"
+      });
       error = true;
     } else if (!email.validate(this.state.emailAddress)) {
-      this.setState({emailAddressError: true, emailAddressErrorMessage: "Email address provided is not a valid email address"});
+      this.setState({
+        emailAddressError: true,
+        emailAddressErrorMessage:
+          "Email address provided is not a valid email address"
+      });
       error = true;
     }
 
-    if(!error) {
-      this.setState({loading: true});
+    if (!error) {
+      this.setState({ loading: true });
       var content = { emailAddress: this.state.emailAddress };
-      dispatcher.dispatch({type: 'sendResetPasswordEmail', content});
+      dispatcher.dispatch({ type: "sendResetPasswordEmail", content });
     }
   },
 
   sendResetPasswordEmailReturned(error, data) {
-    this.setState({loading: false})
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
-      window.location.hash = 'forgotPasswordDone'; //or show 'Your password has been updated'
+    if (data.success) {
+      window.location.hash = "forgotPasswordDone"; //or show 'Your password has been updated'
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   submitLoginNavigate() {
-    window.location.hash = 'welcome';
-  },
-})
+    window.location.hash = "welcome";
+  }
+});
 
-export default (ForgotPassword);
+export default ForgotPassword;

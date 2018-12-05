@@ -1,27 +1,27 @@
-import React from 'react'
-import ProfileComponent from '../components/profile'
-const createReactClass = require('create-react-class')
+import React from "react";
+import ProfileComponent from "../components/profile";
+const createReactClass = require("create-react-class");
 
 const email = require("email-validator");
 
-let emitter = require('../store/accountStore.js').default.emitter
-let dispatcher = require('../store/accountStore.js').default.dispatcher
+// let emitter = require('../store/accountStore.js').default.emitter
+let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let Profile = createReactClass({
   getInitialState() {
     return {
-      error: '',
+      error: "",
       loading: false,
       editEmailOpen: false,
-      emailAddress: '',
+      emailAddress: "",
       emailAddressError: false,
-      emailAddressErrorMessage: ''
-    }
+      emailAddressErrorMessage: ""
+    };
   },
 
   render() {
-    if(!this.props.user) {
-      return null
+    if (!this.props.user) {
+      return null;
     }
     return (
       <ProfileComponent
@@ -40,19 +40,19 @@ let Profile = createReactClass({
         emailAddressError={this.state.emailAddressError}
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
       />
-    )
+    );
   },
 
   editEmail() {
-    this.setState({editEmailOpen: true})
+    this.setState({ editEmailOpen: true });
   },
 
   handleEmailClose() {
-    this.setState({editEmailOpen: false})
+    this.setState({ editEmailOpen: false });
   },
 
   handleChange(event, name) {
-    if(event != null && event.target != null) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -60,34 +60,43 @@ let Profile = createReactClass({
   },
 
   onUpdateKeyDown(event) {
-    if (event.which == 13) {
+    if (event.which === 13) {
       this.updateClicked();
     }
   },
 
   updateClicked() {
-    if(this.validateEmail()) {
-      this.setState({loading: true});
+    if (this.validateEmail()) {
+      this.setState({ loading: true });
 
-      var content = {username: this.props.user.username, emailAddress: this.state.emailAddress};
-      dispatcher.dispatch({type: 'updateEmail', content});
+      var content = {
+        username: this.props.user.username,
+        emailAddress: this.state.emailAddress
+      };
+      dispatcher.dispatch({ type: "updateEmail", content });
     }
   },
 
   validateEmail() {
-    this.setState({emailAddressError: false, emailAddressErrorMessage: ''})
+    this.setState({ emailAddressError: false, emailAddressErrorMessage: "" });
 
-    if(this.state.emailAddress == '') {
-      this.setState({emailAddressError: true, emailAddressErrorMessage: "Please enter your new email address"});
-      return false
+    if (this.state.emailAddress === "") {
+      this.setState({
+        emailAddressError: true,
+        emailAddressErrorMessage: "Please enter your new email address"
+      });
+      return false;
     } else if (!email.validate(this.state.emailAddress)) {
-      this.setState({emailAddressError: true, emailAddressErrorMessage: "Email address provided is not a valid email address"});
-      return false
+      this.setState({
+        emailAddressError: true,
+        emailAddressErrorMessage:
+          "Email address provided is not a valid email address"
+      });
+      return false;
     }
 
-    return true
-  },
+    return true;
+  }
+});
 
-})
-
-export default (Profile);
+export default Profile;

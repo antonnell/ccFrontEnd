@@ -317,7 +317,7 @@ let Welcome = createReactClass({
     return data;
   },
 
-  whitelistUnauthorisedReturned(error, data) {
+  whitelistUnauthorisedReturned() {
     //this.props.setWhitelistState(null);
     //this.setState({loading: false});
     //window.location.hash = 'ethAccounts';
@@ -345,6 +345,7 @@ function decrypt(text, seed) {
   return dec;
 }
 
+/* eslint-disable */
 String.prototype.hexDecode = function() {
   var j;
   var hexes = this.match(/.{1,4}/g) || [];
@@ -355,5 +356,6 @@ String.prototype.hexDecode = function() {
 
   return back;
 };
+/* eslint-enable */
 
 export default Welcome;

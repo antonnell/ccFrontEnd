@@ -1,10 +1,10 @@
-import React from 'react';
-import AionTransactionsComponent from '../components/aionTransactions';
+import React from "react";
+import AionTransactionsComponent from "../components/aionTransactions";
 
-const createReactClass = require('create-react-class');
+const createReactClass = require("create-react-class");
 
-let aionEmitter = require('../store/aionStore.js').default.emitter;
-let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
+// let aionEmitter = require('../store/aionStore.js').default.emitter;
+// let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
 
 let AionTransactions = createReactClass({
   getInitialState() {
@@ -12,15 +12,15 @@ let AionTransactions = createReactClass({
       loading: false,
       error: null,
       aionTransactions: this.props.aionTransactions,
-      selectedAddress: '',
+      selectedAddress: "",
       selectedAddressError: false,
-      selectedAddressErrorMessage: '',
-      selectedContact: '',
+      selectedAddressErrorMessage: "",
+      selectedContact: "",
       selectedContactError: false,
-      selectedContactErrorMessage: '',
-      fromDate: '',
-      toDate: ''
-    }
+      selectedContactErrorMessage: "",
+      fromDate: "",
+      toDate: ""
+    };
   },
   render() {
     return (
@@ -42,11 +42,11 @@ let AionTransactions = createReactClass({
         selectContact={this.selectContact}
         selectAddress={this.selectAddress}
       />
-    )
+    );
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
@@ -54,12 +54,12 @@ let AionTransactions = createReactClass({
   },
 
   selectAddress(event) {
-    this.setState({selectedAddress: event.target.value})
+    this.setState({ selectedAddress: event.target.value });
   },
 
   selectContact(event) {
-    this.setState({selectedContact: event.target.value})
-  },
-})
+    this.setState({ selectedContact: event.target.value });
+  }
+});
 
-export default (AionTransactions);
+export default AionTransactions;

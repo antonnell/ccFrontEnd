@@ -1,26 +1,23 @@
-import React from 'react';
-import CreateEthComponent from '../components/createEth';
-import bip39 from 'bip39';
+import React from "react";
+import CreateEthComponent from "../components/createEth";
 
-const crypto = require('crypto');
-const sha256 = require('sha256');
+// const crypto = require("crypto");
 
-const createReactClass = require('create-react-class');
-const isEthereumAddress  = require('is-ethereum-address');
+const createReactClass = require("create-react-class");
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+let ethEmitter = require("../store/ethStore.js").default.emitter;
+let ethDispatcher = require("../store/ethStore.js").default.dispatcher;
 
 let CreateEth = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
-      addressName: '',
+      addressName: "",
       addressNameError: false,
-      addressNameErrorMessage: 'This is the name of your new Ethereum account',
+      addressNameErrorMessage: "This is the name of your new Ethereum account",
       addressNameValid: false
-    }
+    };
   },
   render() {
     return (
@@ -36,57 +33,68 @@ let CreateEth = createReactClass({
         addressNameErrorMessage={this.state.addressNameErrorMessage}
         addressNameValid={this.state.addressNameValid}
       />
-    )
+    );
   },
 
   componentWillMount() {
-    ethEmitter.removeAllListeners('createEthAddress');
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
+    ethEmitter.removeAllListeners("createEthAddress");
+    ethEmitter.on("createEthAddress", this.createEthAddressReturned);
   },
 
   resetInputs() {
     this.setState({
-      addressName: '',
+      addressName: "",
       addressNameError: false
-    })
+    });
   },
 
   createEthAddressReturned(error, data) {
-    this.setState({loading: false});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ loading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       this.resetInputs();
-      var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      var content = { id: this.props.user.id };
+      ethDispatcher.dispatch({
+        type: "getEthAddress",
+        content,
+        token: this.props.user.token
+      });
 
-      window.location.hash = 'createWan'
+      window.location.hash = "createWan";
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   navigateSkip() {
-    window.location.hash = 'createWan'
+    window.location.hash = "createWan";
   },
 
   onCreateKeyDown(event) {
-    if (event.which == 13) {
-      this.createEthAddress()
+    if (event.which === 13) {
+      this.createEthAddress();
     }
   },
 
   validateAddressName(value) {
-    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'This is the name of your new Ethereum account' });
-    if(value==null) {
+    this.setState({
+      addressNameValid: false,
+      addressNameError: false,
+      addressNameErrorMessage: "This is the name of your new Ethereum account"
+    });
+    if (value == null) {
       value = this.state.addressName;
     }
-    if(value == '') {
-      this.setState({ addressNameError: true, addressNameErrorMessage:'Address name is required' });
+    if (value === "") {
+      this.setState({
+        addressNameError: true,
+        addressNameErrorMessage: "Address name is required"
+      });
       return false;
     }
     this.setState({ addressNameValid: true });
@@ -94,31 +102,39 @@ let CreateEth = createReactClass({
   },
 
   createEthAddress() {
-    if(this.validateAddressName()) {
-      this.setState({loading: true});
-      var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+    if (this.validateAddressName()) {
+      this.setState({ loading: true });
+      var content = {
+        username: this.props.user.username,
+        name: this.state.addressName,
+        isPrimary: this.state.primary
+      };
+      ethDispatcher.dispatch({
+        type: "createEthAddress",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
 
-      if (name==="addressName") {
-        this.validateAddressName(event.target.value)
+      if (name === "addressName") {
+        this.validateAddressName(event.target.value);
       }
     }
   }
-})
+});
 
-function decrypt(text,seed){
-  var decipher = crypto.createDecipher('aes-256-cbc', seed)
-  var dec = decipher.update(text,'base64','utf8')
-  dec += decipher.final('utf8');
-  return dec;
-}
+// function decrypt(text, seed) {
+//   var decipher = crypto.createDecipher("aes-256-cbc", seed);
+//   var dec = decipher.update(text, "base64", "utf8");
+//   dec += decipher.final("utf8");
+//   return dec;
+// }
 
-export default (CreateEth);
+export default CreateEth;

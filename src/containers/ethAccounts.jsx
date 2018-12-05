@@ -1,44 +1,43 @@
-import React from 'react';
-import EthAccountsComponent from '../components/ethAccounts';
-import bip39 from 'bip39';
+import React from "react";
+import EthAccountsComponent from "../components/ethAccounts";
+import bip39 from "bip39";
 
-const crypto = require('crypto');
-const sha256 = require('sha256');
+const crypto = require("crypto");
 
-const createReactClass = require('create-react-class');
-const isEthereumAddress  = require('is-ethereum-address');
+const createReactClass = require("create-react-class");
+const isEthereumAddress = require("is-ethereum-address");
 
-let ethEmitter = require('../store/ethStore.js').default.emitter;
-let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+let ethEmitter = require("../store/ethStore.js").default.emitter;
+let ethDispatcher = require("../store/ethStore.js").default.dispatcher;
 
 let EthAccounts = createReactClass({
   getInitialState() {
     return {
       createLoading: false,
       error: null,
-      addressName: '',
+      addressName: "",
       addressNameError: false,
-      addressNameErrorMessage: '',
-      privateKey: '',
+      addressNameErrorMessage: "",
+      privateKey: "",
       privateKeyError: false,
-      privateKeyErrorMessage: '',
-      publicAddress: '',
+      privateKeyErrorMessage: "",
+      publicAddress: "",
       publicAddressError: false,
-      publicAddressErrorMessage: '',
+      publicAddressErrorMessage: "",
       primary: false,
       primaryError: false,
-      editAddressName: '',
+      editAddressName: "",
       editAddressNameError: false,
-      editAddressNameErrorMessage: '',
+      editAddressNameErrorMessage: "",
       editAccount: null,
       keyOpen: false,
-      currentAccountKey:  '',
+      currentAccountKey: "",
       optionsAccount: null,
       loadingAccount: null,
       deleteOpen: false,
       createOpen: false,
       importOpen: false
-    }
+    };
   },
   render() {
     return (
@@ -99,175 +98,208 @@ let EthAccounts = createReactClass({
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
       />
-    )
+    );
   },
 
   componentWillMount() {
-    ethEmitter.removeAllListeners('createEthAddress');
-    ethEmitter.removeAllListeners('importEthAddress');
-    ethEmitter.removeAllListeners('updateEthAddress');
-    ethEmitter.removeAllListeners('exportEthereumKey');
-    ethEmitter.removeAllListeners('deleteEthAddress');
+    ethEmitter.removeAllListeners("createEthAddress");
+    ethEmitter.removeAllListeners("importEthAddress");
+    ethEmitter.removeAllListeners("updateEthAddress");
+    ethEmitter.removeAllListeners("exportEthereumKey");
+    ethEmitter.removeAllListeners("deleteEthAddress");
 
-    ethEmitter.on('createEthAddress', this.createEthAddressReturned);
-    ethEmitter.on('importEthAddress', this.importEthAddressReturned);
-    ethEmitter.on('updateEthAddress', this.updateEthAddressReturned);
-    ethEmitter.on('exportEthereumKey', this.exportEthereumKeyReturned);
-    ethEmitter.on('deleteEthAddress', this.deleteEthAddressReturned);
+    ethEmitter.on("createEthAddress", this.createEthAddressReturned);
+    ethEmitter.on("importEthAddress", this.importEthAddressReturned);
+    ethEmitter.on("updateEthAddress", this.updateEthAddressReturned);
+    ethEmitter.on("exportEthereumKey", this.exportEthereumKeyReturned);
+    ethEmitter.on("deleteEthAddress", this.deleteEthAddressReturned);
   },
 
   resetInputs() {
     this.setState({
-      addressName: '',
+      addressName: "",
       addressNameError: false,
       primary: false,
       primaryError: false,
-      privateKey: '',
+      privateKey: "",
       privateKeyError: false,
-      publicAddress: '',
+      publicAddress: "",
       publicAddressError: false
-    })
+    });
   },
 
   createEthAddressReturned(error, data) {
-    this.setState({createLoading: false});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ createLoading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       this.resetInputs();
-      var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      var content = { id: this.props.user.id };
+      ethDispatcher.dispatch({
+        type: "getEthAddress",
+        content,
+        token: this.props.user.token
+      });
 
-      this.setState({createOpen: false})
+      this.setState({ createOpen: false });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   importEthAddressReturned(error, data) {
-    this.setState({createLoading: false});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ createLoading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       this.resetInputs();
-      var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      var content = { id: this.props.user.id };
+      ethDispatcher.dispatch({
+        type: "getEthAddress",
+        content,
+        token: this.props.user.token
+      });
 
-      this.setState({createOpen: false})
+      this.setState({ createOpen: false });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   updateEthAddressReturned(error, data) {
-    this.setState({cardLoading: false,  editAccount: null, editAddressName: '', editAddressNameError: false, editAddressNameErrorMessage: '', loadingAccount: null});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({
+      cardLoading: false,
+      editAccount: null,
+      editAddressName: "",
+      editAddressNameError: false,
+      editAddressNameErrorMessage: "",
+      loadingAccount: null
+    });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
-      var content = {id: this.props.user.id};
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+    if (data.success) {
+      var content = { id: this.props.user.id };
+      ethDispatcher.dispatch({
+        type: "getEthAddress",
+        content,
+        token: this.props.user.token
+      });
 
       //show sncakbar?
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   exportEthereumKeyReturned(error, data) {
-    this.optionsClosed()
-    this.setState({ privateKeyLoading: false,  exportKeyAccount: null });
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.optionsClosed();
+    this.setState({ privateKeyLoading: false, exportKeyAccount: null });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
+      const encodedKeyHex = data.encryptedPrivateKey;
+      const mnemonic = this.state.mnemonic;
+      const encodedKey = encodedKeyHex.hexDecode();
 
-      const encodedKeyHex = data.encryptedPrivateKey
-      const mnemonic = this.state.mnemonic
-      const encodedKey = encodedKeyHex.hexDecode()
-
-      var privateKey = decrypt(encodedKey, mnemonic)
-      this.setState({keyOpen: true, currentAccountKey: privateKey})
-
+      var privateKey = decrypt(encodedKey, mnemonic);
+      this.setState({ keyOpen: true, currentAccountKey: privateKey });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   deleteEthAddressReturned(error, data) {
-    this.setState({ deleteLoading: false, deleteAddress: null, deleteOpen: false });
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({
+      deleteLoading: false,
+      deleteAddress: null,
+      deleteOpen: false
+    });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       var content = { id: this.props.user.id };
-      ethDispatcher.dispatch({type: 'getEthAddress', content, token: this.props.user.token });
+      ethDispatcher.dispatch({
+        type: "getEthAddress",
+        content,
+        token: this.props.user.token
+      });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
   handleCreateOpen() {
-    this.setState({createOpen: true});
+    this.setState({ createOpen: true });
   },
   handleCreateClose() {
-    this.setState({createOpen: false})
+    this.setState({ createOpen: false });
   },
 
   handleImportOpen() {
-    this.setState({importOpen: true});
+    this.setState({ importOpen: true });
   },
   handleImportClose() {
-    this.setState({importOpen: false})
+    this.setState({ importOpen: false });
   },
 
   deleteKeyClicked(address) {
-    this.setState({deleteAddress: address, deleteOpen: true});
+    this.setState({ deleteAddress: address, deleteOpen: true });
   },
 
   confirmDelete() {
-    this.setState({deleteLoading: true});
+    this.setState({ deleteLoading: true });
     var content = { publicAddress: this.state.deleteAddress };
-    ethDispatcher.dispatch({type: 'deleteEthAddress', content, token: this.props.user.token });
+    ethDispatcher.dispatch({
+      type: "deleteEthAddress",
+      content,
+      token: this.props.user.token
+    });
   },
 
   handleDeleteClose() {
-    this.setState({deleteAddress: null, deleteOpen: false});
+    this.setState({ deleteAddress: null, deleteOpen: false });
   },
 
   exportEthereumKeyClicked(address) {
-    this.setState({ privateKeyLoading: true, exportKeyAccount: address })
-    var mnemonic = bip39.generateMnemonic()
-    this.setState({ mnemonic })
+    this.setState({ privateKeyLoading: true, exportKeyAccount: address });
+    var mnemonic = bip39.generateMnemonic();
+    this.setState({ mnemonic });
     var content = { mnemonic: mnemonic, address };
-    ethDispatcher.dispatch({type: 'exportEthereumKey', content, token: this.props.user.token });
+    ethDispatcher.dispatch({
+      type: "exportEthereumKey",
+      content,
+      token: this.props.user.token
+    });
   },
 
   onCreateImportKeyDown(event) {
-    if (event.which == 13) {
-      this.createImportClicked()
+    if (event.which === 13) {
+      this.createImportClicked();
     }
   },
 
   createImportClicked() {
-    if(this.state.createOpen === true) {
+    if (this.state.createOpen === true) {
       this.createEthAddress();
     } else {
       this.importEthAddress();
@@ -275,49 +307,72 @@ let EthAccounts = createReactClass({
   },
 
   updatePrimaryClicked(account) {
-    this.optionsClosed()
-    this.setState({loadingAccount: account, cardLoading: true})
-    var content = { name: account.name, isPrimary: true, address: account.address };
-    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
+    this.optionsClosed();
+    this.setState({ loadingAccount: account, cardLoading: true });
+    var content = {
+      name: account.name,
+      isPrimary: true,
+      address: account.address
+    };
+    ethDispatcher.dispatch({
+      type: "updateEthAddress",
+      content,
+      token: this.props.user.token
+    });
   },
 
   optionsClicked(event, optionsAccount) {
-    optionsAccount.anchorEl = event.currentTarget
-    this.setState({optionsAccount})
+    optionsAccount.anchorEl = event.currentTarget;
+    this.setState({ optionsAccount });
   },
 
   optionsClosed() {
-    this.setState({optionsAccount: null})
+    this.setState({ optionsAccount: null });
   },
 
   editNameClicked(editAccount) {
-    this.optionsClosed()
-    this.setState({editAccount, editAddressName: editAccount.name})
+    this.optionsClosed();
+    this.setState({ editAccount, editAddressName: editAccount.name });
   },
 
   onEditAddressNameKeyDown(event, editAccount) {
-    if (event.which == 13) {
-      this.updateName(editAccount)
+    if (event.which === 13) {
+      this.updateName(editAccount);
     }
   },
 
   onEditAddressNameBlur(event, editAccount) {
-    this.updateName(editAccount)
+    this.updateName(editAccount);
   },
 
   updateName(account) {
-    this.setState({cardLoading: true})
-    var content = { name: this.state.editAddressName, isPrimary: account.isPrimary, address: account.address };
-    ethDispatcher.dispatch({type: 'updateEthAddress', content, token: this.props.user.token });
+    this.setState({ cardLoading: true });
+    var content = {
+      name: this.state.editAddressName,
+      isPrimary: account.isPrimary,
+      address: account.address
+    };
+    ethDispatcher.dispatch({
+      type: "updateEthAddress",
+      content,
+      token: this.props.user.token
+    });
   },
 
   validateAddressName(value) {
-    this.setState({ addressNameValid: false, addressNameError: false, addressNameErrorMessage:'' });
-    if(value==null) {
+    this.setState({
+      addressNameValid: false,
+      addressNameError: false,
+      addressNameErrorMessage: ""
+    });
+    if (value == null) {
       value = this.state.addressName;
     }
-    if(value == '') {
-      this.setState({ addressNameError: true, addressNameErrorMessage:'Address name is required' });
+    if (value === "") {
+      this.setState({
+        addressNameError: true,
+        addressNameErrorMessage: "Address name is required"
+      });
       return false;
     }
     this.setState({ addressNameValid: true });
@@ -325,15 +380,25 @@ let EthAccounts = createReactClass({
   },
 
   validatePublicAddress(value) {
-    this.setState({ publicAddressValid: false, publicAddressError: false, publicAddressErrorMessage:'' });
-    if(value==null) {
+    this.setState({
+      publicAddressValid: false,
+      publicAddressError: false,
+      publicAddressErrorMessage: ""
+    });
+    if (value == null) {
       value = this.state.publicAddress;
     }
-    if(value == '') {
-      this.setState({ publicAddressError: true, publicAddressErrorMessage:'Ethereum public address is required' });
+    if (value === "") {
+      this.setState({
+        publicAddressError: true,
+        publicAddressErrorMessage: "Ethereum public address is required"
+      });
       return false;
     } else if (!isEthereumAddress(value)) {
-      this.setState({publicAddressError: true, publicAddressErrorMessage:'Invalid Ethereum public address'});
+      this.setState({
+        publicAddressError: true,
+        publicAddressErrorMessage: "Invalid Ethereum public address"
+      });
       return false;
     }
     this.setState({ publicAddressValid: true });
@@ -341,12 +406,19 @@ let EthAccounts = createReactClass({
   },
 
   validatePrivateKey(value) {
-    this.setState({ privateKeyValid: false, privateKeyError: false, privateKeyErrorMessage:'' });
-    if(value==null) {
+    this.setState({
+      privateKeyValid: false,
+      privateKeyError: false,
+      privateKeyErrorMessage: ""
+    });
+    if (value == null) {
       value = this.state.privateKey;
     }
-    if(value == '') {
-      this.setState({ privateKeyError: true, privateKeyErrorMessage:'Ethereum private key is required' });
+    if (value === "") {
+      this.setState({
+        privateKeyError: true,
+        privateKeyErrorMessage: "Ethereum private key is required"
+      });
       return false;
     }
     this.setState({ privateKeyValid: true });
@@ -354,18 +426,39 @@ let EthAccounts = createReactClass({
   },
 
   createEthAddress() {
-    if(this.validateAddressName()) {
-      this.setState({createLoading: true});
-      var content = { username: this.props.user.username, name: this.state.addressName, isPrimary: this.state.primary };
-      ethDispatcher.dispatch({type: 'createEthAddress', content, token: this.props.user.token });
+    if (this.validateAddressName()) {
+      this.setState({ createLoading: true });
+      var content = {
+        username: this.props.user.username,
+        name: this.state.addressName,
+        isPrimary: this.state.primary
+      };
+      ethDispatcher.dispatch({
+        type: "createEthAddress",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
   importEthAddress() {
-    if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
-      this.setState({createLoading: true});
-      var content = { name: this.state.addressName, isPrimary: this.state.primary, publicAddress: this.state.publicAddress, privateKey: this.state.privateKey };
-      ethDispatcher.dispatch({type: 'importEthAddress', content, token: this.props.user.token });
+    if (
+      this.validateAddressName() &
+      this.validatePrivateKey() &&
+      this.validatePublicAddress()
+    ) {
+      this.setState({ createLoading: true });
+      var content = {
+        name: this.state.addressName,
+        isPrimary: this.state.primary,
+        publicAddress: this.state.publicAddress,
+        privateKey: this.state.privateKey
+      };
+      ethDispatcher.dispatch({
+        type: "importEthAddress",
+        content,
+        token: this.props.user.token
+      });
     }
   },
 
@@ -373,13 +466,12 @@ let EthAccounts = createReactClass({
     let elm = document.getElementById("currentAccountKey");
     // for Internet Explorer
 
-    if(document.body.createTextRange) {
+    if (document.body.createTextRange) {
       let range = document.body.createTextRange();
       range.moveToElementText(elm);
       range.select();
       document.execCommand("Copy");
-    }
-    else if(window.getSelection) {
+    } else if (window.getSelection) {
       // other browsers
       var selection = window.getSelection();
       var range = document.createRange();
@@ -391,42 +483,42 @@ let EthAccounts = createReactClass({
   },
 
   handleKeyClose() {
-    this.setState({keyOpen: false})
+    this.setState({ keyOpen: false });
   },
 
   handleTabChange(event, tabValue) {
     this.setState({ tabValue });
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
     }
   },
 
-  handleChecked (event, name) {
+  handleChecked(event, name) {
     this.setState({ [name]: event.target.checked });
   },
 
-  validateField (event, name) {
-    if (name==="addressName") {
-      this.validateAddressName(event.target.value)
-    } if (name==="privateKey") {
-      this.validatePrivateKey(event.target.value)
-    } else if (name==="publicAddress") {
-      this.validatePublicAddress(event.target.value)
+  validateField(event, name) {
+    if (name === "addressName") {
+      this.validateAddressName(event.target.value);
+    }
+    if (name === "privateKey") {
+      this.validatePrivateKey(event.target.value);
+    } else if (name === "publicAddress") {
+      this.validatePublicAddress(event.target.value);
     }
   }
+});
 
-})
-
-function decrypt(text,seed){
-  var decipher = crypto.createDecipher('aes-256-cbc', seed)
-  var dec = decipher.update(text,'base64','utf8')
-  dec += decipher.final('utf8');
+function decrypt(text, seed) {
+  var decipher = crypto.createDecipher("aes-256-cbc", seed);
+  var dec = decipher.update(text, "base64", "utf8");
+  dec += decipher.final("utf8");
   return dec;
 }
 
-export default (EthAccounts);
+export default EthAccounts;
