@@ -82,14 +82,14 @@ let SendAion = createReactClass({
 
   componentDidMount() {
     console.log(this.props);
-    if (this.props.sendAionContact !== null) {
+    if (this.props.sendAionContact) {
       this.setState({
         contact: this.props.sendAionContact,
         contactValue: this.props.sendAionContact.primaryAionAddress,
         contactValid: true
       });
     }
-    if (this.props.sendAionAccount !== null) {
+    if (this.props.sendAionAccount) {
       this.setState({
         account: this.props.sendAionAccount,
         accountValue: this.props.sendAionAccount.address,
