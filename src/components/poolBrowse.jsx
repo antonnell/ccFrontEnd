@@ -57,7 +57,7 @@ class PoolBrowse extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h1">
+          <Typography variant="h5">
             Oh no, we couldn't find any pools for you. Why don't you create one?
           </Typography>
         </Grid>
@@ -141,7 +141,7 @@ class PoolBrowse extends Component {
           }}
         >
           <div style={{ flex: 1 }}>
-            <Typography variant="h1">Browse Pools</Typography>
+            <Typography variant="h5">Browse Pools</Typography>
           </div>
           <div>
             <Button

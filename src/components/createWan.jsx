@@ -13,7 +13,7 @@ class CreateWan extends Component {
         <Grid item xs={10} sm={6} md={4} lg={3} align='left'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
             <Grid item xs={12} align='center'>
-              <Typography variant="h1" >
+              <Typography variant="h5" >
                 Create Wanchain Account
               </Typography>
             </Grid>

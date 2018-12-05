@@ -469,7 +469,7 @@ class PoolCreate extends Component {
           }}
         >
           <div style={{ flex: 1 }}>
-            <Typography variant="h1">Create Pool</Typography>
+            <Typography variant="h5">Create Pool</Typography>
           </div>
           <div>
             <Button

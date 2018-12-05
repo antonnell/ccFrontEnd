@@ -19,7 +19,7 @@ class PrivacyPolicy extends Component {
         style={{ marginTop: "50px" }}
       >
         <Grid item xs={10} sm={10} md={10} lg={10} align="left">
-          <Typography variant="h1" align="center">
+          <Typography variant="h5" align="center">
             CRYPTOCURVE PRIVACY POLICY
           </Typography>
           <p style={{ paragraphStyle, fontWeight: "bold" }}>Introduction</p>

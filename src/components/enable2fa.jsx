@@ -33,7 +33,7 @@ class Enable2FA extends Component {
           </Typography>
         </Grid>
         <Grid item xs={8} style={{position: 'relative', minHeight: '228px', marginTop: '50px'}} align='center'>
-          <canvas id='canvas' style={{minHeight: '228px'}}></canvas>
+          <canvas id='canvas' style={ { minHeight: '228px' } }/>
           {this.props.QRCodeLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
         </Grid>
         <Grid item xs={8} style={{position: 'relative'}} align='center'>
@@ -74,7 +74,7 @@ class Enable2FA extends Component {
                 InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h1" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
+              <Typography variant="h5" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>
                 {this.props.codeErrorMessage}
               </Typography>
             </Grid>

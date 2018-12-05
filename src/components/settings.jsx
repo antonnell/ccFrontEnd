@@ -48,7 +48,7 @@ class Settings extends Component {
     )
   };
 
-  renderTheme() {
+  renderTheme = ()=> {
     return (
       <ThemePicker />
     )
@@ -59,7 +59,7 @@ class Settings extends Component {
       <Grid container justify="center" alignItems="flex-start" direction="row">
         <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
           <div style={{marginRight: '12px', marginTop: '8px'}}>
-            <Typography variant="h1">
+            <Typography variant="h5">
               Settings
             </Typography>
           </div>
@@ -76,7 +76,7 @@ class Settings extends Component {
           <div>
             <IconButton
               color="primary"
-              onClick={(e) => { this.props.changeTheme() }}>
+              onClick={() => { this.props.changeTheme() }}>
               <ThemeIcon />
             </IconButton>
           </div>

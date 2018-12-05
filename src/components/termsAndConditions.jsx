@@ -8,12 +8,12 @@ const styles = {};
 class TermsAndConditions extends Component {
 
   render() {
-    var paragraphStyle = {textAlign: 'justify', marginTop: '12px'}
+    const paragraphStyle = { textAlign: 'justify', marginTop: '12px' };
 
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant="h1" align='center'>
+          <Typography variant="h5" align='center'>
             CURV SALE TERMS &amp; CONDITIONS
           </Typography>
           <p>

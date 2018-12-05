@@ -42,7 +42,7 @@ class Contacts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h1">
+          <Typography variant="h5">
             Oh no, we couldn't find any contacts for you. Why don't you add one?
           </Typography>
         </Grid>
@@ -238,7 +238,7 @@ class Contacts extends Component {
           }}
         >
           <div style={{ flex: 1 }}>
-            <Typography variant="h1">Your contacts</Typography>
+            <Typography variant="h5">Your contacts</Typography>
           </div>
           <div>
             <Button

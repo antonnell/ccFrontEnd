@@ -11,7 +11,7 @@ class CookiePolicy extends Component {
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} style={{marginTop: '50px'}}>
         <Grid item xs={10} sm={10} md={10} lg={10} align='left'>
-          <Typography variant="h1" align='center'>
+          <Typography variant="h5" align='center'>
             CRYPTOCURVE COOKIE POLICY
           </Typography>
           <ol style={{paddingLeft: '0px'}}>
@@ -66,7 +66,7 @@ class CookiePolicy extends Component {
                 <strong>Use of Cookies</strong>
               </p>
               <p>
-                <strong><u></u></strong>
+                <strong><u/></strong>
               </p>
               <p>
                 Our Site does not use cookies. End of policy.

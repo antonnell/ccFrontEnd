@@ -31,13 +31,13 @@ class Pooling extends Component {
     );
   }
 
-  static renderWhitelists() {
+  renderWhitelists = ()=>{
     return (
       <Grid item xs={12} align="left">
         <CustomWhitelists />
       </Grid>
     );
-  }
+  };
 
   render() {
     return (
@@ -62,7 +62,7 @@ class Pooling extends Component {
           }}
         >
           <div style={{ flex: 1 }}>
-            <Typography variant="h1">Pooling</Typography>
+            <Typography variant="h5">Pooling</Typography>
           </div>
           <div>
             <Button

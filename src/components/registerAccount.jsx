@@ -42,7 +42,7 @@ class RegisterAccount extends Component {
             spacing={0}
           >
             <Grid item xs={12} align="center">
-              <Typography variant="h1">Register</Typography>
+              <Typography variant="h5">Register</Typography>
             </Grid>
           </Grid>
           <Grid

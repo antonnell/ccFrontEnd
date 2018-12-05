@@ -103,7 +103,7 @@ class EthAccounts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h1">
+          <Typography variant="h5">
             Oh no, we couldn't find any accounts for you. Why don't you
             create/import one?
           </Typography>
@@ -491,7 +491,7 @@ class EthAccounts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h1">
+          <Typography variant="h5">
             We couldn't find any transactions for you.
           </Typography>
         </Grid>

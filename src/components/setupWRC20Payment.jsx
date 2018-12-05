@@ -209,7 +209,7 @@ class SetupWRC20Payment extends Component {
                 direction="row"
               >
                 <Grid item xs={8} align="left">
-                  <Typography variant="h1" noWrap color="secondary">
+                  <Typography variant="h5" noWrap color="secondary">
                     {selectedContact.displayName}
                   </Typography>
                   <Typography
@@ -339,7 +339,7 @@ class SetupWRC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h1">Token details</Typography>
+            <Typography variant="h5">Token details</Typography>
           </Grid>
           <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
             <Typography variant="subtitle1">
@@ -364,7 +364,7 @@ class SetupWRC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h1">Your details</Typography>
+            <Typography variant="h5">Your details</Typography>
           </Grid>
           <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
             <Typography variant="subtitle1">Select your account*</Typography>

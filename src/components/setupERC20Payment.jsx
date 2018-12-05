@@ -368,7 +368,7 @@ class SetupERC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h1">Token details</Typography>
+            <Typography variant="h5">Token details</Typography>
           </Grid>
           <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
             <Typography variant="subtitle1">
@@ -393,7 +393,7 @@ class SetupERC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h1">Your details</Typography>
+            <Typography variant="h5">Your details</Typography>
           </Grid>
           <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
             <Typography variant="subtitle1">Select your account*</Typography>
@@ -422,7 +422,7 @@ class SetupERC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h1">Payment details</Typography>
+            <Typography variant="h5">Payment details</Typography>
           </Grid>
           <Grid item xs={12} align="left">
             <Tabs
