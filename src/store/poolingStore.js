@@ -1,51 +1,62 @@
 import fetch from "node-fetch";
-var crypto = require("crypto");
-var bip39 = require("bip39");
-var sha256 = require("sha256");
+import crypto from "crypto";
+import bip39 from "bip39";
+import sha256 from "sha256";
 
-let Dispatcher = require("flux").Dispatcher;
-let Emitter = require("events").EventEmitter;
+import {Dispatcher} from "flux";
+import {EventEmitter} from "events";
+import config from "../config";
 
-let dispatcher = new Dispatcher();
-let emitter = new Emitter();
+export const  poolingDispatcher = new Dispatcher();
+export const poolingEmitter = new EventEmitter();
 
-let config = require("../config");
 
-let apiUrl = config.apiUrl;
+const apiUrl = config.apiUrl;
 
-var Store = () => {
-  dispatcher.register(
-    function(payload) {
+const Store = () => {
+  poolingDispatcher.register(
+    function (payload) {
       switch (payload.type) {
-        case "getEtherPools":
+        case 'getEtherPools':
           this.getEtherPools(payload);
           break;
-        case "createPoolingContract":
+        case 'createPoolingContract':
           this.createPoolingContract(payload);
           break;
-        case "getAvailableEtherPools":
+        case 'getAvailableEtherPools':
           this.getAvailableEtherPools(payload);
           break;
-        default: {}
+        case 'getAvailableFundingPools':
+          this.getAvailableFundingPools(payload);
+          break;
+        default: {
+        }
       }
     }.bind(this)
   );
 
-  this.getEtherPools = function(payload) {
-    var url = "etherPooling/getManagedEtherPools/" + payload.content.id;
+  this.getEtherPools = function (payload) {
+    console.log("here");
+    const url = 'etherPooling/getManagedEtherPools/' + payload.content.id;
 
-    this.callApi(url, "GET", null, payload);
+    this.callApi(url, 'GET', null, payload);
   };
 
-  this.getAvailableEtherPools = function(payload) {
-    var url = "etherPooling/getAvailableEtherPools/" + payload.content.id;
+  this.getAvailableEtherPools = function (payload) {
+    const url = 'etherPooling/getAvailableEtherPools/' + payload.content.id;
 
-    this.callApi(url, "GET", null, payload);
+    this.callApi(url, 'GET', null, payload);
+  };
+  this.getAvailableFundingPools = function (payload) {
+    console.log(payload);
+    const url = 'pooling/getAvailableFundingPools/' + payload.content.id;
+
+    this.callApi(url, 'GET', null, payload);
   };
 
-  this.createPoolingContract = function(payload) {
-    var url = "etherPooling/createPoolingContract";
-    var postJson = {
+  this.createPoolingContract = function (payload) {
+    const url = 'etherPooling/createPoolingContract';
+    const postJson = {
       ownerEthAddress: payload.content.primaryEthAddress,
       name: payload.content.poolName,
       minContribution: payload.content.minCap,
@@ -67,29 +78,30 @@ var Store = () => {
 
     console.log(postJson);
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.callApi = function(url, method, postData, payload, customEmit) {
+  this.callApi = function (url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
-    var userString = sessionStorage.getItem("cc_user");
-    var authOTP = "";
+    console.log(sessionStorage);
+    const userString = sessionStorage.getItem('cc_user');
+    let authOTP = '';
     if (userString) {
-      var user = JSON.parse(userString);
+      const user = JSON.parse(userString);
       authOTP = user.authOTP;
     }
 
-    var call = apiUrl + url;
+    const call = apiUrl + url;
 
-    if (method === "GET") {
+    if (method === 'GET') {
       postData = null;
     } else {
       const signJson = JSON.stringify(postData);
       const signMnemonic = bip39.generateMnemonic();
-      const cipher = crypto.createCipher("aes-256-cbc", signMnemonic);
+      const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
       const signEncrypted =
-        cipher.update(signJson, "utf8", "base64") + cipher.final("base64");
-      var signData = {
+        cipher.update(signJson, 'utf8', 'base64') + cipher.final('base64');
+      const signData = {
         e: signEncrypted.hexEncode(),
         m: signMnemonic.hexEncode(),
         u: sha256(url.toLowerCase()),
@@ -97,8 +109,7 @@ var Store = () => {
         t: new Date().getTime()
       };
       const signSeed = JSON.stringify(signData);
-      const signSignature = sha256(signSeed);
-      signData.s = signSignature;
+      signData.s = sha256(signSeed);
       postData = JSON.stringify(signData);
     }
 
@@ -106,17 +117,17 @@ var Store = () => {
       method: method,
       body: postData,
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + payload.token,
-        "X-curve-OTP": authOTP
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + payload.token,
+        'X-curve-OTP': authOTP
       }
     })
       .then(res => {
         if (res.status === 401) {
-          return emitter.emit("Unauthorised", null, null);
+          return poolingEmitter.emit('Unauthorised', null, null);
         }
         if (res.status === 403) {
-          return emitter.emit("Unauthorised", null, null);
+          return poolingEmitter.emit('Unauthorised', null, null);
         }
 
         if (res.ok) {
@@ -127,18 +138,18 @@ var Store = () => {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res, customEmit);
+        poolingEmitter.emit(payload.type, null, res, customEmit);
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null, customEmit);
+        poolingEmitter.emit(payload.type, error, null, customEmit);
       });
   };
 };
 
 /* eslint-disable */
 String.prototype.hexEncode = function() {
-  var hex, i;
-  var result = "";
+  let hex, i;
+  let result = '';
   for (i = 0; i < this.length; i++) {
     hex = this.charCodeAt(i).toString(16);
     result += ("000" + hex).slice(-4);
@@ -146,9 +157,9 @@ String.prototype.hexEncode = function() {
   return result;
 };
 String.prototype.hexDecode = function() {
-  var j;
-  var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
+  let j;
+  const hexes = this.match(/.{1,4}/g) || [];
+  let back = '';
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }
@@ -157,10 +168,10 @@ String.prototype.hexDecode = function() {
 };
 /* eslint-enable */
 
-var store = new Store();
+// const store = new Store();
 
-export default {
-  store: store,
-  dispatcher: dispatcher,
-  emitter: emitter
-};
+new Store();
+
+// export default {
+//   store: store,
+// };

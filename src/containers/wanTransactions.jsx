@@ -3,8 +3,8 @@ import WanTransactionsComponent from "../components/wanTransactions";
 
 const createReactClass = require("create-react-class");
 
-// let wanEmitter = require('../store/wanStore.js').default.emitter;
-// let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
+// let wanEmitter = require('../store/wanStore.js').default.poolingEmitter;
+// let wanDispatcher = require('../store/wanStore.js').default.poolingDispatcher;
 
 let WanTransactions = createReactClass({
   getInitialState() {

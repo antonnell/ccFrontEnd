@@ -4,7 +4,7 @@ const createReactClass = require("create-react-class");
 
 const email = require("email-validator");
 
-// let emitter = require('../store/accountStore.js').default.emitter
+// let poolingEmitter = require('../store/accountStore.js').default.poolingEmitter
 let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let Profile = createReactClass({

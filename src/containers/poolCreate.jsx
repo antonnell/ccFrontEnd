@@ -1,94 +1,99 @@
-import React from 'react'
-import PoolCreateComponent from '../components/poolCreate'
-const createReactClass = require('create-react-class')
+import React from "react";
+import PoolCreateComponent from "./PoolCreate/components";
+import createReactClass from "create-react-class";
 
-let poolingEmitter = require('../store/poolingStore.js').default.emitter
-let poolingDispatcher = require('../store/poolingStore.js').default.dispatcher
+import {poolingEmitter,poolingDispatcher} from "../store/poolingStore";
 
 let PoolCreate = createReactClass({
   getInitialState() {
     return {
-      error: '',
+      error: "",
       loading: false,
       open: false,
-      poolName: '',
-      poolSecurity:  '',
-      poolSecurities:  [
-        'public',
-        'private'
-      ],
-      tokenName: '',
-      tokenAddress: '',
-      pledgeEndDate: '',
-      contractCap: '',
-      yourFee: '',
-      minCap: '',
-      maxCap: '',
-      searchUser: '',
-      chooseList: '',
+      poolName: "",
+      poolSecurity: "",
+      poolSecurities: ["public", "private"],
+      tokenName: "",
+      tokenAddress: "",
+      pledgeEndDate: "",
+      contractCap: "",
+      yourFee: "",
+      minCap: "",
+      maxCap: "",
+      searchUser: "",
+      chooseList: "",
       addedUsers: [
-        'jocko85',
-        'jocko85',
-        'jocko85',
-        'jocko85',
-        'jocko85',
-        'jocko85',
-        'jocko85',
+        "jocko85",
+        "jocko85",
+        "jocko85",
+        "jocko85",
+        "jocko85",
+        "jocko85",
+        "jocko85"
       ],
       pledgesEnabled: false,
-      pledgesEndDate: '',
+      pledgesEndDate: "",
       whitelistEnabled: false
-    }
+    };
   },
 
   componentWillMount() {
-    poolingEmitter.removeAllListeners('createPoolingContract');
-    poolingEmitter.on('createPoolingContract', this.createPoolingContractReturned);
+    poolingEmitter.removeAllListeners("createPoolingContract");
+    poolingEmitter.on(
+      "createPoolingContract",
+      this.createPoolingContractReturned
+    );
   },
 
   createPoolingContractReturned(error, data) {
-    this.setState({addLoading: false});
-    if(error) {
-      return this.setState({error: error.toString()});
+    this.setState({ addLoading: false });
+    if (error) {
+      return this.setState({ error: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       this.resetInputs();
-      var content = {id: this.props.user.id};
-      poolingDispatcher.dispatch({type: 'getEtherPools', content, token: this.props.user.token });
+      var content = { id: this.props.user.id };
+      poolingDispatcher.dispatch({
+        type: "getEtherPools",
+        content,
+        token: this.props.user.token
+      });
     } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({error: data.statusText})
+      this.setState({ error: data.statusText });
     }
   },
 
-  resetInputs()  {
+  resetInputs() {
     this.setState({
-      error: '',
+      error: "",
       loading: false,
       open: false,
-      poolName: '',
-      poolSecurity:  '',
-      tokenName: '',
-      tokenAddress: '',
-      pledgeEndDate: '',
-      contractCap: '',
-      yourFee: '',
-      minCap: '',
-      maxCap: '',
-      searchUser: '',
-      chooseList: '',
+      poolName: "",
+      poolSecurity: "",
+      tokenName: "",
+      tokenAddress: "",
+      pledgeEndDate: "",
+      contractCap: "",
+      yourFee: "",
+      minCap: "",
+      maxCap: "",
+      searchUser: "",
+      chooseList: "",
       pledgesEnabled: false,
-      pledgesEndDate: '',
+      pledgesEndDate: "",
       whitelistEnabled: false
-    })
+    });
   },
 
   render() {
+    // console.log(this.props);
+    const {theme} = this.props;
     return (
       <PoolCreateComponent
-        theme={this.props.theme}
+        theme={theme}
         error={this.state.error}
         pools={this.state.pools}
         whitelists={this.state.whitelists}
@@ -118,64 +123,66 @@ let PoolCreate = createReactClass({
         browsePoolsClicked={this.browsePoolsClicked}
         myInvitesClicked={this.myInvitesClicked}
       />
-    )
+    );
   },
 
   browsePoolsClicked() {
-    window.location.hash = 'browsePools'
+    window.location.hash = "browsePools";
   },
 
-  myInvitesClicked(){
-
-  },
+  myInvitesClicked() {},
 
   optionsClicked() {
-    this.setState({open: true})
+    this.setState({ open: true });
   },
 
   optionsClosed() {
-    this.setState({open: false})
+    this.setState({ open: false });
   },
 
   handleHome() {
-    window.location.hash='pooling'
+    window.location.hash = "pooling";
   },
 
-  handleChange (event, name) {
-    if(event != null && event.target != null) {
+  handleChange(event, name) {
+    if (event != null && event.target != null) {
       this.setState({
         [name]: event.target.value
       });
     }
   },
 
-  handleChecked (event, name) {
+  handleChecked(event, name) {
     this.setState({ [name]: event.target.checked });
   },
 
-  selectChooseList(event, value) {
-    this.setState({chooseList: event.target.value})
+  selectChooseList(event) {
+    this.setState({ chooseList: event.target.value });
   },
 
-  selectSecurity(event, value) {
-    this.setState({poolSecurity: event.target.value})
+  selectSecurity(event) {
+    this.setState({ poolSecurity: event.target.value });
   },
 
   submitLaunchPool() {
-    let error = false
+    let error = false;
     //do some validation. /care
 
     //get primary eth address
-    let primaryEthAddress = this.props.ethAddresses.filter((add) => {
-      return add.isPrimary
-    })
-    if(!error) {
-      this.setState({loading: true, error: null});
+    let primaryEthAddress = this.props.ethAddresses.filter(add => {
+      return add.isPrimary;
+    });
+    if (!error) {
+      this.setState({ loading: true, error: null });
       var content = this.state;
-      content.primaryEthAddress = primaryEthAddress[0].address
-      poolingDispatcher.dispatch({ type: 'createPoolingContract', content, token: this.props.user.token })
+      content.primaryEthAddress = primaryEthAddress[0].address;
+      poolingDispatcher.dispatch({
+        type: "createPoolingContract",
+        content,
+        token: this.props.user.token
+      });
     }
-  },
-})
+  }
+});
 
-export default (PoolCreate);
+export default PoolCreate;

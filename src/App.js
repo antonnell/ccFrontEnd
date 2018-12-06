@@ -49,8 +49,9 @@ import TermsAndConditions from "./components/termsAndConditions.jsx";
 import ContactUs from "./components/contactUs.jsx";
 import curveTheme from "./theme";
 
-var sha256 = require("sha256");
-var crypto = require("crypto");
+import { poolingEmitter, poolingDispatcher } from "./store/poolingStore";
+import sha256 from "sha256";
+import crypto from "crypto";
 // var bip39 = require("bip39");
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
@@ -69,14 +70,11 @@ let aionEmitter = require("./store/aionStore.js").default.emitter;
 let aionDispatcher = require("./store/aionStore.js").default.dispatcher;
 
 let whitelistEmitter = require("./store/whitelistStore.js").default.emitter;
-// let whitelistDispatcher = require("./store/whitelistStore.js").default.dispatcher;
+// let whitelistDispatcher = require("./store/whitelistStore.js").default.poolingDispatcher;
 
 let crowdsaleEmitter = require("./store/crowdsaleStore.js").default.emitter;
 let crowdsaleDispatcher = require("./store/crowdsaleStore.js").default
   .dispatcher;
-
-let poolingEmitter = require("./store/poolingStore.js").default.emitter;
-let poolingDispatcher = require("./store/poolingStore.js").default.dispatcher;
 
 let emitter = require("./store/ipStore.js").default.emitter;
 let dispatcher = require("./store/ipStore.js").default.dispatcher;
@@ -175,7 +173,7 @@ class App extends Component {
     );
 
     this.getEtherPoolsReturned = this.getEtherPoolsReturned.bind(this);
-    this.getAvailableEtherPoolsReturned = this.getAvailableEtherPoolsReturned.bind(
+    this.getAvailableFundingPoolsReturned = this.getAvailableFundingPoolsReturned.bind(
       this
     );
 
@@ -322,8 +320,11 @@ class App extends Component {
     ethEmitter.removeAllListeners("getEthTransactionHistory");
     wanEmitter.removeAllListeners("getWanTransactionHistory");
     aionEmitter.removeAllListeners("getAionTransactionHistory");
-    poolingEmitter.removeAllListeners("getEtherPools");
-    poolingEmitter.removeAllListeners("getAvailableEtherPools");
+    // TODO: Removed the listener for getEtherPools remover
+    // poolingEmitter.removeAllListeners("getEtherPools");
+    // TODO: Removed the listener for getAvailableEtherPools remover
+    //poolingEmitter.removeAllListeners("getAvailableEtherPools");
+    poolingEmitter.removeAllListeners("getAvailableFundingPools");
 
     contactsEmitter.on("Unauthorised", this.logUserOut);
     ethEmitter.on("Unauthorised", this.logUserOut);
@@ -367,10 +368,9 @@ class App extends Component {
     );
     poolingEmitter.on("getEtherPools", this.getEtherPoolsReturned);
     poolingEmitter.on(
-      "getAvailableEtherPools",
-      this.getAvailableEtherPoolsReturned
+      "getAvailableFundingPools",
+      this.getAvailableFundingPoolsReturned
     );
-
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
 
@@ -428,7 +428,7 @@ class App extends Component {
     }
   }
 
-  getIpReturned(err, data) {
+  getIpReturned() {
     this.setState({ ipLoading: false });
     emitter.removeAllListeners("getIp");
 
@@ -470,7 +470,7 @@ class App extends Component {
     }
   }
 
-  getUserCrowdSaleContributionsReturned(error, data, id) {
+  getUserCrowdSaleContributionsReturned(error, data) {
     this.setState({ investLoading: false });
     if (error) {
       return this.setState({ ICOError: error.toString() });
@@ -521,7 +521,7 @@ class App extends Component {
     }
   }
 
-  constantRefresh(user) {
+  constantRefresh() {
     let content = {};
 
     setTimeout(() => {
@@ -538,9 +538,9 @@ class App extends Component {
     }, 300000);
   }
 
-  getUserDetails(user) {
+  getUserDetails = user => {
     if (user) {
-      var content = { id: user.id };
+      const content = { id: user.id };
       ethDispatcher.dispatch({
         type: "getEthAddress",
         content,
@@ -576,18 +576,25 @@ class App extends Component {
         content,
         token: user.token
       });
+      // TODO: removed the getEtherPools poolingDispatcher
+      // poolingDispatcher.dispatch({
+      //   type: "getEtherPools",
+      //   content,
+      //   token: user.token
+      // });
+      // TODO: removed the getAvailableEtherPools poolingDispatcher
+      // poolingDispatcher.dispatch({
+      //   type: "getAvailableEtherPools",
+      //   content,
+      //   token: user.token
+      // });
       poolingDispatcher.dispatch({
-        type: "getEtherPools",
-        content,
-        token: user.token
-      });
-      poolingDispatcher.dispatch({
-        type: "getAvailableEtherPools",
+        type: "getAvailableFundingPools",
         content,
         token: user.token
       });
     }
-  }
+  };
 
   getEtherPoolsReturned(error, data) {
     if (error) {
@@ -603,18 +610,19 @@ class App extends Component {
     }
   }
 
-  getAvailableEtherPoolsReturned(error, data) {
+  getAvailableFundingPoolsReturned(error, data) {
     if (error) {
       return this.setState({ error: error.toString() });
     }
-
-    if (data.success) {
-      this.setState({ availablePools: data.etherPools });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg, contacts: [] });
-    } else {
-      this.setState({ error: data.statusText, contacts: [] });
-    }
+    console.log(error);
+    console.log(data);
+    // if (data.success) {
+    //   this.setState({ availablePools: data.etherPools });
+    // } else if (data.errorMsg) {
+    //   this.setState({ error: data.errorMsg, contacts: [] });
+    // } else {
+    //   this.setState({ error: data.statusText, contacts: [] });
+    // }
   }
 
   getWhitelistStateReturned(error, data) {
@@ -871,11 +879,11 @@ class App extends Component {
     window.location.hash = currentScreen;
   }
 
-  logUserOut() {
+  logUserOut = () => {
     sessionStorage.removeItem("cc_user");
     sessionStorage.removeItem("cc_whiteliststate");
     window.location.hash = "welcome";
-  }
+  };
 
   setUser(user) {
     this.setState({ user });
@@ -1180,7 +1188,7 @@ class App extends Component {
             direction="row"
             style={{ minHeight: "622px", position: "relative", flex: 1 }}
           >
-            <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid item xs={12}>
               {this.state.user == null ? null : this.renderAppBar()}
               {this.renderScreen()}
             </Grid>
@@ -1395,7 +1403,7 @@ class App extends Component {
     }
   }
 
-  decodeWhitelistResponse(message) {
+  decodeWhitelistResponse = (message) => {
     const mnemonic = message.m.hexDecode();
     const encrypted = message.e.hexDecode();
     const signature = message.s;
@@ -1415,7 +1423,7 @@ class App extends Component {
     }
 
     const payload = decrypt(encrypted, mnemonic);
-    var data = null;
+    let data = null;
     try {
       data = JSON.parse(payload);
     } catch (ex) {
@@ -1427,16 +1435,16 @@ class App extends Component {
 }
 
 function decrypt(text, seed) {
-  var decipher = crypto.createDecipher("aes-256-cbc", seed);
-  var dec = decipher.update(text, "base64", "utf8");
+  const decipher = crypto.createDecipher('aes-256-cbc', seed);
+  let dec = decipher.update(text, 'base64', 'utf8');
   dec += decipher.final("utf8");
   return dec;
 }
 /* eslint-disable */
 String.prototype.hexDecode = function() {
-  var j;
-  var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
+  let j;
+  const hexes = this.match(/.{1,4}/g) || [];
+  let back = '';
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }

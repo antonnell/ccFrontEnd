@@ -3,8 +3,8 @@ import EthTransactionsComponent from "../components/ethTransactions";
 
 const createReactClass = require("create-react-class");
 
-// let ethEmitter = require('../store/ethStore.js').default.emitter;
-// let ethDispatcher = require('../store/ethStore.js').default.dispatcher;
+// let ethEmitter = require('../store/ethStore.js').default.poolingEmitter;
+// let ethDispatcher = require('../store/ethStore.js').default.poolingDispatcher;
 
 let EthTransactions = createReactClass({
   getInitialState() {

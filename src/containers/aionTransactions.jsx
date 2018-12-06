@@ -3,8 +3,8 @@ import AionTransactionsComponent from "../components/aionTransactions";
 
 const createReactClass = require("create-react-class");
 
-// let aionEmitter = require('../store/aionStore.js').default.emitter;
-// let aionDispatcher = require('../store/aionStore.js').default.dispatcher;
+// let aionEmitter = require('../store/aionStore.js').default.poolingEmitter;
+// let aionDispatcher = require('../store/aionStore.js').default.poolingDispatcher;
 
 let AionTransactions = createReactClass({
   getInitialState() {

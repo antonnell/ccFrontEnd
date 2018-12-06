@@ -17,7 +17,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Chip from "@material-ui/core/Chip";
 import Checkbox from "@material-ui/core/Checkbox";
-import { MoreIcon } from "../theme/icons";
+import { MoreIcon } from "../../../theme/icons";
 
 class PoolCreate extends React.Component {
   renderSettings() {

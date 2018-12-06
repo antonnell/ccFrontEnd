@@ -2,8 +2,8 @@ import React from "react";
 import PoolBrowseComponent from "../components/poolBrowse";
 const createReactClass = require("create-react-class");
 
-// let poolingEmitter = require('../store/poolingStore.js').default.emitter
-// let poolingDispatcher = require('../store/poolingStore.js').default.dispatcher
+// let poolingEmitter = require('../store/poolingStore.js').default.poolingEmitter
+// let poolingDispatcher = require('../store/poolingStore.js').default.poolingDispatcher
 
 let Pooling = createReactClass({
   getInitialState() {
