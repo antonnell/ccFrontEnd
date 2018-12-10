@@ -1,4 +1,7 @@
-let theme =  {
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+
+const defaultTheme = createMuiTheme();
+let customTheme =  {
   light: {
     name: 'light',
     mui: {
@@ -80,6 +83,12 @@ let theme =  {
           },
           elevation2: {
             boxShadow: '1px 3px 5px 2px rgba(0, 0, 0, 0.2), 5px 4px 2px 0px rgba(0, 0, 0, 0.14), 3px 6px 2px 2px rgba(0, 0, 0, 0.12)'
+          }
+        },
+        MuiTableCell: {
+          head: {
+            textAlign: "center",
+            padding: defaultTheme.spacing.unit
           }
         }
       },
@@ -292,6 +301,6 @@ let theme =  {
       }
     }
   }
-}
+};
 
-module.exports = theme;
+export default customTheme;
