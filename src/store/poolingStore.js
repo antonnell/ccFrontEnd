@@ -48,7 +48,7 @@ const Store = () => {
     this.callApi(url, 'GET', null, payload);
   };
   this.getAvailableFundingPools = function (payload) {
-    console.log(payload);
+    // console.log(payload);
     const url = 'pooling/getAvailableFundingPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
@@ -83,7 +83,7 @@ const Store = () => {
 
   this.callApi = function (url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
-    console.log(sessionStorage);
+    // console.log(sessionStorage);
     const userString = sessionStorage.getItem('cc_user');
     let authOTP = '';
     if (userString) {

@@ -614,8 +614,9 @@ class App extends Component {
     if (error) {
       return this.setState({ error: error.toString() });
     }
-    console.log(error);
-    console.log(data);
+    data =null;
+    // console.log(error);
+    // console.log(data);
     // if (data.success) {
     //   this.setState({ availablePools: data.etherPools });
     // } else if (data.errorMsg) {
