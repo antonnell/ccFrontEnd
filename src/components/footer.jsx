@@ -41,10 +41,9 @@ class Footer extends Component {
       >
         <Grid item xs={12} sm={4} md={4} lg={4} align="center">
           <img
+            style={{width: 155}}
             src={require("../assets/images/footer-logo.png")}
             alt=""
-            width="150px"
-            height="166px"
           />
         </Grid>
         <Grid

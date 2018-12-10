@@ -20,14 +20,28 @@ import ResetPassword from "./containers/resetPassword.jsx";
 import EthAccounts from "./containers/ethAccounts.jsx";
 import WanAccounts from "./containers/wanAccounts.jsx";
 import AionAccounts from "./containers/aionAccounts.jsx";
+// import UpdatePassword from "./containers/updatePassword.jsx";
+// import Manage2FA from "./containers/manage2fa.jsx";
 import Contacts from "./containers/contacts.jsx";
+// import Whitelist from "./containers/whitelist.jsx";
 import SendEthereum from "./containers/sendEthereum.jsx";
 import SendERC20 from "./containers/sendERC20.jsx";
 import SendWanchain from "./containers/sendWanchain.jsx";
+// import SendWRC20 from "./containers/sendWRC20.jsx";
 import SendAion from "./containers/sendAion.jsx";
+// import WhitelistMe from "./containers/whitelistMe.jsx";
+// import WhitelistMeDone from "./containers/whitelistMeDone.jsx";
+// import WhitelistCheck from "./containers/whitelistCheck.jsx";
 import SetUsername from "./containers/setUsername.jsx";
 import Settings from "./containers/settings.jsx";
+// import EthTransactions from './containers/ethTransactions.jsx';
+// import WanTransactions from './containers/wanTransactions.jsx';
+// import AionTransactions from './containers/aionTransactions.jsx';
+import Pooling from "./containers/pooling.jsx";
+import PoolCreate from "./containers/poolCreate.jsx";
+import PoolBrowse from "./containers/poolBrowse.jsx";
 
+// import WhitelistMeUnavailable from "./components/whitelistMeUnavailable.jsx";
 import ComingSoon from "./components/comingSoon.jsx";
 import PrivacyPolicy from "./components/privacyPolicy.jsx";
 import CookiePolicy from "./components/cookiePolicy.jsx";
@@ -38,6 +52,7 @@ import curveTheme from "./theme";
 import { poolingEmitter, poolingDispatcher } from "./store/poolingStore";
 import sha256 from "sha256";
 import crypto from "crypto";
+// var bip39 = require("bip39");
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
 let accountDispatcher = require("./store/accountStore.js").default.dispatcher;
@@ -1317,30 +1332,30 @@ class App extends Component {
         );
       // case 'ethTransactions':
       //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
-      // case "pooling":
-      //   return (
-      //     <Pooling
-      //       theme={this.state.theme}
-      //       user={this.state.user}
-      //       pools={this.state.myPools}
-      //     />
-      //   );
-      // case "createPool":
-      //   return (
-      //     <PoolCreate
-      //       theme={this.state.theme}
-      //       user={this.state.user}
-      //       ethAddresses={this.state.ethAddresses}
-      //     />
-      //   );
-      // case "browsePools":
-      //   return (
-      //     <PoolBrowse
-      //       theme={this.state.theme}
-      //       user={this.state.user}
-      //       pools={this.state.availablePools}
-      //     />
-      //   );
+      case "pooling":
+        return (
+          <Pooling
+            theme={this.state.theme}
+            user={this.state.user}
+            pools={this.state.myPools}
+          />
+        );
+      case "createPool":
+        return (
+          <PoolCreate
+            theme={this.state.theme}
+            user={this.state.user}
+            ethAddresses={this.state.ethAddresses}
+          />
+        );
+      case "browsePools":
+        return (
+          <PoolBrowse
+            theme={this.state.theme}
+            user={this.state.user}
+            pools={this.state.availablePools}
+          />
+        );
       case "ico":
         return <ComingSoon />;
       case "settings":

@@ -1,6 +1,6 @@
 import React from 'react'
 import DrawerComponent from '../components/drawer'
-const createReactClass = require('create-react-class')
+const createReactClass = require('create-react-class');
 
 let Drawer = createReactClass({
   getInitialState() {
@@ -34,6 +34,6 @@ let Drawer = createReactClass({
     this.setState({wanOpen: !this.state.wanOpen})
   }
 
-})
+});
 
 export default (Drawer);

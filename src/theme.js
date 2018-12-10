@@ -1,5 +1,10 @@
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
+export const colors = {
+  dodgerBlue: "#3cabff",
+  dark: "#1a191d"
+};
+
 const defaultTheme = createMuiTheme();
 let customTheme =  {
   light: {
@@ -95,7 +100,7 @@ let customTheme =  {
       typography: {
         useNextVariants: true,
         // Use the system font over Roboto.
-        fontFamily: 'Abel, sans-serif',
+        fontFamily: 'ProximaNovaRegular, sans-serif',
         button: {
           fontWeight: 700
         },
@@ -105,9 +110,16 @@ let customTheme =  {
           fontWeight: 'bold'
         },
         h3: {
-          fontSize: '22px',
-          color: '#3cabff',
-          fontWeight: 'bold'
+          fontFamily: 'ProximaNovaSemiBold, sans-serif',
+          fontSize: '25px',
+          color: colors.dodgerBlue,
+          lineHeight: "30px",
+        },
+        h5: {
+          fontFamily: 'ProximaNovaSemiBold, sans-serif',
+          fontSize: 21,
+          color: colors.dark,
+          lineHeight: "25px"
         },
         h2: {
           fontSize: '20px',
@@ -124,9 +136,6 @@ let customTheme =  {
         subtitle1: {
           color: '#1a191d'
         },
-        h5:  {
-          color: '#1a191d'
-        }
       },
       palette: {
         primary: {
@@ -229,7 +238,7 @@ let customTheme =  {
       typography: {
         useNextVariants: true,
         // Use the system font over Roboto.
-        fontFamily: 'Abel, sans-serif',
+        fontFamily: 'ProximaNovaSemiBold, sans-serif',
         button: {
           fontWeight: 700
         },
