@@ -586,7 +586,7 @@ class EthAccounts extends Component {
     );
   }
 
-  static renderTransaction(transaction, bodyStyle) {
+  renderTransaction = (transaction, bodyStyle) => {
     return (
       <Grid item xs={12} align="center">
         <Grid
@@ -658,11 +658,11 @@ class EthAccounts extends Component {
         </Grid>
       </Grid>
     );
-  }
+  };
 
   render() {
     return (
-      <Grid container justify="center" alignItems="flex-start" direction="row">
+      <Grid container justify="center" direction="row">
         <Grid
           item
           xs={12}

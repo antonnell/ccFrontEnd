@@ -8,8 +8,50 @@ export const colors = {
 const defaultTheme = createMuiTheme();
 let customTheme =  {
   light: {
+    typography: {
+      useNextVariants: true,
+    },
     name: 'light',
     mui: {
+      typography: {
+        fontFamily: ['ProximaNovaRegular', 'sans-serif'].join(","),
+        useNextVariants: true,
+        button: {
+          fontWeight: 700
+        },
+        h4: {
+          color: '#1a191d',
+          fontSize: '22px',
+          fontWeight: 'bold'
+        },
+        h3: {
+          fontFamily: 'ProximaNovaSemiBold, sans-serif',
+          fontSize: '25px',
+          color: colors.dodgerBlue,
+          lineHeight: "30px",
+        },
+        h5: {
+          fontFamily: 'ProximaNovaSemiBold, sans-serif',
+          fontSize: 21,
+          color: colors.dark,
+          lineHeight: "25px"
+        },
+        h2: {
+          fontSize: '20px',
+          color: '#3cabff'
+        },
+        body1: {
+          color: '#888888',
+          fontSize: '16px'
+        },
+        // body2: {
+        //   color: '#000',
+        //   fontSize: '16px'
+        // },
+        subtitle1: {
+          color: '#1a191d'
+        },
+      },
       type: 'light',
       overrides: {
         MuiStepIcon: {
@@ -97,46 +139,7 @@ let customTheme =  {
           }
         }
       },
-      typography: {
-        useNextVariants: true,
-        // Use the system font over Roboto.
-        fontFamily: 'ProximaNovaRegular, sans-serif',
-        button: {
-          fontWeight: 700
-        },
-        h4: {
-          color: '#1a191d',
-          fontSize: '22px',
-          fontWeight: 'bold'
-        },
-        h3: {
-          fontFamily: 'ProximaNovaSemiBold, sans-serif',
-          fontSize: '25px',
-          color: colors.dodgerBlue,
-          lineHeight: "30px",
-        },
-        h5: {
-          fontFamily: 'ProximaNovaSemiBold, sans-serif',
-          fontSize: 21,
-          color: colors.dark,
-          lineHeight: "25px"
-        },
-        h2: {
-          fontSize: '20px',
-          color: '#3cabff'
-        },
-        body1: {
-          color: '#888888',
-          fontSize: '16px'
-        },
-        body2: {
-          color: '#000',
-          fontSize: '16px'
-        },
-        subtitle1: {
-          color: '#1a191d'
-        },
-      },
+
       palette: {
         primary: {
           main: '#3cabff',
@@ -238,7 +241,7 @@ let customTheme =  {
       typography: {
         useNextVariants: true,
         // Use the system font over Roboto.
-        fontFamily: 'ProximaNovaSemiBold, sans-serif',
+        fontFamily: ['ProximaNovaSemiBold', 'sans-serif'].join(","),
         button: {
           fontWeight: 700
         },
@@ -258,10 +261,10 @@ let customTheme =  {
           color: '#b5b5b5',
           fontSize: '16px'
         },
-        body2: {
-          color: '#fff',
-          fontSize: '16px'
-        },
+        // body2: {
+        //   color: '#fff',
+        //   fontSize: '16px'
+        // },
         subtitle1: {
           color: '#fff'
         },
