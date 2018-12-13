@@ -611,7 +611,7 @@ class TermsModal extends Component {
                 </ol>
             </li>
             <li>
-                <a name="_Hlk510775626"><u>Governing Law and Venue</u></a>
+                <u>Governing Law and Venue</u>
                 . These Terms will be governed by and construed and enforced in
                 accordance with the laws of The Netherlands.
             </li>

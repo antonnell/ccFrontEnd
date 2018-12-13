@@ -37,7 +37,7 @@ import Settings from "./containers/settings.jsx";
 // import EthTransactions from './containers/ethTransactions.jsx';
 // import WanTransactions from './containers/wanTransactions.jsx';
 // import AionTransactions from './containers/aionTransactions.jsx';
-import Pooling from "./containers/pooling.jsx";
+import Pooling from "./containers/Pooling/index";
 import PoolCreate from "./containers/poolCreate.jsx";
 import PoolBrowse from "./containers/poolBrowse.jsx";
 
@@ -377,8 +377,9 @@ class App extends Component {
     window.onhashchange = this.locationHashChanged;
     this.locationHashChanged();
 
-    var loader = document.getElementById("loader");
-    document.body.removeChild(loader);
+    // const loader = document.getElementById("loader");
+    // console.log(loader);
+    // document.body.removeChild(loader);
 
     emitter.on("getIp", this.getIpReturned);
     dispatcher.dispatch({ type: "getIp" });

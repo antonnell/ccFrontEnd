@@ -24,8 +24,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
-
-let config = require("../config");
+import config from "../config";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -504,6 +503,7 @@ class EnhancedTable extends React.Component {
                             <a
                               href={config.etherscanUrl + n.transactionId}
                               target="_blank"
+                              rel="noopener noreferrer"
                             >
                               View
                             </a>

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-
-let config = require("../config");
+import config from "../config";
 
 class CompleteWanchainPayment extends Component {
   renderError() {
@@ -62,7 +61,7 @@ class CompleteWanchainPayment extends Component {
           <Typography variant="body1">
             You can view the progress of your transaction using the following
             transaction ID:{" "}
-            <a href={url} target="_blank">
+            <a href={url} target="_blank" rel="noopener noreferrer">
               {this.props.transactionID}
             </a>
           </Typography>

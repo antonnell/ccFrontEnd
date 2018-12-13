@@ -28,8 +28,7 @@ import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import EthTransactions from "../containers/ethTransactions";
 import CreateModal from "./createModal";
 import ImportModal from "./importModal";
-
-let config = require("../config");
+import config from "../config";
 
 function ExpandMoreIcon(props) {
   return (
@@ -650,6 +649,7 @@ class EthAccounts extends Component {
               <a
                 href={config.etherscanUrl + transaction.transactionId}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 {transaction.transactionId}
               </a>

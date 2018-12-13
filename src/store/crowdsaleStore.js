@@ -1,53 +1,57 @@
-import fetch from "node-fetch";
-var crypto = require("crypto");
-var bip39 = require("bip39");
-var sha256 = require("sha256");
+import fetch from 'node-fetch';
+import config from "../config";
 
-let Dispatcher = require("flux").Dispatcher;
-let Emitter = require("events").EventEmitter;
+var crypto = require('crypto');
+var bip39 = require('bip39');
+var sha256 = require('sha256');
+
+let Dispatcher = require('flux').Dispatcher;
+let Emitter = require('events').EventEmitter;
 
 let dispatcher = new Dispatcher();
 let emitter = new Emitter();
 
-let config = require("../config");
 
 let apiUrl = config.apiUrl;
 
-var Store = () => {
-  dispatcher.register(
-    function(payload) {
-      switch (payload.type) {
-        case "getCrowdSales":
-          this.getCrowdSales(payload);
-          break;
-        case "getUserCrowdSaleContributions":
-          this.getUserCrowdSaleContributions(payload);
-          break;
-        default: {}
-      }
-    }.bind(this)
-  );
+class Store {
+  constructor() {
+    dispatcher.register(
+      function (payload) {
+        switch (payload.type) {
+          case 'getCrowdSales':
+            this.getCrowdSales(payload);
+            break;
+          case 'getUserCrowdSaleContributions':
+            this.getUserCrowdSaleContributions(payload);
+            break;
+          default: {
+          }
+        }
+      }.bind(this)
+    );
+  }
 
-  this.getCrowdSales = function(payload) {
-    var url = "crowdsale/getCrowdSales";
+  getCrowdSales = function (payload) {
+    var url = 'crowdsale/getCrowdSales';
 
-    this.callApi(url, "GET", null, payload);
+    this.callApi(url, 'GET', null, payload);
   };
 
-  this.getUserCrowdSaleContributions = function(payload) {
+  getUserCrowdSaleContributions = function (payload) {
     var url =
-      "crowdsale/getUserCrowdSaleContributions/" +
+      'crowdsale/getUserCrowdSaleContributions/' +
       payload.content.userId +
-      "/" +
+      '/' +
       payload.content.crowdsaleID;
 
-    this.callApi(url, "GET", null, payload, payload.content.crowdsaleID);
+    this.callApi(url, 'GET', null, payload, payload.content.crowdsaleID);
   };
 
-  this.callApi = function(url, method, postData, payload, extraData) {
+  callApi = function (url, method, postData, payload, extraData) {
     //get X-curve-OTP from sessionStorage
-    var userString = sessionStorage.getItem("cc_user");
-    var authOTP = "";
+    var userString = sessionStorage.getItem('cc_user');
+    var authOTP = '';
     if (userString) {
       var user = JSON.parse(userString);
       authOTP = user.authOTP;
@@ -55,14 +59,14 @@ var Store = () => {
 
     var call = apiUrl + url;
 
-    if (method === "GET") {
+    if (method === 'GET') {
       postData = null;
     } else {
       const signJson = JSON.stringify(postData);
       const signMnemonic = bip39.generateMnemonic();
-      const cipher = crypto.createCipher("aes-256-cbc", signMnemonic);
+      const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
       const signEncrypted =
-        cipher.update(signJson, "utf8", "base64") + cipher.final("base64");
+        cipher.update(signJson, 'utf8', 'base64') + cipher.final('base64');
       var signData = {
         e: signEncrypted.hexEncode(),
         m: signMnemonic.hexEncode(),
@@ -80,17 +84,17 @@ var Store = () => {
       method: method,
       body: postData,
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + payload.token,
-        "X-curve-OTP": authOTP
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + payload.token,
+        'X-curve-OTP': authOTP
       }
     })
       .then(res => {
         if (res.status === 401) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
         if (res.status === 403) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
 
         if (res.ok) {
@@ -107,24 +111,24 @@ var Store = () => {
         emitter.emit(payload.type, error, null);
       });
   };
-};
+}
 
 var store = new Store();
 
 /* eslint-disable */
-String.prototype.hexEncode = function() {
+String.prototype.hexEncode = function () {
   var hex, i;
-  var result = "";
+  var result = '';
   for (i = 0; i < this.length; i++) {
     hex = this.charCodeAt(i).toString(16);
-    result += ("000" + hex).slice(-4);
+    result += ('000' + hex).slice(-4);
   }
   return result;
 };
-String.prototype.hexDecode = function() {
+String.prototype.hexDecode = function () {
   var j;
   var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
+  var back = '';
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }

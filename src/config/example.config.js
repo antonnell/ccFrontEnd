@@ -1,4 +1,4 @@
-var config = {
+const config = {
   whitelistApiUrl: "",
   whitelistApiHeader: "",
   apiUrl: "",
@@ -7,4 +7,4 @@ var config = {
   aionscanURL: ""
 };
 
-module.exports = config;
+export default config;

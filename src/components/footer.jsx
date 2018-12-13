@@ -122,6 +122,7 @@ class Footer extends Component {
                 style={aStyle}
                 href={"https://cryptocurve.io/about#"}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Typography variant="body1" style={linkStyle}>
                   About Us
@@ -133,6 +134,7 @@ class Footer extends Component {
                   "https://www.google.co.za/search?tbm=nws&q=cryptocurve&oq=cryptocurve"
                 }
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Typography variant="body1" style={linkStyle}>
                   Press
@@ -148,6 +150,7 @@ class Footer extends Component {
                 style={aStyle}
                 href={"https://cryptocurve.io/contact"}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Typography variant="body1" style={linkStyle}>
                   Contact Us
@@ -157,6 +160,7 @@ class Footer extends Component {
                 style={aStyle}
                 href={"https://cryptocurve.io/blog"}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Typography variant="body1" style={linkStyle}>
                   Blog
@@ -166,6 +170,7 @@ class Footer extends Component {
                 style={aStyle}
                 href={"https://cryptocurve.io/#faq"}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <Typography variant="body1" style={linkStyle}>
                   FAQ

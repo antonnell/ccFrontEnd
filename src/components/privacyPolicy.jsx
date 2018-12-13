@@ -24,22 +24,18 @@ class PrivacyPolicy extends Component {
           </Typography>
           <p style={{ paragraphStyle, fontWeight: "bold" }}>Introduction</p>
           <p style={paragraphStyle}>
-            <a name="a496830">Welcome to the CryptoCurve's privacy policy. </a>
+            Welcome to the CryptoCurve's privacy policy.
           </p>
           <p style={paragraphStyle}>
-            <a name="a410588">
               CryptoCurve respects your privacy and is committed to protecting
               your personal data. This privacy notice will inform you as to how
               we look after your personal data when you visit our website
               (regardless of where you visit it from) and tell you about your
               privacy rights and how the law protects you.
-            </a>
           </p>
           <p style={paragraphStyle}>
-            <a name="a183820">
               Please also use the Glossary to understand the meaning of some of
               the terms used in this privacy notice.
-            </a>
           </p>
           <ol style={{ paddingLeft: "0px" }}>
             <li>
@@ -50,7 +46,6 @@ class PrivacyPolicy extends Component {
                 LAWFUL BASIS
               </p>
               <p style={paragraphStyle}>
-                <a name="a647495">
                   <strong>Legitimate Interest</strong> means the interest of our
                   business in conducting and managing our business to enable us
                   to give you the best service and the best and most secure
@@ -64,31 +59,26 @@ class PrivacyPolicy extends Component {
                   means processing your data where it is necessary for the
                   performance of a contract to which you are a party or to take
                   steps at your request before entering into such a contract.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a865636">
                   <strong>Comply with a legal or regulatory obligation</strong>{" "}
                   means processing your personal data where it is necessary for
                   compliance with a legal or regulatory obligation that we are
                   subject to.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
                 THIRD PARTIES
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a678226">Internal Third Parties</a>
+                Internal Third Parties
               </p>
               <p style={paragraphStyle}>
-                <a name="a548600">
                   Other companies in the Company Group acting as joint
                   controllers or processors and who are based in US and Cayman
                   Island.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a995424">External Third Parties</a>
+                External Third Parties
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -116,24 +106,19 @@ class PrivacyPolicy extends Component {
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a819128">Important information and who we are</a>
+                Important information and who we are
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a424696">Purpose of this privacy notice</a>
+                Purpose of this privacy notice
               </p>
               <p style={paragraphStyle}>
-                <a name="a644190">
                   This privacy notice aims to give you information on how
                   CryptoCurve collects and processes your personal data through
                   your use of this website.
-                </a>
-                <a name="a961414">
                   This website is not intended for children and we do not
                   knowingly collect data relating to children.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a222632">
                   It is important that you read this privacy notice together
                   with any other privacy notice or fair processing notice we may
                   provide on specific occasions when we are collecting or
@@ -141,32 +126,27 @@ class PrivacyPolicy extends Component {
                   of how and why we are using your data. This privacy notice
                   supplements the other notices and is not intended to override
                   them.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a985786">Controller</a>
+                Controller
               </p>
               <p style={paragraphStyle}>
-                <a name="a382234">
                   CryptoCurve Ltd. is the controller and responsible for your
                   personal data (collectively referred to as “CryptoCurve”,
                   "Company", "we", "us" or "our" in this privacy notice).
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a540866">
                   We have appointed a data privacy manager (DPM) who is
                   responsible for overseeing questions in relation to this
                   privacy policy. If you have any questions about this privacy
                   policy, including any requests to exercise your legal rights,
                   please contact the DPM using the details set out below.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a599551">Contact details</a>
+                Contact details
               </p>
               <p style={paragraphStyle}>
-                <a name="a199685">Full name of legal entity:</a>
+                Full name of legal entity:
                 CryptoCurve Ltd.
               </p>
               <p style={paragraphStyle}>Company number: 11027490</p>
@@ -175,16 +155,15 @@ class PrivacyPolicy extends Component {
                 Exeter, England, EX1 1UG
               </p>
               <p style={paragraphStyle}>
-                <a name="a563186">Name and title of DPM: </a> Xander Yi - CFO
+                Name and title of DPM: Xander Yi - CFO
               </p>
               <p style={paragraphStyle}>
-                <a name="a770336">Email address: </a> xander@cryptocurve.io
+                Email address: xander@cryptocurve.io
               </p>
               <p style={paragraphStyle}>
-                <a name="a733364">Telephone number: </a> +15712576498
+                Telephone number: +15712576498
               </p>
               <p style={paragraphStyle}>
-                <a name="a389597">
                   You have the right to make a complaint at any time to the
                   Information Commissioner's Office (ICO), the UK supervisory
                   authority for data protection issues (
@@ -192,32 +171,24 @@ class PrivacyPolicy extends Component {
                   however, appreciate the chance to deal with your concerns
                   before you approach the ICO so please contact us in the first
                   instance.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a465678">
                   Changes to the privacy notice and your duty to inform us of
                   changes
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a292073">
                   This version was last updated on 25 June 2018 and historic
                   versions can be obtained by contacting us.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a457168">
                   It is important that the personal data we hold about you is
                   accurate and current. Please keep us informed if your personal
                   data changes during your relationship with us.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a378536">Third-party links</a>
+                Third-party links
               </p>
               <p style={paragraphStyle}>
-                <a name="a998713">
                   This website may include links to third-party websites,
                   plug-ins and applications. Clicking on those links or enabling
                   those connections may allow third parties to collect or share
@@ -225,27 +196,22 @@ class PrivacyPolicy extends Component {
                   and are not responsible for their privacy statements. When you
                   leave our website, we encourage you to read the privacy notice
                   of every website you visit.
-                </a>
               </p>
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a480831">The data we collect about you</a>
+                The data we collect about you
               </p>
               <p style={paragraphStyle}>
-                <a name="a738838">
                   Personal data, or personal information, means any information
                   about an individual from which that person can be identified.
                   It does not include data where the identity has been removed
                   (anonymous data).
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a562087">
                   We may collect, use, store and transfer different kinds of
                   personal data about you which we have grouped together
                   follows:
-                </a>
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -303,7 +269,7 @@ class PrivacyPolicy extends Component {
                 </li>
               </ul>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a331664">If you fail to provide personal data</a>
+                If you fail to provide personal data
               </p>
               <p style={paragraphStyle}>
                 Where we need to collect personal data by law, or under the
@@ -317,13 +283,11 @@ class PrivacyPolicy extends Component {
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a524838">How is your personal data collected?</a>
+                How is your personal data collected?
               </p>
               <p style={paragraphStyle}>
-                <a name="a653340">
                   We use different methods to collect data from and about you
                   including through:
-                </a>
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -367,14 +331,12 @@ class PrivacyPolicy extends Component {
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a179246">How we use your personal data</a>
+                How we use your personal data
               </p>
               <p style={paragraphStyle}>
-                <a name="a964261">
                   We will only use your personal data when the law allows us to.
                   Most commonly, we will use your personal data in the following
                   circumstances:
-                </a>
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -399,30 +361,22 @@ class PrivacyPolicy extends Component {
                 </li>
               </ul>
               <p style={paragraphStyle}>
-                <a name="a852894">
                   Generally we do not rely on consent as a legal basis for
                   processing your personal data.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a309744">
                   Purposes for which we will use your personal data
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a218374">
                   We have set out below, in a table format, a description of all
                   the ways we plan to use your personal data, and which of the
                   legal bases we rely on to do so. We have also identified what
                   our legitimate interests are where appropriate.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a638713">
                   Note that we may process your personal data for more than one
                   lawful ground depending on the specific purpose for which we
                   are using your data.
-                </a>
               </p>
               <table border="1" cellSpacing="0" cellPadding="16">
                 <tbody>
@@ -570,10 +524,9 @@ class PrivacyPolicy extends Component {
                 </tbody>
               </table>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a512081">Cookies</a>
+                Cookies
               </p>
               <p style={paragraphStyle}>
-                <a name="a591491">
                   You can set your browser to refuse all or some browser
                   cookies, or to alert you when websites set or access cookies.
                   If you disable or refuse cookies, please note that some parts
@@ -583,46 +536,37 @@ class PrivacyPolicy extends Component {
                   <a href="https://cryptocurve.network/#cookiePolicy">
                     Cookie Policy
                   </a>
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a233076">Change of purpose </a>
+                Change of purpose
               </p>
               <p style={paragraphStyle}>
-                <a name="a290238">
                   We will only use your personal data for the purposes for which
                   we collected it, unless we reasonably consider that we need to
                   use it for another reason and that reason is compatible with
                   the original purpose. If you wish to get an explanation as to
                   how the processing for the new purpose is compatible with the
                   original purpose, please contact us.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a178016">
                   If we need to use your personal data for an unrelated purpose,
                   we will notify you and we will explain the legal basis which
                   allows us to do so.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a834833">
                   Please note that we may process your personal data without
                   your knowledge or consent, in compliance with the above rules,
                   where this is required or permitted by law.
-                </a>
               </p>
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a239061">Disclosures of your personal data</a>
+                Disclosures of your personal data
               </p>
               <p style={paragraphStyle}>
-                <a name="a342752">
                   We may have to share your personal data with the parties set
                   out below for the purposes set out in the table in paragraph 5
                   above.
-                </a>
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -659,48 +603,38 @@ class PrivacyPolicy extends Component {
                 </li>
               </ul>
               <p style={paragraphStyle}>
-                <a name="a880441">
                   We require all third parties to respect the security of your
                   personal data and to treat it in accordance with the law. We
                   do not allow our third-party service providers to use your
                   personal data for their own purposes and only permit them to
                   process your personal data for specified purposes and in
                   accordance with our instructions.
-                </a>
               </p>
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a888527">International transfers</a>
+                International transfers
               </p>
               <p style={paragraphStyle}>
-                <a name="a718730">
                   We share your personal data within the Company Group. This
                   will involve transferring your data outside the European
                   Economic Area (<strong>EEA</strong>).
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a232622">
                   We ensure your personal data is protected by requiring all our
                   group companies to follow the same rules when processing your
                   personal data. These rules are called "binding corporate
                   rules".
-                </a>
-                <a name="a926207">
                   Some of our external third parties are based outside the
                   European Economic Area (<strong>EEA</strong>) so their
                   processing of your personal data will involve a transfer of
                   data outside the EEA.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a108510">
                   Whenever we transfer your personal data out of the EEA, we
                   ensure a similar degree of protection is afforded to it by
                   ensuring at least one of the following safeguards is
                   implemented:
-                </a>
               </p>
               <ul style={{ paddingLeft: "18px" }}>
                 <li
@@ -743,10 +677,9 @@ class PrivacyPolicy extends Component {
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a424553">Data security</a>
+                Data security
               </p>
               <p style={paragraphStyle}>
-                <a name="a117271">
                   We have put in place appropriate security measures to prevent
                   your personal data from being accidentally lost, used or
                   accessed in an unauthorised way, altered or disclosed. In
@@ -755,35 +688,27 @@ class PrivacyPolicy extends Component {
                   have a business need to know. They will only process your
                   personal data on our instructions and they are subject to a
                   duty of confidentiality.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a347220">
                   We have put in place procedures to deal with any suspected
                   personal data breach and will notify you and any applicable
                   regulator of a breach where we are legally required to do so.
-                </a>
               </p>
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a852989">Data retention</a>
+                Data retention
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a536431">
                   How long will you use my personal data for?
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a656402">
                   We will only retain your personal data for as long as
                   necessary to fulfil the purposes we collected it for,
                   including for the purposes of satisfying any legal,
                   accounting, or reporting requirements.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a679927">
                   To determine the appropriate retention period for personal
                   data, we consider the amount, nature, and sensitivity of the
                   personal data, the potential risk of harm from unauthorised
@@ -791,48 +716,38 @@ class PrivacyPolicy extends Component {
                   which we process your personal data and whether we can achieve
                   those purposes through other means, and the applicable legal
                   requirements.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a137296">
                   In some circumstances you can ask us to delete your data: see{" "}
                   <em>Request erasure</em> below for further information.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a938517">
                   In some circumstances we may anonymise your personal data (so
                   that it can no longer be associated with you) for research or
                   statistical purposes in which case we may use this information
                   indefinitely without further notice to you.
-                </a>
               </p>
             </li>
             <li>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
-                <a name="a513536">YOUR LEGAL RIGHTS</a>
+                YOUR LEGAL RIGHTS
               </p>
               <p style={paragraphStyle}>
-                <a name="a484071">You have the right to:</a>
+                You have the right to:
               </p>
               <p style={paragraphStyle}>
-                <a name="a100058">
                   <strong>Request access </strong> to your personal data
                   (commonly known as a "data subject access request"). This
                   enables you to receive a copy of the personal data we hold
                   about you and to check that we are lawfully processing it.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a297597">
                   <strong>Request correction </strong> of the personal data that
                   we hold about you. This enables you to have any incomplete or
                   inaccurate data we hold about you corrected, though we may
                   need to verify the accuracy of the new data you provide to us.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a836012">
                   <strong>Request erasure </strong> of your personal data. This
                   enables you to ask us to delete or remove personal data where
                   there is no good reason for us continuing to process it. You
@@ -844,10 +759,8 @@ class PrivacyPolicy extends Component {
                   however, that we may not always be able to comply with your
                   request of erasure for specific legal reasons which will be
                   notified to you, if applicable, at the time of your request.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a789450">
                   <strong>Object to processing </strong> of your personal data
                   where we are relying on a legitimate interest (or those of a
                   third party) and there is something about your particular
@@ -856,10 +769,8 @@ class PrivacyPolicy extends Component {
                   freedoms. In some cases, we may demonstrate that we have
                   compelling legitimate grounds to process your information
                   which override your rights and freedoms.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a520072">
                   <strong>Request restriction of processing </strong> of your
                   personal data. This enables you to ask us to suspend the
                   processing of your personal data in the following scenarios:
@@ -870,18 +781,14 @@ class PrivacyPolicy extends Component {
                   defend legal claims; or (d) you have objected to our use of
                   your data but we need to verify whether we have overriding
                   legitimate grounds to use it.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a546939">
                   <strong>Request the transfer </strong> of your personal data
                   to you or to a third party. We will provide to you, or a third
                   party you have chosen, your personal data in a structured,
                   commonly used, machine-readable format.
-                </a>
               </p>
               <p style={paragraphStyle}>
-                <a name="a722140">
                   <strong>Withdraw consent at any time </strong> where we are
                   relying on consent to process your personal data. However,
                   this will not affect the lawfulness of any processing carried
@@ -889,7 +796,6 @@ class PrivacyPolicy extends Component {
                   consent, we may not be able to provide certain products or
                   services to you. We will advise you if this is the case at the
                   time you withdraw your consent.
-                </a>
               </p>
               <p style={{ paragraphStyle, fontWeight: "bold" }}>
                 No fee usually required
@@ -908,9 +814,6 @@ class PrivacyPolicy extends Component {
                 is particularly complex or you have made a number of requests.
                 In this case, we will notify you and keep you updated.
               </p>
-              {/*<p style={paragraphStyle}>*/}
-              {/*<a name="a694615"></a>*/}
-              {/*</p>*/}
               <p style={paragraphStyle}>
                 If you wish to exercise any of the rights set out above, please
                 contact us.

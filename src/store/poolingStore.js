@@ -1,60 +1,64 @@
-import fetch from "node-fetch";
-import crypto from "crypto";
-import bip39 from "bip39";
-import sha256 from "sha256";
+import fetch from 'node-fetch';
+import crypto from 'crypto';
+import bip39 from 'bip39';
+import sha256 from 'sha256';
 
-import {Dispatcher} from "flux";
-import {EventEmitter} from "events";
-import config from "../config";
+import { Dispatcher } from 'flux';
+import { EventEmitter } from 'events';
+import config from '../config';
 
-export const  poolingDispatcher = new Dispatcher();
+export const poolingDispatcher = new Dispatcher();
 export const poolingEmitter = new EventEmitter();
 
 
 const apiUrl = config.apiUrl;
 
-const Store = () => {
-  poolingDispatcher.register(
-    function (payload) {
-      switch (payload.type) {
-        case 'getEtherPools':
-          this.getEtherPools(payload);
-          break;
-        case 'createPoolingContract':
-          this.createPoolingContract(payload);
-          break;
-        case 'getAvailableEtherPools':
-          this.getAvailableEtherPools(payload);
-          break;
-        case 'getAvailableFundingPools':
-          this.getAvailableFundingPools(payload);
-          break;
-        default: {
-        }
-      }
-    }.bind(this)
-  );
+class Store {
+  constructor() {
 
-  this.getEtherPools = function (payload) {
-    console.log("here");
+    poolingDispatcher.register(
+      function (payload) {
+        switch (payload.type) {
+          case 'getEtherPools':
+            this.getEtherPools(payload);
+            break;
+          case 'createPoolingContract':
+            this.createPoolingContract(payload);
+            break;
+          case 'getAvailableEtherPools':
+            this.getAvailableEtherPools(payload);
+            break;
+          case 'getAvailableFundingPools':
+            this.getAvailableFundingPools(payload);
+            break;
+          default: {
+          }
+        }
+      }.bind(this)
+    );
+  }
+
+  getEtherPools = function (payload) {
+    console.log('here');
     const url = 'etherPooling/getManagedEtherPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
   };
 
-  this.getAvailableEtherPools = function (payload) {
+  getAvailableEtherPools = function (payload) {
     const url = 'etherPooling/getAvailableEtherPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
   };
-  this.getAvailableFundingPools = function (payload) {
+
+  getAvailableFundingPools = function (payload) {
     // console.log(payload);
     const url = 'pooling/getAvailableFundingPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
   };
 
-  this.createPoolingContract = function (payload) {
+  createPoolingContract = function (payload) {
     const url = 'etherPooling/createPoolingContract';
     const postJson = {
       ownerEthAddress: payload.content.primaryEthAddress,
@@ -81,7 +85,7 @@ const Store = () => {
     this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.callApi = function (url, method, postData, payload, customEmit) {
+  callApi = function (url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
     // console.log(sessionStorage);
     const userString = sessionStorage.getItem('cc_user');
@@ -144,19 +148,19 @@ const Store = () => {
         poolingEmitter.emit(payload.type, error, null, customEmit);
       });
   };
-};
+}
 
 /* eslint-disable */
-String.prototype.hexEncode = function() {
+String.prototype.hexEncode = function () {
   let hex, i;
   let result = '';
   for (i = 0; i < this.length; i++) {
     hex = this.charCodeAt(i).toString(16);
-    result += ("000" + hex).slice(-4);
+    result += ('000' + hex).slice(-4);
   }
   return result;
 };
-String.prototype.hexDecode = function() {
+String.prototype.hexDecode = function () {
   let j;
   const hexes = this.match(/.{1,4}/g) || [];
   let back = '';
