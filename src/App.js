@@ -325,6 +325,7 @@ class App extends Component {
     // TODO: Removed the listener for getAvailableEtherPools remover
     //poolingEmitter.removeAllListeners("getAvailableEtherPools");
     poolingEmitter.removeAllListeners("getAvailableFundingPools");
+    accountEmitter.removeAllListeners("getUserProfile");
 
     contactsEmitter.on("Unauthorised", this.logUserOut);
     ethEmitter.on("Unauthorised", this.logUserOut);

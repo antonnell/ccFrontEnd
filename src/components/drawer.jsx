@@ -10,7 +10,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
 import { Grid } from '@material-ui/core';
-import Avatar from '@material-ui/core/es/Avatar/Avatar';
 
 function EthIconPng() {
   return (
@@ -138,12 +137,32 @@ class AppDrawer extends Component {
   }
 
   renderTop() {
-    return (
-      <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
-        <Avatar style={ { width: 45, height: 45 } }><img alt="" style={ { width: 45 } } src={ require('../assets/images/footer-logo.png') } /></Avatar>
-        <Typography variant="h5" style={ { paddingTop: 16 } }>{ this.props.user.username }</Typography>
-      </Grid>
-    );
+    if(this.props.theme.name == 'dark') {
+      return (<Card style={{padding: '24px', marginBottom: '8px'}} >
+        <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
+          <div style={{width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("'+this.props.user.profilePhoto+'")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+          </div>
+          <Typography variant="h5" style={ { paddingTop: 16 } }>{ this.props.user.username }</Typography>
+        </Grid>
+      </Card>)
+    } else {
+      return (
+        <div style={{padding: '24px', marginBottom: '8px'}} >
+          <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
+            <div style={{width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("'+this.props.user.profilePhoto+'")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+            </div>
+            <Typography variant="h5" style={ { paddingTop: 16 } }>{ this.props.user.username }</Typography>
+          </Grid>
+        </div>
+      )
+    }
+    // return (
+      // <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
+      //   <div style={{width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("'+this.props.user.profilePhoto+'")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+      //   </div>
+      //   <Typography variant="h5" style={ { paddingTop: 16 } }>{ this.props.user.username }</Typography>
+      // </Grid>
+    // );
   }
 
   renderBottom() {

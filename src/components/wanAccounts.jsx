@@ -484,7 +484,7 @@ class WanAccounts extends Component {
 
       return (
         <Grid item xs={ 12 } xl={ 6 } align="left" key={ address.publicAddress }>
-          <Card style={ { marginRight: '6px', marginBottom: '6px' } }>
+          <Card style={ { margin: '12px' } }>
             <CardContent style={ { position: 'relative' } }>
               <Grid
                 container
@@ -497,8 +497,7 @@ class WanAccounts extends Component {
                   { address.editing !== true && (
                     <Typography
                       noWrap
-                      variant="h5"
-                      component="h2"
+                      variant="h3"
                       style={ { minHeight: '32px', display: 'inline-block' } }
                     >
                       { address.isPrimary === true && (
@@ -670,7 +669,7 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
             <Typography variant="h5" color="inherit">
@@ -692,7 +691,7 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
             <Typography variant="h5" color="inherit">
@@ -720,7 +719,7 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
             <Typography variant="h5" color="inherit">
@@ -742,7 +741,7 @@ class WanAccounts extends Component {
         alignItems="flex-start"
         direction="row"
         spacing={ 0 }
-        style={ { padding: '24px' } }
+        style={ { padding: '12px', paddingTop: '48px' } }
       >
         <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
           <Typography variant="h5" color="inherit">Wanchain ICOs</Typography>
@@ -973,9 +972,11 @@ class WanAccounts extends Component {
         <Grid item xs={ 12 } align="center">
           <Grid
             container
+            justify="flex-start"
+            alignItems="flex-start"
             direction="row"
-            spacing={ 0 }
-            style={ { padding: '24px' } }
+            spacing={0}
+            style={{ paddingTop: "24px" }}
           >
             { this.renderAddresses() }
           </Grid>
