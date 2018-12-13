@@ -143,7 +143,7 @@ class App extends Component {
     this.getContactsReturned = this.getContactsReturned.bind(this);
     this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
 
-    this.getIpReturned = this.getIpReturned.bind(this);
+    // this.getIpReturned = this.getIpReturned.bind(this);
 
     this.getERC20AddressReturned = this.getERC20AddressReturned.bind(this);
     this.getWRC20AddressReturned = this.getWRC20AddressReturned.bind(this);
@@ -381,8 +381,8 @@ class App extends Component {
     var loader = document.getElementById("loader");
     document.body.removeChild(loader);
 
-    emitter.on("getIp", this.getIpReturned);
-    dispatcher.dispatch({ type: "getIp" });
+    // emitter.on("getIp", this.getIpReturned);
+    // dispatcher.dispatch({ type: "getIp" });
 
     if (this.state.user) {
       let content = {};
@@ -429,21 +429,21 @@ class App extends Component {
     }
   }
 
-  getIpReturned() {
-    this.setState({ ipLoading: false });
-    emitter.removeAllListeners("getIp");
-
-    this.setState({ ipValid: true });
-    // if(data == null || data.country == null) {
-    //   this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
-    // } else {
-    //   if(data.country.code != 'US') {
-    //     this.setState({ipValid: true})
-    //   } else {
-    //     this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
-    //   }
-    // }
-  }
+  // getIpReturned() {
+  //   this.setState({ ipLoading: false });
+  //   emitter.removeAllListeners("getIp");
+  //
+  //   this.setState({ ipValid: true });
+  //   // if(data == null || data.country == null) {
+  //   //   this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
+  //   // } else {
+  //   //   if(data.country.code != 'US') {
+  //   //     this.setState({ipValid: true})
+  //   //   } else {
+  //   //     this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
+  //   //   }
+  //   // }
+  // }
 
   getCrowdSalesReturned(error, data) {
     if (error) {
@@ -471,22 +471,22 @@ class App extends Component {
     }
   }
 
-  getUserCrowdSaleContributionsReturned(error, data) {
+  getUserCrowdSaleContributionsReturned(error, data, id) {
     this.setState({ investLoading: false });
     if (error) {
       return this.setState({ ICOError: error.toString() });
     }
 
     if (data.success) {
-      // let crowdsales = this.state.crowdsales;
-      //
-      // crowdsales = this.state.crowdsales.map(crowdsale => {
-      //   if (crowdsale.id === id) {
-      //     crowdsale.totalContribution = data.totalContribution;
-      //   }
-      //
-      //   return crowdsale;
-      // });
+      let crowdsales = this.state.crowdsales;
+
+      crowdsales = this.state.crowdsales.map(crowdsale => {
+        if (crowdsale.id === id) {
+          crowdsale.totalContribution = data.totalContribution;
+        }
+
+        return crowdsale;
+      });
     } else if (data.errorMsg) {
       this.setState({ ICOError: data.errorMsg });
     } else {

@@ -9,6 +9,9 @@ const createReactClass = require("create-react-class");
 let wanEmitter = require("../store/wanStore.js").default.emitter;
 let wanDispatcher = require("../store/wanStore.js").default.dispatcher;
 
+let crowdsaleEmitter = require('../store/crowdsaleStore.js').default.emitter;
+let crowdsaleDispatcher = require('../store/crowdsaleStore.js').default.dispatcher;
+
 let WanAccounts = createReactClass({
   getInitialState() {
     return {
@@ -134,6 +137,7 @@ let WanAccounts = createReactClass({
         handleCreateClose={this.handleCreateClose}
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
+        refundClicked={this.refundClicked}
       />
     );
   },
@@ -146,6 +150,7 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners("deleteWanAddress");
     wanEmitter.removeAllListeners("investICO");
     wanEmitter.removeAllListeners("getICOProgress");
+    crowdsaleEmitter.removeAllListeners('refund');
 
     wanEmitter.on("createWanAddress", this.createWanAddressReturned);
     wanEmitter.on("importWanAddress", this.importWanAddressReturned);
@@ -154,6 +159,7 @@ let WanAccounts = createReactClass({
     wanEmitter.on("deleteWanAddress", this.deleteWanAddressReturned);
     wanEmitter.on("investICO", this.investICOReturned);
     wanEmitter.on("getICOProgress", this.getICOProgressReturned);
+    crowdsaleEmitter.on('refund', this.refundReturned);
   },
 
   // componentDidMount() {
@@ -301,7 +307,6 @@ let WanAccounts = createReactClass({
     }
 
     if (data.success) {
-      //update the contributed amounts? Show them a tx? I don't know...
       this.setState({
         thanksOpen: true,
         investTransacstionID: data.transactionId,
@@ -311,6 +316,32 @@ let WanAccounts = createReactClass({
       this.setState({ ICOError: data.errorMsg });
     } else {
       this.setState({ ICOError: data.statusText });
+    }
+  },
+
+  refundClicked(icoContractId) {
+    this.setState({investLoading: true})
+    var content = { saleId: icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress }
+    crowdsaleDispatcher.dispatch({type: 'refund', content, token: this.props.user.token });
+  },
+
+  refundReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({
+        thanksOpen: true,
+        investTransacstionID: data.transactionId,
+        ICOSuccess: "Your ICO refund was successfully submitted."
+      });
+
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
     }
   },
 

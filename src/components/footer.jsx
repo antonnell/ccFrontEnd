@@ -201,7 +201,7 @@ class Footer extends Component {
               color: "#000"
             }}
           >
-            V1.1.14-beta
+            V1.1.15-beta
           </Typography>
         </Grid>
       </Grid>

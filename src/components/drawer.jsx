@@ -176,7 +176,7 @@ class AppDrawer extends Component {
   renderList() {
     return (
       <List>
-        <ListSubheader>Accounts</ListSubheader>
+        <ListSubheader disableSticky={true}>Accounts</ListSubheader>
         <ListItem
           selected={ this.props.currentScreen === 'aionAccounts' }
           button
@@ -213,7 +213,7 @@ class AppDrawer extends Component {
           </ListItemIcon>
           <ListItemText primary="Wanchain Accounts" />
         </ListItem>
-        <ListSubheader>Transact</ListSubheader>
+        <ListSubheader disableSticky={true}>Transact</ListSubheader>
         <ListItem
           selected={ this.props.currentScreen === 'sendAion' }
           button
@@ -262,7 +262,7 @@ class AppDrawer extends Component {
           </ListItemIcon>
           <ListItemText primary="Send Wanchain" />
         </ListItem>
-        {/*<ListSubheader>Invest</ListSubheader>*/ }
+        {/*<ListSubheader disableSticky={true}>Invest</ListSubheader>*/ }
         {/*<ListItem*/ }
         {/*selected={this.props.currentScreen === "ico"}*/ }
         {/*button*/ }
@@ -288,7 +288,7 @@ class AppDrawer extends Component {
         {/*</ListItemIcon>*/ }
         {/*<ListItemText primary="Pooling" />*/ }
         {/*</ListItem>*/ }
-        <ListSubheader>Profile</ListSubheader>
+        <ListSubheader disableSticky={true}>Profile</ListSubheader>
         <ListItem
           selected={ this.props.currentScreen === 'contacts' }
           button

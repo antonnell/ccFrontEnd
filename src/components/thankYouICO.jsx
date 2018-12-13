@@ -18,14 +18,14 @@ class ThankYouICO extends Component {
         title="Invest"
         onClose={this.props.handleClose}
       >
-        <DialogTitle id="alert-dialog-title">Thank You</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Refund Request</DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-description"
             style={{ color: "#333" }}
           >
             <Typography variant="body1" style={{ marginBottom: "12px" }}>
-              Thank you for your contribution to the CryptoCurve ICO.
+              Your refund has been submitted.
             </Typography>
             <Typography variant="body1">
               You can view the progress of your transaction using the following
