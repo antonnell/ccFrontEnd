@@ -52,7 +52,8 @@ let WanAccounts = createReactClass({
       minContribution: 25,
       crowdasleProgress: null,
       createOpen: false,
-      importOpen: false
+      importOpen: false,
+      termsRefundOpen: false,
     };
   },
   render() {
@@ -118,8 +119,11 @@ let WanAccounts = createReactClass({
         investmentAmountKeyDown={this.investmentAmountKeyDown}
         crowdsales={this.props.crowdsales}
         termsOpen={this.state.termsOpen}
+        termsRefundOpen={this.state.termsRefundOpen}
         handleTermsClose={this.handleTermsClose}
+        handleTermsRefundClose={this.handleTermsRefundClose}
         handleTermsAccepted={this.handleTermsAccepted}
+        handleTermsRefundAccepted={this.handleTermsRefundAccepted}
         ICOError={this.state.ICOError}
         ICOSuccess={this.state.ICOSuccess}
         investLoading={this.state.investLoading}
@@ -320,9 +324,7 @@ let WanAccounts = createReactClass({
   },
 
   refundClicked(icoContractId) {
-    this.setState({investLoading: true})
-    var content = { saleId: icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress }
-    crowdsaleDispatcher.dispatch({type: 'refund', content, token: this.props.user.token });
+    this.setState({icoContractId: icoContractId, termsRefundOpen: true})
   },
 
   refundReturned(error, data) {
@@ -478,6 +480,10 @@ let WanAccounts = createReactClass({
     this.setState({ termsOpen: false });
   },
 
+  handleTermsRefundClose() {
+    this.setState({ termsRefundOpen: false });
+  },
+
   handleTermsAccepted() {
     this.setState({ termsOpen: false, investLoading: true });
 
@@ -492,6 +498,12 @@ let WanAccounts = createReactClass({
       content,
       token: this.props.user.token
     });
+  },
+
+  handleTermsRefundAccepted() {
+    this.setState({termsRefundOpen: false, investLoading: true})
+    var content = { saleId: this.state.icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress }
+    crowdsaleDispatcher.dispatch({type: 'refund', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {

@@ -31,6 +31,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import TermsModalComponent from './termsModalICO';
+import TermsModalRefundComponent from './termsModalICORefund';
 import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
 import CreateModal from './createModal';
@@ -672,7 +673,7 @@ class WanAccounts extends Component {
           style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -694,7 +695,7 @@ class WanAccounts extends Component {
           style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -722,7 +723,7 @@ class WanAccounts extends Component {
           style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -744,7 +745,7 @@ class WanAccounts extends Component {
         style={ { padding: '12px', paddingTop: '48px' } }
       >
         <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-          <Typography variant="h5" color="inherit">Wanchain ICOs</Typography>
+          <Typography variant="h5">Wanchain ICOs</Typography>
         </Grid>
 
         { this.props.crowdsales.map((crowdSale, index) => {
@@ -763,6 +764,7 @@ class WanAccounts extends Component {
         </Grid>
         <Grid item xs={ 12 } align="center">
           <Typography
+            color="inherit" 
             style={ {
               background: '#dedede',
               width: '100%',
@@ -792,20 +794,20 @@ class WanAccounts extends Component {
           spacing={ 0 }
         >
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Name</Typography>
-            <Typography variant="body1" color="inherit">{ crowdSale.name }</Typography>
+            <Typography variant="h5">Name</Typography>
+            <Typography variant="body1">{ crowdSale.name }</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">ICO Dates</Typography>
-            <Typography variant="body1" color="inherit">
+            <Typography variant="h5">ICO Dates</Typography>
+            <Typography variant="body1">
               { moment(crowdSale.startDate).format('YYYY/MM/DD hh:mm') +
               ' - ' +
               moment(crowdSale.endDate).format('YYYY/MM/DD hh:mm') }
             </Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Personal Cap</Typography>
-            <Typography variant="body1" color="inherit">
+            <Typography variant="h5">Personal Cap</Typography>
+            <Typography variant="body1">
               { crowdSale.userCap === 0
                 ? 'Unlimited'
                 : this.props.minContribution +
@@ -815,15 +817,15 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Choose Wallet</Typography>
+            <Typography variant="h5">Choose Wallet</Typography>
             { this.renderAddressDropdown(crowdSale) }
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Token Amount</Typography>
-            <Typography variant="body1" color="inherit">{ this.props.investmentAmount * 1/crowdSale.tokenRatio } Wan</Typography>
+            <Typography variant="h5">Token Amount</Typography>
+            <Typography variant="body1">{ this.props.investmentAmount * 1/crowdSale.tokenRatio } Wan</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Amount to Refund (CURVE)</Typography>
+            <Typography variant="h5">Amount to Refund (CURVE)</Typography>
             <TextField
               fullWidth={ true }
               color="textSecondary"
@@ -843,11 +845,11 @@ class WanAccounts extends Component {
             />
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Contributed Amount</Typography>
-            <Typography variant="body1" color="inherit">{ crowdSale.totalContribution } Wan</Typography>
+            <Typography variant="h5">Contributed Amount</Typography>
+            <Typography variant="body1">{ crowdSale.totalContribution } Wan</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Refund</Typography>
+            <Typography variant="h5">Refund</Typography>
             <Button
               size="small"
               variant={ 'contained' }
@@ -1001,6 +1003,11 @@ class WanAccounts extends Component {
           isOpen={ this.props.termsOpen }
           handleClose={ this.props.handleTermsClose }
           handleTermsAccepted={ this.props.handleTermsAccepted }
+        />
+        <TermsModalRefundComponent
+          isOpen={ this.props.termsRefundOpen }
+          handleClose={ this.props.handleTermsRefundClose }
+          handleTermsAccepted={ this.props.handleTermsRefundAccepted }
         />
         <CreateModal
           isOpen={this.props.createOpen}
