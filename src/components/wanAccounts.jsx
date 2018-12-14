@@ -558,7 +558,11 @@ class WanAccounts extends Component {
                 </Grid>
                 <Grid item xs={ 1 } align="right">
                   <IconButton
-                    style={ { verticalAlign: 'top', marginRight: '-20px' } }
+                    style={ {
+                      verticalAlign: "top",
+                      marginRight: "-20px",
+                      marginTop: "-11px"
+                    } }
                     color="primary"
                     aria-label="More"
                     buttonRef={ node => {
@@ -614,14 +618,14 @@ class WanAccounts extends Component {
                 <Grid item xs={ 12 }>
                   <Typography
                     noWrap
-                    variant="h6"
+                    variant="subtitle1"
                     color="textSecondary"
                     style={ { minHeight: '32px' } }
                   >
                     { address.publicAddress }
                   </Typography>
                 </Grid>
-                <Grid item xs={ 6 } align="left">
+                <Grid item xs={6} style={{ marginTop: "6px" }}>
                   <Typography variant="h5" noWrap>
                     { address.balance +
                     ' WAN ($' +
@@ -764,7 +768,7 @@ class WanAccounts extends Component {
         </Grid>
         <Grid item xs={ 12 } align="center">
           <Typography
-            color="inherit" 
+            color="inherit"
             style={ {
               background: '#dedede',
               width: '100%',
