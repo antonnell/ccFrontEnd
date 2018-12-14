@@ -137,7 +137,7 @@ class AppDrawer extends Component {
   }
 
   renderTop() {
-    if(this.props.theme.name == 'dark') {
+    if(this.props.theme.name === 'dark') {
       return (<Card style={{padding: '24px', marginBottom: '8px'}} >
         <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
           <div style={{width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("'+this.props.user.profilePhoto+'")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>

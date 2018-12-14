@@ -26,6 +26,7 @@ var Store = () => {
     case 'refund':
       this.refund(payload);
       break;
+    default: {}
     }
   }.bind(this))
 
@@ -74,7 +75,7 @@ var Store = () => {
 
     var call = apiUrl+url
 
-    if(method == 'GET') {
+    if(method === 'GET') {
       postData = null
     } else {
       const signJson = JSON.stringify(postData);
@@ -100,10 +101,10 @@ var Store = () => {
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+payload.token, 'X-curve-OTP': authOTP },
     })
     .then(res => {
-      if(res.status == 401) {
+      if(res.status === 401) {
         return emitter.emit('Unauthorised', null, null)
       }
-      if(res.status == 403) {
+      if(res.status === 403) {
         return emitter.emit('Unauthorised', null, null)
       }
 
@@ -125,6 +126,7 @@ var Store = () => {
 
 var store = new Store()
 
+/* eslint-disable */
 String.prototype.hexEncode = function(){
     var hex, i;
     var result = "";
@@ -144,6 +146,7 @@ String.prototype.hexDecode = function(){
 
     return back;
 }
+/* eslint-enable */
 
 export default ({
   store: store,

@@ -76,8 +76,6 @@ let crowdsaleEmitter = require("./store/crowdsaleStore.js").default.emitter;
 let crowdsaleDispatcher = require("./store/crowdsaleStore.js").default
   .dispatcher;
 
-let emitter = require("./store/ipStore.js").default.emitter;
-let dispatcher = require("./store/ipStore.js").default.dispatcher;
 
 class App extends Component {
   constructor(props) {
@@ -478,9 +476,7 @@ class App extends Component {
     }
 
     if (data.success) {
-      let crowdsales = this.state.crowdsales;
-
-      crowdsales = this.state.crowdsales.map(crowdsale => {
+      this.state.crowdsales.map(crowdsale => {
         if (crowdsale.id === id) {
           crowdsale.totalContribution = data.totalContribution;
         }
