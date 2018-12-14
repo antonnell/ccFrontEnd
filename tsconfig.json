@@ -15,6 +15,6 @@
     "jsx": "preserve"
   },
   "include": [
-    "src/containers/Pooling"
+    "src"
   ]
 }

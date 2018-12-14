@@ -1,2 +1,2 @@
-import PoolCreate from "./PoolCreate";
+import PoolCreate from "../PoolCreate";
 export default PoolCreate;

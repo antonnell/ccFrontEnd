@@ -8,7 +8,7 @@ let Pools = createReactClass({
     return {
       loading: false,
       error: null,
-      pools: this.props.pools,
+      whiteLists: this.props.whiteLists,
     }
   },
   render() {
@@ -16,10 +16,10 @@ let Pools = createReactClass({
       <PoolsComponent
         loading={this.state.loading}
         error={this.state.error}
-        pools={this.props.pools}
+        pools={this.props.whiteLists}
       />
     )
   },
-})
+});
 
 export default (Pools);

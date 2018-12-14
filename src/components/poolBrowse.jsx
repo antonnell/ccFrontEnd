@@ -25,7 +25,7 @@ function MoreIcon(props) {
 
 class PoolBrowse extends Component {
   renderPools() {
-    if (this.props.pools == null) {
+    if (this.props.whiteLists == null) {
       return (
         <Grid
           item
@@ -48,7 +48,7 @@ class PoolBrowse extends Component {
       );
     }
 
-    if (this.props.pools.length === 0) {
+    if (this.props.whiteLists.length === 0) {
       return (
         <Grid
           item
@@ -64,7 +64,7 @@ class PoolBrowse extends Component {
       );
     }
 
-    return this.props.pools.map(pool => {
+    return this.props.whiteLists.map(pool => {
       return (
         <Grid item xs={12} xl={6} align="left" key={pool.name}>
           <Card style={{ margin: "12px" }}>

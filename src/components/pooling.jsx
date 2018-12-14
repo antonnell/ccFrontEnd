@@ -26,7 +26,7 @@ class Pooling extends Component {
   renderPools() {
     return (
       <Grid item xs={12} align="left">
-        <Pools pools={this.props.pools} />
+        <Pools pools={this.props.whiteLists} />
       </Grid>
     );
   }
