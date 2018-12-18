@@ -6,7 +6,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
-class CustomList extends React.Component {
+class CustomListNots extends React.Component {
   render() {
     const {
       loading,
@@ -70,4 +70,4 @@ class CustomList extends React.Component {
   }
 }
 
-export default CustomList;
+export default CustomListNots;

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
 
-class AddedUsers extends React.Component {
+class AddedUsersNots extends React.Component {
   render() {
     const {
       addedUsers
@@ -54,4 +54,4 @@ class AddedUsers extends React.Component {
   }
 }
 
-export default AddedUsers;
+export default AddedUsersNots;

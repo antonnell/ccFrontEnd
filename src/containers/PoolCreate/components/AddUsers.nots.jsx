@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 
-class AddUsers extends React.Component {
+class AddUsersNots extends React.Component {
   render() {
     const {
       loading,
@@ -56,4 +56,4 @@ class AddUsers extends React.Component {
   }
 }
 
-export default AddUsers;
+export default AddUsersNots;

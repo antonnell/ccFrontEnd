@@ -17,7 +17,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 const styles = (theme: Theme) =>
     createStyles({
       header: {
-        margin: theme.spacing.unit * 1.5,
+        marginBottom: theme.spacing.unit * 1.5,
         padding: theme.spacing.unit,
         borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
         display: "flex"
