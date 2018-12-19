@@ -21,13 +21,13 @@ export interface PoolingContract {
 export const initialPoolingContract:PoolingContract = {
   blockChain: "ETH",
   ownerAddress: null,
-  name: "",
+  name: "Test",
   minContribution: 0,
   maxContribution: 0,
   isPledgesEnabled: false,
   pledgesEndDate: "",
-  saleAddress: "",
-  tokenAddress: "",
+  saleAddress: "0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0",
+  tokenAddress: "0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0",
   transactionFee: 0,
   isWhitelistEnabled: false,
   existingWhitelistId: null

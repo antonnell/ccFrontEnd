@@ -53,6 +53,7 @@ import sha256 from 'sha256';
 import crypto from 'crypto';
 import PoolCreate from './containers/PoolCreate/index';
 import Loader from './components/Loader';
+import Context from './context/Context';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -1172,35 +1173,37 @@ class App extends Component {
         'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)';
     }
     return (
-      <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
-        <CssBaseline />
-        <div
-          style={ {
-            display: 'flex',
-            padding:
-              this.state.size === 'xs' || this.state.size === 'sm'
-                ? '0px'
-                : this.state.theme.custom.page.padding,
-            background: background,
-            backgroundImage: backgroundImage
-          } }
-        >
-          { this.renderDrawer() }
-          <Grid
-            container
-            justify="space-around"
-            alignItems="flex-start"
-            direction="row"
-            style={ { minHeight: '622px', position: 'relative', flex: 1 } }
+      <Context>
+        <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
+          <CssBaseline />
+          <div
+            style={ {
+              display: 'flex',
+              padding:
+                this.state.size === 'xs' || this.state.size === 'sm'
+                  ? '0px'
+                  : this.state.theme.custom.page.padding,
+              background: background,
+              backgroundImage: backgroundImage
+            } }
           >
-            <Grid item xs={ 12 }>
-              { this.state.user == null ? null : this.renderAppBar() }
-              { this.renderScreen() }
+            { this.renderDrawer() }
+            <Grid
+              container
+              justify="space-around"
+              alignItems="flex-start"
+              direction="row"
+              style={ { minHeight: '622px', position: 'relative', flex: 1 } }
+            >
+              <Grid item xs={ 12 }>
+                { this.state.user == null ? null : this.renderAppBar() }
+                { this.renderScreen() }
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-        { this.renderFooter() }
-      </MuiThemeProvider>
+          </div>
+          { this.renderFooter() }
+        </MuiThemeProvider>
+      </Context>
     );
   }
 
@@ -1345,7 +1348,7 @@ class App extends Component {
           />
         );
       case 'createPool':
-        const {ethAddresses,wanAddresses} = this.state;
+        const { ethAddresses, wanAddresses } = this.state;
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}

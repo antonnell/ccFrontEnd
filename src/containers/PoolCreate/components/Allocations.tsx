@@ -28,16 +28,16 @@ class Allocations extends React.Component<Props> {
   public render() {
     const {classes,minContribution,maxContribution,transactionFee,handleChange} = this.props;
     return (
-        <Grid item xs={12} md={5} className={classes.separator}>
-            <Grid item>
+        <Grid container item xs={12} md={5} className={classes.separator} justify="space-between">
+            <Grid item xs={12}>
               <Typography variant="h2">Allocations</Typography>
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md={5}>
               <TextField
                   margin="normal"
                   required
                   fullWidth
-                  label="Minimum Contribution"
+                  label="Min Contribution"
                   value={minContribution}
                   onChange={handleChange("minContribution")}
                   inputProps={{type: "number"}}
@@ -45,11 +45,11 @@ class Allocations extends React.Component<Props> {
                   placeholder="100"
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md={5}>
               <TextField
                   required
                   fullWidth
-                  label="Maximum Contribution"
+                  label="Max Contribution"
                   value={maxContribution}
                   onChange={handleChange("maxContribution")}
                   margin="normal"
@@ -58,7 +58,7 @@ class Allocations extends React.Component<Props> {
                   placeholder="1000"
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={12} md={5}>
               <TextField
                   required
                   fullWidth

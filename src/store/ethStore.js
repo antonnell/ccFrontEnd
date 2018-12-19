@@ -64,6 +64,7 @@ class Store {
   }
 
   getEthAddress = function (payload) {
+    // console.log(payload);
     var url = 'ethereum/getUserAddresses/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);

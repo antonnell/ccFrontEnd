@@ -29,6 +29,10 @@ interface OwnProps {
   ethAddresses: EthAddress[];
   wanAddresses: WanAddress[];
   handleChange: PoolCreateHandleChange;
+  saleAddress:string;
+  tokenAddress:string;
+  isTokenAddressValid: boolean;
+  isSaleAddressValid: boolean;
 }
 
 
@@ -37,8 +41,10 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class Settings extends React.Component<Props> {
   public render() {
-    const {name, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses} = this.props;
+    const {name, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses,tokenAddress,saleAddress,isSaleAddressValid,isTokenAddressValid} = this.props;
     const nameError = Boolean(name.length) && !isNameValid;
+    const saleAddressError = Boolean(saleAddress.length) && !isSaleAddressValid;
+    const tokenAddressError = Boolean(tokenAddress.length) && !isTokenAddressValid;
     return (
         <Grid item xs={12} md={5}>
           <Grid item xs={12} className={classes.title}>
@@ -81,6 +87,34 @@ class Settings extends React.Component<Props> {
                 )}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+                required
+                fullWidth
+                error={saleAddressError}
+                label="Sale Address"
+                value={saleAddress}
+                margin="normal"
+                onChange={handleChange("saleAddress")}
+                helperText={saleAddressError ? "Invalid address provided" : null}
+                InputLabelProps={{shrink: true}}
+                placeholder="0xA57E3290D0b7cb2748Ed410C19c1D58F7F192bc0"
+            />
+            <Grid item xs={12}>
+              <TextField
+                  required
+                  fullWidth
+                  error={tokenAddressError}
+                  label="Token Address"
+                  value={tokenAddress}
+                  margin="normal"
+                  onChange={handleChange("tokenAddress")}
+                  helperText={tokenAddressError ? "Invalid address provided" : null}
+                  InputLabelProps={{shrink: true}}
+                  placeholder="0xA57E3290D0b7cb2748Ed410C19c1D58F7F192bc0"
+              />
+            </Grid>
           </Grid>
         </Grid>
     );
