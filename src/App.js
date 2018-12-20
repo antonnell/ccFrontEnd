@@ -1208,6 +1208,7 @@ class App extends Component {
   }
 
   renderScreen() {
+    const { ethAddresses, wanAddresses } = this.state;
     switch (this.state.currentScreen) {
       case 'welcome':
         return <Welcome setUser={ this.setUser } />;
@@ -1340,15 +1341,9 @@ class App extends Component {
       // case 'ethTransactions':
       //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'pooling':
-        return (
-          <Pooling
-            theme={ this.state.theme }
-            user={ this.state.user }
-            pools={ this.state.myPools }
-          />
-        );
+        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+          <Pooling user={ this.state.user } />:<Loader />;
       case 'createPool':
-        const { ethAddresses, wanAddresses } = this.state;
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}

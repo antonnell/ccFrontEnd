@@ -11,7 +11,7 @@ interface AppContextInterface {
       url: string,
       method: "GET" | "POST",
       postData: {} | null,
-  ) => void
+  ) => Promise<{}>
 }
 
 const ctxt = React.createContext<AppContextInterface | null>(null);
@@ -36,7 +36,6 @@ class AppContext extends React.Component<{}, AppContextInterface> {
         postData = null;
       } else {
         const signJson = JSON.stringify(postData);
-        console.log(postData);
         const signMnemonic = bip39.generateMnemonic();
         const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
         const signEncrypted =
@@ -47,13 +46,15 @@ class AppContext extends React.Component<{}, AppContextInterface> {
           u: sha256(url.toLowerCase()),
           p: sha256(sha256(url.toLowerCase())),
           t: new Date().getTime(),
-          s: ""
         };
         const signSeed = JSON.stringify(signData);
-        signData.s = sha256(signSeed);
+        signData = {
+            ...signData,
+          s: sha256(signSeed)
+        }
       }
 
-      fetch(call, {
+      return fetch(call, {
         method: method,
         body: JSON.stringify(signData),
         headers: {
@@ -72,19 +73,11 @@ class AppContext extends React.Component<{}, AppContextInterface> {
               // return poolingEmitter.emit('Unauthorised', null, null);
             }
 
-            console.log(res);
             if (res.ok) {
-              return res;
+              return res.json();
             } else {
               throw Error(res.statusText);
             }
-          })
-          .then(res => {
-            console.log(res);
-          })
-          .then(res => {
-            console.log(res)
-            // poolingEmitter.emit(payload.type, null, res, customEmit);
           })
           .catch(error => {
             console.log(error);

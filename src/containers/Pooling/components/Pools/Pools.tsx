@@ -10,6 +10,9 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import EnhancedTableHead from "./EnhancedTableHead";
+import {helperRenderConsoleText} from "../../../../helpers/helpers";
+import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
+import {User} from "../../../../types/account";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -52,7 +55,7 @@ const styles = (theme: Theme) =>
     });
 
 interface OwnProps {
-  pools: any;
+  user: User;
 }
 
 interface State {
@@ -64,8 +67,7 @@ interface State {
   filtersVisible: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles> {
-}
+interface Props extends OwnProps, WithStyles<typeof styles>,WithPoolingContext {}
 
 class Pools extends React.Component<Props, State> {
   readonly state: State = {
@@ -77,8 +79,14 @@ class Pools extends React.Component<Props, State> {
     filtersVisible: false,
   };
 
+  componentWillMount(): void {
+    const {poolingContext:{getManagedFundingPools},user} = this.props;
+    getManagedFundingPools(user.id);
+  }
+
   public render() {
-    const {classes, pools} = this.props;
+    console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
+    const {classes,poolingContext:{pools}} = this.props;
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
         rowsPerPage -
@@ -202,4 +210,4 @@ class Pools extends React.Component<Props, State> {
   };
 }
 
-export default withStyles(styles)(Pools) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(Pools)) as unknown as React.ComponentClass<OwnProps>;

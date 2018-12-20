@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {PoolingContract} from "../types/pooling";
+import {FundingPools, GetManagedFundingPoolsResponse, PoolingContract} from "../types/pooling";
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
 
 interface PoolingContextInterface {
+  pools: FundingPools[];
+  getManagedFundingPools: (userId:string)=>void;
   createPoolingContract: (poolingContract: PoolingContract) => void
 }
 
@@ -17,13 +19,24 @@ const PoolingContextConsumer = ctxt.Consumer;
 class PoolingContext extends React.Component<WithAppContext, PoolingContextInterface> {
   // noinspection JSUnusedGlobalSymbols
   public state: PoolingContextInterface = {
+    pools: [],
     createPoolingContract: poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
+      // const url = 'ethereum/updateAddress';
       const method = "POST";
       callApi(url, method, {
         ...poolingContract,
         ownerAddress: poolingContract.blockChain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
+      });
+    },
+    getManagedFundingPools: (userId)=> {
+      const {appContext: {callApi}} = this.props;
+      const url = `pooling/getManagedFundingPools/${userId}`;
+      const method = "GET";
+      callApi(url, method,{}).then(res=> {
+        const response:GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
+        response.success && this.setState({pools:[...response.fundingPools]})
       });
     }
   };

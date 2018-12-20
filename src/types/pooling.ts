@@ -25,12 +25,27 @@ export const initialPoolingContract:PoolingContract = {
   minContribution: 0,
   maxContribution: 0,
   isPledgesEnabled: false,
-  pledgesEndDate: "",
+  pledgesEndDate: new Date().toDateString(),
   saleAddress: "0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0",
   tokenAddress: "0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0",
   transactionFee: 0,
   isWhitelistEnabled: false,
-  existingWhitelistId: null
+  existingWhitelistId: -1
 };
 
 export const poolingBlockChainOptions:PoolingContractBlockChain[] = ["ETH","WAN"];
+
+export interface FundingPools {
+  blockchain: "ETH" | "WAN";
+  contractAddress: string;
+  id: number;
+  name: string;
+  status: boolean;
+  transactionId: string|null;
+}
+
+export interface GetManagedFundingPoolsResponse {
+  errorMsg: string|null
+  fundingPools: FundingPools[];
+  success: boolean;
+}
