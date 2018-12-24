@@ -13,6 +13,7 @@ import EnhancedTableHead from "./EnhancedTableHead";
 import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
 import {User} from "../../../../types/account";
+import {FundingPools} from "../../../../types/pooling";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -51,7 +52,12 @@ const styles = (theme: Theme) =>
       table: {},
       tableWrapper: {
         overflowX: "auto"
-      }
+      },
+      row: {
+        '&:nth-of-type(odd)': {
+          backgroundColor: theme.palette.background.default,
+        },
+      },
     });
 
 interface OwnProps {
@@ -67,7 +73,8 @@ interface State {
   filtersVisible: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>,WithPoolingContext {}
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+}
 
 class Pools extends React.Component<Props, State> {
   readonly state: State = {
@@ -80,13 +87,15 @@ class Pools extends React.Component<Props, State> {
   };
 
   componentWillMount(): void {
-    const {poolingContext:{getManagedFundingPools},user} = this.props;
+    const {poolingContext: {getManagedFundingPools}, user} = this.props;
     getManagedFundingPools(user.id);
+    // getAvailableFundingPools(user.id);
   }
 
   public render() {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
-    const {classes,poolingContext:{pools}} = this.props;
+    const {classes, poolingContext: {pools}} = this.props;
+    console.log(pools);
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
         rowsPerPage -
@@ -109,9 +118,9 @@ class Pools extends React.Component<Props, State> {
                 <TableBody>
                   {stableSort(pools, getSorting(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((n: any) => {
+                      .map((n: FundingPools) => {
                         return (
-                            <TableRow hover tabIndex={-1} key={n.id}>
+                            <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
                               <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
@@ -120,38 +129,38 @@ class Pools extends React.Component<Props, State> {
                                   {n.name}
                                 </Typography>
                               </TableCell>
+                              {/*<TableCell>*/}
+                              {/*<Typography*/}
+                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
+                              {/*noWrap*/}
+                              {/*>*/}
+                              {/*{n.creator}*/}
+                              {/*</Typography>*/}
+                              {/*</TableCell>*/}
                               <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
                                     noWrap
                                 >
-                                  {n.creator}
+                                  {n.status}
                                 </Typography>
                               </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.fundStatus}
-                                </Typography>
-                              </TableCell>
-                              <TableCell numeric>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.token}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.myContribution}
-                                </Typography>
-                              </TableCell>
+                              {/*<TableCell numeric>*/}
+                              {/*<Typography*/}
+                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
+                              {/*noWrap*/}
+                              {/*>*/}
+                              {/*{n.token}*/}
+                              {/*</Typography>*/}
+                              {/*</TableCell>*/}
+                              {/*<TableCell>*/}
+                              {/*<Typography*/}
+                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
+                              {/*noWrap*/}
+                              {/*>*/}
+                              {/*{n.myContribution}*/}
+                              {/*</Typography>*/}
+                              {/*</TableCell>*/}
                               <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
@@ -190,9 +199,9 @@ class Pools extends React.Component<Props, State> {
     );
   }
 
-  private handleRequestSort = (event:any, property:string) => {
+  private handleRequestSort = (event: any, property: string) => {
     const orderBy = property;
-    let order:false | "desc" | "asc" | undefined = "desc";
+    let order: false | "desc" | "asc" | undefined = "desc";
 
     if (this.state.orderBy === property && this.state.order === "desc") {
       order = "asc";
@@ -201,12 +210,15 @@ class Pools extends React.Component<Props, State> {
     this.setState({order, orderBy});
   };
 
-  private handleChangePage = (event:any, page:any) => {
+  private handleChangePage = (event: any, page: any) => {
     this.setState({page});
   };
 
-  private handleChangeRowsPerPage = (event:any) => {
-    this.setState({ rowsPerPage: event.target.value });
+  private handleChangeRowsPerPage = (event: any) => {
+    this.setState({rowsPerPage: event.target.value});
+  };
+  private handleRowClick = (id: number) => () => {
+    window.location.hash = `updatePool/${id}`;
   };
 }
 

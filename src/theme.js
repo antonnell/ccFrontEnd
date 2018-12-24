@@ -1,11 +1,10 @@
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 export const colors = {
   dodgerBlue: "#3cabff",
   dark: "#1a191d"
 };
 
-const defaultTheme = createMuiTheme();
+// const defaultTheme = createMuiTheme();
 let customTheme =  {
   light: {
     typography: {
@@ -134,8 +133,9 @@ let customTheme =  {
         },
         MuiTableCell: {
           head: {
-            textAlign: "center",
-            padding: defaultTheme.spacing.unit
+            padding: "4px 56px 4px 24px",
+            // textAlign: "center",
+            // padding: defaultTheme.spacing.unit
           }
         }
       },
@@ -150,7 +150,6 @@ let customTheme =  {
         },
         background:{
           paper: '#fff',
-          default: '#fff'
         },
         text: {
           primary: '#1a191d',

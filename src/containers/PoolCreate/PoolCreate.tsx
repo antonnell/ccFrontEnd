@@ -13,6 +13,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Allocations from "./components/Allocations";
 import isEthereumAddress from "is-ethereum-address";
 import {WithPoolingContext, withPoolingContext} from "../../context/PoolingContext";
+import moment from "moment";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -24,7 +25,8 @@ export type PoolCreateHandleChange = (fieldName: keyof PoolingContract) => (e: R
 
 interface OwnProps {
   ethAddresses: EthAddress[],
-  wanAddresses: WanAddress[]
+  wanAddresses: WanAddress[],
+  id: number | null
 }
 
 interface State {
@@ -40,7 +42,7 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext 
 }
 
 const setOwnerAddress = (props: Props, poolingContract: PoolingContract) => {
-  const ownerAddress: EthAddress | WanAddress = poolingContract.blockChain === "ETH" ? props.ethAddresses[0] : props.wanAddresses[0];
+  const ownerAddress: EthAddress | WanAddress = poolingContract.blockchain === "ETH" ? props.ethAddresses[0] : props.wanAddresses[0];
   return {...poolingContract, ownerAddress: ownerAddress}
 };
 
@@ -54,25 +56,38 @@ class PoolCreate extends React.Component<Props, State> {
     }
   };
 
+  componentWillMount(): void {
+    const {id, poolingContext: {getManagedFundingPoolDetails}, wanAddresses, ethAddresses} = this.props;
+    id && getManagedFundingPoolDetails(id).then(poolingContract => {
+      poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
+          ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
+      console.log(poolingContract);
+      poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
+      this.setState({poolingContract});
+    });
+  }
+
   render() {
-    const {ethAddresses, wanAddresses, classes} = this.props;
+    const {ethAddresses, wanAddresses, classes, id} = this.props;
     const {
       poolingContract: {
-        saleAddress, tokenAddress, transactionFee, blockChain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution
+        saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
       }
     } = this.state;
     const canSubmit = isNameValid && isSaleAddressValid && isTokenAddressValid;
+    console.log(pledgesEndDate);
     return (
         <form onSubmit={this.submitCreatePool}>
           <Grid container justify="space-between" className={classes.containerGrid}>
-            <Header title="Create Pool" headerItems={HeaderItems.poolCreate} />
+            <Header title={id ? "Update Pool" : "Create Pool"} headerItems={HeaderItems.poolCreate} />
             <Settings
                 name={name}
+                poolId={id}
                 isNameValid={isNameValid}
-                blockChain={blockChain}
+                blockChain={blockchain}
                 ownerAddress={ownerAddress}
                 ethAddresses={ethAddresses}
                 wanAddresses={wanAddresses}
@@ -106,7 +121,7 @@ class PoolCreate extends React.Component<Props, State> {
                   type="submit"
                   onClick={this.submitCreatePool}
               >
-                CREATE POOL
+                {id ? "UPDATE" : "CREATE"} POOL
               </Button>
             </Grid>
           </Grid>
@@ -120,14 +135,14 @@ class PoolCreate extends React.Component<Props, State> {
     switch (fieldName) {
       case "ownerAddress": {
         const {ethAddresses, wanAddresses} = this.props;
-        value = poolingContract.blockChain === "ETH" ?
+        value = poolingContract.blockchain === "ETH" ?
             ethAddresses.find(address => address.address === e.target.value) :
             wanAddresses.find(address => address.publicAddress === e.target.value);
         break;
       }
-      case "blockChain": {
+      case "blockchain": {
         value = e.target.value;
-        poolingContract = {...poolingContract, blockChain: value as PoolingContractBlockChain};
+        poolingContract = {...poolingContract, blockchain: value as PoolingContractBlockChain};
         poolingContract = setOwnerAddress(this.props, poolingContract);
         break;
       }
@@ -166,11 +181,20 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   submitCreatePool = (event: React.FormEvent) => {
-    const {poolingContext: {createPoolingContract}} = this.props;
+    const {poolingContext: {createPoolingContract, updatePoolingContract}, id} = this.props;
     const {poolingContract} = this.state;
     event.preventDefault();
     console.log('SubmitCreatePool...');
-    createPoolingContract(poolingContract);
+    id ? updatePoolingContract(id, poolingContract).then(res => {
+          if (res.success === true) {
+            window.location.hash = "pooling";
+          }
+        }) :
+        createPoolingContract(poolingContract).then(res => {
+          if (res.success === true) {
+            window.location.hash = "pooling";
+          }
+        });
   }
 }
 

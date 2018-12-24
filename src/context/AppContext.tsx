@@ -11,7 +11,7 @@ interface AppContextInterface {
       url: string,
       method: "GET" | "POST",
       postData: {} | null,
-  ) => Promise<{}>
+  ) => Promise<any>
 }
 
 const ctxt = React.createContext<AppContextInterface | null>(null);

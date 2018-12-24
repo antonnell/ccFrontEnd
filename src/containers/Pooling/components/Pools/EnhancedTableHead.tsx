@@ -8,20 +8,20 @@ import TableHead from "@material-ui/core/TableHead";
 
 const rows = [
   { id: "name", numeric: false, disablePadding: false, label: "Name" },
-  { id: "creator", numeric: false, disablePadding: false, label: "Creator" },
+  // { id: "creator", numeric: false, disablePadding: false, label: "Creator" },
   {
-    id: "fundStatus",
+    id: "status",
     numeric: false,
     disablePadding: false,
     label: "Fund Status"
   },
-  { id: "token", numeric: true, disablePadding: false, label: "Token" },
-  {
-    id: "myContribution",
-    numeric: false,
-    disablePadding: false,
-    label: "My Contribution"
-  },
+  // { id: "token", numeric: true, disablePadding: false, label: "Token" },
+  // {
+  //   id: "myContribution",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "My Contribution"
+  // },
   {
     id: "blockchain",
     numeric: false,
@@ -63,12 +63,7 @@ class EnhancedTableHead  extends React.Component<Props> {
                           direction={order === false?undefined:order}
                           onClick={this.createSortHandler(row.id)}
                       >
-                        <Typography
-                            variant="body1"
-                            style={{ fontSize: "17px", fontWeight: "bold" }}
-                        >
-                          {row.label}
-                        </Typography>
+                        <Typography variant="body1">{row.label}</Typography>
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>

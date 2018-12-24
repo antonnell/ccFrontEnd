@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FundingPools, GetManagedFundingPoolsResponse, PoolingContract} from "../types/pooling";
+import {FundingPools, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract} from "../types/pooling";
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
@@ -7,7 +7,10 @@ import {WanAddress} from "../types/wan";
 interface PoolingContextInterface {
   pools: FundingPools[];
   getManagedFundingPools: (userId:string)=>void;
-  createPoolingContract: (poolingContract: PoolingContract) => void
+  getAvailableFundingPools: (userId:string)=>void;
+  createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
+  updatePoolingContract: (poolId:number,poolingContract: PoolingContract) => Promise<any>
+  getManagedFundingPoolDetails: (poolId:number)=>Promise<PoolingContract>;
 }
 
 const ctxt = React.createContext<PoolingContextInterface | null>(null);
@@ -23,20 +26,52 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     createPoolingContract: poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
-      // const url = 'ethereum/updateAddress';
       const method = "POST";
-      callApi(url, method, {
+      return callApi(url, method, {
         ...poolingContract,
-        ownerAddress: poolingContract.blockChain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
+        ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
+      });
+    },
+    updatePoolingContract: (poolId,poolingContract) => {
+      const {appContext: {callApi}} = this.props;
+      const url = 'pooling/updatePoolingContract';
+      const method = "POST";
+      return callApi(url, method, {
+        ...poolingContract,
+        poolId,
+        ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
+      });
+    },
+    getAvailableFundingPools: (userId)=> {
+      const {appContext: {callApi}} = this.props;
+      const url = `pooling/getAvailableFundingPools/${userId}`;
+      const method = "GET";
+      callApi(url, method,{}).then(res=> {
+        console.log(res);
+        const response:GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
+        console.log(response);
       });
     },
     getManagedFundingPools: (userId)=> {
       const {appContext: {callApi}} = this.props;
+      // const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
       callApi(url, method,{}).then(res=> {
         const response:GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
-        response.success && this.setState({pools:[...response.fundingPools]})
+        response.success && this.setState({pools:[...response.fundingPools]});
+        // response.fundingPools.map(pool=>
+        //     getManagedFundingPoolDetails(pool.id)
+        // )
+      });
+    },
+    getManagedFundingPoolDetails: (poolId)=> {
+      const {appContext: {callApi}} = this.props;
+      const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
+      const method = "GET";
+      return callApi(url, method,{}).then(res=> {
+        console.log(res);
+        return res.success && res.fundingPool;
       });
     }
   };

@@ -23,14 +23,15 @@ const styles = (theme: Theme) =>
 
 interface OwnProps {
   name: string;
+  poolId: number | null;
   isNameValid: boolean;
   blockChain: PoolingContractBlockChain,
-  ownerAddress: EthAddress | WanAddress | null;
+  ownerAddress: EthAddress | WanAddress | null | undefined;
   ethAddresses: EthAddress[];
   wanAddresses: WanAddress[];
   handleChange: PoolCreateHandleChange;
-  saleAddress:string;
-  tokenAddress:string;
+  saleAddress: string;
+  tokenAddress: string;
   isTokenAddressValid: boolean;
   isSaleAddressValid: boolean;
 }
@@ -41,7 +42,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class Settings extends React.Component<Props> {
   public render() {
-    const {name, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses,tokenAddress,saleAddress,isSaleAddressValid,isTokenAddressValid} = this.props;
+    const {name, poolId, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses, tokenAddress, saleAddress, isSaleAddressValid, isTokenAddressValid} = this.props;
     const nameError = Boolean(name.length) && !isNameValid;
     const saleAddressError = Boolean(saleAddress.length) && !isSaleAddressValid;
     const tokenAddressError = Boolean(tokenAddress.length) && !isTokenAddressValid;
@@ -65,16 +66,26 @@ class Settings extends React.Component<Props> {
             />
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth required margin="normal">
-              <InputLabel shrink={true}>Blockchain</InputLabel>
-              <Select fullWidth value={blockChain} onChange={handleChange("blockChain")}>
-                {poolingBlockChainOptions.map(option => {
-                  return (
-                      <MenuItem key={option} value={option}>{option}</MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
+            {poolId ? <TextField
+                    required
+                    fullWidth
+                    label="Blockchain"
+                    value={blockChain}
+                    InputLabelProps={{shrink: true}}
+                    disabled
+                    margin="normal"
+                /> :
+                <FormControl fullWidth required margin="normal">
+                  <InputLabel shrink={true}>Blockchain</InputLabel>
+                  <Select fullWidth value={blockChain} onChange={handleChange("blockchain")}>
+                    {poolingBlockChainOptions.map(option => {
+                      return (
+                          <MenuItem key={option} value={option}>{option}</MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+            }
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth required margin="normal">

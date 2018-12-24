@@ -1208,8 +1208,10 @@ class App extends Component {
   }
 
   renderScreen() {
-    const { ethAddresses, wanAddresses } = this.state;
-    switch (this.state.currentScreen) {
+    const { ethAddresses, wanAddresses,currentScreen } = this.state;
+    const path = currentScreen.split("/")[0];
+    const params = currentScreen.split("/")[1] || null;
+    switch (path) {
       case 'welcome':
         return <Welcome setUser={ this.setUser } />;
       case 'registerAccount':
@@ -1344,10 +1346,12 @@ class App extends Component {
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <Pooling user={ this.state.user } />:<Loader />;
       case 'createPool':
+      case 'updatePool':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}
             // user={this.state.user}
+            id={params}
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;

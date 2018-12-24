@@ -4,8 +4,8 @@ import {WanAddress} from "./wan";
 export type PoolingContractBlockChain = "ETH"|"WAN";
 
 export interface PoolingContract {
-  blockChain: PoolingContractBlockChain;
-  ownerAddress: EthAddress|WanAddress | null;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
+  blockchain: PoolingContractBlockChain;
+  ownerAddress: EthAddress|WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
   name: string;                                 // Easy reference display name for the user to assign to this pooling contract
   minContribution: number;                      // Minimum individual contribution the contract should accept, in Eth
   maxContribution: number;                      // Maximum individual contribution the contract should accept, in Eth
@@ -19,7 +19,7 @@ export interface PoolingContract {
 }
 
 export const initialPoolingContract:PoolingContract = {
-  blockChain: "ETH",
+  blockchain: "ETH",
   ownerAddress: null,
   name: "Test",
   minContribution: 0,
@@ -49,3 +49,5 @@ export interface GetManagedFundingPoolsResponse {
   fundingPools: FundingPools[];
   success: boolean;
 }
+
+export interface GetAvailableFundingPoolsResponse extends GetManagedFundingPoolsResponse{}
