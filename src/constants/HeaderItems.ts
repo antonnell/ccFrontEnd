@@ -13,39 +13,32 @@ interface HeaderItemsInterface {
   poolCreate: HeaderItem;
 }
 
-const HeaderItems: HeaderItemsInterface = {
+const poolingMenuItems = [
+  {
+    label: "Browse Pools",
+    link: "browsePools"
+  },
+  {
+    label: "Create Whitelist",
+    link: "createWhitelist"
+  }
+];
+
+const headerItems: HeaderItemsInterface = {
   pooling: {
     buttons: [{
       label: "New Pool",
       link: "createPool"
     }],
-    menuItems: [
-      {
-        label: "Browse Pools",
-        link: "browsePools"
-      },
-      {
-        label: "My Invites",
-        link: "myInvites"
-      }
-    ]
+    menuItems: poolingMenuItems
   },
   poolCreate: {
     buttons: [{
       label: "Pool Home",
       link: "pooling"
     }],
-    menuItems: [
-      {
-        label: "Browse Pools",
-        link: "browsePools"
-      },
-      {
-        label: "My Invites",
-        link: "myInvites"
-      }
-    ]
+    menuItems: poolingMenuItems
   }
 };
 
-export default HeaderItems;
+export default headerItems;

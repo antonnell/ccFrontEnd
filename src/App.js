@@ -54,6 +54,7 @@ import crypto from 'crypto';
 import PoolCreate from './containers/PoolCreate/index';
 import Loader from './components/Loader';
 import Context from './context/Context';
+import WhitelistCreate from './containers/WhitelistCreate';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -1195,7 +1196,7 @@ class App extends Component {
               direction="row"
               style={ { minHeight: '622px', position: 'relative', flex: 1 } }
             >
-              <Grid item xs={ 12 }>
+              <Grid item xs={ 12 } style={{marginRight: 16}}>
                 { this.state.user == null ? null : this.renderAppBar() }
                 { this.renderScreen() }
               </Grid>
@@ -1349,6 +1350,15 @@ class App extends Component {
       case 'updatePool':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
+            // theme={this.state.theme}
+            // user={this.state.user}
+            id={params}
+            ethAddresses={ this.state.ethAddresses }
+            wanAddresses={ this.state.wanAddresses }
+          /> : <Loader />;
+      case "createWhitelist":
+        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+          <WhitelistCreate
             // theme={this.state.theme}
             // user={this.state.user}
             id={params}

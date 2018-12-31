@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/Header';
-import HeaderItems from "../../constants/HeaderItems";
+import headerItems from "../../constants/HeaderItems";
 import Settings from "./components/Settings";
 import {Button, Theme, WithStyles} from "@material-ui/core";
 import {initialPoolingContract, PoolingContract, PoolingContractBlockChain} from "../../types/pooling";
@@ -18,7 +18,7 @@ import moment from "moment";
 const styles = (theme: Theme) =>
     createStyles({
       containerGrid: {
-        paddingRight: theme.spacing.unit * 3
+        marginTop: theme.spacing.unit * 5
       }
     });
 export type PoolCreateHandleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
@@ -50,9 +50,9 @@ class PoolCreate extends React.Component<Props, State> {
   readonly state: State = {
     poolingContract: setOwnerAddress(this.props, initialPoolingContract),
     validation: {
-      isNameValid: true,
-      isSaleAddressValid: true,
-      isTokenAddressValid: true,
+      isNameValid: false,
+      isSaleAddressValid: false,
+      isTokenAddressValid: false,
     }
   };
 
@@ -81,8 +81,8 @@ class PoolCreate extends React.Component<Props, State> {
     console.log(pledgesEndDate);
     return (
         <form onSubmit={this.submitCreatePool}>
+          <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} />
           <Grid container justify="space-between" className={classes.containerGrid}>
-            <Header title={id ? "Update Pool" : "Create Pool"} headerItems={HeaderItems.poolCreate} />
             <Settings
                 name={name}
                 poolId={id}
