@@ -1,6 +1,7 @@
 import * as React from 'react';
 import AppContext from "./AppContext";
 import PoolingContext from "./PoolingContext";
+import ContactsContext from "./ContactsContext";
 
 interface OwnProps {
 }
@@ -14,7 +15,9 @@ class Context extends React.Component<Props> {
     return (
         <AppContext>
           <PoolingContext>
+            <ContactsContext>
             {children}
+            </ContactsContext>
           </PoolingContext>
         </AppContext>
     );

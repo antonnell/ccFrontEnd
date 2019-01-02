@@ -95,7 +95,6 @@ class Pools extends React.Component<Props, State> {
   public render() {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
     const {classes, poolingContext: {pools}} = this.props;
-    console.log(pools);
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
         rowsPerPage -
