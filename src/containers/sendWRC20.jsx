@@ -14,6 +14,7 @@ const createReactClass = require("create-react-class");
 let wanEmitter = require("../store/wanStore.js").default.emitter;
 let wanDispatcher = require("../store/wanStore.js").default.dispatcher;
 
+
 let SendWRC20 = createReactClass({
   getInitialState() {
     return {
@@ -41,6 +42,12 @@ let SendWRC20 = createReactClass({
       account: null,
       accountError: false,
       accountErrorMessage: "",
+
+      ownAccountValue: "",
+      ownAccountValid: true,
+      ownAccount: null,
+      ownAccountError: false,
+      ownAccountErrorMessage: "",
 
       amount: "",
       amountValid: false,
@@ -112,6 +119,7 @@ let SendWRC20 = createReactClass({
             loading={this.state.loading}
             proceedClicked={this.proceedClicked}
             selectAddress={this.selectAddress}
+            selectOwnAddress={this.selectOwnAddress}
             selectContact={this.selectContact}
             wanAddresses={this.props.wanAddresses}
             contacts={this.props.contacts}
@@ -120,6 +128,10 @@ let SendWRC20 = createReactClass({
             account={this.state.account}
             accountError={this.state.accountError}
             accountErrorMessage={this.state.accountErrorMessage}
+            ownAccountValue={this.state.ownAccountValue}
+            ownAccount={this.state.ownAccount}
+            ownAccountError={this.state.ownAccountError}
+            ownAccountErrorMessage={this.state.ownAccountErrorMessage}
             contactValue={this.state.contactValue}
             contact={this.state.contact}
             contactError={this.state.contactError}
@@ -151,6 +163,7 @@ let SendWRC20 = createReactClass({
             loading={this.state.loading}
             tabValue={this.state.tabValue}
             account={this.state.account}
+            ownAccount={this.state.ownAccount}
             contact={this.state.contact}
             amount={this.state.amount}
             gwei={this.state.gwei}
@@ -176,6 +189,7 @@ let SendWRC20 = createReactClass({
             loading={this.state.loading}
             proceedClicked={this.proceedClicked}
             selectAddress={this.selectAddress}
+            selectOwnAddress={this.selectOwnAddress}
             selectContact={this.selectContact}
             wanAddresses={this.props.wanAddresses}
             contacts={this.props.contacts}
@@ -184,6 +198,10 @@ let SendWRC20 = createReactClass({
             account={this.state.account}
             accountError={this.state.accountError}
             accountErrorMessage={this.state.accountErrorMessage}
+            ownAccountValue={this.state.ownAccountValue}
+            ownAccount={this.state.ownAccount}
+            ownAccountError={this.state.ownAccountError}
+            ownAccountErrorMessage={this.state.ownAccountErrorMessage}
             contactValue={this.state.contactValue}
             contact={this.state.contact}
             contactError={this.state.contactError}
@@ -200,6 +218,11 @@ let SendWRC20 = createReactClass({
             setupPaymentValid={this.state.setupPaymentValid}
             disclaimer={this.state.disclaimer}
             validateField={this.validateField}
+            wrc20Tokens={this.props.wrc20Tokens}
+            sendWRC20Symbol={this.state.sendWRC20Symbol}
+            selectToken={this.selectToken}
+            tokenError={this.state.tokenError}
+            tokenErrorMessage={this.state.tokenErrorMessage}
           />
         );
     }
@@ -266,6 +289,25 @@ let SendWRC20 = createReactClass({
     );
   },
 
+  selectOwnAddress(event) {
+    var selectedAccount = this.props.wanAddresses.filter(address => {
+      return address.publicAddress === event.target.value;
+    });
+    if (selectedAccount.length > 0) {
+      selectedAccount = selectedAccount[0];
+    } else {
+      selectedAccount = null;
+    }
+    this.setState({
+      ownAccountValue: selectedAccount.publicAddress,
+      ownAccount: selectedAccount,
+      ownAccountValid: true
+    });
+
+    this.validateOwnAccount(selectedAccount);
+    this.validateSetupPayment();
+  },
+
   selectToken(event) {
     var selectedToken = this.props.wrc20Tokens.filter(token => {
       return token.symbol == event.target.value;
@@ -325,6 +367,7 @@ let SendWRC20 = createReactClass({
     this.validatePublicAddress();
     this.validateAccount();
     this.validateToken();
+    this.validateOwnAccount();
     this.validateContact();
 
     if (this.validateSetupPayment()) {
@@ -362,6 +405,8 @@ let SendWRC20 = createReactClass({
     } else if (this.state.tabValue == 1) {
       //public address payment
       content.toAddress = this.state.publicAddress;
+    }  else if (this.state.tabValue === 2) {
+      content.toAddress = this.state.ownAccountValue;
     } else {
       return false;
     }
@@ -445,6 +490,12 @@ let SendWRC20 = createReactClass({
       accountError: false,
       accountErrorMessage: "",
 
+      ownAccountValue: "",
+      ownAccountValid: true,
+      ownAccount: null,
+      ownAccountError: false,
+      ownAccountErrorMessage: "",
+
       amount: "",
       amountValid: false,
       amountError: false,
@@ -501,7 +552,13 @@ let SendWRC20 = createReactClass({
         publicAddressError: false,
         publicAddressErrorMessage: "",
         publicAddressValid: true,
-        contactValid: false
+        ownAccount: null,
+        ownAccountValue: "",
+        ownAccountError: false,
+        ownAccountErrorMessage: "",
+        publicAddressValid: true,
+        contactValid: false,
+        ownAccountValid: true
       });
     } else if (tabValue == 1) {
       this.setState({
@@ -510,8 +567,27 @@ let SendWRC20 = createReactClass({
         contactValue: "",
         contactError: false,
         contactErrorMessage: "",
+        ownAccount: null,
+        ownAccountValue: "",
+        ownAccountError: false,
+        ownAccountErrorMessage: "",
         publicAddressValid: false,
-        contactValid: true
+        contactValid: true,
+        ownAccountValid: true
+      });
+    } else if (tabValue === 2) {
+      this.setState({
+        tabValue,
+        contact: null,
+        contactValue: "",
+        contactError: false,
+        contactErrorMessage: "",
+        publicAddress: "",
+        publicAddressError: false,
+        publicAddressErrorMessage: "",
+        publicAddressValid: true,
+        contactValid: true,
+        ownAccountValid: false
       });
     } else {
       this.setState({ tabValue });
@@ -521,17 +597,15 @@ let SendWRC20 = createReactClass({
   },
 
   validateField(event, name) {
-    if (event.target.value != "") {
-      if (name === "amount") {
-        this.validateAmount(event.target.value);
-      } else if (name === "gwei") {
-        this.validateGas(event.target.value);
-      } else if (name === "publicAddress") {
-        this.validatePublicAddress(event.target.value);
-      }
-
-      this.validateSetupPayment();
+    if (name === "amount") {
+      this.validateAmount(event.target.value);
+    } else if (name === "gwei") {
+      this.validateGas(event.target.value);
+    } else if (name === "publicAddress") {
+      this.validatePublicAddress(event.target.value);
     }
+
+    this.validateSetupPayment();
   },
 
   isNumeric(n) {
@@ -541,6 +615,7 @@ let SendWRC20 = createReactClass({
   validateSetupPayment() {
     var valid =
       this.state.accountValid &&
+      this.state.ownAccountValid &&
       this.state.contactValid &&
       this.state.amountValid &&
       this.state.gweiValid &&
@@ -579,6 +654,26 @@ let SendWRC20 = createReactClass({
       this.setState({
         accountError: true,
         accountErrorMessage: "Your account is required"
+      });
+      return false;
+    }
+
+    return true;
+  },
+
+  validateOwnAccount(value) {
+    this.setState({ ownAccountError: false, ownAccountErrorMessage: "" });
+    if (value == null) {
+      if (this.state.tabValue !== 2) {
+        return true;
+      }
+      value = this.state.ownAccount;
+    }
+
+    if (value == null) {
+      this.setState({
+        ownAccountError: true,
+        ownAccountErrorMessage: "Your account is required"
       });
       return false;
     }
@@ -643,21 +738,18 @@ let SendWRC20 = createReactClass({
 
     if (value == "" || value == "0") {
       this.setState({
-        amountValid: false,
         amountError: true,
         amountErrorMessage: "Amount is requred"
       });
       return false;
     } else if (!this.isNumeric(value)) {
       this.setState({
-        amountValid: false,
         amountError: true,
         amountErrorMessage: "Invalid amount"
       });
       return false;
     } else if (this.state.account != null && tokenBalance < value) {
       this.setState({
-        amountValid: false,
         amountError: true,
         amountErrorMessage: "Amount greater than current balance"
       });

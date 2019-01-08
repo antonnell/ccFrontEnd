@@ -27,7 +27,7 @@ import Contacts from "./containers/contacts.jsx";
 import SendEthereum from "./containers/sendEthereum.jsx";
 import SendERC20 from "./containers/sendERC20.jsx";
 import SendWanchain from "./containers/sendWanchain.jsx";
-// import SendWRC20 from "./containers/sendWRC20.jsx";
+import SendWRC20 from "./containers/sendWRC20.jsx";
 import SendAion from "./containers/sendAion.jsx";
 // import WhitelistMe from "./containers/whitelistMe.jsx";
 // import WhitelistMeDone from "./containers/whitelistMeDone.jsx";
@@ -1314,8 +1314,8 @@ class App extends Component {
             contacts={this.state.contacts}
           />
         );
-      // case 'sendWRC20':
-      //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendWRC20':
+        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case "sendAion":
         return (
           <SendAion

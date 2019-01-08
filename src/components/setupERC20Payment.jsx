@@ -160,7 +160,10 @@ class SetupERC20Payment extends Component {
             }
 
             return (
-              <MenuItem value={address.address} key={address.address}>
+              <MenuItem
+                value={address.address}
+                key={address.address}
+              >
                 <ListItemText
                   primary={address.name}
                   secondary={address.address}
@@ -218,7 +221,11 @@ class SetupERC20Payment extends Component {
                   <Typography variant="h3" noWrap>
                     {selectedContact.displayName}
                   </Typography>
-                  <Typography variant="body1" noWrap>
+                  <Typography
+                    variant="subtitle1"
+                    noWrap
+                    style={{ color: "rgba(0, 0, 0, 0.54)" }}
+                  >
                     {selectedContact.primaryEthAddress}
                   </Typography>
                 </Grid>

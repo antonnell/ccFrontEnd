@@ -189,6 +189,7 @@ let SendERC20 = createReactClass({
             loading={this.state.loading}
             proceedClicked={this.proceedClicked}
             selectAddress={this.selectAddress}
+            selectOwnAddress={this.selectOwnAddress}
             selectContact={this.selectContact}
             ethAddresses={this.props.ethAddresses}
             contacts={this.props.contacts}
@@ -217,6 +218,11 @@ let SendERC20 = createReactClass({
             setupPaymentValid={this.state.setupPaymentValid}
             disclaimer={this.state.disclaimer}
             validateField={this.validateField}
+            erc20Tokens={this.props.erc20Tokens}
+            sendERC20Symbol={this.state.sendERC20Symbol}
+            selectToken={this.selectToken}
+            tokenError={this.state.tokenError}
+            tokenErrorMessage={this.state.tokenErrorMessage}
           />
         );
     }
@@ -405,7 +411,6 @@ let SendERC20 = createReactClass({
       return false;
     }
 
-    console.log(content);
     ethDispatcher.dispatch({
       type: "sendERC20",
       content,
