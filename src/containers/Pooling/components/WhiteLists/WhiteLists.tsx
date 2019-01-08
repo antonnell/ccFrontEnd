@@ -10,20 +10,10 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import EnhancedTableHead from "../../../../components/EnhancedTableHead";
-
-
-const cells = [
-  { id: "name", numeric: false, disablePadding: false, label: "Name" },
-  { id: "users", numeric: false, disablePadding: false, label: "Users" },
-  {
-    id: "created",
-    numeric: false,
-    disablePadding: false,
-    label: "Date Created"
-  },
-  { id: "edit", numeric: true, disablePadding: false, label: "Edit" },
-  { id: "delete", numeric: false, disablePadding: false, label: "" }
-];
+import {User} from "../../../../types/account";
+import {withWhitelistContext, WithWhitelistContext} from "../../../../context/WhitelistContext";
+import {helperRenderConsoleText} from "../../../../helpers/helpers";
+import {Whitelist} from "../../../../types/whitelist";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,7 +56,7 @@ const styles = (theme: Theme) =>
     });
 
 interface OwnProps {
-  whiteLists: any;
+  user: User;
 }
 
 interface State {
@@ -78,46 +68,56 @@ interface State {
   filtersVisible: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles> {
+interface Props extends OwnProps, WithStyles<typeof styles>,WithWhitelistContext {
 }
 
 class WhiteLists extends React.Component<Props, State> {
   readonly state: State = {
     order: "asc",
-    orderBy: "timestamp",
+    orderBy: "name",
     selected: [],
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false,
   };
 
+  componentWillMount(): void {
+    const {
+      user,
+      whitelistContext: {
+        getUserSavedWhitelists
+      }
+    } = this.props;
+    getUserSavedWhitelists(user.id);
+  }
+
   public render() {
-    const {classes, whiteLists} = this.props;
+    console.log(...helperRenderConsoleText('Render Whitelists', 'lightGreen'));
+    const {classes,whitelistContext: {whitelists}} = this.props;
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
         rowsPerPage -
-        Math.min(rowsPerPage, whiteLists ? whiteLists.length : 0 - page * rowsPerPage);
+        Math.min(rowsPerPage, whitelists ? whitelists.length : 0 - page * rowsPerPage);
     return (
         <div className={classes.root}>
           <Typography variant="h5" style={{marginBottom: "20px"}}>
-            My Custom Whitelists
+            My Whitelists
           </Typography>
           <Paper>
             <div className={classes.tableWrapper}>
               <Table className={classes.table} aria-labelledby="tableTitle">
                 <EnhancedTableHead
-                    cells={cells}
                     order={order}
                     orderBy={orderBy}
                     onRequestSort={this.handleRequestSort}
                     // rowCount={data ? data.length : 0}
                 />
                 <TableBody>
-                  {stableSort(whiteLists, getSorting(order, orderBy))
+                  {stableSort(whitelists, getSorting(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((n: any) => {
+                      .map((n: Whitelist,i:number) => {
                         return (
-                            <TableRow hover tabIndex={-1} key={n.id}>
+                            <TableRow hover tabIndex={-1} key={i} onClick={this.handleRowClick(n.id||0)}>
                               <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
@@ -126,45 +126,16 @@ class WhiteLists extends React.Component<Props, State> {
                                   {n.name}
                                 </Typography>
                               </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.creator}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.fundStatus}
-                                </Typography>
-                              </TableCell>
                               <TableCell numeric>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
                                     noWrap
                                 >
-                                  {n.token}
+                                  {n.userCount}
                                 </Typography>
                               </TableCell>
                               <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.myContribution}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.blockchain}
-                                </Typography>
+                                <Typography style={{lineHeight: "57px", fontSize: "17px"}} noWrap>-</Typography>
                               </TableCell>
                             </TableRow>
                         );
@@ -179,7 +150,7 @@ class WhiteLists extends React.Component<Props, State> {
             </div>
             <TablePagination
                 component="div"
-                count={whiteLists ? whiteLists.length : 0}
+                count={whitelists ? whitelists.length : 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{
@@ -214,6 +185,10 @@ class WhiteLists extends React.Component<Props, State> {
   private handleChangeRowsPerPage = (event:any) => {
     this.setState({ rowsPerPage: event.target.value });
   };
+
+  private handleRowClick = (id: number) => () => {
+    window.location.hash = `updateWhitelist/${id}`;
+  };
 }
 
-export default withStyles(styles)(WhiteLists) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withWhitelistContext(WhiteLists)) as React.ComponentClass<OwnProps>;

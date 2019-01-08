@@ -2,6 +2,8 @@ import * as React from 'react';
 import AppContext from "./AppContext";
 import PoolingContext from "./PoolingContext";
 import ContactsContext from "./ContactsContext";
+import WhitelistContext from "./WhitelistContext";
+import DialogContext from "./DialogContext";
 
 interface OwnProps {
 }
@@ -16,7 +18,11 @@ class Context extends React.Component<Props> {
         <AppContext>
           <PoolingContext>
             <ContactsContext>
-            {children}
+              <WhitelistContext>
+                <DialogContext>
+                {children}
+                </DialogContext>
+              </WhitelistContext>
             </ContactsContext>
           </PoolingContext>
         </AppContext>

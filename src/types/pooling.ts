@@ -36,7 +36,7 @@ export const initialPoolingContract:PoolingContract = {
 export const poolingBlockChainOptions:PoolingContractBlockChain[] = ["ETH","WAN"];
 
 export interface FundingPools {
-  blockchain: "ETH" | "WAN";
+  blockchain: PoolingContractBlockChain;
   contractAddress: string;
   id: number;
   name: string;

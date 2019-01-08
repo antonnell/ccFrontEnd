@@ -35,7 +35,7 @@ class Pooling extends React.Component<Props> {
               <Pools user={user} />
             </Grid>
             <Grid item xs={12}>
-              <WhiteLists whiteLists={[]} />
+              <WhiteLists user={user} />
             </Grid>
           </Grid>
         </React.Fragment>)

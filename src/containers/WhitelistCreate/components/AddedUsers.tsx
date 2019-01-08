@@ -5,54 +5,59 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-
-interface OwnProps {
-}
+import {Contact} from "../../../types/contacts";
+import Chip from "@material-ui/core/Chip";
 
 const styles = (theme: Theme) =>
     createStyles({
       outerGrid: {
         marginTop: theme.spacing.unit * 5,
         marginRight: theme.spacing.unit
+      },
+      card: {
+        marginTop: theme.spacing.unit * 1.5,
+        padding: theme.spacing.unit,
+        minHeight: 200,
+      },
+      chips: {
+        margin: theme.spacing.unit
       }
     });
+
+interface OwnProps {
+  users: Contact[]
+  removeUserFromWhitelist: (contact: Contact) => void;
+}
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
 }
 
 class AddedUsers extends React.Component<Props> {
   public render() {
-    const {classes} = this.props;
+    const {classes, users} = this.props;
     return (
         <Grid item xs={12} className={classes.outerGrid}>
           <Grid item xs={12}>
             <Typography variant="h2">Added Users</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Card
-                style={{
-                  marginTop: '12px',
-                  padding: '12px',
-                  minHeight: '200px',
-                  width: '100%'
-                }}
-            >
-              {/*{ addedUsers.map((user, i) => {*/}
-              {/*return (*/}
-              {/*<Chip*/}
-              {/*key={ i }*/}
-              {/*label={ user }*/}
-              {/*color="primary"*/}
-              {/*onDelete={ () => {*/}
-              {/*} }*/}
-              {/*style={ { margin: '12px' } }*/}
-              {/*/>*/}
-              {/*);*/}
-              {/*}) }*/}
+            <Card className={classes.card}>
+              {users.map((user, i) => {
+                return (
+                    <Chip key={i} label={user.userName} color="primary"
+                          onDelete={this.removeUser(user)} className={classes.chips}
+                    />
+                );
+              })}
             </Card>
           </Grid>
         </Grid>
     );
+  }
+
+  removeUser = (contact: Contact) => () => {
+    const {removeUserFromWhitelist} = this.props;
+    removeUserFromWhitelist(contact);
   }
 }
 

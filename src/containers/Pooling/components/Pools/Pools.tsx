@@ -79,7 +79,7 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext 
 class Pools extends React.Component<Props, State> {
   readonly state: State = {
     order: "asc",
-    orderBy: "timestamp",
+    orderBy: "name",
     selected: [],
     page: 0,
     rowsPerPage: 5,
@@ -87,9 +87,13 @@ class Pools extends React.Component<Props, State> {
   };
 
   componentWillMount(): void {
-    const {poolingContext: {getManagedFundingPools}, user} = this.props;
+    const {
+      user,
+      poolingContext: {
+        getManagedFundingPools
+      },
+    } = this.props;
     getManagedFundingPools(user.id);
-    // getAvailableFundingPools(user.id);
   }
 
   public render() {

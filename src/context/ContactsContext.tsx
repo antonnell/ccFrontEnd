@@ -4,6 +4,10 @@ import {Contact, SearchContactsResponse} from "../types/contacts";
 
 interface ContactsContextInterface {
   searchContacts: (userNameOrEmail:string)=>Promise<Contact[]>;
+  getUserContacts: (userId:string)=>void;
+  addUserContact: (emailOrUserName:string,displayName:string,notes:string,ownerUserName:string)=>void;
+  updateUserContact: (userName:string,displayName:string,notes:string,ownerUserName:string)=>void;
+  deleteUserContact: (contactUserName:string)=>void;
 }
 
 const ctxt = React.createContext<ContactsContextInterface | null>(null);
@@ -22,6 +26,24 @@ class ContactsContext extends React.Component<WithAppContext, ContactsContextInt
       return callApi(url, method,{}).then(res=> {
         return (res as SearchContactsResponse).contacts || [];
       });
+    },
+    getUserContacts: userId => {
+      console.log(userId);
+    },
+    addUserContact: (emailOrUserName, displayName, notes, ownerUserName) => {
+      console.log(emailOrUserName);
+      console.log(displayName);
+      console.log(notes);
+      console.log(ownerUserName);
+    },
+    updateUserContact: (userName, displayName, notes, ownerUserName) => {
+      console.log(userName);
+      console.log(displayName);
+      console.log(notes);
+      console.log(ownerUserName);
+    },
+    deleteUserContact: contactUserName => {
+      console.log(contactUserName);
     }
   };
 

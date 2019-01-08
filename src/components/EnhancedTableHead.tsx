@@ -6,14 +6,23 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Typography from "@material-ui/core/Typography";
 import TableHead from "@material-ui/core/TableHead";
 
-export interface Cell {
-  id: string;
-  numeric: boolean;
-  disablePadding: boolean;
-  label: string;
-}
+const rows = [
+  { id: "name", numeric: false, disablePadding: false, label: "Name" },
+  {
+    id: "users",
+    numeric: true,
+    disablePadding: false,
+    label: "Users"
+  },
+  {
+    id: "date",
+    numeric: false,
+    disablePadding: false,
+    label: "Date Created"
+  }
+];
+
 interface OwnProps {
-  cells: Cell[]
   order: false | "desc" | "asc" | undefined;
   orderBy: string;
   onRequestSort: (e:React.MouseEvent<HTMLElement>,index:string)=>void
@@ -24,11 +33,11 @@ interface Props extends OwnProps {
 
 class EnhancedTableHead  extends React.Component<Props> {
   public render() {
-    const { order, orderBy,cells } = this.props;
+    const { order, orderBy } = this.props;
     return (
         <TableHead>
           <TableRow>
-            {cells.map(row => {
+            {rows.map(row => {
               return (
                   <TableCell
                       key={row.id}
@@ -46,12 +55,7 @@ class EnhancedTableHead  extends React.Component<Props> {
                           direction={order === false?undefined:order}
                           onClick={this.createSortHandler(row.id)}
                       >
-                        <Typography
-                            variant="body1"
-                            style={{ fontSize: "17px", fontWeight: "bold" }}
-                        >
-                          {row.label}
-                        </Typography>
+                        <Typography variant="body1">{row.label}</Typography>
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>

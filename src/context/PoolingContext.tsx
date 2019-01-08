@@ -1,16 +1,32 @@
 import * as React from 'react';
-import {FundingPools, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract} from "../types/pooling";
+import {FundingPools, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
 
 interface PoolingContextInterface {
   pools: FundingPools[];
-  getManagedFundingPools: (userId:string)=>void;
-  getAvailableFundingPools: (userId:string)=>void;
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   updatePoolingContract: (poolId:number,poolingContract: PoolingContract) => Promise<any>
+  deployPoolingContract: (poolId:number)=>void;
+  updateTokenAddress: (poolId:number,tokenAddress:string)=>void;
+  setPoolLocked: (poolId:number,isLocked:boolean)=>void;
+  updatePledgesEndDate: (poolId:number,pledgesEndDate:string)=>void;
+  updateSaleAddress: (poolId:number,saleAddress:string)=>void;
+  sendPoolFunds: (poolId:number)=>void;
+  confirmTokens: (poolId:number)=>void;
+  enableWithdrawTokens: (poolId:number)=>void;
+  depositToPoolingContract: (poolId:number,fromAddress:string,amount:number,gwei:string)=>void;
+  withdrawFromPoolingContract: (poolId:number,userAddress:string,amount:number)=>void;
+  pledgeToPoolingContract: (userAddress:string,poolAddress:string,amount:number,blockchain:PoolingContractBlockChain)=>void;
+  withdrawAllFromPoolingContract: (userAddress:string,poolAddress:string,blockchain:PoolingContractBlockChain)=>void;
+  getFundingPoolPendingTransactions: (blockchain:PoolingContractBlockChain,address:string)=>void;
+  getManagedFundingPoolPendingTransactions: (poolId:number)=>void;
+  getManagedFundingPoolContributions: (poolId:number)=>void;
+  getManagedFundingPools: (userId:string)=>void;
+  getAvailableFundingPools: (userId:string)=>void;
   getManagedFundingPoolDetails: (poolId:number)=>Promise<PoolingContract>;
+  getPoolContribution: (poolId:number,address:string)=>void;
 }
 
 const ctxt = React.createContext<PoolingContextInterface | null>(null);
@@ -42,15 +58,65 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
       });
     },
-    getAvailableFundingPools: (userId)=> {
-      const {appContext: {callApi}} = this.props;
-      const url = `pooling/getAvailableFundingPools/${userId}`;
-      const method = "GET";
-      callApi(url, method,{}).then(res=> {
-        console.log(res);
-        const response:GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
-        console.log(response);
-      });
+    deployPoolingContract: poolId => {
+      console.log(poolId);
+    },
+    updateTokenAddress: (poolId, tokenAddress) => {
+      console.log(poolId);
+      console.log(tokenAddress);
+    },
+    setPoolLocked: (poolId, isLocked) => {
+      console.log(poolId);
+      console.log(isLocked);
+    },
+    updatePledgesEndDate: (poolId, pledgesEndDate) => {
+      console.log(poolId);
+      console.log(pledgesEndDate);
+    },
+    updateSaleAddress: (poolId, saleAddress) => {
+      console.log(poolId);
+      console.log(saleAddress);
+    },
+    sendPoolFunds: poolId => {
+      console.log(poolId);
+    },
+    confirmTokens: poolId => {
+      console.log(poolId);
+    },
+    enableWithdrawTokens: poolId => {
+      console.log(poolId);
+    },
+    depositToPoolingContract: (poolId, fromAddress, amount, gwei) => {
+      console.log(poolId);
+      console.log(fromAddress);
+      console.log(amount);
+      console.log(gwei);
+    },
+    withdrawFromPoolingContract: (poolId, userAddress, amount) => {
+      console.log(poolId);
+      console.log(userAddress);
+      console.log(amount);
+    },
+    pledgeToPoolingContract: (userAddress, poolAddress, amount, blockchain) => {
+      console.log(userAddress);
+      console.log(poolAddress);
+      console.log(amount);
+      console.log(blockchain);
+    },
+    withdrawAllFromPoolingContract: (userAddress, poolAddress, blockchain) => {
+      console.log(userAddress);
+      console.log(poolAddress);
+      console.log(blockchain);
+    },
+    getFundingPoolPendingTransactions: (blockchain,address) => {
+      console.log(blockchain);
+      console.log(address);
+    },
+    getManagedFundingPoolPendingTransactions: poolId => {
+      console.log(poolId);
+    },
+    getManagedFundingPoolContributions: poolId => {
+      console.log(poolId);
     },
     getManagedFundingPools: (userId)=> {
       const {appContext: {callApi}} = this.props;
@@ -65,6 +131,16 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         // )
       });
     },
+    getAvailableFundingPools: (userId)=> {
+      const {appContext: {callApi}} = this.props;
+      const url = `pooling/getAvailableFundingPools/${userId}`;
+      const method = "GET";
+      callApi(url, method,{}).then(res=> {
+        console.log(res);
+        const response:GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
+        console.log(response);
+      });
+    },
     getManagedFundingPoolDetails: (poolId)=> {
       const {appContext: {callApi}} = this.props;
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
@@ -73,7 +149,11 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         console.log(res);
         return res.success && res.fundingPool;
       });
-    }
+    },
+    getPoolContribution: (poolId, address) => {
+      console.log(poolId);
+      console.log(address);
+    },
   };
 
   public render() {

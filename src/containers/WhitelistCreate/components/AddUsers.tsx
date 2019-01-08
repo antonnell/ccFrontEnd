@@ -36,10 +36,11 @@ const styles = (theme: Theme) =>
 interface State {
   userSearch: string;
   suggestions: Contact[];
-  selectedUser: Contact|null;
+  selectedUser: Contact | null;
 }
 
 interface OwnProps {
+  addUserToWhitelist: (contact: Contact) => void
 }
 
 
@@ -56,6 +57,7 @@ function renderInputComponent(inputProps: any) {
       <TextField
           fullWidth
           InputProps={{
+
             inputRef: node => {
               ref(node);
               inputRef(node);
@@ -130,10 +132,10 @@ class AddUsers extends React.Component<Props, State> {
                   suggestion: classes.suggestion,
                 }}
                 renderSuggestionsContainer={options => {
-                  return  options.children !== null?
+                  return options.children !== null ?
                       <Paper {...options.containerProps} square>
                         {options.children}
-                      </Paper>:
+                      </Paper> :
                       null
                 }}
             />
@@ -160,15 +162,16 @@ class AddUsers extends React.Component<Props, State> {
 
   handleSuggestionsClearRequested = () => {
     this.setState({
-      suggestions: [],
+      suggestions: [], userSearch: "", selectedUser: null
     });
   };
 
   handleSuggestionSelected = () => {
-    console.log("Send this user to the parent component",this.state.selectedUser);
-    this.setState({suggestions:[],userSearch:"",selectedUser: null})
-  }
-
+    const {addUserToWhitelist} = this.props;
+    const {selectedUser} = this.state;
+    selectedUser !== null && addUserToWhitelist(selectedUser);
+    this.handleSuggestionsClearRequested();
+  };
 }
 
 export default withStyles(styles)(withContactsContext(AddUsers)) as React.ComponentClass<OwnProps>;

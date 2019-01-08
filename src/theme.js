@@ -153,7 +153,7 @@ let customTheme =  {
         },
         text: {
           primary: '#1a191d',
-          secondary: '#3cabff'
+          // secondary: '#3cabff'
         }
       }
     },

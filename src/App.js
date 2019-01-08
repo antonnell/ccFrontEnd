@@ -23,11 +23,9 @@ import AionAccounts from './containers/aionAccounts.jsx';
 // import UpdatePassword from "./containers/updatePassword.jsx";
 // import Manage2FA from "./containers/manage2fa.jsx";
 import Contacts from './containers/contacts.jsx';
-// import Whitelist from "./containers/whitelist.jsx";
 import SendEthereum from './containers/sendEthereum.jsx';
 import SendERC20 from './containers/sendERC20.jsx';
 import SendWanchain from './containers/sendWanchain.jsx';
-// import SendWRC20 from "./containers/sendWRC20.jsx";
 import SendAion from './containers/sendAion.jsx';
 // import WhitelistMe from "./containers/whitelistMe.jsx";
 // import WhitelistMeDone from "./containers/whitelistMeDone.jsx";
@@ -55,6 +53,7 @@ import PoolCreate from './containers/PoolCreate/index';
 import Loader from './components/Loader';
 import Context from './context/Context';
 import WhitelistCreate from './containers/WhitelistCreate';
+import AppDialog from './containers/AppDialog/AppDialog';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -1203,6 +1202,7 @@ class App extends Component {
             </Grid>
           </div>
           { this.renderFooter() }
+          <AppDialog />
         </MuiThemeProvider>
       </Context>
     );
@@ -1357,6 +1357,7 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
       case "createWhitelist":
+      case "updateWhitelist":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <WhitelistCreate
             // theme={this.state.theme}
