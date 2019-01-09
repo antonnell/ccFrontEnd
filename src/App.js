@@ -1351,7 +1351,7 @@ class App extends Component {
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}
-            // user={this.state.user}
+            user={this.state.user}
             id={params}
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }

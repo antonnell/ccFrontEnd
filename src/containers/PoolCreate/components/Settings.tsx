@@ -90,7 +90,8 @@ class Settings extends React.Component<Props> {
           <Grid item xs={12}>
             <FormControl fullWidth required margin="normal">
               <InputLabel shrink={true}>Owner Address</InputLabel>
-              <Select fullWidth value={(ownerAddress as EthAddress).address !== undefined ? (ownerAddress as EthAddress).address : (ownerAddress as WanAddress).publicAddress} onChange={handleChange("ownerAddress")}>
+              <Select fullWidth value={(ownerAddress as EthAddress).address !== undefined ? (ownerAddress as EthAddress).address : (ownerAddress as WanAddress).publicAddress}
+                      onChange={handleChange("ownerAddress")}>
                 {blockChain === "ETH" ? ethAddresses.map(address =>
                     <MenuItem key={address.address} value={address.address}>{address.name}</MenuItem>
                 ) : wanAddresses.map(address =>

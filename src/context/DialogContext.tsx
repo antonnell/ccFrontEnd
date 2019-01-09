@@ -1,18 +1,19 @@
 import * as React from 'react';
-import {DialogActions} from "../types/dialog";
+import {DialogActionResult} from "../types/dialog";
 
+type DialogActions = "deleteWhitelist" | null;
 type DialogType = "confirmation";
-type ActionResult = "pending"|"denied"|"confirmed";
 
 interface DialogContextInterface {
   title: string;
   body: string;
   open: boolean;
   action:DialogActions;
-  result: ActionResult;
+  result: DialogActionResult;
   type: DialogType;
   showDialog: (type:DialogType,action:DialogActions,title?:string,body?:string) => void;
-  hideDialog: () => void;
+  hideDialog: (result:DialogActionResult) => void;
+  reset: ()=>void;
 }
 
 const ctxt = React.createContext<DialogContextInterface | null>(null);
@@ -24,8 +25,8 @@ const DialogContextConsumer = ctxt.Consumer;
 class DialogContext extends React.Component<{}, DialogContextInterface> {
   // noinspection JSUnusedGlobalSymbols
   readonly state: DialogContextInterface = {
-    title: 'Place holder',
-    body: 'Place holder',
+    title: '',
+    body: '',
     open: false,
     type: "confirmation",
     action: null,
@@ -42,7 +43,17 @@ class DialogContext extends React.Component<{}, DialogContextInterface> {
             type==="confirmation"?"Are you sure you want to continue with this action":"Default Body"
       });
     },
-    hideDialog: () => this.setState({ open: false })
+    hideDialog: (result) => {
+      return this.setState({open: false,result});
+    },
+    reset: () => this.setState({
+      title: '',
+      body: '',
+      open: false,
+      type: "confirmation",
+      action: null,
+      result: "pending",
+    })
   };
 
   public render() {

@@ -65,6 +65,28 @@ class WhitelistCreate extends React.Component<Props, State> {
         {whitelist, validation: {isNameValid: true}, originalWhitelist: {...whitelist, users: [...whitelist.users]}}));
   }
 
+  componentWillUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): void {
+    const {
+      dialogContext: {
+        result,
+        action,
+          reset
+      },
+      whitelistContext: {
+        deleteSavedWhitelist
+      },
+      id
+    } = nextProps;
+    if (result !== "pending" && action === "deleteWhitelist") {
+      reset();
+      result === "confirmed" && deleteSavedWhitelist(id||0).then(()=>{
+        this.clearState().then(()=>{
+          window.location.hash = "pooling";
+        });
+      })
+    }
+  }
+
   render() {
     const {classes, id} = this.props;
     const {
@@ -78,7 +100,7 @@ class WhitelistCreate extends React.Component<Props, State> {
     } = this.state;
     return (
         <React.Fragment>
-          <Header title={`${id?"Update":"Create"} Whitelist`} headerItems={headerItems.poolCreate} />
+          <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.poolCreate} />
           <Grid container justify="space-between" className={classes.containerGrid}>
             <Settings
                 name={name}
@@ -91,7 +113,7 @@ class WhitelistCreate extends React.Component<Props, State> {
               <Grid container justify="flex-end">
                 <Button
                     disabled={!isNameValid}
-                    variant="raised"
+                    variant="contained"
                     size="large"
                     color="primary"
                     type="submit"
@@ -179,12 +201,12 @@ class WhitelistCreate extends React.Component<Props, State> {
     }
   };
 
-  removeWhitelist = ()=> {
-        const {dialogContext: {showDialog}} = this.props;
-        showDialog("confirmation", "deleteWhitelist");
+  removeWhitelist = () => {
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "deleteWhitelist");
   };
-  clearState = () => {
-    this.setState({whitelist: initialWhitelist, originalWhitelist: initialWhitelist, validation: {isNameValid: false}})
+  clearState = async () => {
+    return this.setState({whitelist: initialWhitelist, originalWhitelist: initialWhitelist, validation: {isNameValid: false}})
   }
 }
 

@@ -11,11 +11,6 @@ export interface Whitelist {
   createdDate?: string;
 }
 
-export interface UsersPoolWhitelist {
-  userId: string;
-  allocation: string;
-}
-
 export interface WhitelistRequest {
   name: string;  // Name of the whitelist
   users: WhiteListUsers[];  // list of users to include in the whitelist, each consisting of:

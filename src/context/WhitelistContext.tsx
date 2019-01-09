@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {convertWhitelistToWhiteListRequest, GetUserSavedWhitelistDetailsResponse, GetUserSavedWhitelistsResponse, UsersPoolWhitelist, Whitelist} from "../types/whitelist";
+import {convertWhitelistToWhiteListRequest, GetUserSavedWhitelistDetailsResponse, GetUserSavedWhitelistsResponse, Whitelist} from "../types/whitelist";
 import {WithAppContext, withAppContext} from "./AppContext";
 
 interface WhitelistContextInterface {
@@ -8,12 +8,12 @@ interface WhitelistContextInterface {
   getUserSavedWhitelistDetails: (whitelistId: number) => Promise<Whitelist>;
   createSavedWhitelist: (whitelist: Whitelist) => Promise<boolean>;
   updateSavedWhitelist: (whitelist:Whitelist)=>Promise<boolean>;
-  deleteSavedWhitelist: (whitelistId:number)=>void;
+  deleteSavedWhitelist: (whitelistId:number)=>Promise<boolean>;
   addUsersToSavedWhitelist: (whitelistId:number,userIds:string[])=>Promise<boolean>;
   removeUsersFromSavedWhitelist: (whitelistId:number,userIds:string[])=>Promise<boolean>;
-  updateUsersOnPoolWhitelist: (poolId:number,users:UsersPoolWhitelist)=>void;
-  addUsersToPoolWhitelist: (etherPoolId:number,users:UsersPoolWhitelist)=>void;
-  removeUsersFromPoolWhitelist: (poolId:number,userIds:string[])=>void;
+  updateUsersOnPoolWhitelist: (poolId:number,users:{userId:string,allocation:number}[])=>void;
+  addUsersToPoolWhitelist: (poolId:number,users:{userId:string,allocation:number}[])=>Promise<boolean>;
+  removeUsersFromPoolWhitelist: (poolId:number,userIds:string[])=>Promise<boolean>;
 }
 
 const ctxt = React.createContext<WhitelistContextInterface | null>(null);
@@ -66,8 +66,15 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
         return res.success;
       });
     },
-    deleteSavedWhitelist: whitelistId => {
-      console.log(whitelistId);
+    deleteSavedWhitelist: async whitelistId => {
+      const {appContext: {callApi}} = this.props;
+      const url = 'whitelists/deleteSavedWhitelist';
+      const method = "POST";
+      return callApi(url, method, {
+        whitelistId
+      }).then(res => {
+        return res.success;
+      });
     },
     addUsersToSavedWhitelist: async (whitelistId, userIds) => {
       const {appContext: {callApi}} = this.props;
@@ -93,13 +100,23 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
       console.log(poolId);
       console.log(users);
     },
-    addUsersToPoolWhitelist: (etherPoolId, users) => {
-      console.log(etherPoolId);
-      console.log(users);
+    addUsersToPoolWhitelist: async (poolId, users) => {
+      const {appContext: {callApi}} = this.props;
+      const url = 'whitelists/addUsersToPoolWhitelist';
+      const method = "POST";
+      return users.length?callApi(url, method, {
+        poolId,
+        users
+      }).then(()=>true):false;
     },
-    removeUsersFromPoolWhitelist: (poolId, userIds) => {
-      console.log(poolId);
-      console.log(userIds);
+    removeUsersFromPoolWhitelist: async (poolId, userIds) => {
+      const {appContext: {callApi}} = this.props;
+      const url = 'whitelists/removeUsersFromPoolWhitelist';
+      const method = "POST";
+      return userIds.length? callApi(url, method, {
+        poolId,
+        userIds: [...userIds]
+      }).then(() => true):false;
     }
   };
 

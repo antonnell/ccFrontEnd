@@ -1,1 +1,1 @@
-export type DialogActions = "deleteWhitelist" | null;
+export type DialogActionResult = "pending"|"denied"|"confirmed";
