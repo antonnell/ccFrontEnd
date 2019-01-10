@@ -205,6 +205,7 @@ class WhitelistCreate extends React.Component<Props, State> {
     const {dialogContext: {showDialog}} = this.props;
     showDialog("confirmation", "deleteWhitelist");
   };
+
   clearState = async () => {
     return this.setState({whitelist: initialWhitelist, originalWhitelist: initialWhitelist, validation: {isNameValid: false}})
   }

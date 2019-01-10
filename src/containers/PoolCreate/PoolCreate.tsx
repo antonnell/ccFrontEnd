@@ -19,6 +19,9 @@ import AddedUsers from "./components/AddedUsers";
 import {Contact} from "../../types/contacts";
 import AddUsers from "./components/AddUsers";
 import {WithWhitelistContext, withWhitelistContext} from "../../context/WhitelistContext";
+import {DeleteIcon} from "../../theme/icons";
+import Fab from "@material-ui/core/Fab";
+import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -30,6 +33,14 @@ const styles = (theme: Theme) =>
       marginRight: theme.spacing.unit,
       marginBottom: theme.spacing.unit * 4,
     },
+    deployButton: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    },
+    fab: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    }
   });
 
 export type PoolCreateHandleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
@@ -51,7 +62,7 @@ interface State {
   originalPoolingContractUsers: Contact[];
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext,WithDialogContext {
 }
 
 const setOwnerAddress = (props: Props, poolingContract: PoolingContract) => {
@@ -76,8 +87,42 @@ class PoolCreate extends React.Component<Props, State> {
       poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
         ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
       poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
-      this.setState({poolingContract, validation: {isNameValid: true, isTokenAddressValid: true, isSaleAddressValid: true}, originalPoolingContractUsers: [...poolingContract.whitelistedUsers]});
+      if (poolingContract.whitelistedUsers === null) {
+        poolingContract.whitelistedUsers = [];
+      }
+      console.log(poolingContract);
+      this.setState({
+        poolingContract,
+        validation: {
+          isNameValid: true,
+          isTokenAddressValid: true,
+          isSaleAddressValid: true
+        },
+        originalPoolingContractUsers: [...poolingContract.whitelistedUsers]
+      });
     });
+  }
+
+  componentWillUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): void {
+    const {
+      dialogContext: {
+        result,
+        action,
+        reset
+      },
+      poolingContext: {
+        deletePoolingContract
+      },
+      id
+    } = nextProps;
+    if (result !== "pending" && action === "deletePoolingContract") {
+      reset();
+      result === "confirmed" && deletePoolingContract(id||0).then(()=>{
+        this.clearState().then(()=>{
+          window.location.hash = "pooling";
+        });
+      })
+    }
   }
 
   render() {
@@ -137,12 +182,42 @@ class PoolCreate extends React.Component<Props, State> {
             >
               {id ? "UPDATE" : "CREATE"} POOL
             </Button>
+            {id && <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={this.deployPool}
+            >
+              Deploy
+            </Button>}
+            {id && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool}>
+              <DeleteIcon />
+            </Fab>}
           </Grid>
         </Grid>
       </React.Fragment>
     );
   }
 
+  removePool = ()=> {
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "deletePoolingContract");
+  };
+  deployPool = () => {
+    const {
+      id,
+      poolingContext: {
+        deployPoolingContract
+      }
+    } = this.props;
+    deployPoolingContract(id||0).then(()=>{
+      this.clearState().then(()=>{
+        window.location.hash = "pooling";
+      });
+    })
+  };
   removeUserFromWhitelist = (contact: Contact) => {
     const {poolingContract} = this.state;
     const {whitelistedUsers: users} = poolingContract;
@@ -252,8 +327,18 @@ class PoolCreate extends React.Component<Props, State> {
         }
       });
     }
+  };
 
+  clearState = async () => {
+    return this.setState({
+      poolingContract: setOwnerAddress(this.props, initialPoolingContract),
+      originalPoolingContractUsers: [],
+      validation: {
+        isSaleAddressValid: false,
+        isTokenAddressValid: false,
+        isNameValid: false
+      }})
   }
 }
 
-export default withStyles(styles)(withPoolingContext(withWhitelistContext(PoolCreate))) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(PoolCreate)))) as React.ComponentClass<OwnProps>;

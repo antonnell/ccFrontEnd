@@ -90,10 +90,12 @@ class Pools extends React.Component<Props, State> {
     const {
       user,
       poolingContext: {
-        getManagedFundingPools
+        getManagedFundingPools,
+        getAvailableFundingPools
       },
     } = this.props;
     getManagedFundingPools(user.id);
+    getAvailableFundingPools(user.id);
   }
 
   public render() {

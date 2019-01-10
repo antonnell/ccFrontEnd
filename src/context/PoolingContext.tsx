@@ -7,8 +7,9 @@ import {WanAddress} from "../types/wan";
 interface PoolingContextInterface {
   pools: FundingPools[];
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
+  deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId:number,poolingContract: PoolingContract) => Promise<any>
-  deployPoolingContract: (poolId:number)=>void;
+  deployPoolingContract: (poolId:number)=>Promise<boolean>;
   updateTokenAddress: (poolId:number,tokenAddress:string)=>void;
   setPoolLocked: (poolId:number,isLocked:boolean)=>void;
   updatePledgesEndDate: (poolId:number,pledgesEndDate:string)=>void;
@@ -48,6 +49,16 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
       });
     },
+    deletePoolingContract: poolId1 => {
+      const {appContext: {callApi}} = this.props;
+      const url = '/pooling/deletePoolingContract';
+      const method = "POST";
+      return callApi(url, method, {
+        poolId1
+      }).then(res => {
+        return res.success;
+      });
+    },
     updatePoolingContract: (poolId,poolingContract) => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/updatePoolingContract';
@@ -59,7 +70,14 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       });
     },
     deployPoolingContract: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      const url = 'pooling/deployPoolingContract';
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+      }).then(res => {
+        return res.success;
+      });
     },
     updateTokenAddress: (poolId, tokenAddress) => {
       console.log(poolId);
@@ -125,7 +143,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const method = "GET";
       callApi(url, method,{}).then(res=> {
         const response:GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
-        response.success && this.setState({pools:[...response.fundingPools]});
+        response && response.success && this.setState({pools:[...response.fundingPools]});
         // response.fundingPools.map(pool=>
         //     getManagedFundingPoolDetails(pool.id)
         // )
