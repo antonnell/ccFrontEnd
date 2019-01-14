@@ -1,6 +1,7 @@
 
 export const colors = {
   dodgerBlue: "#3cabff",
+  "robin-s-egg": "#6be6fd",
   dark: "#1a191d"
 };
 
@@ -28,12 +29,16 @@ let customTheme =  {
           fontSize: '25px',
           color: colors.dodgerBlue,
           lineHeight: "30px",
+          "-webkit-font-smoothing": "antialiased",
+          "-moz-osx-font-smoothing": "grayscale",
         },
         h5: {
           fontFamily: 'ProximaNovaSemiBold, sans-serif',
           fontSize: 21,
           color: colors.dark,
-          lineHeight: "25px"
+          lineHeight: "25px",
+          "-webkit-font-smoothing": "antialiased",
+          "-moz-osx-font-smoothing": "grayscale",
         },
         h2: {
           fontSize: '20px',
@@ -101,8 +106,14 @@ let customTheme =  {
           label: {
             fontSize: '12px'
           },
-          sizeSmall: {
-            padding: '10px 20px'
+          outlined: {
+            borderWidth: 2
+          },
+          outlinedSecondary: {
+            borderWidth: 2,
+            "&:hover": {
+              borderWidth: 2,
+            }
           }
         },
         MuiCard: {

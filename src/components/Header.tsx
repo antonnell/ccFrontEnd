@@ -54,7 +54,6 @@ class Header extends React.Component<Props, State> {
           {headerItems.buttons.map((button, index) =>
               <Button
                   key={index}
-                  size="small"
                   variant="contained"
                   color="primary"
                   onClick={this.handleLink(button.link)}

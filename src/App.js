@@ -36,7 +36,6 @@ import Settings from './containers/settings.jsx';
 // import WanTransactions from './containers/wanTransactions.jsx';
 // import AionTransactions from './containers/aionTransactions.jsx';
 import Pooling from './containers/Pooling/index';
-import PoolBrowse from './containers/poolBrowse.jsx';
 
 // import WhitelistMeUnavailable from "./components/whitelistMeUnavailable.jsx";
 import ComingSoon from './components/comingSoon.jsx';
@@ -54,6 +53,8 @@ import Loader from './components/Loader';
 import Context from './context/Context';
 import WhitelistCreate from './containers/WhitelistCreate';
 import AppDialog from './containers/AppDialog/AppDialog';
+import PoolBrowse from './containers/PoolBrowse/index';
+import PoolDetails from './containers/PoolDetails/PoolDetails';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -118,7 +119,6 @@ class App extends Component {
       wanTransactions: null,
       aionTransactions: null,
       myPools: null,
-      availablePools: null,
       currentTheme: theme,
       theme: curveTheme[theme]
     };
@@ -1367,13 +1367,16 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
       case 'browsePools':
-        return (
+        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolBrowse
-            theme={ this.state.theme }
             user={ this.state.user }
-            pools={ this.state.availablePools }
-          />
-        );
+          />: <Loader />;
+      case 'poolDetails':
+        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+          <PoolDetails
+            id={params}
+            user={ this.state.user }
+          />: <Loader />;
       case 'ico':
         return <ComingSoon />;
       case 'settings':

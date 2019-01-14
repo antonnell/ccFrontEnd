@@ -42,7 +42,7 @@ export const initialPoolingContract:PoolingContract = {
 
 export const poolingBlockChainOptions:PoolingContractBlockChain[] = ["ETH","WAN"];
 
-export interface FundingPools {
+export interface FundingPool {
   blockchain: PoolingContractBlockChain;
   contractAddress: string;
   id: number;
@@ -53,7 +53,7 @@ export interface FundingPools {
 
 export interface GetManagedFundingPoolsResponse {
   errorMsg: string|null
-  fundingPools: FundingPools[];
+  fundingPools: FundingPool[];
   success: boolean;
 }
 

@@ -13,7 +13,7 @@ import EnhancedTableHead from "./EnhancedTableHead";
 import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
 import {User} from "../../../../types/account";
-import {FundingPools} from "../../../../types/pooling";
+import {FundingPool} from "../../../../types/pooling";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -91,20 +91,18 @@ class Pools extends React.Component<Props, State> {
       user,
       poolingContext: {
         getManagedFundingPools,
-        getAvailableFundingPools
       },
     } = this.props;
     getManagedFundingPools(user.id);
-    getAvailableFundingPools(user.id);
   }
 
   public render() {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
-    const {classes, poolingContext: {pools}} = this.props;
+    const {classes, poolingContext: {managedPools}} = this.props;
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
         rowsPerPage -
-        Math.min(rowsPerPage, pools ? pools.length : 0 - page * rowsPerPage);
+        Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
     return (
         <div className={classes.root}>
           <Typography variant="h5" style={{marginBottom: "20px"}}>
@@ -121,9 +119,9 @@ class Pools extends React.Component<Props, State> {
                     // rowCount={data ? data.length : 0}
                 />
                 <TableBody>
-                  {stableSort(pools, getSorting(order, orderBy))
+                  {stableSort(managedPools, getSorting(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((n: FundingPools) => {
+                      .map((n: FundingPool) => {
                         return (
                             <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
                               <TableCell>
@@ -187,7 +185,7 @@ class Pools extends React.Component<Props, State> {
             </div>
             <TablePagination
                 component="div"
-                count={pools ? pools.length : 0}
+                count={managedPools ? managedPools.length : 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{

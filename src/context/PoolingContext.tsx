@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {FundingPools, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
+import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
 
 interface PoolingContextInterface {
-  pools: FundingPools[];
+  managedPools: FundingPool[];
+  availablePools: FundingPool[];
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId:number,poolingContract: PoolingContract) => Promise<any>
@@ -39,7 +40,8 @@ const PoolingContextConsumer = ctxt.Consumer;
 class PoolingContext extends React.Component<WithAppContext, PoolingContextInterface> {
   // noinspection JSUnusedGlobalSymbols
   public state: PoolingContextInterface = {
-    pools: [],
+    managedPools: [],
+    availablePools: [],
     createPoolingContract: poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
@@ -49,12 +51,12 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
       });
     },
-    deletePoolingContract: poolId1 => {
+    deletePoolingContract: poolId => {
       const {appContext: {callApi}} = this.props;
-      const url = '/pooling/deletePoolingContract';
+      const url = 'pooling/deletePoolingContract';
       const method = "POST";
       return callApi(url, method, {
-        poolId1
+        poolId
       }).then(res => {
         return res.success;
       });
@@ -143,7 +145,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const method = "GET";
       callApi(url, method,{}).then(res=> {
         const response:GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
-        response && response.success && this.setState({pools:[...response.fundingPools]});
+        response && response.success && this.setState({managedPools:[...response.fundingPools]});
         // response.fundingPools.map(pool=>
         //     getManagedFundingPoolDetails(pool.id)
         // )
@@ -151,12 +153,15 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     getAvailableFundingPools: (userId)=> {
       const {appContext: {callApi}} = this.props;
+      const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getAvailableFundingPools/${userId}`;
       const method = "GET";
       callApi(url, method,{}).then(res=> {
-        console.log(res);
         const response:GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
-        console.log(response);
+        response.fundingPools.forEach(pool=> {
+          getManagedFundingPoolDetails(pool.id).then(pool=>console.log(pool))
+        });
+        response && response.success && this.setState({availablePools:[...response.fundingPools]});
       });
     },
     getManagedFundingPoolDetails: (poolId)=> {
