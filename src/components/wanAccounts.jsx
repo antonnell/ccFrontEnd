@@ -237,7 +237,7 @@ class WanAccounts extends Component {
                           <Button
                             size="small"
                             variant="contained"
-                            color="primary"                            
+                            color="primary"
                             onClick={ () => {
                               this.props.sendWRC20(n.symbol, address);
                             } }
@@ -770,16 +770,6 @@ class WanAccounts extends Component {
           >
             { this.renderAddresses() }
           </Grid>
-        </Grid>
-        <Grid
-          item
-          xs={ 12 }
-          align="center"
-          style={ { position: 'relative', minHeight: '200px' } }
-        >
-          { this.props.user && this.props.user.verificationResult === 'completed'
-            ? this.renderICOS()
-            : this.renderICOUnavailable() }
         </Grid>
         <Grid item xs={ 12 }>
           <WanTransactions

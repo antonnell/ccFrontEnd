@@ -62,6 +62,9 @@ var Store = () => {
         case "getUserProfile":
           this.getUserProfile(payload);
           break;
+        case "allocateKycCode":
+          this.allocateKycCode(payload);
+          break;
         default: {}
       }
     }.bind(this)
@@ -138,6 +141,15 @@ var Store = () => {
       token: payload.content.token,
       password: payload.content.password
     };
+
+    this.callApi(url, "POST", postJson, payload);
+  };
+
+  this.allocateKycCode = function(payload) {
+    var url = "account/allocateKycCode";
+    var postJson = {
+      username: payload.content.username
+    }
 
     this.callApi(url, "POST", postJson, payload);
   };
