@@ -6,12 +6,14 @@ export type PoolingContractBlockChain = "ETH"|"WAN";
 
 export interface PoolingContact extends Contact {
   allocation?: number;
+  value?: number;
 }
 
 export interface PoolingContract {
   blockchain: PoolingContractBlockChain;
   ownerAddress: EthAddress|WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
   name: string;                                 // Easy reference display name for the user to assign to this pooling contract
+  status?: keyof typeof PoolingContractStatus;
   minContribution: number;                      // Minimum individual contribution the contract should accept, in Eth
   maxContribution: number;                      // Maximum individual contribution the contract should accept, in Eth
   isPledgesEnabled: boolean;                    // flag to indicate if pledges are enabled for this pooling contract
@@ -42,12 +44,21 @@ export const initialPoolingContract:PoolingContract = {
 
 export const poolingBlockChainOptions:PoolingContractBlockChain[] = ["ETH","WAN"];
 
+export const PoolingContractStatus = {
+  0: "Setup",
+  1: "Unlocked",
+  2: "Locked",
+  3: "Token Received",
+  4: "Tokens Ready",
+  5: "Pledges"
+};
+
 export interface FundingPool {
   blockchain: PoolingContractBlockChain;
   contractAddress: string;
   id: number;
   name: string;
-  status: boolean;
+  status: keyof typeof PoolingContractStatus;
   transactionId: string|null;
 }
 

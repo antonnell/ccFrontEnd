@@ -13,7 +13,9 @@ import EnhancedTableHead from "./EnhancedTableHead";
 import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
 import {User} from "../../../../types/account";
-import {FundingPool} from "../../../../types/pooling";
+import {FundingPool, PoolingContractStatus} from "../../../../types/pooling";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Grid from "@material-ui/core/Grid";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -40,25 +42,22 @@ function stableSort(array: any, cmp: any) {
 
 function getSorting(order: any, orderBy: any) {
   return order === "desc"
-      ? (a: any, b: any) => desc(a, b, orderBy)
-      : (a: any, b: any) => -desc(a, b, orderBy);
+    ? (a: any, b: any) => desc(a, b, orderBy)
+    : (a: any, b: any) => -desc(a, b, orderBy);
 }
 
 const styles = (theme: Theme) =>
-    createStyles({
-      root: {
-        margin: theme.spacing.unit * 1.5
+  createStyles({
+    table: {},
+    tableWrapper: {
+      overflowX: "auto"
+    },
+    row: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.background.default,
       },
-      table: {},
-      tableWrapper: {
-        overflowX: "auto"
-      },
-      row: {
-        '&:nth-of-type(odd)': {
-          backgroundColor: theme.palette.background.default,
-        },
-      },
-    });
+    },
+  });
 
 interface OwnProps {
   user: User;
@@ -71,6 +70,7 @@ interface State {
   page: number;
   rowsPerPage: number;
   filtersVisible: boolean;
+  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
@@ -84,6 +84,7 @@ class Pools extends React.Component<Props, State> {
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false,
+    loading: false,
   };
 
   componentWillMount(): void {
@@ -93,112 +94,94 @@ class Pools extends React.Component<Props, State> {
         getManagedFundingPools,
       },
     } = this.props;
-    getManagedFundingPools(user.id);
+    this.setState({loading: true});
+    getManagedFundingPools(user.id).then(()=>{
+      this.setState({loading: false});
+    });
+
   }
 
   public render() {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
     const {classes, poolingContext: {managedPools}} = this.props;
-    const {order, orderBy, page, rowsPerPage} = this.state;
+    const {order, orderBy, page, rowsPerPage,loading} = this.state;
     const emptyRows =
-        rowsPerPage -
-        Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
+      rowsPerPage -
+      Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
     return (
-        <div className={classes.root}>
-          <Typography variant="h5" style={{marginBottom: "20px"}}>
-            My Pools
-          </Typography>
-          <Paper>
-            <div className={classes.tableWrapper}>
-              <Table className={classes.table} aria-labelledby="tableTitle">
-                <EnhancedTableHead
-                    // numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={this.handleRequestSort}
-                    // rowCount={data ? data.length : 0}
-                />
-                <TableBody>
-                  {stableSort(managedPools, getSorting(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((n: FundingPool) => {
-                        return (
-                            <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.name}
-                                </Typography>
-                              </TableCell>
-                              {/*<TableCell>*/}
-                              {/*<Typography*/}
-                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
-                              {/*noWrap*/}
-                              {/*>*/}
-                              {/*{n.creator}*/}
-                              {/*</Typography>*/}
-                              {/*</TableCell>*/}
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.status}
-                                </Typography>
-                              </TableCell>
-                              {/*<TableCell numeric>*/}
-                              {/*<Typography*/}
-                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
-                              {/*noWrap*/}
-                              {/*>*/}
-                              {/*{n.token}*/}
-                              {/*</Typography>*/}
-                              {/*</TableCell>*/}
-                              {/*<TableCell>*/}
-                              {/*<Typography*/}
-                              {/*style={{lineHeight: "57px", fontSize: "17px"}}*/}
-                              {/*noWrap*/}
-                              {/*>*/}
-                              {/*{n.myContribution}*/}
-                              {/*</Typography>*/}
-                              {/*</TableCell>*/}
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.blockchain}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
-                        );
-                      })}
-                  {emptyRows > 0 && (
-                      <TableRow style={{height: 49 * emptyRows}}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <TablePagination
-                component="div"
-                count={managedPools ? managedPools.length : 0}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{
-                  "aria-label": "Previous Page"
-                }}
-                nextIconButtonProps={{
-                  "aria-label": "Next Page"
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-          </Paper>
-        </div>
+      <Grid item xs={12}>
+        <Typography variant="h3" style={{marginBottom: "20px"}}>My Pools</Typography>
+        <Paper>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={this.handleRequestSort}
+              />
+              <TableBody>
+                {loading && <TableRow style={{height: "auto"}}>
+                  <TableCell colSpan={3} style={{padding: 0}}>
+                    <LinearProgress />
+                  </TableCell>
+                </TableRow>}
+                {stableSort(managedPools, getSorting(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((n: FundingPool) => {
+                  return (
+                    <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
+                      <TableCell>
+                        <Typography
+                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          noWrap
+                        >
+                          {n.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          noWrap
+                        >
+                          {PoolingContractStatus[n.status]}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          noWrap
+                        >
+                          {n.blockchain}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow style={{height: 49 * emptyRows}}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            component="div"
+            count={managedPools ? managedPools.length : 0}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[10]}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "Previous Page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "Next Page"
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Grid>
     );
   }
 

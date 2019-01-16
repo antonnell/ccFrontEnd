@@ -8,12 +8,11 @@ import {User} from "../../types/account";
 import withStyles, {WithStyles} from "@material-ui/core/styles/withStyles";
 import {Theme} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
+import {sharedStyles} from "../../theme/theme";
 
 const styles = (theme: Theme) =>
     createStyles({
-      containerGrid: {
-        paddingRight: theme.spacing.unit * 3
-      }
+      containerGrid: sharedStyles(theme).containerGrid
     });
 
 interface OwnProps {
@@ -30,13 +29,9 @@ class Pooling extends React.Component<Props> {
     return (
         <React.Fragment>
           <Header title="Pooling" headerItems={headerItems.pooling} />
-          <Grid container direction="row" className={classes.containerGrid}>
-            <Grid item xs={12}>
+          <Grid container direction="row" className={classes.containerGrid} spacing={40}>
               <Pools user={user} />
-            </Grid>
-            <Grid item xs={12}>
               <WhiteLists user={user} />
-            </Grid>
           </Grid>
         </React.Fragment>)
   }

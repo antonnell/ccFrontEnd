@@ -17,99 +17,103 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 
 const styles = (theme: Theme) =>
-    createStyles({
-      title: {
-        marginBottom: theme.spacing.unit * 2
-      }
-    });
+  createStyles({
+    title: {
+      marginBottom: theme.spacing.unit * 2
+    }
+  });
 
 interface OwnProps {
+  status: number;
   isPledgesEnabled: boolean;
   isWhitelistEnabled: boolean;
   pledgesEndDate: string;
-  existingWhitelistId: number|null;
+  existingWhitelistId: number | null;
   handleChange: PoolCreateHandleChange;
   user: User;
-  id: number|null;
+  id: number | null;
 }
 
 
-interface Props extends OwnProps, WithStyles<typeof styles>,WithWhitelistContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithWhitelistContext {
 }
 
 class Options extends React.Component<Props> {
 
   componentWillMount(): void {
-    const {whitelistContext:{getUserSavedWhitelists},user} = this.props;
+    const {whitelistContext: {getUserSavedWhitelists}, user} = this.props;
     getUserSavedWhitelists(user.id);
   }
 
   public render() {
-    const {isPledgesEnabled, pledgesEndDate, handleChange, classes,isWhitelistEnabled,existingWhitelistId,id,
-    whitelistContext:{
-      whitelists
-    }} = this.props;
+    const {
+      isPledgesEnabled, pledgesEndDate, handleChange, classes, isWhitelistEnabled, existingWhitelistId, id, status,
+      whitelistContext: {
+        whitelists
+      }
+    } = this.props;
     return (
-        <Grid item xs={12} md={6}>
-          <Grid item xs={12} className={classes.title}>
-            <Typography variant="h2">Options</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControlLabel
-                control={
-                  <Checkbox
-                      // disabled={loading}
-                      checked={isPledgesEnabled}
-                      onChange={handleChange("isPledgesEnabled")}
-                      value="primary"
-                      color="primary"
-                  />
-                }
-                label="Pledges"
-            />
-          </Grid>
-          {isPledgesEnabled ? (
-              <Grid item xs={10}>
-                <TextField
-                    required
-                    fullWidth
-                    id="pledgeEndDate"
-                    label="Pledge End Date"
-                    value={pledgesEndDate}
-                    type="date"
-                    onChange={handleChange("pledgesEndDate")}
-                    margin="normal"
-                    InputLabelProps={{shrink: true}}
-                />
-              </Grid>
-          ) : null}
-          {id === null && <Grid item xs={12}>
-            <FormControlLabel
-                control={
-                  <Checkbox
-                      // disabled={loading}
-                      checked={isWhitelistEnabled}
-                      onChange={handleChange("isWhitelistEnabled")}
-                      value="primary"
-                      color="primary"
-                  />
-                }
-                label="Use a whitelist"
-            />
-          </Grid>}
-          {id === null && isWhitelistEnabled && <Grid item xs={10}>
-            <FormControl fullWidth required margin="normal">
-              <InputLabel shrink={true}>Whitelist</InputLabel>
-              <Select fullWidth value={existingWhitelistId||0}
-                      onChange={handleChange("existingWhitelistId")}>
-                {existingWhitelistId === null && <MenuItem value={0}>Please select a whitelist...</MenuItem>}
-                {whitelists.map(wl=>
-                    <MenuItem key={wl.id||0} value={wl.id||0}>{wl.name} - ({wl.userCount} users)</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid>}
+      <Grid item xs={12} md={6}>
+        <Grid item xs={12} className={classes.title}>
+          <Typography variant="h2">Options</Typography>
         </Grid>
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={status > 0}
+                checked={isPledgesEnabled}
+                onChange={handleChange("isPledgesEnabled")}
+                value="primary"
+                color="primary"
+              />
+            }
+            label="Pledges"
+          />
+        </Grid>
+        {isPledgesEnabled ? (
+          <Grid item xs={10}>
+            <TextField
+              disabled={status > 0}
+              required
+              fullWidth
+              id="pledgeEndDate"
+              label="Pledge End Date"
+              value={pledgesEndDate}
+              type="date"
+              onChange={handleChange("pledgesEndDate")}
+              margin="normal"
+              InputLabelProps={{shrink: true}}
+            />
+          </Grid>
+        ) : null}
+        {id === null && <Grid item xs={12}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                // disabled={loading}
+                checked={isWhitelistEnabled}
+                onChange={handleChange("isWhitelistEnabled")}
+                value="primary"
+                color="primary"
+              />
+            }
+            label="Use a whitelist"
+          />
+        </Grid>}
+        {id === null && isWhitelistEnabled && <Grid item xs={10}>
+          <FormControl fullWidth required margin="normal">
+            <InputLabel shrink={true}>Whitelist</InputLabel>
+            <Select fullWidth value={existingWhitelistId || 0}
+                    onChange={handleChange("existingWhitelistId")}>
+              {existingWhitelistId === null && <MenuItem value={0}>Please select a whitelist...</MenuItem>}
+              {whitelists.map(wl =>
+                <MenuItem key={wl.id || 0} value={wl.id || 0}>{wl.name} - ({wl.userCount} users)</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </Grid>}
+      </Grid>
     );
   }
 }

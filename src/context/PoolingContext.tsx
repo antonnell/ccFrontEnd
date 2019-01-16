@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
+import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContact, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
@@ -24,8 +24,8 @@ interface PoolingContextInterface {
   withdrawAllFromPoolingContract: (userAddress:string,poolAddress:string,blockchain:PoolingContractBlockChain)=>void;
   getFundingPoolPendingTransactions: (blockchain:PoolingContractBlockChain,address:string)=>void;
   getManagedFundingPoolPendingTransactions: (poolId:number)=>void;
-  getManagedFundingPoolContributions: (poolId:number)=>void;
-  getManagedFundingPools: (userId:string)=>void;
+  getManagedFundingPoolContributions: (poolId:number)=>Promise<PoolingContact[]>;
+  getManagedFundingPools: (userId:string)=>Promise<boolean>;
   getAvailableFundingPools: (userId:string)=>void;
   getManagedFundingPoolDetails: (poolId:number)=>Promise<PoolingContract>;
   getPoolContribution: (poolId:number,address:string)=>void;
@@ -136,16 +136,23 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(poolId);
     },
     getManagedFundingPoolContributions: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      // const {getManagedFundingPoolDetails} = this.state;
+      const url = `pooling/getManagedFundingPoolContributions/${poolId}`;
+      const method = "GET";
+      return callApi(url, method,{}).then(res=> {
+        return res?res.contributions:[];
+      });
     },
     getManagedFundingPools: (userId)=> {
       const {appContext: {callApi}} = this.props;
       // const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
-      callApi(url, method,{}).then(res=> {
+      return callApi(url, method,{}).then(res=> {
         const response:GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
         response && response.success && this.setState({managedPools:[...response.fundingPools]});
+        return response && response.success;
         // response.fundingPools.map(pool=>
         //     getManagedFundingPoolDetails(pool.id)
         // )
@@ -169,7 +176,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
       const method = "GET";
       return callApi(url, method,{}).then(res=> {
-        console.log(res);
         return res.success && res.fundingPool;
       });
     },

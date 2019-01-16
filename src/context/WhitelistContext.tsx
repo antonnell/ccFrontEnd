@@ -4,7 +4,7 @@ import {WithAppContext, withAppContext} from "./AppContext";
 
 interface WhitelistContextInterface {
   whitelists: Whitelist[];
-  getUserSavedWhitelists: (userId: string) => void;
+  getUserSavedWhitelists: (userId: string) => Promise<boolean>;
   getUserSavedWhitelistDetails: (whitelistId: number) => Promise<Whitelist>;
   createSavedWhitelist: (whitelist: Whitelist) => Promise<boolean>;
   updateSavedWhitelist: (whitelist:Whitelist)=>Promise<boolean>;
@@ -36,6 +36,7 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
           const whitelists:Whitelist[] = response.whitelists.map(wl=>({id:wl.id,name:wl.name|| "",users:[],userCount: wl.userCount}));
           this.setState({whitelists});
         }
+        return response && response.success;
       });
     },
     getUserSavedWhitelistDetails: whitelistId => {

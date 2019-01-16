@@ -10,7 +10,7 @@ const rows = [
   { id: "name", numeric: false, disablePadding: false, label: "Name" },
   {
     id: "users",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Users"
   },

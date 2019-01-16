@@ -14,6 +14,9 @@ import {User} from "../../../../types/account";
 import {withWhitelistContext, WithWhitelistContext} from "../../../../context/WhitelistContext";
 import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {Whitelist} from "../../../../types/whitelist";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Grid from "@material-ui/core/Grid";
+import {sharedStyles} from "../../../../theme/theme";
 
 function desc(a: any, b: any, orderBy: any) {
   if (b[orderBy] < a[orderBy]) {
@@ -46,9 +49,7 @@ function getSorting(order: any, orderBy: any) {
 
 const styles = (theme: Theme) =>
     createStyles({
-      root: {
-        margin: theme.spacing.unit * 1.5
-      },
+      containerGrid: sharedStyles(theme).containerGrid,
       table: {},
       tableWrapper: {
         overflowX: "auto"
@@ -66,6 +67,7 @@ interface State {
   page: number;
   rowsPerPage: number;
   filtersVisible: boolean;
+  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>,WithWhitelistContext {
@@ -79,6 +81,7 @@ class WhiteLists extends React.Component<Props, State> {
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false,
+    loading: false,
   };
 
   componentWillMount(): void {
@@ -88,19 +91,22 @@ class WhiteLists extends React.Component<Props, State> {
         getUserSavedWhitelists
       }
     } = this.props;
-    getUserSavedWhitelists(user.id);
+    this.setState({loading:true});
+    getUserSavedWhitelists(user.id).then(()=>{
+      this.setState({loading:false});
+    });
   }
 
   public render() {
     console.log(...helperRenderConsoleText('Render Whitelists', 'lightGreen'));
     const {classes,whitelistContext: {whitelists}} = this.props;
-    const {order, orderBy, page, rowsPerPage} = this.state;
+    const {order, orderBy, page, rowsPerPage,loading} = this.state;
     const emptyRows =
         rowsPerPage -
         Math.min(rowsPerPage, whitelists ? whitelists.length : 0 - page * rowsPerPage);
     return (
-        <div className={classes.root}>
-          <Typography variant="h5" style={{marginBottom: "20px"}}>
+        <Grid item xs={12}>
+          <Typography variant="h3" style={{marginBottom: "20px"}}>
             My Whitelists
           </Typography>
           <Paper>
@@ -113,6 +119,11 @@ class WhiteLists extends React.Component<Props, State> {
                     // rowCount={data ? data.length : 0}
                 />
                 <TableBody>
+                  {loading && <TableRow style={{height: "auto"}}>
+                    <TableCell colSpan={3} style={{padding: 0}}>
+                      <LinearProgress />
+                    </TableCell>
+                  </TableRow>}
                   {stableSort(whitelists, getSorting(order, orderBy))
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((n: Whitelist,i:number) => {
@@ -126,7 +137,7 @@ class WhiteLists extends React.Component<Props, State> {
                                   {n.name}
                                 </Typography>
                               </TableCell>
-                              <TableCell numeric>
+                              <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
                                     noWrap
@@ -152,6 +163,7 @@ class WhiteLists extends React.Component<Props, State> {
                 component="div"
                 count={whitelists ? whitelists.length : 0}
                 rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[10]}
                 page={page}
                 backIconButtonProps={{
                   "aria-label": "Previous Page"
@@ -163,7 +175,7 @@ class WhiteLists extends React.Component<Props, State> {
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Paper>
-        </div>
+        </Grid>
     );
   }
 

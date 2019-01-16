@@ -23,6 +23,7 @@ const styles = (theme: Theme) =>
 
 interface OwnProps {
   name: string;
+  status: number;
   poolId: number | null;
   isNameValid: boolean;
   blockChain: PoolingContractBlockChain,
@@ -42,7 +43,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class Settings extends React.Component<Props> {
   public render() {
-    const {name, poolId, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses, tokenAddress, saleAddress, isSaleAddressValid, isTokenAddressValid} = this.props;
+    const {name, poolId, isNameValid, ownerAddress, blockChain, handleChange, classes, ethAddresses, wanAddresses, tokenAddress, saleAddress, isSaleAddressValid, isTokenAddressValid,status} = this.props;
     const nameError = Boolean(name.length) && !isNameValid;
     const saleAddressError = Boolean(saleAddress.length) && !isSaleAddressValid;
     const tokenAddressError = Boolean(tokenAddress.length) && !isTokenAddressValid;
@@ -88,7 +89,7 @@ class Settings extends React.Component<Props> {
             }
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth required margin="normal">
+            <FormControl fullWidth required margin="normal" disabled={status > 0}>
               <InputLabel shrink={true}>Owner Address</InputLabel>
               <Select fullWidth value={(ownerAddress as EthAddress).address !== undefined ? (ownerAddress as EthAddress).address : (ownerAddress as WanAddress).publicAddress}
                       onChange={handleChange("ownerAddress")}>
@@ -104,6 +105,7 @@ class Settings extends React.Component<Props> {
             <TextField
                 required
                 fullWidth
+                disabled={status > 0}
                 error={saleAddressError}
                 label="Sale Address"
                 value={saleAddress}
@@ -117,6 +119,7 @@ class Settings extends React.Component<Props> {
               <TextField
                   required
                   fullWidth
+                  disabled={status > 0}
                   error={tokenAddressError}
                   label="Token Address"
                   value={tokenAddress}

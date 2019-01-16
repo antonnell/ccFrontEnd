@@ -22,12 +22,11 @@ import {WithWhitelistContext, withWhitelistContext} from "../../context/Whitelis
 import {DeleteIcon} from "../../theme/icons";
 import Fab from "@material-ui/core/Fab";
 import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
+import {sharedStyles} from "../../theme/theme";
 
 const styles = (theme: Theme) =>
   createStyles({
-    containerGrid: {
-      marginTop: theme.spacing.unit * 5
-    },
+    containerGrid: sharedStyles(theme).containerGrid,
     buttonGrid: {
       marginTop: theme.spacing.unit * 5,
       marginRight: theme.spacing.unit,
@@ -82,7 +81,7 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   componentWillMount(): void {
-    const {id, poolingContext: {getManagedFundingPoolDetails}, wanAddresses, ethAddresses} = this.props;
+    const {id, poolingContext: {getManagedFundingPoolDetails,getManagedFundingPoolContributions}, wanAddresses, ethAddresses} = this.props;
     id && getManagedFundingPoolDetails(id).then(poolingContract => {
       poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
         ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
@@ -90,16 +89,29 @@ class PoolCreate extends React.Component<Props, State> {
       if (poolingContract.whitelistedUsers === null) {
         poolingContract.whitelistedUsers = [];
       }
-      console.log(poolingContract);
-      this.setState({
-        poolingContract,
-        validation: {
-          isNameValid: true,
-          isTokenAddressValid: true,
-          isSaleAddressValid: true
-        },
-        originalPoolingContractUsers: [...poolingContract.whitelistedUsers]
-      });
+      if (poolingContract.status !== undefined && poolingContract.status > 0) {
+        getManagedFundingPoolContributions(id).then(res=>{
+          this.setState({
+            poolingContract:{...poolingContract,whitelistedUsers:res},
+            validation: {
+              isNameValid: true,
+              isTokenAddressValid: true,
+              isSaleAddressValid: true
+            },
+            originalPoolingContractUsers: [...res]
+          });
+        });
+      } else {
+        this.setState({
+          poolingContract,
+          validation: {
+            isNameValid: true,
+            isTokenAddressValid: true,
+            isSaleAddressValid: true
+          },
+          originalPoolingContractUsers: [...poolingContract.whitelistedUsers]
+        });
+      }
     });
   }
 
@@ -129,18 +141,20 @@ class PoolCreate extends React.Component<Props, State> {
     const {ethAddresses, wanAddresses, classes, id, user} = this.props;
     const {
       poolingContract: {
-        saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers
+        saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers,status:poolStatus
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
       }
     } = this.state;
+    const status = poolStatus||0;
     const canSubmit = isNameValid && isSaleAddressValid && isTokenAddressValid;
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} />
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
+            status={status}
             name={name}
             poolId={id}
             isNameValid={isNameValid}
@@ -155,6 +169,7 @@ class PoolCreate extends React.Component<Props, State> {
             isSaleAddressValid={isSaleAddressValid}
           />
           <Options
+            status={status}
             id={id}
             user={user}
             existingWhitelistId={existingWhitelistId}
@@ -164,6 +179,7 @@ class PoolCreate extends React.Component<Props, State> {
             handleChange={this.handleChange}
           />
           <Allocations
+            status={status}
             minContribution={minContribution}
             maxContribution={maxContribution}
             transactionFee={transactionFee}
@@ -182,7 +198,7 @@ class PoolCreate extends React.Component<Props, State> {
             >
               {id ? "UPDATE" : "CREATE"} POOL
             </Button>
-            {id && <Button
+            {id && status < 1 && <Button
               className={classes.deployButton}
               disabled={!canSubmit}
               variant="contained"
@@ -192,14 +208,28 @@ class PoolCreate extends React.Component<Props, State> {
             >
               Deploy
             </Button>}
-            {id && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool}>
+            {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool}>
               <DeleteIcon />
             </Fab>}
+            <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="outlined"
+              size="large"
+              color="secondary"
+              onClick={this.cancelUpdate}
+            >
+              Cancel
+            </Button>
           </Grid>
         </Grid>
       </React.Fragment>
     );
   }
+
+  cancelUpdate = ()=> {
+    window.location.hash = "pooling";
+  };
 
   removePool = ()=> {
     const {dialogContext: {showDialog}} = this.props;
