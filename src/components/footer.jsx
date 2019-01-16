@@ -203,7 +203,7 @@ class Footer extends Component {
               fontSize: '14px'
             }}
           >
-            V1.1.17-beta
+            V1.1.18-beta
           </Typography>
         </Grid>
       </Grid>
