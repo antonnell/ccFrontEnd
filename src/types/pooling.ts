@@ -22,7 +22,7 @@ export interface PoolingContract {
   tokenAddress: string;                         // Eth/Wan address of the ERC20/WRC20 token which the users will withdraw from the contract after completion
   transactionFee: number;                       // Percentage cut that the owner will take of the total funding raised in this pool
   isWhitelistEnabled: boolean;                  // flag to indicate if this pool should use a whitelist
-  existingWhitelistId: number | null;           // saved whitelist id to create this pool’s whitelist from
+  existingWhitelistId: number;           // saved whitelist id to create this pool’s whitelist from
   whitelistedUsers: PoolingContact[];
 }
 
@@ -38,7 +38,7 @@ export const initialPoolingContract:PoolingContract = {
   tokenAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   transactionFee: 0,
   isWhitelistEnabled: false,
-  existingWhitelistId: null,
+  existingWhitelistId: -1,
   whitelistedUsers: []
 };
 

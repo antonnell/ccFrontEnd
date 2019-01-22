@@ -28,7 +28,7 @@ class Pooling extends React.Component<Props> {
     const {user, classes} = this.props;
     return (
         <React.Fragment>
-          <Header title="Pooling" headerItems={headerItems.pooling} />
+          <Header title="Pooling" headerItems={headerItems.pooling} loading={false}/>
           <Grid container direction="row" className={classes.containerGrid} spacing={40}>
               <Pools user={user} />
               <WhiteLists user={user} />

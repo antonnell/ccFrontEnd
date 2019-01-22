@@ -32,6 +32,7 @@ interface OwnProps {
   handleChange: PoolCreateHandleChange;
   user: User;
   id: number | null;
+  loading: boolean;
 }
 
 
@@ -50,7 +51,8 @@ class Options extends React.Component<Props> {
       isPledgesEnabled, pledgesEndDate, handleChange, classes, isWhitelistEnabled, existingWhitelistId, id, status,
       whitelistContext: {
         whitelists
-      }
+      },
+      loading
     } = this.props;
     return (
       <Grid item xs={12} md={6}>
@@ -61,7 +63,7 @@ class Options extends React.Component<Props> {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={status > 0}
+                disabled={status > 0 || loading}
                 checked={isPledgesEnabled}
                 onChange={handleChange("isPledgesEnabled")}
                 value="primary"
@@ -74,7 +76,7 @@ class Options extends React.Component<Props> {
         {isPledgesEnabled ? (
           <Grid item xs={10}>
             <TextField
-              disabled={status > 0}
+              disabled={status > 0 || loading}
               required
               fullWidth
               id="pledgeEndDate"
@@ -91,7 +93,6 @@ class Options extends React.Component<Props> {
           <FormControlLabel
             control={
               <Checkbox
-                // disabled={loading}
                 checked={isWhitelistEnabled}
                 onChange={handleChange("isWhitelistEnabled")}
                 value="primary"

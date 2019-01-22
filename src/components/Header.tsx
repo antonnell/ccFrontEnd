@@ -13,19 +13,23 @@ import Popover from "@material-ui/core/Popover";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const styles = (theme: Theme) =>
-    createStyles({
-      header: {
-        marginBottom: theme.spacing.unit * 1.5,
-        padding: theme.spacing.unit,
-        borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
-        display: "flex"
-      },
-      spacer: {
-        marginLeft: theme.spacing.unit
-      }
-    });
+  createStyles({
+    header: {
+      marginBottom: theme.spacing.unit * 1.5,
+      padding: theme.spacing.unit,
+      borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
+      display: "flex"
+    },
+    spacer: {
+      marginLeft: theme.spacing.unit
+    },
+    progress: {
+      marginTop: -12
+    }
+  });
 
 interface State {
   optionsOpen: boolean;
@@ -34,6 +38,7 @@ interface State {
 interface OwnProps {
   title: string;
   headerItems: HeaderItem
+  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
@@ -46,18 +51,19 @@ class Header extends React.Component<Props, State> {
   };
 
   public render() {
-    const {title, classes, headerItems} = this.props;
+    const {title, classes, headerItems, loading} = this.props;
     const {optionsOpen} = this.state;
     return (
+      <React.Fragment>
         <Grid container item xs={12} alignItems="center" className={classes.header}>
           <Typography variant="h5" style={{flexGrow: 1}}>{title}</Typography>
           {headerItems.buttons.map((button, index) =>
-              <Button
-                  key={index}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleLink(button.link)}
-              >{button.label}</Button>
+            <Button
+              key={index}
+              variant="contained"
+              color="primary"
+              onClick={this.handleLink(button.link)}
+            >{button.label}</Button>
           )}
           {headerItems.menuItems.length &&
           <React.Fragment>
@@ -70,16 +76,18 @@ class Header extends React.Component<Props, State> {
               onClose={this.optionsClosed}
             >
               <List component="nav">
-                {headerItems.menuItems.map((menuItem,index)=>
-                    <ListItem key={index} button onClick={this.handleLink(menuItem.link)}>
-                      <ListItemText primary={menuItem.label} />
-                    </ListItem>
+                {headerItems.menuItems.map((menuItem, index) =>
+                  <ListItem key={index} button onClick={this.handleLink(menuItem.link)}>
+                    <ListItemText primary={menuItem.label} />
+                  </ListItem>
                 )}
               </List>
             </Popover>
           </React.Fragment>
           }
         </Grid>
+        {loading && <LinearProgress className={classes.progress}/>}
+      </React.Fragment>
     );
   }
 

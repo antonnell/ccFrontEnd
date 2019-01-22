@@ -13,6 +13,7 @@ interface OwnProps {
   maxContribution: number;
   transactionFee: number;
   handleChange: PoolCreateHandleChange;
+  loading: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -27,7 +28,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class Allocations extends React.Component<Props> {
   public render() {
-    const {classes, minContribution, maxContribution, transactionFee, handleChange, status} = this.props;
+    const {classes, minContribution, maxContribution, transactionFee, handleChange, status, loading} = this.props;
     return (
       <Grid container item xs={12} md={5} className={classes.separator} justify="space-between">
         <Grid item xs={12}>
@@ -35,7 +36,7 @@ class Allocations extends React.Component<Props> {
         </Grid>
         <Grid item xs={12} md={5}>
           <TextField
-            disabled={status > 0}
+            disabled={status > 0 || loading}
             margin="normal"
             required
             fullWidth
@@ -49,7 +50,7 @@ class Allocations extends React.Component<Props> {
         </Grid>
         <Grid item xs={12} md={5}>
           <TextField
-            disabled={status > 0}
+            disabled={status > 0 || loading}
             required
             fullWidth
             label="Max Contribution"
@@ -63,7 +64,7 @@ class Allocations extends React.Component<Props> {
         </Grid>
         <Grid item xs={12} md={5}>
           <TextField
-            disabled={status > 0}
+            disabled={status > 0 || loading}
             required
             fullWidth
             label="Transaction Fee"

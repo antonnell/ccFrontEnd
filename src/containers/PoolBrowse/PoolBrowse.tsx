@@ -39,7 +39,7 @@ class PoolBrowse extends React.Component<Props> {
     const {poolingContext: {availablePools}, classes} = this.props;
     return (
       <React.Fragment>
-        <Header title="Browse Pools" headerItems={headerItems.pooling} />
+        <Header title="Browse Pools" headerItems={headerItems.pooling} loading={false}/>
         <Grid container direction="row" className={classes.containerGrid} spacing={32}>
           {availablePools.map(pool=>
             <Grid item xs={6} key={pool.id}>

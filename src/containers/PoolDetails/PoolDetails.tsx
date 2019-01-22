@@ -96,7 +96,7 @@ class PoolDetails extends React.Component<Props> {
     const {groups} = this.state;
     return (
       <React.Fragment>
-        <Header title="Pool Details" headerItems={headerItems.pooling} />
+        <Header title="Pool Details" headerItems={headerItems.pooling} loading={false}/>
         <Grid container direction="row" className={classes.containerGrid} spacing={40}>
           {groups.map((group,i)=><DetailsGroup key={i} title={group.title} items={group.items} />)}
           <Grid item container direction="row" justify="flex-end" xs={12}>
