@@ -91,11 +91,14 @@ class WhitelistCreate extends React.Component<Props, State> {
     } = nextProps;
     if (result !== "pending" && action === "deleteWhitelist") {
       reset();
-      result === "confirmed" && deleteSavedWhitelist(id || 0).then(() => {
-        this.clearState().then(() => {
-          window.location.hash = "pooling";
-        });
-      })
+      if (result === "confirmed") {
+        this.setState({isSubmitting: true});
+        deleteSavedWhitelist(id || 0).then(() => {
+          this.clearState().then(() => {
+            window.location.hash = "pooling";
+          });
+        })
+      }
     }
   }
 

@@ -150,12 +150,14 @@ class PoolCreate extends React.Component<Props, State> {
     } = nextProps;
     if (result !== "pending" && action === "deletePoolingContract") {
       reset();
-      this.setState({isSubmitting: true});
-      result === "confirmed" && deletePoolingContract(id || 0).then(() => {
-        this.clearState().then(() => {
-          window.location.hash = "pooling";
-        });
-      })
+      if (result === "confirmed") {
+        this.setState({isSubmitting: true});
+        deletePoolingContract(id || 0).then(() => {
+          this.clearState().then(() => {
+            window.location.hash = "pooling";
+          });
+        })
+      }
     }
   }
 
