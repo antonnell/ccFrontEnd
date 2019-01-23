@@ -27,6 +27,7 @@ const styles = (theme: Theme) =>
 interface OwnProps {
   users: Contact[]
   removeUserFromWhitelist: (contact: Contact) => void;
+  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
@@ -34,7 +35,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class AddedUsers extends React.Component<Props> {
   public render() {
-    const {classes, users} = this.props;
+    const {classes, users,loading} = this.props;
     return (
         <Grid item xs={12} className={classes.outerGrid}>
           <Grid item xs={12}>
@@ -45,7 +46,7 @@ class AddedUsers extends React.Component<Props> {
               {users.map((user, i) => {
                 return (
                     <Chip key={i} label={user.userName} color="primary"
-                          onDelete={this.removeUser(user)} className={classes.chips}
+                          onDelete={loading?undefined:this.removeUser(user)} className={classes.chips}
                     />
                 );
               })}

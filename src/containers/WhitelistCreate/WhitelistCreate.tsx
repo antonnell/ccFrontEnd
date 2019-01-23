@@ -16,21 +16,22 @@ import {WithWhitelistContext, withWhitelistContext} from "../../context/Whitelis
 import {DeleteIcon} from "../../theme/icons";
 import Fab from "@material-ui/core/Fab";
 import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const styles = (theme: Theme) =>
-    createStyles({
-      containerGrid: {
-        marginTop: theme.spacing.unit * 5
-      },
-      buttonGrid: {
-        marginTop: theme.spacing.unit * 5,
-        marginRight: theme.spacing.unit
-      },
-      fab: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
-      }
-    });
+  createStyles({
+    containerGrid: {
+      marginTop: theme.spacing.unit * 5
+    },
+    buttonGrid: {
+      marginTop: theme.spacing.unit * 5,
+      marginRight: theme.spacing.unit
+    },
+    buttonSpacing: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
+    },
+  });
 export type WhitelistCreateHandleChange = (fieldName: keyof Whitelist) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 
 interface OwnProps {
@@ -45,6 +46,8 @@ interface State {
     isNameValid: boolean;
   },
   originalWhitelist: Whitelist;
+  loading: boolean;
+  isSubmitting: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithWhitelistContext, WithDialogContext {
@@ -56,13 +59,22 @@ class WhitelistCreate extends React.Component<Props, State> {
     validation: {
       isNameValid: false,
     },
-    originalWhitelist: initialWhitelist
+    originalWhitelist: initialWhitelist,
+    isSubmitting: false,
+    loading: false
   };
 
   componentWillMount(): void {
     const {id, whitelistContext: {getUserSavedWhitelistDetails}} = this.props;
-    id && getUserSavedWhitelistDetails(id).then(whitelist => this.setState(
-        {whitelist, validation: {isNameValid: true}, originalWhitelist: {...whitelist, users: [...whitelist.users]}}));
+    if (id) {
+      this.setState({loading: true});
+      getUserSavedWhitelistDetails(id).then(whitelist => this.setState(
+        {
+          whitelist,
+          validation: {isNameValid: true}, originalWhitelist: {...whitelist, users: [...whitelist.users]},
+          loading: false
+        }));
+    }
   }
 
   componentWillUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): void {
@@ -70,7 +82,7 @@ class WhitelistCreate extends React.Component<Props, State> {
       dialogContext: {
         result,
         action,
-          reset
+        reset
       },
       whitelistContext: {
         deleteSavedWhitelist
@@ -79,8 +91,8 @@ class WhitelistCreate extends React.Component<Props, State> {
     } = nextProps;
     if (result !== "pending" && action === "deleteWhitelist") {
       reset();
-      result === "confirmed" && deleteSavedWhitelist(id||0).then(()=>{
-        this.clearState().then(()=>{
+      result === "confirmed" && deleteSavedWhitelist(id || 0).then(() => {
+        this.clearState().then(() => {
           window.location.hash = "pooling";
         });
       })
@@ -90,6 +102,8 @@ class WhitelistCreate extends React.Component<Props, State> {
   render() {
     const {classes, id} = this.props;
     const {
+      loading,
+      isSubmitting,
       whitelist: {
         name,
         users
@@ -99,37 +113,56 @@ class WhitelistCreate extends React.Component<Props, State> {
       }
     } = this.state;
     return (
-        <React.Fragment>
-          <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.poolCreate} loading={false}/>
-          <Grid container justify="space-between" className={classes.containerGrid}>
-            <Settings
-                name={name}
-                isNameValid={isNameValid}
-                handleChange={this.handleChange}
-            />
-            <AddUsers addUserToWhitelist={this.addUserToWhitelist} />
-            <AddedUsers users={users} removeUserFromWhitelist={this.removeUserFromWhitelist} />
-            <Grid item xs={12} className={classes.buttonGrid}>
-              <Grid container justify="flex-end">
-                <Button
-                    disabled={!isNameValid}
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    type="submit"
-                    onClick={this.submitCreateWhitelist}
-                >
-                  {id ? "Update" : "Create"} Whitelist
-                </Button>
-                {id && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removeWhitelist}>
-                  <DeleteIcon />
-                </Fab>}
-              </Grid>
+      <React.Fragment>
+        <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.poolCreate} loading={loading || isSubmitting} />
+        <Grid container justify="space-between" className={classes.containerGrid}>
+          <Settings
+            loading={loading || isSubmitting}
+            name={name}
+            isNameValid={isNameValid}
+            handleChange={this.handleChange}
+          />
+          <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
+          <AddedUsers users={users} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting}/>
+          <Grid item xs={12} className={classes.buttonGrid}>
+            <Grid container justify="flex-end">
+              <Button
+                className={classes.buttonSpacing}
+                disabled={!isNameValid || loading || isSubmitting}
+                variant="contained"
+                size="large"
+                color="primary"
+                type="submit"
+                onClick={this.submitCreateWhitelist}
+              >
+                {id ? "Update" : "Create"} Whitelist
+                {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+              </Button>
+              {id && <Fab aria-label="Delete" className={classes.buttonSpacing} size="small" onClick={this.removeWhitelist} disabled={loading || isSubmitting}>
+                <DeleteIcon />
+              </Fab>}
+              <Button
+                className={classes.buttonSpacing}
+                disabled={loading || isSubmitting}
+                variant="outlined"
+                size="large"
+                color="secondary"
+                onClick={this.cancelUpdate}
+              >
+                Cancel
+              </Button>
             </Grid>
           </Grid>
-        </React.Fragment>
+        </Grid>
+      </React.Fragment>
     );
   }
+
+  cancelUpdate = () => {
+    this.clearState().then(() => {
+      window.location.hash = "pooling";
+    });
+  };
 
   private handleChange = (fieldName: keyof Whitelist) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const {whitelist} = this.state;
@@ -176,6 +209,7 @@ class WhitelistCreate extends React.Component<Props, State> {
     event.preventDefault();
     const {whitelistContext: {createSavedWhitelist, addUsersToSavedWhitelist, removeUsersFromSavedWhitelist, updateSavedWhitelist}, id} = this.props;
     const {whitelist, originalWhitelist} = this.state;
+    this.setState({isSubmitting: true});
     if (id) {
       // update users - adding new ones
       const addUsers: Contact[] = [];
@@ -187,16 +221,18 @@ class WhitelistCreate extends React.Component<Props, State> {
         whitelist.users.findIndex(user => user.userId === oUser.userId) === -1 && removeUsers.push(oUser);
       });
       addUsersToSavedWhitelist(whitelist.id || 0, addUsers.map(user => user.userId))
-          .then(() => removeUsersFromSavedWhitelist(whitelist.id || 0, removeUsers.map(user => user.userId))
-              .then(() => updateSavedWhitelist(whitelist)
-                  .then(() => {
-                    window.location.hash = "pooling";
-                    this.clearState();
-                  })))
+      .then(() => removeUsersFromSavedWhitelist(whitelist.id || 0, removeUsers.map(user => user.userId))
+      .then(() => updateSavedWhitelist(whitelist)
+      .then(() => {
+        this.clearState().then(() => {
+          window.location.hash = "pooling";
+        });
+      })))
     } else {
       createSavedWhitelist(whitelist).then(() => {
-        window.location.hash = "pooling";
-        this.clearState();
+        this.clearState().then(() => {
+          window.location.hash = "pooling";
+        });
       });
     }
   };

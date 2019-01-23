@@ -24,6 +24,7 @@ import Fab from "@material-ui/core/Fab";
 import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
 import {sharedStyles} from "../../theme/theme";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {withSnackBarContext, WithSnackBarContext} from "../../context/SnackBarContext";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -64,7 +65,7 @@ interface State {
   isSubmitting: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext, WithDialogContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext, WithDialogContext,WithSnackBarContext {
 }
 
 const setOwnerAddress = (props: Props, poolingContract: PoolingContract) => {
@@ -86,41 +87,51 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   componentWillMount(): void {
-    const {id, poolingContext: {getManagedFundingPoolDetails, getManagedFundingPoolContributions}, wanAddresses, ethAddresses} = this.props;
+    const {id, poolingContext: {getManagedFundingPoolDetails, getManagedFundingPoolContributions}, wanAddresses, ethAddresses,
+    snackBarContext: {
+      snackBarPush
+    }} = this.props;
     if (id) {
       this.setState({loading: true});
       getManagedFundingPoolDetails(id).then(poolingContract => {
-        poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
-          ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
-        poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
-        if (poolingContract.whitelistedUsers === null) {
-          poolingContract.whitelistedUsers = [];
-        }
-        if (poolingContract.status !== undefined && poolingContract.status > 0) {
-          getManagedFundingPoolContributions(id).then(res => {
+        console.log(poolingContract);
+        if (poolingContract.ownerAddress) {
+          poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
+            ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
+          poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
+          if (poolingContract.whitelistedUsers === null) {
+            poolingContract.whitelistedUsers = [];
+          }
+          if (poolingContract.status !== undefined && poolingContract.status > 0) {
+            getManagedFundingPoolContributions(id).then(res => {
+              this.setState({
+                poolingContract: {...poolingContract, whitelistedUsers: res},
+                validation: {
+                  isNameValid: true,
+                  isTokenAddressValid: true,
+                  isSaleAddressValid: true
+                },
+                originalPoolingContractUsers: [...res],
+                loading: false
+              });
+            });
+          } else {
             this.setState({
-              poolingContract: {...poolingContract, whitelistedUsers: res},
+              poolingContract,
               validation: {
                 isNameValid: true,
                 isTokenAddressValid: true,
                 isSaleAddressValid: true
               },
-              originalPoolingContractUsers: [...res],
+              originalPoolingContractUsers: [...poolingContract.whitelistedUsers],
               loading: false
             });
-          });
+          }
         } else {
-          this.setState({
-            poolingContract,
-            validation: {
-              isNameValid: true,
-              isTokenAddressValid: true,
-              isSaleAddressValid: true
-            },
-            originalPoolingContractUsers: [...poolingContract.whitelistedUsers],
-            loading: false
-          });
+          snackBarPush({key: new Date().toISOString(),message: "Something went wrong",type:"error"});
+          window.location.hash = "pooling";
         }
+
       });
     }
   }
@@ -163,10 +174,10 @@ class PoolCreate extends React.Component<Props, State> {
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
     return (
       <React.Fragment>
-        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} loading={loading}/>
+        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} loading={loading  || isSubmitting}/>
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
-            loading={loading}
+            loading={loading || isSubmitting}
             status={status}
             name={name}
             poolId={id}
@@ -182,7 +193,7 @@ class PoolCreate extends React.Component<Props, State> {
             isSaleAddressValid={isSaleAddressValid}
           />
           <Options
-            loading={loading}
+            loading={loading || isSubmitting}
             status={status}
             id={id}
             user={user}
@@ -193,15 +204,15 @@ class PoolCreate extends React.Component<Props, State> {
             handleChange={this.handleChange}
           />
           <Allocations
-            loading={loading}
+            loading={loading || isSubmitting}
             status={status}
             minContribution={minContribution}
             maxContribution={maxContribution}
             transactionFee={transactionFee}
             handleChange={this.handleChange}
           />
-          {id && <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading}/>}
-          {id && <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} />}
+          {id && <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting}/>}
+          {id && <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting}/>}
           <Grid container item justify="flex-end" className={classes.buttonGrid}>
             <Button
               disabled={!canSubmit}
@@ -389,6 +400,6 @@ class PoolCreate extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(PoolCreate)))) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(withSnackBarContext(PoolCreate))))) as React.ComponentClass<OwnProps>;
 
 

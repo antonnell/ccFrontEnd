@@ -55,6 +55,7 @@ import WhitelistCreate from './containers/WhitelistCreate';
 import AppDialog from './containers/AppDialog/AppDialog';
 import PoolBrowse from './containers/PoolBrowse/index';
 import PoolDetails from './containers/PoolDetails/PoolDetails';
+import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -1203,6 +1204,7 @@ class App extends Component {
           </div>
           { this.renderFooter() }
           <AppDialog />
+          <AppSnackBar />
         </MuiThemeProvider>
       </Context>
     );

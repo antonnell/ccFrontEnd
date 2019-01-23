@@ -137,7 +137,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     getManagedFundingPoolContributions: poolId => {
       const {appContext: {callApi}} = this.props;
-      // const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getManagedFundingPoolContributions/${poolId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
@@ -146,7 +145,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     getManagedFundingPools: (userId) => {
       const {appContext: {callApi}} = this.props;
-      // const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
@@ -179,7 +177,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
-        return res.success && res.fundingPool;
+        return res.success?res.fundingPool:{};
       });
     },
     getPoolContribution: (poolId, address) => {

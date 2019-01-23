@@ -4,6 +4,7 @@ import PoolingContext from "./PoolingContext";
 import ContactsContext from "./ContactsContext";
 import WhitelistContext from "./WhitelistContext";
 import DialogContext from "./DialogContext";
+import SnackBarContext from "./SnackBarContext";
 
 interface OwnProps {
 }
@@ -15,17 +16,19 @@ class Context extends React.Component<Props> {
     // console.log(...helperRenderConsoleText('Render Context', 'lightGreen'));
     const {children} = this.props;
     return (
-        <AppContext>
-          <PoolingContext>
-            <ContactsContext>
-              <WhitelistContext>
-                <DialogContext>
-                {children}
-                </DialogContext>
-              </WhitelistContext>
-            </ContactsContext>
-          </PoolingContext>
-        </AppContext>
+      <AppContext>
+        <PoolingContext>
+          <ContactsContext>
+            <WhitelistContext>
+              <DialogContext>
+                <SnackBarContext>
+                  {children}
+                </SnackBarContext>
+              </DialogContext>
+            </WhitelistContext>
+          </ContactsContext>
+        </PoolingContext>
+      </AppContext>
     );
   }
 }

@@ -18,6 +18,7 @@ interface OwnProps {
   name: string;
   isNameValid: boolean;
   handleChange: WhitelistCreateHandleChange;
+  loading: boolean;
 }
 
 
@@ -26,7 +27,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class Settings extends React.Component<Props> {
   public render() {
-    const {name, isNameValid,classes,handleChange} = this.props;
+    const {name, isNameValid,classes,handleChange,loading} = this.props;
     const nameError = Boolean(name.length) && !isNameValid;
     return (
         <Grid item xs={12} md={5}>
@@ -35,6 +36,7 @@ class Settings extends React.Component<Props> {
           </Grid>
           <Grid item xs={10}>
             <TextField
+                disabled={loading}
                 required
                 autoFocus
                 fullWidth
