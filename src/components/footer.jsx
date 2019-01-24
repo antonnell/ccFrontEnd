@@ -13,7 +13,7 @@ class Footer extends Component {
     }
     var linkStyle = { cursor: "pointer", marginBottom: "6px", color: "#fff" };
     var headingStyle = { color: "#FFFFFF", marginBottom: "12px" };
-    //onClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}
+    //onPledgeClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}
     var aStyle = { textDecoration: "none", color: "white" };
     var line = {
       width: "30px",

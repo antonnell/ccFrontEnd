@@ -53,13 +53,34 @@ export const PoolingContractStatus = {
   5: "Pledges"
 };
 
-export interface FundingPool {
+export interface FundingPool extends PoolingContract{
   blockchain: PoolingContractBlockChain;
   contractAddress: string;
   id: number;
   name: string;
   status: keyof typeof PoolingContractStatus;
   transactionId: string|null;
+  contributorCount: number;
+  fee: number;
+  hardCap: number;
+  maxContribution: number;
+  minContribution: number;
+  owner: string;
+  softCap: number;
+  tokenAddress: string;
+  tokenName: string;
+  totalPooled: number;
+  balance: 0
+  isLocked: false
+  isPledgesEnabled: true
+  isTokensReceived: false
+  isWhitelistEnabled: false
+  pledgesEndDate: string;
+  saleAddress: string;
+  tokenSymbol: string | null;
+  totalTokensReceived: number;
+  totalTokensRemaining: number;
+  transactionFee: number;
 }
 
 export interface GetManagedFundingPoolsResponse {

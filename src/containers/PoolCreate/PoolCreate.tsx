@@ -94,7 +94,6 @@ class PoolCreate extends React.Component<Props, State> {
     if (id) {
       this.setState({loading: true});
       getManagedFundingPoolDetails(id).then(poolingContract => {
-        console.log(poolingContract);
         if (poolingContract.ownerAddress) {
           poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
             ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));

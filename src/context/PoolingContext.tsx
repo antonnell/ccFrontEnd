@@ -7,6 +7,7 @@ import {WanAddress} from "../types/wan";
 interface PoolingContextInterface {
   managedPools: FundingPool[];
   availablePools: FundingPool[];
+  availablePoolsLoading: boolean;
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId: number, poolingContract: PoolingContract) => Promise<any>
@@ -20,14 +21,14 @@ interface PoolingContextInterface {
   enableWithdrawTokens: (poolId: number) => void;
   depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: string) => void;
   withdrawFromPoolingContract: (poolId: number, userAddress: string, amount: number) => void;
-  pledgeToPoolingContract: (userAddress: string, poolAddress: string, amount: number, blockchain: PoolingContractBlockChain) => void;
+  pledgeToPoolingContract: (userAddress: string, poolAddress: string, amount: number, blockchain: PoolingContractBlockChain) => Promise<boolean>;
   withdrawAllFromPoolingContract: (userAddress: string, poolAddress: string, blockchain: PoolingContractBlockChain) => void;
   getFundingPoolPendingTransactions: (blockchain: PoolingContractBlockChain, address: string) => void;
   getManagedFundingPoolPendingTransactions: (poolId: number) => void;
   getManagedFundingPoolContributions: (poolId: number) => Promise<PoolingContact[]>;
   getManagedFundingPools: (userId: string) => Promise<boolean>;
   getAvailableFundingPools: (userId: string) => void;
-  getManagedFundingPoolDetails: (poolId: number) => Promise<PoolingContract>;
+  getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool>;
   getPoolContribution: (poolId: number, address: string) => void;
 }
 
@@ -42,6 +43,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
   public state: PoolingContextInterface = {
     managedPools: [],
     availablePools: [],
+    availablePoolsLoading: false,
     createPoolingContract: poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
@@ -118,10 +120,18 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(amount);
     },
     pledgeToPoolingContract: (userAddress, poolAddress, amount, blockchain) => {
-      console.log(userAddress);
-      console.log(poolAddress);
-      console.log(amount);
-      console.log(blockchain);
+      // console.log(userAddress);
+      // console.log(poolAddress);
+      // console.log(amount);
+      // console.log(blockchain);
+      const {appContext: {callApi}} = this.props;
+      const url = 'pooling/pledgeToPoolingContract';
+      const method = "POST";
+      return callApi(url, method, {
+        userAddress, poolAddress, amount, blockchain
+      }).then(res => {
+        return res.success;
+      });
     },
     withdrawAllFromPoolingContract: (userAddress, poolAddress, blockchain) => {
       console.log(userAddress);
@@ -161,15 +171,21 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const {getManagedFundingPoolDetails} = this.state;
       const url = `pooling/getAvailableFundingPools/${userId}`;
       const method = "GET";
+      this.setState({availablePoolsLoading: true});
       callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
         console.log(response);
+        const availPools: FundingPool[] = [];
         if (response && response.success) {
-          response.fundingPools.forEach(pool => {
-            getManagedFundingPoolDetails(pool.id).then(pool => console.log(pool))
+          let count = response.fundingPools.length;
+          response.fundingPools.forEach(async (pool) => {
+            await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
+              availPools.push({...pool,...fetchedPool});
+              count--;
+              this.setState({availablePools: availPools,availablePoolsLoading: count !== 0});
+            })
           });
         }
-        response && response.success && this.setState({availablePools: [...response.fundingPools]});
       });
     },
     getManagedFundingPoolDetails: (poolId) => {
@@ -177,7 +193,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
-        return res.success?res.fundingPool:{};
+        return res.success ? res.fundingPool : {};
       });
     },
     getPoolContribution: (poolId, address) => {

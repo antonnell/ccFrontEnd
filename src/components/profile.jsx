@@ -59,7 +59,7 @@ class Profile extends Component {
 }
 
 /*
-<Typography variant="h3" style={{fontSize: '16px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginLeft: '12px'}} onClick={this.props.editEmail}>
+<Typography variant="h3" style={{fontSize: '16px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginLeft: '12px'}} onPledgeClick={this.props.editEmail}>
   Edit
 </Typography>
 */

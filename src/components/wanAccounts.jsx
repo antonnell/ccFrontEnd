@@ -474,11 +474,11 @@ class WanAccounts extends Component {
         );
       }
 
-      // <ListItem button onClick={() => { this.props.updatePrimaryClicked(address) }}>
+      // <ListItem button onPledgeClick={() => { this.props.updatePrimaryClicked(address) }}>
       //   <ListItemText primary="Set Primary" />
       // </ListItem>
       // <Divider />
-      // <ListItem button onClick={() => { this.props.deleteKeyClicked(address.publicAddress) }}>
+      // <ListItem button onPledgeClick={() => { this.props.deleteKeyClicked(address.publicAddress) }}>
       //   <ListItemText primary="Delete" />
       // </ListItem>
 

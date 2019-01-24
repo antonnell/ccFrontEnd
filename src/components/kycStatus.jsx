@@ -90,6 +90,6 @@ class KYC extends Component {
     );
   }
 }
-//<Button size="small" variant={this.props.kycState!='failed'&&(this.props.kycState=='completed'||this.props.kycClicked)?"text":"contained"} disabled={this.props.loading||this.props.kycClicked||(['completed', 'hold', 'post_processing', 'failed', 'restarted'].includes(this.props.kycState))} color="primary" onClick={this.props.KYC}>KYC</Button>
+//<Button size="small" variant={this.props.kycState!='failed'&&(this.props.kycState=='completed'||this.props.kycClicked)?"text":"contained"} disabled={this.props.loading||this.props.kycClicked||(['completed', 'hold', 'post_processing', 'failed', 'restarted'].includes(this.props.kycState))} color="primary" onPledgeClick={this.props.KYC}>KYC</Button>
 
 export default KYC;

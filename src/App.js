@@ -1372,6 +1372,8 @@ class App extends Component {
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolBrowse
             user={ this.state.user }
+            ethAddresses={ this.state.ethAddresses }
+            wanAddresses={ this.state.wanAddresses }
           />: <Loader />;
       case 'poolDetails':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
