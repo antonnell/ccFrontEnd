@@ -10,6 +10,10 @@ import {WithPoolingContext, withPoolingContext} from "../../context/PoolingConte
 import DetailsGroup from "./components/DetailsGroup";
 import Button from "@material-ui/core/Button";
 import {colors} from "../../theme";
+import {FundingPool, initialFundingPool} from "../../types/pooling";
+import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog";
+import {EthAddress} from "../../types/eth";
+import {WanAddress} from "../../types/wan";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -27,7 +31,7 @@ const styles = (theme: Theme) =>
 
 export interface PoolDetailsGroupItems {
   title: string;
-  text: string;
+  text: string | number;
   width: 6 | 12;
 }
 
@@ -39,74 +43,111 @@ interface PoolDetailsGroups {
 interface OwnProps {
   id: number;
   user: User;
+  ethAddresses: EthAddress[],
+  wanAddresses: WanAddress[],
 }
 
 interface State {
   groups: PoolDetailsGroups[];
+  loading: boolean;
+  pool: FundingPool;
+  openPledgeDialog: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
 }
 
-class PoolDetails extends React.Component<Props> {
+class PoolDetails extends React.Component<Props,State> {
   readonly state: State = {
-    groups: [
-      {
-        title: "Settings",
-        items: [
-          {title: "Pool Name",text: "Example Pool",width: 6},
-          {title: "Creator",text: "Tyler_Durdin",width: 6},
-          {title: "Pool Security",text: "Public",width: 6},
-          {title: "Token Name",text: "Bloom",width: 6},
-          {title: "Token Address",text: "0xb1B670f4da7c0BE238775EBe74F8Fa5852C15591",width: 12},
-        ]
-      },
-      {
-        title: "Details",
-        items: [
-          {title: "Progress",text: "95% Complete",width: 12},
-        ]
-      },
-      {
-        title: "Allocations",
-        items: [
-          {title: "Contract Cap",text: "1000 ETH / $250,000",width: 6},
-          {title: "Fee",text: "5%",width: 6},
-          {title: "Min-Cap",text: "10 ETH",width: 6},
-          {title: "Max-Cap",text: "25 ETH",width: 6},
-        ]
-      },
-      {
-        title: "",
-        items: [
-          {title: "Amount Pooled",text: "950 ETH / $238,000",width: 12},
-          {title: "Contributors",text: "561",width: 12},
-        ]
-      }
-    ]
+    groups: [],
+    loading: false,
+    pool: initialFundingPool,
+    openPledgeDialog:false,
   };
 
   componentWillMount(): void {
-    const {id} = this.props;
+    const {
+      id, poolingContext: {
+        getManagedFundingPoolDetails
+      }
+    } = this.props;
+    this.setState({loading: true});
     console.log(id);
+    getManagedFundingPoolDetails(id).then(res => {
+      this.setState({
+        loading: false,
+        pool: res,
+        groups: [
+          {
+            title: "Settings",
+            items: [
+              {title: "Pool Name", text: res.name || "Not Available", width: 6},
+              {title: "Creator", text: res.owner || "Not Available", width: 6},
+              {title: "Token Name", text: res.tokenSymbol || "Not Available", width: 6},
+              {title: "Token Address", text: res.tokenAddress, width: 12},
+            ]
+          },
+          // {
+          //   title: "Details",
+          //   items: [
+          //     {title: "Progress",text: "95% Complete",width: 12},
+          //   ]
+          // },
+          {
+            title: "Allocations",
+            items: [
+              // {title: "Contract Cap",text: "1000 ETH / $250,000",width: 6},
+              {title: "Fee", text: `${res.fee || 0} %`, width: 6},
+              {title: "Min-Cap", text: `${res.minContribution} ${res.blockchain}`, width: 6},
+              {title: "Max-Cap", text: `${res.maxContribution} ${res.blockchain}`, width: 6},
+            ]
+          },
+          {
+            title: "",
+            items: [
+              {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 12},
+              {title: "Contributors", text: res.contributorCount || 0, width: 12},
+            ]
+          }
+        ]
+      });
+      console.log(res);
+    });
   }
 
   public render() {
-    const {classes} = this.props;
-    const {groups} = this.state;
+    const {classes,ethAddresses,wanAddresses} = this.props;
+    const {
+      groups, loading, openPledgeDialog, pool} = this.state;
+    const {status} = pool;
     return (
       <React.Fragment>
-        <Header title="Pool Details" headerItems={headerItems.pooling} loading={false}/>
+        <Header title="Pool Details" headerItems={headerItems.pooling} loading={loading} />
         <Grid container direction="row" className={classes.containerGrid} spacing={40}>
-          {groups.map((group,i)=><DetailsGroup key={i} title={group.title} items={group.items} />)}
-          <Grid item container direction="row" justify="flex-end" xs={12}>
-            <Button variant="outlined" color="secondary" className={classes.button}>Join</Button>
+          {groups.map((group, i) => <DetailsGroup key={i} title={group.title} items={group.items} />)}
+          {!loading && <Grid item container direction="row" justify="flex-end" xs={12}>
+            <Button variant="outlined" color="secondary" className={classes.button} onClick={this.onBackClick}>Back</Button>
             <div className={classes.buttonSpacer} />
-            <Button variant="contained" color="secondary" className={classes.button}>Contribute</Button>
-          </Grid>
+            {status === 1 && <Button variant="contained" color="secondary" className={classes.button}>Contribute</Button>}
+            <div className={classes.buttonSpacer} />
+            {status === 5 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
+          </Grid>}
         </Grid>
+        <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onPledgeDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />
       </React.Fragment>
     )
+  }
+
+  onBackClick = () => {
+    window.location.hash = "browsePools";
+  };
+
+  onPledgeClick = () => {
+    this.setState({openPledgeDialog: true})
+  };
+
+  onPledgeDialogClose = () => {
+    this.setState({openPledgeDialog: false})
   }
 }
 

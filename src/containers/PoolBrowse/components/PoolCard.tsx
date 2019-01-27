@@ -70,7 +70,11 @@ class PoolCard extends React.Component<Props> {
 
   public render() {
     const {classes, pool} = this.props;
-    const {name, owner, blockchain, contributorCount, totalPooled, status} = pool;
+    const {name, owner, blockchain, contributorCount, totalPooled, status,whitelistedUsers} = pool;
+    let pledged = 0;
+    for (const user of whitelistedUsers) {
+      pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
+    }
     console.log(pool);
     return (
       <React.Fragment>
@@ -91,15 +95,16 @@ class PoolCard extends React.Component<Props> {
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
+              {pledged > 0 && <Typography variant="subtitle1"><strong>{pledged}</strong> Pledged</Typography>}
               {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography align="center" variant="subtitle1"><b>{totalPooled}</b> Raised</Typography>
-              <Grid item container direction="row" justify="flex-end" className={classes.buttonRow}>
-                {status === 5 && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
-                <div className={classes.buttonSpacer} />
-                <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
-              </Grid>
+            </Grid>
+            <Grid item xs={12} container direction="row" justify="flex-end" className={classes.buttonRow}>
+              {status === 5 && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
+              <div className={classes.buttonSpacer} />
+              <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
             </Grid>
           </Grid>
           <IconButton className={classes.shareButton}><ShareIcon /></IconButton>

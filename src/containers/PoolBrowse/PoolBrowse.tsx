@@ -52,9 +52,8 @@ class PoolBrowse extends React.Component<Props,State> {
   }
 
   public render() {
-    const {poolingContext: {availablePools,availablePoolsLoading}, classes,user,ethAddresses,wanAddresses} = this.props;
+    const {poolingContext: {availablePools,availablePoolsLoading}, classes,ethAddresses,wanAddresses} = this.props;
     const {selectedPool,openPledgeDialog} = this.state;
-    console.log(user);
     return (
       <React.Fragment>
         <Header title="Browse Pools" headerItems={headerItems.pooling} loading={availablePoolsLoading}/>

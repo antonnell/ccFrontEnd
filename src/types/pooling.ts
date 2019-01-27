@@ -2,16 +2,17 @@ import {EthAddress} from "./eth";
 import {WanAddress} from "./wan";
 import {Contact} from "./contacts";
 
-export type PoolingContractBlockChain = "ETH"|"WAN";
+export type PoolingContractBlockChain = "ETH" | "WAN";
 
 export interface PoolingContact extends Contact {
   allocation?: number;
   value?: number;
+  pledge?: number;
 }
 
 export interface PoolingContract {
   blockchain: PoolingContractBlockChain;
-  ownerAddress: EthAddress|WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
+  ownerAddress: EthAddress | WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
   name: string;                                 // Easy reference display name for the user to assign to this pooling contract
   status?: keyof typeof PoolingContractStatus;
   minContribution: number;                      // Minimum individual contribution the contract should accept, in Eth
@@ -26,7 +27,7 @@ export interface PoolingContract {
   whitelistedUsers: PoolingContact[];
 }
 
-export const initialPoolingContract:PoolingContract = {
+export const initialPoolingContract: PoolingContract = {
   blockchain: "ETH",
   ownerAddress: null,
   name: "",
@@ -42,7 +43,7 @@ export const initialPoolingContract:PoolingContract = {
   whitelistedUsers: []
 };
 
-export const poolingBlockChainOptions:PoolingContractBlockChain[] = ["ETH","WAN"];
+export const poolingBlockChainOptions: PoolingContractBlockChain[] = ["ETH", "WAN"];
 
 export const PoolingContractStatus = {
   0: "Setup",
@@ -53,13 +54,13 @@ export const PoolingContractStatus = {
   5: "Pledges"
 };
 
-export interface FundingPool extends PoolingContract{
+export interface FundingPool extends PoolingContract {
   blockchain: PoolingContractBlockChain;
   contractAddress: string;
   id: number;
   name: string;
   status: keyof typeof PoolingContractStatus;
-  transactionId: string|null;
+  transactionId: string | null;
   contributorCount: number;
   fee: number;
   hardCap: number;
@@ -70,11 +71,11 @@ export interface FundingPool extends PoolingContract{
   tokenAddress: string;
   tokenName: string;
   totalPooled: number;
-  balance: 0
-  isLocked: false
-  isPledgesEnabled: true
-  isTokensReceived: false
-  isWhitelistEnabled: false
+  balance: 0;
+  isLocked: boolean;
+  isPledgesEnabled: boolean;
+  isTokensReceived: boolean;
+  isWhitelistEnabled: boolean;
   pledgesEndDate: string;
   saleAddress: string;
   tokenSymbol: string | null;
@@ -83,10 +84,32 @@ export interface FundingPool extends PoolingContract{
   transactionFee: number;
 }
 
+export const initialFundingPool: FundingPool = {
+  ...initialPoolingContract,
+  contractAddress: "",
+  id: 0,
+  status: 0,
+  transactionId: null,
+  contributorCount: 0,
+  fee: 0,
+  hardCap: 0,
+  owner: "",
+  softCap: 0,
+  tokenName: "",
+  totalPooled: 0,
+  balance: 0,
+  isLocked: false,
+  isTokensReceived: false,
+  tokenSymbol: "",
+  totalTokensReceived: 0,
+  totalTokensRemaining: 0,
+};
+
 export interface GetManagedFundingPoolsResponse {
-  errorMsg: string|null
+  errorMsg: string | null
   fundingPools: FundingPool[];
   success: boolean;
 }
 
-export interface GetAvailableFundingPoolsResponse extends GetManagedFundingPoolsResponse{}
+export interface GetAvailableFundingPoolsResponse extends GetManagedFundingPoolsResponse {
+}

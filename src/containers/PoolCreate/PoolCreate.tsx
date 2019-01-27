@@ -103,6 +103,7 @@ class PoolCreate extends React.Component<Props, State> {
           }
           if (poolingContract.status !== undefined && poolingContract.status > 0) {
             getManagedFundingPoolContributions(id).then(res => {
+              console.log(res);
               this.setState({
                 poolingContract: {...poolingContract, whitelistedUsers: res},
                 validation: {

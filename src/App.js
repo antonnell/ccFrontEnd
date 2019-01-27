@@ -1380,6 +1380,8 @@ class App extends Component {
           <PoolDetails
             id={params}
             user={ this.state.user }
+            ethAddresses={ this.state.ethAddresses }
+            wanAddresses={ this.state.wanAddresses }
           />: <Loader />;
       case 'ico':
         return <ComingSoon />;
