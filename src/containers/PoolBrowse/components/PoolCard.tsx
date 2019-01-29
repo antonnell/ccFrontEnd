@@ -14,6 +14,7 @@ import {FundingPool} from "../../../types/pooling";
 interface OwnProps {
   pool: FundingPool;
   onPledgeClick: ()=>void;
+  onContributeClick: ()=>void;
 }
 
 const styles = (theme: Theme) =>
@@ -47,7 +48,7 @@ const styles = (theme: Theme) =>
       transform: "rotate(-130deg) !important",
     },
     button: {
-      minWidth: 80,
+      minWidth: 100,
       color: colors.dark
     },
     buttonSpacer: {
@@ -60,6 +61,9 @@ const styles = (theme: Theme) =>
       position: "absolute",
       top: theme.spacing.unit * 2,
       right: theme.spacing.unit * 2
+    },
+    textMinHeight: {
+      minHeight: 30
     }
   });
 
@@ -95,13 +99,16 @@ class PoolCard extends React.Component<Props> {
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
-              {pledged > 0 && <Typography variant="subtitle1"><strong>{pledged}</strong> Pledged</Typography>}
+              <Typography variant="subtitle1" className={classes.textMinHeight}>
+                {pledged > 0 && <React.Fragment><strong>{pledged}</strong> Pledged</React.Fragment>}
+            </Typography>
               {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography align="center" variant="subtitle1"><b>{totalPooled}</b> Raised</Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" className={classes.buttonRow}>
+              {status === 1 && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
               <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
@@ -117,10 +124,17 @@ class PoolCard extends React.Component<Props> {
     const {pool: {id}} = this.props;
     window.location.hash = `poolDetails/${id}`;
   };
+
   onPledgeClick = () => {
     const {onPledgeClick} = this.props;
     onPledgeClick();
   };
+
+  onContributeClick = () => {
+    const {onContributeClick} = this.props;
+    onContributeClick();
+  };
+
 
 }
 

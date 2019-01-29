@@ -108,6 +108,7 @@ class Pools extends React.Component<Props, State> {
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
+    console.log(managedPools);
     return (
       <Grid item xs={12}>
         <Typography variant="h3" style={{marginBottom: "20px"}}>My Pools</Typography>
@@ -128,6 +129,7 @@ class Pools extends React.Component<Props, State> {
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
+                  const status = (n.pendingTransactions && n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1)?"Deploying":PoolingContractStatus[n.status];
                   return (
                     <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
                       <TableCell>
@@ -143,7 +145,7 @@ class Pools extends React.Component<Props, State> {
                           style={{lineHeight: "57px", fontSize: "17px"}}
                           noWrap
                         >
-                          {PoolingContractStatus[n.status]}
+                          {status}
                         </Typography>
                       </TableCell>
                       <TableCell>

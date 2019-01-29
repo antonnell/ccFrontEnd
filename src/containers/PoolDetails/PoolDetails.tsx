@@ -14,6 +14,7 @@ import {FundingPool, initialFundingPool} from "../../types/pooling";
 import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog";
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
+import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -52,6 +53,7 @@ interface State {
   loading: boolean;
   pool: FundingPool;
   openPledgeDialog: boolean;
+  openContributeDialog: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
@@ -63,6 +65,7 @@ class PoolDetails extends React.Component<Props,State> {
     loading: false,
     pool: initialFundingPool,
     openPledgeDialog:false,
+    openContributeDialog: false
   };
 
   componentWillMount(): void {
@@ -118,7 +121,7 @@ class PoolDetails extends React.Component<Props,State> {
   public render() {
     const {classes,ethAddresses,wanAddresses} = this.props;
     const {
-      groups, loading, openPledgeDialog, pool} = this.state;
+      groups, loading, openPledgeDialog, openContributeDialog,pool} = this.state;
     const {status} = pool;
     return (
       <React.Fragment>
@@ -128,12 +131,13 @@ class PoolDetails extends React.Component<Props,State> {
           {!loading && <Grid item container direction="row" justify="flex-end" xs={12}>
             <Button variant="outlined" color="secondary" className={classes.button} onClick={this.onBackClick}>Back</Button>
             <div className={classes.buttonSpacer} />
-            {status === 1 && <Button variant="contained" color="secondary" className={classes.button}>Contribute</Button>}
+            {status === 1 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
             <div className={classes.buttonSpacer} />
             {status === 5 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
           </Grid>}
         </Grid>
-        <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onPledgeDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />
+        <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />
+        <PoolContributeDialog pool={pool} open={openContributeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />
       </React.Fragment>
     )
   }
@@ -146,8 +150,12 @@ class PoolDetails extends React.Component<Props,State> {
     this.setState({openPledgeDialog: true})
   };
 
-  onPledgeDialogClose = () => {
-    this.setState({openPledgeDialog: false})
+  onContributeClick = () => {
+    this.setState({openContributeDialog: true})
+  };
+
+  onDialogClose = () => {
+    this.setState({openPledgeDialog: false,openContributeDialog: false})
   }
 }
 

@@ -10,6 +10,14 @@ export interface PoolingContact extends Contact {
   pledge?: number;
 }
 
+export interface PoolingTransaction {
+  functionCall: "deployPoolingContract";
+  poolName: string;
+  timestamp: string;
+  transactionId: string;
+  value: number;
+}
+
 export interface PoolingContract {
   blockchain: PoolingContractBlockChain;
   ownerAddress: EthAddress | WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
@@ -25,6 +33,7 @@ export interface PoolingContract {
   isWhitelistEnabled: boolean;                  // flag to indicate if this pool should use a whitelist
   existingWhitelistId: number;           // saved whitelist id to create this pool’s whitelist from
   whitelistedUsers: PoolingContact[];
+  pendingTransactions: PoolingTransaction[];
 }
 
 export const initialPoolingContract: PoolingContract = {
@@ -40,7 +49,8 @@ export const initialPoolingContract: PoolingContract = {
   transactionFee: 0,
   isWhitelistEnabled: false,
   existingWhitelistId: -1,
-  whitelistedUsers: []
+  whitelistedUsers: [],
+  pendingTransactions: []
 };
 
 export const poolingBlockChainOptions: PoolingContractBlockChain[] = ["ETH", "WAN"];

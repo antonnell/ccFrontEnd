@@ -265,6 +265,7 @@ class PoolCreate extends React.Component<Props, State> {
     showDialog("confirmation", "deletePoolingContract");
   };
   deployPool = () => {
+    this.setState({isSubmitting:true});
     const {
       id,
       poolingContext: {
@@ -376,7 +377,12 @@ class PoolCreate extends React.Component<Props, State> {
       addUsersToPoolWhitelist(id || 0, addUsers.map(user => ({userId: user.userId, allocation: 0})))
       .then(() => removeUsersFromPoolWhitelist(id || 0, removeUsers.map(user => user.userId))
       .then(() => updatePoolingContract(id, poolingContract).then(res => {
-        if (res.success === true) {
+          const {snackBarContext: {snackBarPush}} = this.props;
+        if (res === true) {
+          snackBarPush({key: new Date().toISOString(),message: "Pool Updated",type:"success"});
+          window.location.hash = "pooling";
+        } else {
+          snackBarPush({key: new Date().toISOString(),message: "Something went wrong",type:"error"});
           window.location.hash = "pooling";
         }
       })));

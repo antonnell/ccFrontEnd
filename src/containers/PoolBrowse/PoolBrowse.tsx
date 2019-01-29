@@ -12,6 +12,7 @@ import {FundingPool} from "../../types/pooling";
 import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog";
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
+import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -27,6 +28,7 @@ interface OwnProps {
 }
 interface State {
   openPledgeDialog: boolean;
+  openContributeDialog: boolean;
   selectedPool: FundingPool | null;
 }
 
@@ -38,6 +40,7 @@ class PoolBrowse extends React.Component<Props,State> {
 
   readonly state:State = {
     openPledgeDialog: false,
+    openContributeDialog: false,
     selectedPool: null
   };
 
@@ -53,18 +56,19 @@ class PoolBrowse extends React.Component<Props,State> {
 
   public render() {
     const {poolingContext: {availablePools,availablePoolsLoading}, classes,ethAddresses,wanAddresses} = this.props;
-    const {selectedPool,openPledgeDialog} = this.state;
+    const {selectedPool,openPledgeDialog,openContributeDialog} = this.state;
     return (
       <React.Fragment>
         <Header title="Browse Pools" headerItems={headerItems.pooling} loading={availablePoolsLoading}/>
         <Grid container direction="row" className={classes.containerGrid} spacing={32}>
           {availablePools.map(pool=>
             <Grid item xs={6} key={pool.id}>
-              <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)}/>
+              <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)}/>
             </Grid>
           )}
         </Grid>
-        <PoolPledgeDialog pool={selectedPool} open={openPledgeDialog} onClose={this.onPledgeDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses}/>
+        <PoolPledgeDialog pool={selectedPool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses}/>
+        <PoolContributeDialog pool={selectedPool} open={openContributeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses}/>
       </React.Fragment>)
   }
 
@@ -72,8 +76,12 @@ class PoolBrowse extends React.Component<Props,State> {
     this.setState({openPledgeDialog: true,selectedPool: pool})
   };
 
-  onPledgeDialogClose = () => {
-    this.setState({openPledgeDialog: false,selectedPool: null})
+  onContributeClick = (pool:FundingPool) => ()=> {
+    this.setState({openContributeDialog: true,selectedPool: pool})
+  };
+
+  onDialogClose = () => {
+    this.setState({openPledgeDialog: false,openContributeDialog: false,selectedPool: null})
   }
 
 }
