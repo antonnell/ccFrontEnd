@@ -108,7 +108,6 @@ class Pools extends React.Component<Props, State> {
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
-    console.log(managedPools);
     return (
       <Grid item xs={12}>
         <Typography variant="h3" style={{marginBottom: "20px"}}>My Pools</Typography>
@@ -129,7 +128,18 @@ class Pools extends React.Component<Props, State> {
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
-                  const status = (n.pendingTransactions && n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1)?"Deploying":PoolingContractStatus[n.status];
+                  let status = PoolingContractStatus[n.status];
+                  if (n.pendingTransactions && n.pendingTransactions.length) {
+                    if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1) {
+                      status = "Deploying";
+                    }
+                    if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (True)") !== -1) {
+                      status = "Locking";
+                    }
+                    if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (False)") !== -1) {
+                      status = "Unlocking";
+                    }
+                  }
                   return (
                     <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
                       <TableCell>

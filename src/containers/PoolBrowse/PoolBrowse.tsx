@@ -59,7 +59,7 @@ class PoolBrowse extends React.Component<Props,State> {
     const {selectedPool,openPledgeDialog,openContributeDialog} = this.state;
     return (
       <React.Fragment>
-        <Header title="Browse Pools" headerItems={headerItems.pooling} loading={availablePoolsLoading}/>
+        <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading}/>
         <Grid container direction="row" className={classes.containerGrid} spacing={32}>
           {availablePools.map(pool=>
             <Grid item xs={6} key={pool.id}>

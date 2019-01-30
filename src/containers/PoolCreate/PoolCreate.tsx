@@ -19,7 +19,7 @@ import AddedUsers from "./components/AddedUsers";
 import {Contact} from "../../types/contacts";
 import AddUsers from "./components/AddUsers";
 import {WithWhitelistContext, withWhitelistContext} from "../../context/WhitelistContext";
-import {DeleteIcon} from "../../theme/icons";
+import {DeleteIcon, LockIcon, LockOpenIcon} from "../../theme/icons";
 import Fab from "@material-ui/core/Fab";
 import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
 import {sharedStyles} from "../../theme/theme";
@@ -144,7 +144,7 @@ class PoolCreate extends React.Component<Props, State> {
         reset
       },
       poolingContext: {
-        deletePoolingContract
+        deletePoolingContract,setPoolLocked
       },
       id
     } = nextProps;
@@ -153,6 +153,26 @@ class PoolCreate extends React.Component<Props, State> {
       if (result === "confirmed") {
         this.setState({isSubmitting: true});
         deletePoolingContract(id || 0).then(() => {
+          this.clearState().then(() => {
+            window.location.hash = "pooling";
+          });
+        })
+      }
+    } else if (result !== "pending" && action === "lockPoolingContract") {
+      reset();
+      if (result === "confirmed") {
+        this.setState({isSubmitting: true});
+        setPoolLocked(id || 0,true).then(() => {
+          this.clearState().then(() => {
+            window.location.hash = "pooling";
+          });
+        })
+      }
+    } else if (result !== "pending" && action === "unlockPoolingContract") {
+      reset();
+      if (result === "confirmed") {
+        this.setState({isSubmitting: true});
+        setPoolLocked(id || 0,false).then(() => {
           this.clearState().then(() => {
             window.location.hash = "pooling";
           });
@@ -240,6 +260,12 @@ class PoolCreate extends React.Component<Props, State> {
             {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={loading || isSubmitting}>
               <DeleteIcon />
             </Fab>}
+            {id && status !== 0 &&status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={loading || isSubmitting}>
+              <LockIcon />
+            </Fab>}
+            {id && status === 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={loading || isSubmitting}>
+              <LockOpenIcon />
+            </Fab>}
             <Button
               className={classes.deployButton}
               disabled={!canSubmit}
@@ -263,6 +289,16 @@ class PoolCreate extends React.Component<Props, State> {
   removePool = () => {
     const {dialogContext: {showDialog}} = this.props;
     showDialog("confirmation", "deletePoolingContract");
+  };
+
+  lockPool = () => {
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "lockPoolingContract");
+  };
+
+  unlockPool = () => {
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "unlockPoolingContract");
   };
   deployPool = () => {
     this.setState({isSubmitting:true});

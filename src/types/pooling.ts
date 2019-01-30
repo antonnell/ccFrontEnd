@@ -11,7 +11,7 @@ export interface PoolingContact extends Contact {
 }
 
 export interface PoolingTransaction {
-  functionCall: "deployPoolingContract";
+  functionCall: "deployPoolingContract" | "setDepositsLocked (True)" | "setDepositsLocked (False)";
   poolName: string;
   timestamp: string;
   transactionId: string;

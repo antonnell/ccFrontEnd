@@ -11,12 +11,24 @@ export interface HeaderItem {
 interface HeaderItemsInterface {
   pooling: HeaderItem;
   poolCreate: HeaderItem;
+  poolBrowse: HeaderItem;
 }
 
 const poolingMenuItems = [
   {
     label: "Browse Pools",
     link: "browsePools"
+  },
+  {
+    label: "Create Whitelist",
+    link: "createWhitelist"
+  }
+];
+
+const poolingBrowseMenuItems = [
+  {
+    label: "New Pool",
+    link: "createPool"
   },
   {
     label: "Create Whitelist",
@@ -38,6 +50,13 @@ const headerItems: HeaderItemsInterface = {
       link: "pooling"
     }],
     menuItems: poolingMenuItems
+  },
+  poolBrowse: {
+    buttons: [{
+      label: "Pool Home",
+      link: "pooling"
+    }],
+    menuItems: poolingBrowseMenuItems
   }
 };
 

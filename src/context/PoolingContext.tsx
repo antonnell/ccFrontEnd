@@ -13,7 +13,7 @@ interface PoolingContextInterface {
   updatePoolingContract: (poolId: number, poolingContract: PoolingContract) => Promise<any>
   deployPoolingContract: (poolId: number) => Promise<boolean>;
   updateTokenAddress: (poolId: number, tokenAddress: string) => void;
-  setPoolLocked: (poolId: number, isLocked: boolean) => void;
+  setPoolLocked: (poolId: number, isLocked: boolean) => Promise<boolean>;
   updatePledgesEndDate: (poolId: number, pledgesEndDate: string) => void;
   updateSaleAddress: (poolId: number, saleAddress: string) => void;
   sendPoolFunds: (poolId: number) => void;
@@ -92,6 +92,15 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     setPoolLocked: (poolId, isLocked) => {
       console.log(poolId);
       console.log(isLocked);
+      const {appContext: {callApi}} = this.props;
+      const url = 'pooling/setPoolLocked';
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,isLocked
+      }).then(res => {
+        console.log(res);
+        return res.success;
+      });
     },
     updatePledgesEndDate: (poolId, pledgesEndDate) => {
       console.log(poolId);
@@ -157,7 +166,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         if (res && res.success) {
           const {managedPools} = this.state;
           const id = managedPools.findIndex(pool=>pool.id === poolId);
-          managedPools[id] = {...managedPools[id],pendingTransactions:[res.pendingTransactions]};
+          managedPools[id] = {...managedPools[id],pendingTransactions:[...res.pendingTransactions]};
           this.setState({managedPools});
         }
         console.log(res);

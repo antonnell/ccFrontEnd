@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {DialogActionResult} from "../types/dialog";
 
-type DialogActions = "deleteWhitelist" | "deletePoolingContract" | null;
+type DialogActions = "deleteWhitelist" | "deletePoolingContract" | "lockPoolingContract" | "unlockPoolingContract" | null;
 type DialogType = "confirmation";
 
 interface DialogContextInterface {
