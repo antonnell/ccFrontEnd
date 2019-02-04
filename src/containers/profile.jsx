@@ -4,7 +4,7 @@ const createReactClass = require("create-react-class");
 
 const email = require("email-validator");
 
-// let poolingEmitter = require('../store/accountStore.js').default.poolingEmitter
+let emitter = require("../store/accountStore.js").default.emitter;
 let dispatcher = require("../store/accountStore.js").default.dispatcher;
 
 let Profile = createReactClass({
@@ -17,6 +17,16 @@ let Profile = createReactClass({
       emailAddressError: false,
       emailAddressErrorMessage: ""
     };
+  },
+
+  componentWillMount() {
+    emitter.on("uploadProfilePhoto", this.uploadProfilePhotoReturned);
+    emitter.on("getUserProfile", this.getUserProfileReturned)
+  },
+
+  componentWillUnmount() {
+    emitter.removeAllListeners("uploadProfilePhoto");
+    emitter.removeAllListeners("getUserProfile");
   },
 
   render() {
@@ -39,8 +49,83 @@ let Profile = createReactClass({
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
+        handleUploadClicked={this.handleUploadClicked}
+        onImageChange={this.onImageChange}
       />
     );
+  },
+
+  handleUploadClicked() {
+    document.getElementById("imgupload").click()
+  },
+
+  onImageChange(event) {
+    event.stopPropagation();
+
+    if(event.target.files && event.target.files.length >= 1) {
+      let state = this;
+
+      setTimeout(function() {
+        state.setState({ loading: true, error: null });
+      }, 1)
+
+      let filename = event.target.files[0].name;
+      let extension = filename.substr((filename.lastIndexOf('.') + 1));
+
+      var reader = new FileReader();
+      reader.onload = function(){
+        // let res = new Uint8Array(this.result).reduce(function (data, byte) {
+        //   return data + String.fromCharCode(byte);
+        // }, '');
+
+        let res = reader.result
+        var strImage = res.replace(/^data:image\/[a-z]+;base64,/, "");
+
+        var content = {
+          userId: state.props.user.id,
+          imageData: strImage,
+          extension: extension
+        };
+
+        console.log(content)
+        dispatcher.dispatch({ type: "uploadProfilePhoto", content, token: state.props.user.token });
+      }
+      // reader.readAsArrayBuffer(event.target.files[0]);
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  },
+
+  uploadProfilePhotoReturned(error, data) {
+    this.setState({ loading: false });
+    var content = {
+      userId: this.props.user.id,
+    };
+    dispatcher.dispatch({ type: "getUserProfile", content, token: this.props.user.token });
+
+  },
+
+  getUserProfileReturned(error, data) {
+    console.log('asdasd')
+    console.log(error)
+    console.log(data)
+
+    let user = this.props.user
+    user.profilePhoto = data.user.profilePhoto
+    this.props.setUser(user);
+    // if (error) {
+    //   return this.setState({ error: error.toString() });
+    // }
+    //
+    // if (data.success) {
+    //   let user = this.props.user
+    //   user.profilePhoto = data.user.profilePhoto
+    //   this.props.setUser(user);
+    //
+    // } else if (data.errorMsg) {
+    //   this.setState({ error: data.errorMsg, contacts: [] });
+    // } else {
+    //   this.setState({ error: data.statusText, contacts: [] });
+    // }
   },
 
   editEmail() {

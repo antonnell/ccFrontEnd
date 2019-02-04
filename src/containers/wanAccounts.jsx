@@ -9,6 +9,9 @@ const createReactClass = require("create-react-class");
 let wanEmitter = require("../store/wanStore.js").default.emitter;
 let wanDispatcher = require("../store/wanStore.js").default.dispatcher;
 
+let crowdsaleEmitter = require('../store/crowdsaleStore.js').default.emitter;
+let crowdsaleDispatcher = require('../store/crowdsaleStore.js').default.dispatcher;
+
 let WanAccounts = createReactClass({
   getInitialState() {
     return {
@@ -49,7 +52,8 @@ let WanAccounts = createReactClass({
       minContribution: 25,
       crowdasleProgress: null,
       createOpen: false,
-      importOpen: false
+      importOpen: false,
+      termsRefundOpen: false,
     };
   },
   render() {
@@ -115,8 +119,11 @@ let WanAccounts = createReactClass({
         investmentAmountKeyDown={this.investmentAmountKeyDown}
         crowdsales={this.props.crowdsales}
         termsOpen={this.state.termsOpen}
+        termsRefundOpen={this.state.termsRefundOpen}
         handleTermsClose={this.handleTermsClose}
+        handleTermsRefundClose={this.handleTermsRefundClose}
         handleTermsAccepted={this.handleTermsAccepted}
+        handleTermsRefundAccepted={this.handleTermsRefundAccepted}
         ICOError={this.state.ICOError}
         ICOSuccess={this.state.ICOSuccess}
         investLoading={this.state.investLoading}
@@ -134,6 +141,7 @@ let WanAccounts = createReactClass({
         handleCreateClose={this.handleCreateClose}
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
+        refundClicked={this.refundClicked}
       />
     );
   },
@@ -146,6 +154,7 @@ let WanAccounts = createReactClass({
     wanEmitter.removeAllListeners("deleteWanAddress");
     wanEmitter.removeAllListeners("investICO");
     wanEmitter.removeAllListeners("getICOProgress");
+    crowdsaleEmitter.removeAllListeners('refund');
 
     wanEmitter.on("createWanAddress", this.createWanAddressReturned);
     wanEmitter.on("importWanAddress", this.importWanAddressReturned);
@@ -154,6 +163,7 @@ let WanAccounts = createReactClass({
     wanEmitter.on("deleteWanAddress", this.deleteWanAddressReturned);
     wanEmitter.on("investICO", this.investICOReturned);
     wanEmitter.on("getICOProgress", this.getICOProgressReturned);
+    crowdsaleEmitter.on('refund', this.refundReturned);
   },
 
   // componentDidMount() {
@@ -301,7 +311,6 @@ let WanAccounts = createReactClass({
     }
 
     if (data.success) {
-      //update the contributed amounts? Show them a tx? I don't know...
       this.setState({
         thanksOpen: true,
         investTransacstionID: data.transactionId,
@@ -311,6 +320,30 @@ let WanAccounts = createReactClass({
       this.setState({ ICOError: data.errorMsg });
     } else {
       this.setState({ ICOError: data.statusText });
+    }
+  },
+
+  refundClicked(icoContractId) {
+    this.setState({icoContractId: icoContractId, termsRefundOpen: true})
+  },
+
+  refundReturned(error, data) {
+    this.setState({ investLoading: false });
+    if(error) {
+      return this.setState({ICOError: error.toString()});
+    }
+
+    if(data.success) {
+      this.setState({
+        thanksOpen: true,
+        investTransacstionID: data.transactionId,
+        ICOSuccess: "Your ICO refund was successfully submitted."
+      });
+
+    } else if (data.errorMsg) {
+      this.setState({ICOError: data.errorMsg});
+    } else {
+      this.setState({ICOError: data.statusText})
     }
   },
 
@@ -447,6 +480,10 @@ let WanAccounts = createReactClass({
     this.setState({ termsOpen: false });
   },
 
+  handleTermsRefundClose() {
+    this.setState({ termsRefundOpen: false });
+  },
+
   handleTermsAccepted() {
     this.setState({ termsOpen: false, investLoading: true });
 
@@ -461,6 +498,12 @@ let WanAccounts = createReactClass({
       content,
       token: this.props.user.token
     });
+  },
+
+  handleTermsRefundAccepted() {
+    this.setState({termsRefundOpen: false, investLoading: true})
+    var content = { saleId: this.state.icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress }
+    crowdsaleDispatcher.dispatch({type: 'refund', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {

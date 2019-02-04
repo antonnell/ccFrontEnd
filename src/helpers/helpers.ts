@@ -1,4 +1,4 @@
-type ConsoleColors = 'lightGreen' | 'white' | 'lightBlue' | 'black';
+type ConsoleColors = 'lightGreen' | 'white' | 'lightBlue' | 'lightsalmon' | 'black';
 export const helperRenderConsoleText = (
   message: string,
   background: ConsoleColors,

@@ -454,7 +454,7 @@ class EnhancedTable extends React.Component {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
                     return (
-                      <TableRow hover tabIndex={-1} key={n.id}>
+                      <TableRow hover tabIndex={-1} key={n.transactionId}>
                         <TableCell>
                           <Typography
                             style={{ lineHeight: "57px", fontSize: "17px" }}
@@ -484,7 +484,7 @@ class EnhancedTable extends React.Component {
                             style={{ lineHeight: "57px", fontSize: "17px" }}
                             noWrap
                           >
-                            {n.value}
+                            {n.value + " " +n.currency}
                           </Typography>
                         </TableCell>
                         <TableCell>

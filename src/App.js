@@ -56,6 +56,7 @@ import AppDialog from './containers/AppDialog/AppDialog';
 import PoolBrowse from './containers/PoolBrowse/index';
 import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
+import { helperRenderConsoleText } from './helpers/helpers';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -262,6 +263,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    // console.log(...helperRenderConsoleText('componentWillMount App', 'lightBlue'));
     ReactGA.initialize('UA-106832873-2', { cookieDomain: 'auto' });
 
     var user = null;
@@ -276,6 +278,7 @@ class App extends Component {
     if (paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex);
     }
+    console.log(paramsIndex);
     if (
       ![
         'welcome',
@@ -959,7 +962,8 @@ class App extends Component {
   }
 
   locationHashChanged() {
-    var uriParameters = {};
+    console.log(...helperRenderConsoleText('locationHashChanged App', 'lightsalmon'));
+    const uriParameters = {};
     var currentScreen = '';
     var paramsIndex = window.location.hash.indexOf('?');
     if (paramsIndex > -1) {
@@ -1167,6 +1171,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(...helperRenderConsoleText('Render App', 'lightGreen'));
     let background = '#fff';
     let backgroundImage = null;
     if (this.state.currentTheme === 'dark') {

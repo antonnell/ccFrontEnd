@@ -132,11 +132,9 @@ class Pools extends React.Component<Props, State> {
                   if (n.pendingTransactions && n.pendingTransactions.length) {
                     if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1) {
                       status = "Deploying";
-                    }
-                    if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (True)") !== -1) {
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (True)") !== -1) {
                       status = "Locking";
-                    }
-                    if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (False)") !== -1) {
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (False)") !== -1) {
                       status = "Unlocking";
                     }
                   }

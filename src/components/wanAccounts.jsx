@@ -31,6 +31,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import TermsModalComponent from './termsModalICO';
+import TermsModalRefundComponent from './termsModalICORefund';
 import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
 import CreateModal from './createModal';
@@ -484,7 +485,7 @@ class WanAccounts extends Component {
 
       return (
         <Grid item xs={ 12 } xl={ 6 } align="left" key={ address.publicAddress }>
-          <Card style={ { marginRight: '6px', marginBottom: '6px' } }>
+          <Card style={ { margin: '12px' } }>
             <CardContent style={ { position: 'relative' } }>
               <Grid
                 container
@@ -497,8 +498,7 @@ class WanAccounts extends Component {
                   { address.editing !== true && (
                     <Typography
                       noWrap
-                      variant="h5"
-                      component="h2"
+                      variant="h3"
                       style={ { minHeight: '32px', display: 'inline-block' } }
                     >
                       { address.isPrimary === true && (
@@ -558,7 +558,11 @@ class WanAccounts extends Component {
                 </Grid>
                 <Grid item xs={ 1 } align="right">
                   <IconButton
-                    style={ { verticalAlign: 'top', marginRight: '-20px' } }
+                    style={ {
+                      verticalAlign: "top",
+                      marginRight: "-20px",
+                      marginTop: "-11px"
+                    } }
                     color="primary"
                     aria-label="More"
                     buttonRef={ node => {
@@ -614,14 +618,14 @@ class WanAccounts extends Component {
                 <Grid item xs={ 12 }>
                   <Typography
                     noWrap
-                    variant="h6"
+                    variant="subtitle1"
                     color="textSecondary"
                     style={ { minHeight: '32px' } }
                   >
                     { address.publicAddress }
                   </Typography>
                 </Grid>
-                <Grid item xs={ 6 } align="left">
+                <Grid item xs={6} style={{ marginTop: "6px" }}>
                   <Typography variant="h5" noWrap>
                     { address.balance +
                     ' WAN ($' +
@@ -670,10 +674,10 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -692,10 +696,10 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -720,10 +724,10 @@ class WanAccounts extends Component {
           alignItems="flex-start"
           direction="row"
           spacing={ 0 }
-          style={ { padding: '24px' } }
+          style={ { padding: '12px', paddingTop: '48px' } }
         >
           <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h5">
               Wanchain ICOs
             </Typography>
           </Grid>
@@ -742,10 +746,10 @@ class WanAccounts extends Component {
         alignItems="flex-start"
         direction="row"
         spacing={ 0 }
-        style={ { padding: '24px' } }
+        style={ { padding: '12px', paddingTop: '48px' } }
       >
         <Grid item xs={ 12 } align="left" style={ { marginBottom: '24px' } }>
-          <Typography variant="h5" color="inherit">Wanchain ICOs</Typography>
+          <Typography variant="h5">Wanchain ICOs</Typography>
         </Grid>
 
         { this.props.crowdsales.map((crowdSale, index) => {
@@ -764,6 +768,7 @@ class WanAccounts extends Component {
         </Grid>
         <Grid item xs={ 12 } align="center">
           <Typography
+            color="inherit"
             style={ {
               background: '#dedede',
               width: '100%',
@@ -793,20 +798,20 @@ class WanAccounts extends Component {
           spacing={ 0 }
         >
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Name</Typography>
-            <Typography variant="body1" color="inherit">{ crowdSale.name }</Typography>
+            <Typography variant="h5">Name</Typography>
+            <Typography variant="body1">{ crowdSale.name }</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">ICO Dates</Typography>
-            <Typography variant="body1" color="inherit">
+            <Typography variant="h5">ICO Dates</Typography>
+            <Typography variant="body1">
               { moment(crowdSale.startDate).format('YYYY/MM/DD hh:mm') +
               ' - ' +
               moment(crowdSale.endDate).format('YYYY/MM/DD hh:mm') }
             </Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Personal Cap</Typography>
-            <Typography variant="body1" color="inherit">
+            <Typography variant="h5">Personal Cap</Typography>
+            <Typography variant="body1">
               { crowdSale.userCap === 0
                 ? 'Unlimited'
                 : this.props.minContribution +
@@ -816,26 +821,22 @@ class WanAccounts extends Component {
             </Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Choose Wallet</Typography>
+            <Typography variant="h5">Choose Wallet</Typography>
             { this.renderAddressDropdown(crowdSale) }
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Token Amount</Typography>
-            <Typography variant="body1" color="inherit">{ this.props.investmentAmount * crowdSale.tokenRatio } Curve</Typography>
+            <Typography variant="h5">Token Amount</Typography>
+            <Typography variant="body1">{ this.props.investmentAmount * 1/crowdSale.tokenRatio } Wan</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Amount to Invest (WAN)</Typography>
+            <Typography variant="h5">Amount to Refund (CURVE)</Typography>
             <TextField
               fullWidth={ true }
               color="textSecondary"
               disabled={
-                true ||
                 this.props.investLoading ||
                 this.props.user.whitelistStatus == null ||
-                this.props.user.whitelistStatus !== 'completed' ||
-                (crowdSale.totalContribution >=
-                  crowdSale.userCap / 1000000000000000000 &&
-                  crowdSale.userCap !== 0)
+                this.props.user.whitelistStatus !== 'completed'
               }
               error={ this.props.investmentAmountError }
               id="investmentAmount"
@@ -848,29 +849,25 @@ class WanAccounts extends Component {
             />
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Contributed Amount</Typography>
-            <Typography variant="body1" color="inherit">{ crowdSale.totalContribution } Wan</Typography>
+            <Typography variant="h5">Contributed Amount</Typography>
+            <Typography variant="body1">{ crowdSale.totalContribution } Wan</Typography>
           </Grid>
           <Grid item xs={ 12 } sm={ 6 } align="left" style={ styleC }>
-            <Typography variant="h5" color="inherit">Invest</Typography>
+            <Typography variant="h5">Refund</Typography>
             <Button
               size="small"
               variant={ 'contained' }
               disabled={
-                true ||
                 this.props.investLoading ||
                 this.props.user.whitelistStatus == null ||
-                this.props.user.whitelistStatus !== 'completed' ||
-                (crowdSale.totalContribution >=
-                  crowdSale.userCap / 1000000000000000000 &&
-                  crowdSale.userCap !== 0)
+                this.props.user.whitelistStatus !== 'completed'
               }
               color="primary"
               onClick={ () => {
-                this.props.investClicked(crowdSale.contractAddress);
+                this.props.refundClicked(crowdSale.id);
               } }
             >
-              Invest
+              Refund
             </Button>
           </Grid>
         </Grid>
@@ -896,13 +893,9 @@ class WanAccounts extends Component {
           value={ this.props.selectedAddress }
           onChange={ this.props.selectAddress }
           disabled={
-            true ||
             this.props.investLoading ||
             this.props.user.whitelistStatus == null ||
-            this.props.user.whitelistStatus !== 'completed' ||
-            (crowdsale.totalContribution >=
-              crowdsale.userCap / 1000000000000000000 &&
-              crowdsale.userCap !== 0)
+            this.props.user.whitelistStatus !== 'completed'
           }
         >
           <option key="" value="">
@@ -973,9 +966,11 @@ class WanAccounts extends Component {
         <Grid item xs={ 12 } align="center">
           <Grid
             container
+            justify="flex-start"
+            alignItems="flex-start"
             direction="row"
-            spacing={ 0 }
-            style={ { padding: '24px' } }
+            spacing={0}
+            style={{ paddingTop: "24px" }}
           >
             { this.renderAddresses() }
           </Grid>
@@ -1012,6 +1007,11 @@ class WanAccounts extends Component {
           isOpen={ this.props.termsOpen }
           handleClose={ this.props.handleTermsClose }
           handleTermsAccepted={ this.props.handleTermsAccepted }
+        />
+        <TermsModalRefundComponent
+          isOpen={ this.props.termsRefundOpen }
+          handleClose={ this.props.handleTermsRefundClose }
+          handleTermsAccepted={ this.props.handleTermsRefundAccepted }
         />
         <CreateModal
           isOpen={this.props.createOpen}

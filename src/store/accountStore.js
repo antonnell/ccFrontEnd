@@ -58,6 +58,12 @@ class Store {
           case 'updateEmail':
             this.updateEmail(payload);
             break;
+          case "uploadProfilePhoto":
+            this.uploadProfilePhoto(payload);
+            break;
+          case "getUserProfile":
+            this.getUserProfile(payload);
+            break;
           default: {
           }
         }
@@ -110,6 +116,23 @@ class Store {
 
       this.callApi(url, 'POST', postJson, payload);
     };
+
+  uploadProfilePhoto = function(payload) {
+    var url = "account/uploadProfilePhoto";
+    var postJson = {
+      userId: payload.content.userId,
+      imageData: payload.content.imageData,
+      extension: payload.content.extension
+    };
+
+    this.callApi(url, "POST", postJson, payload);
+  };
+
+  getUserProfile = function(payload) {
+    var url = "account/getUserProfile/" + payload.content.userId;
+
+    this.callApi(url, "GET", null, payload);
+  };
 
     resetPassword = function (payload) {
       var url = 'account/resetPassword';
