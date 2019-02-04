@@ -86,29 +86,29 @@ function LogoutIcon(props) {
   );
 }
 
-function PoolingIcon(props) {
-  const { color, ...excludingColor } = props;
-  return (
-    <SvgIcon { ...excludingColor }>
-      <path
-        fill={ color }
-        d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"
-      />
-    </SvgIcon>
-  );
-}
-
-function IcoIcon(props) {
-  const { color, ...excludingColor } = props;
-  return (
-    <SvgIcon { ...excludingColor }>
-      <path
-        fill={ color }
-        d="M9.29,21H12.12L21,12.12V9.29M19,21C19.55,21 20.05,20.78 20.41,20.41C20.78,20.05 21,19.55 21,19V17L17,21M5,3A2,2 0 0,0 3,5V7L7,3M11.88,3L3,11.88V14.71L14.71,3M19.5,3.08L3.08,19.5C3.17,19.85 3.35,20.16 3.59,20.41C3.84,20.65 4.15,20.83 4.5,20.92L20.93,4.5C20.74,3.8 20.2,3.26 19.5,3.08Z"
-      />
-    </SvgIcon>
-  );
-}
+// function PoolingIcon(props) {
+//   const { color, ...excludingColor } = props;
+//   return (
+//     <SvgIcon { ...excludingColor }>
+//       <path
+//         fill={ color }
+//         d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"
+//       />
+//     </SvgIcon>
+//   );
+// }
+//
+// function IcoIcon(props) {
+//   const { color, ...excludingColor } = props;
+//   return (
+//     <SvgIcon { ...excludingColor }>
+//       <path
+//         fill={ color }
+//         d="M9.29,21H12.12L21,12.12V9.29M19,21C19.55,21 20.05,20.78 20.41,20.41C20.78,20.05 21,19.55 21,19V17L17,21M5,3A2,2 0 0,0 3,5V7L7,3M11.88,3L3,11.88V14.71L14.71,3M19.5,3.08L3.08,19.5C3.17,19.85 3.35,20.16 3.59,20.41C3.84,20.65 4.15,20.83 4.5,20.92L20.93,4.5C20.74,3.8 20.2,3.26 19.5,3.08Z"
+//       />
+//     </SvgIcon>
+//   );
+// }
 
 class AppDrawer extends Component {
   componentDidMount() {
@@ -263,31 +263,35 @@ class AppDrawer extends Component {
           </ListItemIcon>
           <ListItemText primary="Send Wanchain" />
         </ListItem>
-        <ListSubheader>Invest</ListSubheader>
-        <ListItem
-          selected={ this.props.currentScreen === 'ico' }
-          button
-          onClick={ event => {
-            this.props.navClicked(event, 'ico');
-          } }
-        >
-          <ListItemIcon>
-            <IcoIcon color={ this.props.theme.custom.drawerIcon.color } />
-          </ListItemIcon>
-          <ListItemText primary="ICO Contributions" />
-        </ListItem>
-        <ListItem
-          selected={ this.props.currentScreen === 'pooling' }
-          button
-          onClick={ event => {
-            this.props.navClicked(event, 'pooling');
-          } }
-        >
-          <ListItemIcon>
-            <PoolingIcon color={ this.props.theme.custom.drawerIcon.color } />
-          </ListItemIcon>
-          <ListItemText primary="Pooling" />
-        </ListItem>
+
+        {/*<React.Fragment>*/}
+          {/*<ListSubheader>Invest</ListSubheader>*/}
+          {/*<ListItem*/}
+            {/*selected={ this.props.currentScreen === 'ico' }*/}
+            {/*button*/}
+            {/*onClick={ event => {*/}
+              {/*this.props.navClicked(event, 'ico');*/}
+            {/*} }*/}
+          {/*>*/}
+            {/*<ListItemIcon>*/}
+              {/*<IcoIcon color={ this.props.theme.custom.drawerIcon.color } />*/}
+            {/*</ListItemIcon>*/}
+            {/*<ListItemText primary="ICO Contributions" />*/}
+          {/*</ListItem>*/}
+          {/*<ListItem*/}
+            {/*selected={ this.props.currentScreen === 'pooling' }*/}
+            {/*button*/}
+            {/*onClick={ event => {*/}
+              {/*this.props.navClicked(event, 'pooling');*/}
+            {/*} }*/}
+          {/*>*/}
+            {/*<ListItemIcon>*/}
+              {/*<PoolingIcon color={ this.props.theme.custom.drawerIcon.color } />*/}
+            {/*</ListItemIcon>*/}
+            {/*<ListItemText primary="Pooling" />*/}
+          {/*</ListItem>*/}
+        {/*</React.Fragment>*/}
+
         <ListSubheader disableSticky={ true }>Profile</ListSubheader>
         <ListItem
           selected={ this.props.currentScreen === 'contacts' }
