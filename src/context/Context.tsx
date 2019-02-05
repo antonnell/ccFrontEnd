@@ -5,6 +5,7 @@ import ContactsContext from "./ContactsContext";
 import WhitelistContext from "./WhitelistContext";
 import DialogContext from "./DialogContext";
 import SnackBarContext from "./SnackBarContext";
+import AccountContext from "./AccountContext";
 
 interface OwnProps {
 }
@@ -18,15 +19,17 @@ class Context extends React.Component<Props> {
     return (
       <AppContext>
         <PoolingContext>
-          <ContactsContext>
-            <WhitelistContext>
-              <DialogContext>
-                <SnackBarContext>
-                  {children}
-                </SnackBarContext>
-              </DialogContext>
-            </WhitelistContext>
-          </ContactsContext>
+          <AccountContext>
+            <ContactsContext>
+              <WhitelistContext>
+                <DialogContext>
+                  <SnackBarContext>
+                    {children}
+                  </SnackBarContext>
+                </DialogContext>
+              </WhitelistContext>
+            </ContactsContext>
+          </AccountContext>
         </PoolingContext>
       </AppContext>
     );

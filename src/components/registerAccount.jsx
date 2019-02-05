@@ -24,6 +24,8 @@ class RegisterAccount extends Component {
   // <FormHelperText>{this.props.acceptedErrorMessage}</FormHelperText>
   // </FormControl>
   render() {
+    const {confirmEmail} = this.props;
+    console.log(confirmEmail);
     return (
       <Grid
         container
@@ -45,6 +47,7 @@ class RegisterAccount extends Component {
               <Typography variant="h5">Register</Typography>
             </Grid>
           </Grid>
+          {confirmEmail === false?<React.Fragment>
           <Grid
             container
             justify="space-around"
@@ -181,6 +184,10 @@ class RegisterAccount extends Component {
               </Button>
             </Grid>
           </Grid>
+          </React.Fragment>:
+            <React.Fragment>
+              <Typography variant="subtitle1" style={{ marginTop: "50px" }} align="center">Please check your email to confirm your account</Typography>
+            </React.Fragment>}
           <TermsModalComponent
             isOpen={this.props.termsOpen}
             handleClose={this.props.handleTermsClose}

@@ -242,7 +242,6 @@ let Welcome = createReactClass({
       // not called anymore, we included it in the original login call
       // var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
       // whitelistDispatcher.dispatch({type: 'whitelistLogin', content: whitelistContent });
-
       if (data.user.username === data.user.email) {
         window.location.hash = "setUsername";
       } else {

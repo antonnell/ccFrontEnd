@@ -57,6 +57,7 @@ import PoolBrowse from './containers/PoolBrowse/index';
 import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
 import { helperRenderConsoleText } from './helpers/helpers';
+import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
 // var bip39 = require("bip39");
 
 let accountEmitter = require('./store/accountStore.js').default.emitter;
@@ -299,7 +300,8 @@ class App extends Component {
         'add',
         'added',
         'addUnavailable',
-        'whitelistStatus'
+        'whitelistStatus',
+        'verifyAccount'
       ].includes(currentScreen)
     ) {
       if (user == null) {
@@ -658,8 +660,11 @@ class App extends Component {
     }
 
     if (data.success) {
+      console.log(data);
       this.setState({ ethAddresses: data.ethAddresses });
-
+      if (data.ethAddresses.length === 0) {
+        window.location.hash = 'createEth';
+      }
       //map through the eth addresses and get their ERC20 addresses.
       data.ethAddresses.map(address => {
         let content = { address: address.address };
@@ -1022,7 +1027,8 @@ class App extends Component {
         'add',
         'added',
         'addUnavailable',
-        'whitelistStatus'
+        'whitelistStatus',
+        'verifyAccount'
       ].includes(currentScreen)
     ) {
       if (this.state.user == null) {
@@ -1201,7 +1207,7 @@ class App extends Component {
               direction="row"
               style={ { minHeight: '622px', position: 'relative', flex: 1 } }
             >
-              <Grid item xs={ 12 } style={{marginRight: 16}}>
+              <Grid item xs={ 12 } style={ { marginRight: 16 } }>
                 { this.state.user == null ? null : this.renderAppBar() }
                 { this.renderScreen() }
               </Grid>
@@ -1216,14 +1222,18 @@ class App extends Component {
   }
 
   renderScreen() {
-    const { ethAddresses, wanAddresses,currentScreen } = this.state;
-    const path = currentScreen.split("/")[0];
-    const params = currentScreen.split("/")[1] || null;
+    const { ethAddresses, wanAddresses, currentScreen } = this.state;
+    const path = currentScreen.split('/')[0];
+    const params = currentScreen.split('/')[1] || null;
+    console.log(path);
     switch (path) {
       case 'welcome':
         return <Welcome setUser={ this.setUser } />;
       case 'registerAccount':
         return <RegisterAccount setUser={ this.setUser } />;
+      case 'verifyAccount':
+        const { uriParameters: { token, code } } = this.state;
+        return <VerifyAccount token={ token } code={ code } />;
       case 'createEth':
         return <CreateEth user={ this.state.user } />;
       case 'createWan':
@@ -1352,24 +1362,24 @@ class App extends Component {
       //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'pooling':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
-          <Pooling user={ this.state.user } />:<Loader />;
+          <Pooling user={ this.state.user } /> : <Loader />;
       case 'createPool':
       case 'updatePool':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}
-            user={this.state.user}
-            id={params}
+            user={ this.state.user }
+            id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
-      case "createWhitelist":
-      case "updateWhitelist":
+      case 'createWhitelist':
+      case 'updateWhitelist':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <WhitelistCreate
             // theme={this.state.theme}
             // user={this.state.user}
-            id={params}
+            id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
@@ -1379,15 +1389,15 @@ class App extends Component {
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          />: <Loader />;
+          /> : <Loader />;
       case 'poolDetails':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolDetails
-            id={params}
+            id={ params }
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          />: <Loader />;
+          /> : <Loader />;
       case 'ico':
         return <ComingSoon />;
       case 'settings':
