@@ -1,13 +1,14 @@
-import React from "react";
-import WanAccountsComponent from "../components/wanAccounts";
-import bip39 from "bip39";
+import React from 'react';
+import WanAccountsComponent from '../components/wanAccounts';
+import bip39 from 'bip39';
+import { withWanContext } from '../context/WanContext';
 
-const crypto = require("crypto");
+const crypto = require('crypto');
 
-const createReactClass = require("create-react-class");
+const createReactClass = require('create-react-class');
 
-let wanEmitter = require("../store/wanStore.js").default.emitter;
-let wanDispatcher = require("../store/wanStore.js").default.dispatcher;
+let wanEmitter = require('../store/wanStore.js').default.emitter;
+let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
 
 let crowdsaleEmitter = require('../store/crowdsaleStore.js').default.emitter;
 let crowdsaleDispatcher = require('../store/crowdsaleStore.js').default.dispatcher;
@@ -17,38 +18,38 @@ let WanAccounts = createReactClass({
     return {
       createLoading: false,
       error: null,
-      addressName: "",
+      addressName: '',
       addressNameError: false,
-      addressNameErrorMessage: "",
-      privateKey: "",
+      addressNameErrorMessage: '',
+      privateKey: '',
       privateKeyError: false,
-      privateKeyErrorMessage: "",
-      publicAddress: "",
+      privateKeyErrorMessage: '',
+      publicAddress: '',
       publicAddressError: false,
-      publicAddressErrorMessage: "",
+      publicAddressErrorMessage: '',
       primary: false,
       primaryError: false,
-      editAddressName: "",
+      editAddressName: '',
       editAddressNameError: false,
-      editAddressNameErrorMessage: "",
+      editAddressNameErrorMessage: '',
       editAccount: null,
       keyOpen: false,
-      currentAccountKey: "",
+      currentAccountKey: '',
       optionsAccount: null,
       loadingAccount: null,
-      selectedAddress: "",
+      selectedAddress: '',
       selectedAddressError: false,
-      selectedAddressErrorMessage: "",
-      investmentAmount: "",
+      selectedAddressErrorMessage: '',
+      investmentAmount: '',
       investmentAmountError: false,
-      investmentAmountErrorMessage: "",
+      investmentAmountErrorMessage: '',
       deleteOpen: false,
-      ICOError: "",
-      ICOSuccess: "",
+      ICOError: '',
+      ICOSuccess: '',
       investLoading: false,
       termsOpen: false,
       thanksOpen: false,
-      investTransacstionID: "",
+      investTransacstionID: '',
       minContribution: 25,
       crowdasleProgress: null,
       createOpen: false,
@@ -59,110 +60,110 @@ let WanAccounts = createReactClass({
   render() {
     return (
       <WanAccountsComponent
-        theme={this.props.theme}
-        handleChange={this.handleChange}
-        handleTabChange={this.handleTabChange}
-        onCreateImportKeyDown={this.onCreateImportKeyDown}
-        createImportClicked={this.createImportClicked}
-        exportWanchainKeyClicked={this.exportWanchainKeyClicked}
-        createLoading={this.state.createLoading}
-        cardLoading={this.state.cardLoading}
-        privateKeyLoading={this.state.privateKeyLoading}
-        error={this.state.error}
-        addresses={this.props.wanAddresses}
-        addressName={this.state.addressName}
-        addressNameError={this.state.addressNameError}
-        addressNameErrorMessage={this.state.addressNameErrorMessage}
-        primary={this.state.primary}
-        privateKey={this.state.privateKey}
-        privateKeyError={this.state.privateKeyError}
-        privateKeyErrorMessage={this.state.privateKeyErrorMessage}
-        publicAddress={this.state.publicAddress}
-        publicAddressError={this.state.publicAddressError}
-        publicAddressErrorMessage={this.state.publicAddressErrorMessage}
-        handleChecked={this.handleChecked}
-        sendWanchainClicked={this.props.openSendWanchain}
-        sendWRC20={this.props.openSendWRC}
-        validateField={this.validateField}
-        updatePrimaryClicked={this.updatePrimaryClicked}
-        editNameClicked={this.editNameClicked}
-        editAccount={this.state.editAccount}
-        editAddressName={this.state.editAddressName}
-        editAddressNameError={this.state.editAddressNameError}
-        editAddressNameErrorMessage={this.state.editAddressNameErrorMessage}
-        onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
-        onEditAddressNameBlur={this.onEditAddressNameBlur}
-        currentAccountKey={this.state.currentAccountKey}
-        keyOpen={this.state.keyOpen}
-        handleKeyClose={this.handleKeyClose}
-        copyKey={this.copyKey}
-        exportKeyAccount={this.state.exportKeyAccount}
-        optionsClicked={this.optionsClicked}
-        optionsClosed={this.optionsClosed}
-        optionsAccount={this.state.optionsAccount}
-        loadingAccount={this.state.loadingAccount}
-        deleteKeyClicked={this.deleteKeyClicked}
-        deleteOpen={this.state.deleteOpen}
-        confirmDelete={this.confirmDelete}
-        handleDeleteClose={this.handleDeleteClose}
-        deleteLoading={this.state.deleteLoading}
-        selectedAddress={this.state.selectedAddress}
-        selectedAddressError={this.state.selectedAddressError}
-        selectedAddressErrorMessage={this.state.selectedAddressErrorMessage}
-        selectAddress={this.selectAddress}
-        investmentAmount={this.state.investmentAmount}
-        investmentAmountError={this.state.investmentAmountError}
-        investmentAmountErrorMessage={this.state.investmentAmountErrorMessage}
-        investClicked={this.investClicked}
-        user={this.props.user}
-        whitelistState={this.props.whitelistState}
-        investmentAmountKeyDown={this.investmentAmountKeyDown}
-        crowdsales={this.props.crowdsales}
-        termsOpen={this.state.termsOpen}
-        termsRefundOpen={this.state.termsRefundOpen}
-        handleTermsClose={this.handleTermsClose}
-        handleTermsRefundClose={this.handleTermsRefundClose}
-        handleTermsAccepted={this.handleTermsAccepted}
-        handleTermsRefundAccepted={this.handleTermsRefundAccepted}
-        ICOError={this.state.ICOError}
-        ICOSuccess={this.state.ICOSuccess}
-        investLoading={this.state.investLoading}
-        size={this.props.size}
-        thanksOpen={this.state.thanksOpen}
-        investTransacstionID={this.state.investTransacstionID}
-        handleThanksClose={this.handleThanksClose}
-        minContribution={this.state.minContribution}
-        crowdasleProgress={this.state.crowdasleProgress}
-        wanTransactions={this.props.wanTransactions}
-        contacts={this.props.contacts}
-        handleCreateOpen={this.handleCreateOpen}
-        handleImportOpen={this.handleImportOpen}
-        createOpen={this.state.createOpen}
-        handleCreateClose={this.handleCreateClose}
-        importOpen={this.state.importOpen}
-        handleImportClose={this.handleImportClose}
-        refundClicked={this.refundClicked}
+        theme={ this.props.theme }
+        handleChange={ this.handleChange }
+        handleTabChange={ this.handleTabChange }
+        onCreateImportKeyDown={ this.onCreateImportKeyDown }
+        createImportClicked={ this.createImportClicked }
+        exportWanchainKeyClicked={ this.exportWanchainKeyClicked }
+        createLoading={ this.state.createLoading }
+        cardLoading={ this.state.cardLoading }
+        privateKeyLoading={ this.state.privateKeyLoading }
+        error={ this.state.error }
+        addresses={ this.props.wanAddresses }
+        addressName={ this.state.addressName }
+        addressNameError={ this.state.addressNameError }
+        addressNameErrorMessage={ this.state.addressNameErrorMessage }
+        primary={ this.state.primary }
+        privateKey={ this.state.privateKey }
+        privateKeyError={ this.state.privateKeyError }
+        privateKeyErrorMessage={ this.state.privateKeyErrorMessage }
+        publicAddress={ this.state.publicAddress }
+        publicAddressError={ this.state.publicAddressError }
+        publicAddressErrorMessage={ this.state.publicAddressErrorMessage }
+        handleChecked={ this.handleChecked }
+        sendWanchainClicked={ this.props.openSendWanchain }
+        sendWRC20={ this.props.openSendWRC }
+        validateField={ this.validateField }
+        updatePrimaryClicked={ this.updatePrimaryClicked }
+        editNameClicked={ this.editNameClicked }
+        editAccount={ this.state.editAccount }
+        editAddressName={ this.state.editAddressName }
+        editAddressNameError={ this.state.editAddressNameError }
+        editAddressNameErrorMessage={ this.state.editAddressNameErrorMessage }
+        onEditAddressNameKeyDown={ this.onEditAddressNameKeyDown }
+        onEditAddressNameBlur={ this.onEditAddressNameBlur }
+        currentAccountKey={ this.state.currentAccountKey }
+        keyOpen={ this.state.keyOpen }
+        handleKeyClose={ this.handleKeyClose }
+        copyKey={ this.copyKey }
+        exportKeyAccount={ this.state.exportKeyAccount }
+        optionsClicked={ this.optionsClicked }
+        optionsClosed={ this.optionsClosed }
+        optionsAccount={ this.state.optionsAccount }
+        loadingAccount={ this.state.loadingAccount }
+        deleteKeyClicked={ this.deleteKeyClicked }
+        deleteOpen={ this.state.deleteOpen }
+        confirmDelete={ this.confirmDelete }
+        handleDeleteClose={ this.handleDeleteClose }
+        deleteLoading={ this.state.deleteLoading }
+        selectedAddress={ this.state.selectedAddress }
+        selectedAddressError={ this.state.selectedAddressError }
+        selectedAddressErrorMessage={ this.state.selectedAddressErrorMessage }
+        selectAddress={ this.selectAddress }
+        investmentAmount={ this.state.investmentAmount }
+        investmentAmountError={ this.state.investmentAmountError }
+        investmentAmountErrorMessage={ this.state.investmentAmountErrorMessage }
+        investClicked={ this.investClicked }
+        user={ this.props.user }
+        whitelistState={ this.props.whitelistState }
+        investmentAmountKeyDown={ this.investmentAmountKeyDown }
+        crowdsales={ this.props.crowdsales }
+        termsOpen={ this.state.termsOpen }
+        termsRefundOpen={ this.state.termsRefundOpen }
+        handleTermsClose={ this.handleTermsClose }
+        handleTermsRefundClose={ this.handleTermsRefundClose }
+        handleTermsAccepted={ this.handleTermsAccepted }
+        handleTermsRefundAccepted={ this.handleTermsRefundAccepted }
+        ICOError={ this.state.ICOError }
+        ICOSuccess={ this.state.ICOSuccess }
+        investLoading={ this.state.investLoading }
+        size={ this.props.size }
+        thanksOpen={ this.state.thanksOpen }
+        investTransacstionID={ this.state.investTransacstionID }
+        handleThanksClose={ this.handleThanksClose }
+        minContribution={ this.state.minContribution }
+        crowdasleProgress={ this.state.crowdasleProgress }
+        wanTransactions={ this.props.wanTransactions }
+        contacts={ this.props.contacts }
+        handleCreateOpen={ this.handleCreateOpen }
+        handleImportOpen={ this.handleImportOpen }
+        createOpen={ this.state.createOpen }
+        handleCreateClose={ this.handleCreateClose }
+        importOpen={ this.state.importOpen }
+        handleImportClose={ this.handleImportClose }
+        refundClicked={ this.refundClicked }
       />
     );
   },
 
   componentWillMount() {
-    wanEmitter.removeAllListeners("createWanAddress");
-    wanEmitter.removeAllListeners("importWanAddress");
-    wanEmitter.removeAllListeners("updateWanAddress");
-    wanEmitter.removeAllListeners("exportWanchainKey");
-    wanEmitter.removeAllListeners("deleteWanAddress");
-    wanEmitter.removeAllListeners("investICO");
-    wanEmitter.removeAllListeners("getICOProgress");
+    wanEmitter.removeAllListeners('createWanAddress');
+    wanEmitter.removeAllListeners('importWanAddress');
+    wanEmitter.removeAllListeners('updateWanAddress');
+    wanEmitter.removeAllListeners('exportWanchainKey');
+    wanEmitter.removeAllListeners('deleteWanAddress');
+    wanEmitter.removeAllListeners('investICO');
+    wanEmitter.removeAllListeners('getICOProgress');
     crowdsaleEmitter.removeAllListeners('refund');
 
-    wanEmitter.on("createWanAddress", this.createWanAddressReturned);
-    wanEmitter.on("importWanAddress", this.importWanAddressReturned);
-    wanEmitter.on("updateWanAddress", this.updateWanAddressReturned);
-    wanEmitter.on("exportWanchainKey", this.exportWanchainKeyReturned);
-    wanEmitter.on("deleteWanAddress", this.deleteWanAddressReturned);
-    wanEmitter.on("investICO", this.investICOReturned);
-    wanEmitter.on("getICOProgress", this.getICOProgressReturned);
+    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
+    wanEmitter.on('importWanAddress', this.importWanAddressReturned);
+    wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
+    wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
+    wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
+    wanEmitter.on('investICO', this.investICOReturned);
+    wanEmitter.on('getICOProgress', this.getICOProgressReturned);
     crowdsaleEmitter.on('refund', this.refundReturned);
   },
 
@@ -173,13 +174,13 @@ let WanAccounts = createReactClass({
 
   resetInputs() {
     this.setState({
-      addressName: "",
+      addressName: '',
       addressNameError: false,
       primary: false,
       primaryError: false,
-      privateKey: "",
+      privateKey: '',
       privateKeyError: false,
-      publicAddress: "",
+      publicAddress: '',
       publicAddressError: false
     });
   },
@@ -194,7 +195,7 @@ let WanAccounts = createReactClass({
       this.resetInputs();
       var content = { id: this.props.user.id };
       wanDispatcher.dispatch({
-        type: "getWanAddress",
+        type: 'getWanAddress',
         content,
         token: this.props.user.token
       });
@@ -217,7 +218,7 @@ let WanAccounts = createReactClass({
       this.resetInputs();
       var content = { id: this.props.user.id };
       wanDispatcher.dispatch({
-        type: "getWanAddress",
+        type: 'getWanAddress',
         content,
         token: this.props.user.token
       });
@@ -234,9 +235,9 @@ let WanAccounts = createReactClass({
     this.setState({
       cardLoading: false,
       editAccount: null,
-      editAddressName: "",
+      editAddressName: '',
       editAddressNameError: false,
-      editAddressNameErrorMessage: "",
+      editAddressNameErrorMessage: '',
       loadingAccount: null
     });
     if (error) {
@@ -246,7 +247,7 @@ let WanAccounts = createReactClass({
     if (data.success) {
       var content = { id: this.props.user.id };
       wanDispatcher.dispatch({
-        type: "getWanAddress",
+        type: 'getWanAddress',
         content,
         token: this.props.user.token
       });
@@ -293,7 +294,7 @@ let WanAccounts = createReactClass({
     if (data.success) {
       var content = { id: this.props.user.id };
       wanDispatcher.dispatch({
-        type: "getWanAddress",
+        type: 'getWanAddress',
         content,
         token: this.props.user.token
       });
@@ -314,7 +315,7 @@ let WanAccounts = createReactClass({
       this.setState({
         thanksOpen: true,
         investTransacstionID: data.transactionId,
-        ICOSuccess: "Your ICO contribution was successfully processed."
+        ICOSuccess: 'Your ICO contribution was successfully processed.'
       });
     } else if (data.errorMsg) {
       this.setState({ ICOError: data.errorMsg });
@@ -324,26 +325,26 @@ let WanAccounts = createReactClass({
   },
 
   refundClicked(icoContractId) {
-    this.setState({icoContractId: icoContractId, termsRefundOpen: true})
+    this.setState({ icoContractId: icoContractId, termsRefundOpen: true })
   },
 
   refundReturned(error, data) {
     this.setState({ investLoading: false });
-    if(error) {
-      return this.setState({ICOError: error.toString()});
+    if (error) {
+      return this.setState({ ICOError: error.toString() });
     }
 
-    if(data.success) {
+    if (data.success) {
       this.setState({
         thanksOpen: true,
         investTransacstionID: data.transactionId,
-        ICOSuccess: "Your ICO refund was successfully submitted."
+        ICOSuccess: 'Your ICO refund was successfully submitted.'
       });
 
     } else if (data.errorMsg) {
-      this.setState({ICOError: data.errorMsg});
+      this.setState({ ICOError: data.errorMsg });
     } else {
-      this.setState({ICOError: data.statusText})
+      this.setState({ ICOError: data.statusText })
     }
   },
 
@@ -384,7 +385,7 @@ let WanAccounts = createReactClass({
     this.setState({ deleteLoading: true });
     var content = { publicAddress: this.state.deleteAddress };
     wanDispatcher.dispatch({
-      type: "deleteWanAddress",
+      type: 'deleteWanAddress',
       content,
       token: this.props.user.token
     });
@@ -404,7 +405,7 @@ let WanAccounts = createReactClass({
     this.setState({ mnemonic });
     var content = { mnemonic: mnemonic, address };
     wanDispatcher.dispatch({
-      type: "exportWanchainKey",
+      type: 'exportWanchainKey',
       content,
       token: this.props.user.token
     });
@@ -413,9 +414,9 @@ let WanAccounts = createReactClass({
   investClicked(icoContractAddress) {
     this.setState({
       investmentAmountError: false,
-      investmentAmountErrorMessage: "",
+      investmentAmountErrorMessage: '',
       selectedAddressError: false,
-      selectedAddressErrorMessage: ""
+      selectedAddressErrorMessage: ''
     });
 
     let currentCrowdsale = this.props.crowdsales.filter(crowdsale => {
@@ -426,24 +427,24 @@ let WanAccounts = createReactClass({
       let error = false;
 
       if (
-        this.state.investmentAmount === "" ||
+        this.state.investmentAmount === '' ||
         this.state.investmentAmount === 0
       ) {
         this.setState({
           investmentAmountError: true,
-          investmentAmountErrorMessage: "Invalid investment amount"
+          investmentAmountErrorMessage: 'Invalid investment amount'
         });
         error = true;
       }
       if (
         currentCrowdsale.userCap !== 0 &&
         this.state.investmentAmount >
-          currentCrowdsale.userCap / 1000000000000000000
+        currentCrowdsale.userCap / 1000000000000000000
       ) {
         this.setState({
           investmentAmountError: true,
           investmentAmountErrorMessage:
-            "Investment amount is greater than maximum contribution cap"
+            'Investment amount is greater than maximum contribution cap'
         });
         error = true;
       }
@@ -451,19 +452,19 @@ let WanAccounts = createReactClass({
         this.setState({
           investmentAmountError: true,
           investmentAmountErrorMessage:
-            "Investment amount is less than minimum contribution cap"
+            'Investment amount is less than minimum contribution cap'
         });
         error = true;
       }
 
       if (
-        this.state.selectedAddress === "" ||
+        this.state.selectedAddress === '' ||
         this.state.selectedAddress == null ||
-        this.state.selectedAddress === "none"
+        this.state.selectedAddress === 'none'
       ) {
         this.setState({
           selectedAddressError: true,
-          selectedAddressErrorMessage: "Please select an address"
+          selectedAddressErrorMessage: 'Please select an address'
         });
         error = true;
       }
@@ -472,7 +473,7 @@ let WanAccounts = createReactClass({
         this.setState({ icoContractAddress, termsOpen: true });
       }
     } else {
-      this.setState({ ICOError: "An error occurred" });
+      this.setState({ ICOError: 'An error occurred' });
     }
   },
 
@@ -494,16 +495,16 @@ let WanAccounts = createReactClass({
       toAddress: this.state.icoContractAddress
     };
     wanDispatcher.dispatch({
-      type: "investICO",
+      type: 'investICO',
       content,
       token: this.props.user.token
     });
   },
 
   handleTermsRefundAccepted() {
-    this.setState({termsRefundOpen: false, investLoading: true})
-    var content = { saleId: this.state.icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress }
-    crowdsaleDispatcher.dispatch({type: 'refund', content, token: this.props.user.token });
+    this.setState({ termsRefundOpen: false, investLoading: true });
+    const content = { saleId: this.state.icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress };
+    crowdsaleDispatcher.dispatch({ type: 'refund', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {
@@ -529,7 +530,7 @@ let WanAccounts = createReactClass({
       publicAddress: account.publicAddress
     };
     wanDispatcher.dispatch({
-      type: "updateWanAddress",
+      type: 'updateWanAddress',
       content,
       token: this.props.user.token
     });
@@ -567,7 +568,7 @@ let WanAccounts = createReactClass({
       publicAddress: account.publicAddress
     };
     wanDispatcher.dispatch({
-      type: "updateWanAddress",
+      type: 'updateWanAddress',
       content,
       token: this.props.user.token
     });
@@ -577,15 +578,15 @@ let WanAccounts = createReactClass({
     this.setState({
       addressNameValid: false,
       addressNameError: false,
-      addressNameErrorMessage: ""
+      addressNameErrorMessage: ''
     });
     if (value == null) {
       value = this.state.addressName;
     }
-    if (value === "") {
+    if (value === '') {
       this.setState({
         addressNameError: true,
-        addressNameErrorMessage: "Address name is required"
+        addressNameErrorMessage: 'Address name is required'
       });
       return false;
     }
@@ -597,15 +598,15 @@ let WanAccounts = createReactClass({
     this.setState({
       publicAddressValid: false,
       publicAddressError: false,
-      publicAddressErrorMessage: ""
+      publicAddressErrorMessage: ''
     });
     if (value == null) {
       value = this.state.publicAddress;
     }
-    if (value === "") {
+    if (value === '') {
       this.setState({
         publicAddressError: true,
-        publicAddressErrorMessage: "Wanchain public address is required"
+        publicAddressErrorMessage: 'Wanchain public address is required'
       });
       return false;
     }
@@ -618,15 +619,15 @@ let WanAccounts = createReactClass({
     this.setState({
       privateKeyValid: false,
       privateKeyError: false,
-      privateKeyErrorMessage: ""
+      privateKeyErrorMessage: ''
     });
     if (value == null) {
       value = this.state.publicAddress;
     }
-    if (value === "") {
+    if (value === '') {
       this.setState({
         privateKeyError: true,
-        privateKeyErrorMessage: "Wanchain private key is required"
+        privateKeyErrorMessage: 'Wanchain private key is required'
       });
       return false;
     }
@@ -643,7 +644,7 @@ let WanAccounts = createReactClass({
         isPrimary: this.state.primary
       };
       wanDispatcher.dispatch({
-        type: "createWanAddress",
+        type: 'createWanAddress',
         content,
         token: this.props.user.token
       });
@@ -651,22 +652,32 @@ let WanAccounts = createReactClass({
   },
 
   importWanAddress() {
-    /*if(this.validateAddressName() & this.validatePrivateKey() & this.validatePublicAddress()) {
-      this.setState({createLoading: true});
-      var content = { name: this.state.addressName, isPrimary: this.state.primary, address: this.state.publicAddress, privateKey: this.state.privateKey };
-      wanDispatcher.dispatch({type: 'importWanAddress', content, token: this.props.user.token });
-    }*/
+    if (this.validateAddressName() && this.validatePrivateKey() && this.validatePublicAddress()) {
+      this.setState({ createLoading: true });
+      const { primary, addressName, publicAddress, privateKey } = this.state;
+      const { wanContext: { importMyCCAddress } } = this.props;
+      importMyCCAddress(addressName, primary, publicAddress, privateKey).then(() => {
+        const {user:{token,id}} = this.props;
+        this.setState({ createLoading: false, createOpen: false, importOpen: false });
+        const content = { id };
+        wanDispatcher.dispatch({
+          type: 'getWanAddress',
+          content,
+          token,
+        });
+      })
+    }
   },
 
   copyKey() {
-    let elm = document.getElementById("currentAccountKey");
+    let elm = document.getElementById('currentAccountKey');
     // for Internet Explorer
 
     if (document.body.createTextRange) {
       let range = document.body.createTextRange();
       range.moveToElementText(elm);
       range.select();
-      document.execCommand("Copy");
+      document.execCommand('Copy');
     } else if (window.getSelection) {
       // other browsers
       let selection = window.getSelection();
@@ -674,7 +685,7 @@ let WanAccounts = createReactClass({
       range.selectNodeContents(elm);
       selection.removeAllRanges();
       selection.addRange(range);
-      document.execCommand("Copy");
+      document.execCommand('Copy');
     }
   },
 
@@ -688,11 +699,11 @@ let WanAccounts = createReactClass({
 
   handleChange(event, name) {
     if (event != null && event.target != null) {
-      if (name.indexOf("investmentAmount") > -1) {
+      if (name.indexOf('investmentAmount') > -1) {
         if (
           (isNaN(parseFloat(event.target.value)) ||
             !isFinite(event.target.value)) &&
-          event.target.value !== ""
+          event.target.value !== ''
         ) {
           return false;
         }
@@ -712,22 +723,22 @@ let WanAccounts = createReactClass({
   },
 
   validateField(event, name) {
-    if (name === "addressName") {
+    if (name === 'addressName') {
       this.validateAddressName(event.target.value);
     }
-    if (name === "privateKey") {
+    if (name === 'privateKey') {
       this.validatePrivateKey(event.target.value);
-    } else if (name === "publicAddress") {
+    } else if (name === 'publicAddress') {
       this.validatePublicAddress(event.target.value);
     }
   }
 });
 
 function decrypt(text, seed) {
-  var decipher = crypto.createDecipher("aes-256-cbc", seed);
-  var dec = decipher.update(text, "base64", "utf8");
-  dec += decipher.final("utf8");
+  var decipher = crypto.createDecipher('aes-256-cbc', seed);
+  var dec = decipher.update(text, 'base64', 'utf8');
+  dec += decipher.final('utf8');
   return dec;
 }
 
-export default WanAccounts;
+export default withWanContext(WanAccounts);

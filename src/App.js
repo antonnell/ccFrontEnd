@@ -85,47 +85,45 @@ let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default
 let emitter = require('./store/ipStore.js').default.emitter;
 let dispatcher = require('./store/ipStore.js').default.dispatcher;
 
+const setInitialUser = ()=> {
+  const userString = sessionStorage.getItem('cc_user');
+  return userString !== null?JSON.parse(userString):null;
+};
+
+const setInitialTheme = ()=> {
+  let themeString = localStorage.getItem('cc_theme');
+  return themeString !== null?themeString:"light";
+};
+
 class App extends Component {
+  state = {
+    drawerOpen: false,
+    user: setInitialUser(),
+    addresses: null,
+    ethAddresses: null,
+    wanAddresses: null,
+    aionAddresses: null,
+    contacts: null,
+    // whitelistState: whitelistState,
+    uriParameters: {},
+    ipValid: false,
+    ipLoading: true,
+    rejectionReason: '',
+    erc20Tokens: null,
+    wrc20Tokens: null,
+    crowdsales: null,
+    verificationSearching: false,
+    ethTransactions: null,
+    wanTransactions: null,
+    aionTransactions: null,
+    myPools: null,
+    currentTheme: setInitialTheme(),
+    theme: curveTheme[setInitialTheme()],
+    ethWalletChecked: false
+  };
+
   constructor(props) {
     super(props);
-
-    let userString = sessionStorage.getItem('cc_user');
-    let user = null;
-    if (userString != null) {
-      user = JSON.parse(userString);
-    }
-
-    let themeString = localStorage.getItem('cc_theme');
-    let theme = 'light';
-    if (themeString != null) {
-      theme = themeString;
-    }
-
-    this.state = {
-      drawerOpen: false,
-      user: user,
-      addresses: null,
-      ethAddresses: null,
-      wanAddresses: null,
-      aionAddresses: null,
-      contacts: null,
-      // whitelistState: whitelistState,
-      uriParameters: {},
-      ipValid: false,
-      ipLoading: true,
-      rejectionReason: '',
-      erc20Tokens: null,
-      wrc20Tokens: null,
-      crowdsales: null,
-      verificationSearching: false,
-      ethTransactions: null,
-      wanTransactions: null,
-      aionTransactions: null,
-      myPools: null,
-      currentTheme: theme,
-      theme: curveTheme[theme]
-    };
-
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.locationHashChanged = this.locationHashChanged.bind(this);
 
@@ -661,10 +659,10 @@ class App extends Component {
 
     if (data.success) {
       console.log(data);
-      this.setState({ ethAddresses: data.ethAddresses });
-      if (data.ethAddresses.length === 0) {
+      if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked) {
         window.location.hash = 'createEth';
       }
+      this.setState({ ethAddresses: data.ethAddresses,ethWalletChecked: true });
       //map through the eth addresses and get their ERC20 addresses.
       data.ethAddresses.map(address => {
         let content = { address: address.address };
@@ -1225,7 +1223,6 @@ class App extends Component {
     const { ethAddresses, wanAddresses, currentScreen } = this.state;
     const path = currentScreen.split('/')[0];
     const params = currentScreen.split('/')[1] || null;
-    console.log(path);
     switch (path) {
       case 'welcome':
         return <Welcome setUser={ this.setUser } />;
