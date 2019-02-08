@@ -86,7 +86,7 @@ class SetupWRC20Payment extends Component {
     );
   }
 
-  renderAddresses() {
+  renderAddresses(accountValue, error, errorMessage, onChange, type) {
     if (
       this.props.wanAddresses == null ||
       this.props.wanAddresses.length === 0
@@ -102,10 +102,13 @@ class SetupWRC20Payment extends Component {
     return (
       <FormControl error style={{ minWidth: "300px", width: "100%" }}>
         <Select
-          error={this.props.accountError}
-          value={this.props.accountValue}
-          onChange={this.props.selectAddress}
+          error={error}
+          value={accountValue}
+          onChange={onChange}
           renderValue={value => {
+            if (!value) {
+              return <div />;
+            }
             var selectedAddress = this.props.wanAddresses.filter(address => {
               return address.publicAddress === value;
             })[0];
@@ -152,6 +155,10 @@ class SetupWRC20Payment extends Component {
           }}
         >
           {this.props.wanAddresses.map(address => {
+            if (type === "own" && address.publicAddress === this.props.accountValue) {
+              return false;
+            }
+
             return (
               <MenuItem
                 value={address.publicAddress}
@@ -162,13 +169,15 @@ class SetupWRC20Payment extends Component {
                   secondary={address.publicAddress}
                 />
                 <ListItemSecondaryAction style={{ right: "24px" }}>
-                  {this.props.sendWRC20Symbol
-                    ? address.wrc20Tokens.filter(token => {
-                        return token.symbol === this.props.sendWRC20Symbol;
-                      })[0].balance +
-                      " " +
-                      this.props.sendWRC20Symbol
-                    : ""}
+                  <Typography>
+                    {this.props.sendWRC20Symbol
+                      ? address.wrc20Tokens.filter(token => {
+                          return token.symbol === this.props.sendWRC20Symbol;
+                        })[0].balance +
+                        " " +
+                        this.props.sendWRC20Symbol
+                      : ""}
+                  </Typography>
                 </ListItemSecondaryAction>
               </MenuItem>
             );
@@ -209,7 +218,7 @@ class SetupWRC20Payment extends Component {
                 direction="row"
               >
                 <Grid item xs={8} align="left">
-                  <Typography variant="h5" noWrap color="secondary">
+                  <Typography variant="h3" noWrap>
                     {selectedContact.displayName}
                   </Typography>
                   <Typography
@@ -251,6 +260,33 @@ class SetupWRC20Payment extends Component {
         </Select>
         <FormHelperText>{this.props.contactErrorMessage}</FormHelperText>
       </FormControl>
+    );
+  }
+
+  renderSelectOwn() {
+    return (
+      <Grid
+        container
+        justify="flex-start"
+        alignItems="flex-start"
+        direction="row"
+        spacing={0}
+      >
+        <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
+          <Typography variant="subtitle1">
+            Select your recipient account*
+          </Typography>
+        </Grid>
+        <Grid item xs={12} altign="left">
+          {this.renderAddresses(
+            this.props.ownAccountValue,
+            this.props.ownAccountError,
+            this.props.ownAccountErrorMessage,
+            this.props.selectOwnAddress,
+            "own"
+          )}
+        </Grid>
+      </Grid>
     );
   }
 
@@ -370,7 +406,13 @@ class SetupWRC20Payment extends Component {
             <Typography variant="subtitle1">Select your account*</Typography>
           </Grid>
           <Grid item xs={12} altign="left">
-            {this.renderAddresses()}
+            {this.renderAddresses(
+              this.props.accountValue,
+              this.props.accountError,
+              this.props.accountErrorMessage,
+              this.props.selectAddress,
+              "from"
+            )}
           </Grid>
         </Grid>
         <Grid
@@ -387,7 +429,7 @@ class SetupWRC20Payment extends Component {
             align="left"
             style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
           >
-            <Typography variant="h6">Payment details</Typography>
+            <Typography variant="h5">Payment details</Typography>
           </Grid>
           <Grid item xs={12} align="left">
             <Tabs
@@ -398,9 +440,11 @@ class SetupWRC20Payment extends Component {
             >
               <Tab label="Contact Payment" />
               <Tab label="Public Address Payment" />
+              <Tab label="Account Transfer" />
             </Tabs>
             {this.props.tabValue === 0 && this.renderSelectBeneficiary()}
             {this.props.tabValue === 1 && this.renderEnterPublic()}
+            {this.props.tabValue === 2 && this.renderSelectOwn()}
           </Grid>
           <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
             <Typography variant="subtitle1">Payment amount*</Typography>

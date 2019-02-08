@@ -6,7 +6,6 @@ import EditEmailModal from './editEmailModal';
 
 class Profile extends Component {
   render() {
-    console.log(this.props.user.profilePhoto)
     return (
       <Grid container justify="flex-start" alignItems="center" direction="row" spacing={0}  style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} md={10} lg={10} align='left'>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -37,20 +36,24 @@ import WanTransactions from '../containers/wanTransactions';
 import CreateModal from './createModal';
 import ImportModal from './importModal';
 
-const styles = {};
-
 function ExpandMoreIcon(props) {
   return (
-    <SvgIcon { ...props }>
-      <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+    <SvgIcon {...props}>
+      <path
+        fill="#b5b5b5"
+        d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+      />
     </SvgIcon>
   );
 }
 
 function MoreIcon(props) {
   return (
-    <SvgIcon { ...props }>
-      <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+    <SvgIcon {...props}>
+      <path
+        fill="#b5b5b5"
+        d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
+      />
     </SvgIcon>
   );
 }
@@ -71,229 +74,7 @@ function SetPrimaryIcon(props) {
   );
 }
 
-// function EditIcon(props) {
-//   return (
-//     <SvgIcon {...props}>
-//       <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-//     </SvgIcon>
-//   );
-// }
-
-// function KeyIcon(props) {
-//   return (
-//     <SvgIcon {...props}>
-//       <path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
-//     </SvgIcon>
-//   );
-// }
-
 class WanAccounts extends Component {
-  // <Grid item xs={12} sm={10} md={9} lg={7} align='left'>
-  //   <FormControlLabel
-  //     control={
-  //       <Checkbox
-  //         disabled={this.props.createLoading}
-  //         checked={this.props.primary}
-  //         onChange={ (event) => { this.props.handleChecked(event, 'primary'); }}
-  //         value="primary"
-  //       />
-  //     }
-  //     label="Make this my primary account"
-  //   />
-  // </Grid>
-  //
-
-  renderCreate() {
-    return (
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="flex-start"
-        direction="row"
-        spacing={ 0 }
-        style={ { padding: '24px' } }
-      >
-        <Grid item xs={ 12 } align="left">
-          <Typography variant="h5" color="inherit">
-            Create Wanchain Account
-          </Typography>
-        </Grid>
-        <Grid item xs={ 12 } sm={ 10 } md={ 9 } lg={ 7 } align="left">
-          <TextField
-            fullWidth={ true }
-            required
-            color="textSecondary"
-            error={ this.props.addressNameError }
-            disabled={ this.props.createLoading }
-            id="addressName"
-            label="Account Name"
-            value={ this.props.addressName }
-            onChange={ event => {
-              this.props.handleChange(event, 'addressName');
-            } }
-            margin="normal"
-            onKeyDown={ this.props.onCreateImportKeyDown }
-            onBlur={ event => {
-              this.props.validateField(event, 'addressName');
-            } }
-            helperText={ this.props.addressNameErrorMessage }
-          />
-        </Grid>
-        <Tooltip title="Create Wanchain Account">
-          <Button
-            variant="fab"
-            color="secondary"
-            style={ { position: 'absolute', bottom: '0px', right: '48px' } }
-            disabled={ this.props.createLoading }
-            onClick={ this.props.createImportClicked }
-          >
-            +
-          </Button>
-        </Tooltip>
-        <Grid
-          container
-          justify="space-around"
-          alignItems="center"
-          direction="row"
-          spacing={ 0 }
-          style={ { minHeight: '30px' } }
-        >
-          <Grid item xs={ 12 } align="left">
-            <Typography style={ { color: '#f44336' } }>
-              { this.props.error }
-            </Typography>
-          </Grid>
-        </Grid>
-        <PrivateKeyModal
-          isOpen={ this.props.keyOpen }
-          handleClose={ this.props.handleKeyClose }
-          currentAccountKey={ this.props.currentAccountKey }
-          copyKey={ this.props.copyKey }
-        />
-      </Grid>
-    );
-  }
-
-  static renderImportCommingSoon() {
-    return (
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="flex-start"
-        direction="row"
-        spacing={ 0 }
-        style={ { padding: '24px', position: 'relative' } }
-      >
-        <Grid item xs={ 12 } align="left">
-          <Typography variant="h5" color="inherit">
-            Import Wanchain Account
-          </Typography>
-        </Grid>
-        <Grid item xs={ 12 } sm={ 10 } md={ 9 } lg={ 7 } align="center">
-          <Typography variant="h5" style={ { marginTop: '48px' } }>
-            Coming Soon...
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  // renderImport() {
-  //   return (
-  //     <Grid
-  //       container
-  //       justify="flex-start"
-  //       alignItems="flex-start"
-  //       direction="row"
-  //       spacing={0}
-  //       style={{ padding: "24px", position: "relative" }}
-  //     >
-  //       <Grid item xs={12} align="left">
-  //         <Typography variant="h5" color="inherit">
-  //           Import Wanchain Account
-  //         </Typography>
-  //       </Grid>
-  //       <Grid item xs={12} sm={10} md={9} lg={7} align="left">
-  //         <TextField
-  //           fullWidth={true}
-  //           required
-  //           color="textSecondary"
-  //           error={this.props.publicAddressError}
-  //           disabled={this.props.createLoading}
-  //           id="publicAddress"
-  //           label="Public Address"
-  //           value={this.props.publicAddress}
-  //           onChange={event => {
-  //             this.props.handleChange(event, "publicAddress");
-  //           }}
-  //           margin="normal"
-  //           onKeyDown={this.props.onCreateImportKeyDown}
-  //           onBlur={event => {
-  //             this.props.validateField(event, "publicAddress");
-  //           }}
-  //           helperText={this.props.publicAddressErrorMessage}
-  //         />
-  //       </Grid>
-  //       <Grid item xs={12} sm={10} md={9} lg={7} align="left">
-  //         <TextField
-  //           fullWidth={true}
-  //           required
-  //           color="textSecondary"
-  //           error={this.props.privateKeyError}
-  //           disabled={this.props.createLoading}
-  //           id="privateKey"
-  //           label="Private Key"
-  //           value={this.props.privateKey}
-  //           onChange={event => {
-  //             this.props.handleChange(event, "privateKey");
-  //           }}
-  //           margin="normal"
-  //           onKeyDown={this.props.onCreateImportKeyDown}
-  //           onBlur={event => {
-  //             this.props.validateField(event, "privateKey");
-  //           }}
-  //           helperText={this.props.privateKeyErrorMessage}
-  //         />
-  //       </Grid>
-  //       <Grid item xs={12} sm={10} md={9} lg={7} align="left">
-  //         <TextField
-  //           fullWidth={true}
-  //           required
-  //           color="textSecondary"
-  //           error={this.props.addressNameError}
-  //           disabled={this.props.createLoading}
-  //           id="addressName"
-  //           label="Account Name"
-  //           value={this.props.addressName}
-  //           onChange={event => {
-  //             this.props.handleChange(event, "addressName");
-  //           }}
-  //           margin="normal"
-  //           onKeyDown={this.props.onCreateImportKeyDown}
-  //           onBlur={event => {
-  //             this.props.validateField(event, "addressName");
-  //           }}
-  //           helperText={this.props.addressNameErrorMessage}
-  //         />
-  //       </Grid>
-  //       <Grid item xs={12} sm={10} md={9} lg={7} align="left">
-  //         <FormControlLabel
-  //           control={
-  //             <Checkbox
-  //               disabled={this.props.createLoading}
-  //               checked={this.props.primary}
-  //               onChange={event => {
-  //                 this.props.handleChecked(event, "primary");
-  //               }}
-  //               value="primary"
-  //             />
-  //           }
-  //           label="Make this my primary account"
-  //         />
-  //       </Grid>
-  //     </Grid>
-  //   );
-  // }
 
   renderAddresses() {
     if (this.props.addresses == null) {
@@ -457,7 +238,6 @@ class WanAccounts extends Component {
                             size="small"
                             variant="contained"
                             color="primary"
-                            disabled
                             onClick={ () => {
                               this.props.sendWRC20(n.symbol, address);
                             } }
@@ -474,14 +254,6 @@ class WanAccounts extends Component {
           </ExpansionPanel>
         );
       }
-
-      // <ListItem button onPledgeClick={() => { this.props.updatePrimaryClicked(address) }}>
-      //   <ListItemText primary="Set Primary" />
-      // </ListItem>
-      // <Divider />
-      // <ListItem button onPledgeClick={() => { this.props.deleteKeyClicked(address.publicAddress) }}>
-      //   <ListItemText primary="Delete" />
-      // </ListItem>
 
       return (
         <Grid item xs={ 12 } xl={ 6 } align="left" key={ address.publicAddress }>
@@ -542,7 +314,11 @@ class WanAccounts extends Component {
                       required
                       color="textSecondary"
                       error={ this.props.editAddressNameError }
-                      disabled={ this.props.cardLoading }
+                      disabled={
+                        this.props.loadingAccount ||
+                        this.props.cardLoading ||
+                        this.props.privateKeyLoading
+                      }
                       id="editAddressName"
                       value={ this.props.editAddressName }
                       onChange={ event => {
@@ -611,6 +387,23 @@ class WanAccounts extends Component {
                         } }
                       >
                         <ListItemText primary="View Private Key" />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={( ) => {
+                          this.props.updatePrimaryClicked(address)
+                        } }
+                      >
+                        <ListItemText primary="Set Primary" />
+                      </ListItem>
+                      <Divider />
+                      <ListItem
+                        button
+                        onClick={ () => {
+                          this.props.deleteKeyClicked(address.publicAddress)
+                        } }
+                      >
+                        <ListItemText primary="Delete" />
                       </ListItem>
                     </List>
                   </Popover>
@@ -925,6 +718,18 @@ class WanAccounts extends Component {
     );
   }
 
+  /*
+  <Button
+    style={ { marginLeft: '12px' } }
+    size="small"
+    variant="contained"
+    color="secondary"
+    onClick={ this.props.handleImportOpen }
+  >
+    Import Account
+  </Button>
+  */
+
   render() {
     return (
       <Grid container justify="center" direction="row">
@@ -952,15 +757,6 @@ class WanAccounts extends Component {
             >
               Create Account
             </Button>
-            <Button
-              style={ { marginLeft: '12px' } }
-              size="small"
-              variant="contained"
-              color="secondary"
-              onClick={ this.props.handleImportOpen }
-            >
-              Import Account
-            </Button>
           </div>
         </Grid>
         <Grid item xs={ 12 } align="center">
@@ -975,16 +771,6 @@ class WanAccounts extends Component {
             { this.renderAddresses() }
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={ 12 }
-          align="center"
-          style={ { position: 'relative', minHeight: '200px' } }
-        >
-          { this.props.user && this.props.user.verificationResult === 'completed'
-            ? this.renderICOS()
-            : this.renderICOUnavailable() }
-        </Grid>
         <Grid item xs={ 12 }>
           <WanTransactions
             wanAddresses={ this.props.addresses }
@@ -992,6 +778,12 @@ class WanAccounts extends Component {
             contacts={ this.props.contacts }
           />
         </Grid>
+        <PrivateKeyModal
+          isOpen={ this.props.keyOpen }
+          handleClose={ this.props.handleKeyClose }
+          currentAccountKey={ this.props.currentAccountKey }
+          copyKey={ this.props.copyKey }
+        />
         <ThankYouICOModal
           isOpen={ this.props.thanksOpen }
           handleClose={ this.props.handleThanksClose }
@@ -1054,4 +846,4 @@ class WanAccounts extends Component {
   }
 }
 
-export default withStyles(styles)(WanAccounts);
+export default WanAccounts;

@@ -29,6 +29,9 @@ class KYC extends Component {
     let kycState = "pending";
 
     switch (this.props.kycState) {
+      case "":
+        kycState = "Unconfirmed"
+        break;
       case "hold":
       case "post_processing":
       case "pending":

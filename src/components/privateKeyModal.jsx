@@ -32,7 +32,9 @@ class PrivateKeyModal extends Component {
             Your Private Key:
           </Typography>
           <div style={{lineHeight: '46px', display: 'inline-block'}} id='currentAccountKey'>
-            {this.props.currentAccountKey}
+            <Typography>
+              {this.props.currentAccountKey}
+            </Typography>
           </div>
           <Tooltip style={{display: 'inline-block'}} title='Copy Private Key' placement="right">
             <IconButton style={{ verticalAlign: 'top'}} onClick={() => { this.props.copyKey(this.props.currentAccountKey) }}>

@@ -64,7 +64,7 @@ class Footer extends Component {
           >
             <Grid item xs={3} align="left">
               <Typography variant="subtitle1" style={headingStyle}>
-                ACCOUNT
+                Account
               </Typography>
               <div style={line} />
               <Typography
@@ -88,7 +88,7 @@ class Footer extends Component {
             </Grid>
             <Grid item xs={3} align="left">
               <Typography variant="subtitle1" style={headingStyle}>
-                ABOUT
+                About
               </Typography>
               <div style={line} />
               <Typography
@@ -143,7 +143,7 @@ class Footer extends Component {
             </Grid>
             <Grid item xs={3} align="left">
               <Typography variant="subtitle1" style={headingStyle}>
-                RESOURCES
+                Resources
               </Typography>
               <div style={line} />
               <a
@@ -192,7 +192,8 @@ class Footer extends Component {
               fontWeight: "bold",
               display: "inline-block",
               color: "#000",
-              marginRight: "12px"
+              marginRight: "12px",
+              fontSize: '14px'
             }}
           >
             © 2018 CryptoCurve
@@ -203,10 +204,11 @@ class Footer extends Component {
             style={{
               fontWeight: "bold",
               display: "inline-block",
-              color: "#000"
+              color: "#000",
+              fontSize: '14px'
             }}
           >
-            V1.1.16-beta
+            V1.1.18-beta
           </Typography>
         </Grid>
       </Grid>

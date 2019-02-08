@@ -68,6 +68,9 @@ class Store {
           case 'getUserProfile':
             this.getUserProfile(payload);
             break;
+          case "allocateKycCode":
+            this.allocateKycCode(payload);
+            break;
           default: {
           }
         }
@@ -147,6 +150,15 @@ class Store {
     };
 
     this.callApi(url, 'POST', postJson, payload);
+  };
+
+  allocateKycCode = payload=> {
+    var url = "account/allocateKycCode";
+    var postJson = {
+      username: payload.content.username
+    }
+
+    this.callApi(url, "POST", postJson, payload);
   };
 
   sendResetPasswordEmail = payload=> {
