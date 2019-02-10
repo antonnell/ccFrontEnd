@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, {SuggestionSelectedEventData} from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import Grid from "@material-ui/core/Grid";
@@ -153,11 +153,13 @@ class AddUsers extends React.Component<Props, State> {
   }
 
   getSuggestionValue = (suggestion: Contact) => {
+    console.log(suggestion);
     this.setState({selectedUser: suggestion});
     return suggestion.userName;
   };
 
   handleChange = (event: any, {newValue}: { newValue: any }) => {
+    console.log(newValue);
     this.setState({
       userSearch: newValue,
     });
@@ -174,10 +176,11 @@ class AddUsers extends React.Component<Props, State> {
     });
   };
 
-  handleSuggestionSelected = () => {
+  handleSuggestionSelected = ({},value:SuggestionSelectedEventData<Contact>) => {
+    const suggestion = value.suggestion;
     const {addUserToWhitelist} = this.props;
     const {selectedUser} = this.state;
-    selectedUser !== null && addUserToWhitelist(selectedUser);
+    addUserToWhitelist(selectedUser||suggestion);
     this.handleSuggestionsClearRequested();
   };
 }

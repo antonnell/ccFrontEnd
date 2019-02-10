@@ -89,7 +89,7 @@ class Options extends React.Component<Props> {
             />
           </Grid>
         ) : null}
-        {id === null && <Grid item xs={12}>
+        {id === null && whitelists.length !== 0 && <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox

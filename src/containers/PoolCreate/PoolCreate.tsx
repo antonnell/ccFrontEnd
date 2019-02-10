@@ -233,8 +233,8 @@ class PoolCreate extends React.Component<Props, State> {
             transactionFee={transactionFee}
             handleChange={this.handleChange}
           />
-          {id && <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting}/>}
-          {id && <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting}/>}
+          <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting}/>
+          <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting}/>
           <Grid container item justify="flex-end" className={classes.buttonGrid}>
             <Button
               disabled={!canSubmit}
