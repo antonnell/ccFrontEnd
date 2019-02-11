@@ -669,7 +669,7 @@ class WanAccounts extends Component {
 
   }
 
-  renderAddressDropdown(crowdsale) {
+  renderAddressDropdown() {
     if (this.props.addresses == null || this.props.addresses.length === 0) {
       return <MenuItem value={ 'none' }>None</MenuItem>;
     }
@@ -756,6 +756,15 @@ class WanAccounts extends Component {
               onClick={ this.props.handleCreateOpen }
             >
               Create Account
+            </Button>
+            <Button
+              style={{ marginLeft: "12px" }}
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={this.props.handleImportOpen}
+            >
+              Import Account
             </Button>
           </div>
         </Grid>
