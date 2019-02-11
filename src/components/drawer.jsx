@@ -263,6 +263,18 @@ class AppDrawer extends Component {
           </ListItemIcon>
           <ListItemText primary="Send Wanchain" />
         </ListItem>
+        <ListItem
+          selected={ this.props.currentScreen === 'sendWRC20' }
+          button
+          onClick={ event => {
+            this.props.navClicked(event, 'sendWRC20');
+          } }
+        >
+          <ListItemIcon>
+            <WanIconPng />
+          </ListItemIcon>
+          <ListItemText primary="Send WRC20" />
+        </ListItem>
 
         {/*<React.Fragment>*/}
           {/*<ListSubheader>Invest</ListSubheader>*/}

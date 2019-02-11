@@ -39,7 +39,7 @@ class ConfirmWRC20Payment extends Component {
       </Typography>
       <div style={{border: '1px solid #6be6fd', padding: '12px', marginTop: '12px'}}>
         <Typography variant="h5" noWrap>
-          <b>{this.props.ownAccount.name}</b> ({this.props.ownAccount.address})
+          <b>{this.props.ownAccount.name}</b> ({this.props.ownAccount.publicAddress})
         </Typography>
       </div>
     </Grid>)
