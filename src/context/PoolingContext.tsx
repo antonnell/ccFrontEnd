@@ -44,12 +44,17 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     managedPools: [],
     availablePools: [],
     availablePoolsLoading: false,
-    createPoolingContract: poolingContract => {
+    createPoolingContract: async poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
       const method = "POST";
+      // const userIds = [];
+      // for (const id of poolingContract.whitelistedUsers) {
+      //   userIds.push(id.userId);
+      // }
       return callApi(url, method, {
         ...poolingContract,
+        // whitelistUserIds: userIds,
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
       });
     },
@@ -71,7 +76,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         ...poolingContract,
         poolId,
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
-      }).then(res=>{
+      }).then(res => {
         return res.success;
       });
     },
@@ -96,7 +101,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = 'pooling/setPoolLocked';
       const method = "POST";
       return callApi(url, method, {
-        poolId,isLocked
+        poolId, isLocked
       }).then(res => {
         console.log(res);
         return res.success;
@@ -128,7 +133,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = 'pooling/depositToPoolingContract';
       const method = "POST";
       return callApi(url, method, {
-        poolId, amount,fromAddress,gwei
+        poolId, amount, fromAddress, gwei
       }).then(res => {
         console.log(res);
         return res.success;
@@ -165,8 +170,8 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {}).then(res => {
         if (res && res.success) {
           const {managedPools} = this.state;
-          const id = managedPools.findIndex(pool=>pool.id === poolId);
-          managedPools[id] = {...managedPools[id],pendingTransactions:[...res.pendingTransactions]};
+          const id = managedPools.findIndex(pool => pool.id === poolId);
+          managedPools[id] = {...managedPools[id], pendingTransactions: [...res.pendingTransactions]};
           this.setState({managedPools});
         }
         console.log(res);
@@ -183,7 +188,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     getManagedFundingPools: (userId) => {
       const {getManagedFundingPoolPendingTransactions} = this.state;
       const {appContext: {callApi}} = this.props;
-      this.setState({managedPools:[]});
+      this.setState({managedPools: []});
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
@@ -202,8 +207,8 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     getAvailableFundingPools: (userId) => {
       const {appContext: {callApi}} = this.props;
-      const {getManagedFundingPoolDetails, getManagedFundingPoolContributions,getManagedFundingPoolPendingTransactions} = this.state;
-      this.setState({availablePools:[]});
+      const {getManagedFundingPoolDetails, getManagedFundingPoolContributions, getManagedFundingPoolPendingTransactions} = this.state;
+      this.setState({availablePools: []});
       const url = `pooling/getAvailableFundingPools/${userId}`;
       const method = "GET";
       this.setState({availablePoolsLoading: true});

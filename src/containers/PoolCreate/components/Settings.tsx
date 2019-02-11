@@ -81,7 +81,7 @@ class Settings extends React.Component<Props> {
               disabled
               margin="normal"
             /> :
-            <FormControl fullWidth required margin="normal">
+            <FormControl fullWidth required margin="normal" disabled={loading}>
               <InputLabel shrink={true}>Blockchain</InputLabel>
               <Select fullWidth value={blockChain} onChange={handleChange("blockchain")}>
                 {poolingBlockChainOptions.map(option => {
@@ -96,7 +96,8 @@ class Settings extends React.Component<Props> {
         <Grid item xs={12}>
           <FormControl fullWidth required margin="normal" disabled={status > 0 || loading}>
             <InputLabel shrink={true}>Owner Address</InputLabel>
-            <Select fullWidth value={(ownerAddress as EthAddress).address !== undefined ? (ownerAddress as EthAddress).address : (ownerAddress as WanAddress).publicAddress}
+            <Select
+              fullWidth value={(ownerAddress as EthAddress).address !== undefined ? (ownerAddress as EthAddress).address : (ownerAddress as WanAddress).publicAddress}
                     onChange={handleChange("ownerAddress")}>
               {blockChain === "ETH" ? ethAddresses.map(address =>
                 <MenuItem key={address.address} value={address.address}>{address.name}</MenuItem>

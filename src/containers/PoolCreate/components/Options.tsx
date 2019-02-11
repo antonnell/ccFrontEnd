@@ -43,7 +43,7 @@ class Options extends React.Component<Props> {
 
   componentWillMount(): void {
     const {whitelistContext: {getUserSavedWhitelists}, user} = this.props;
-    getUserSavedWhitelists(user.id);
+    getUserSavedWhitelists(user.id).then();
   }
 
   public render() {
@@ -54,6 +54,7 @@ class Options extends React.Component<Props> {
       },
       loading
     } = this.props;
+    console.log(existingWhitelistId);
     return (
       <Grid item xs={12} md={6}>
         <Grid item xs={12} className={classes.title}>
@@ -93,6 +94,7 @@ class Options extends React.Component<Props> {
           <FormControlLabel
             control={
               <Checkbox
+                disabled={loading}
                 checked={isWhitelistEnabled}
                 onChange={handleChange("isWhitelistEnabled")}
                 value="primary"
@@ -103,7 +105,7 @@ class Options extends React.Component<Props> {
           />
         </Grid>}
         {id === null && isWhitelistEnabled && <Grid item xs={10}>
-          <FormControl fullWidth required margin="normal">
+          <FormControl fullWidth required margin="normal" disabled={loading}>
             <InputLabel shrink={true}>Whitelist</InputLabel>
             <Select fullWidth value={existingWhitelistId || 0}
                     onChange={handleChange("existingWhitelistId")}>

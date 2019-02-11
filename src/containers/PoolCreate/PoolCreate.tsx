@@ -61,11 +61,13 @@ interface State {
     isTokenAddressValid: boolean;
   },
   originalPoolingContractUsers: Contact[];
+  whitelistPoolingContractUsers: Contact[],
+  manuallyAddedPoolingContractUsers: Contact[],
   loading: boolean;
   isSubmitting: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext, WithDialogContext,WithSnackBarContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithWhitelistContext, WithDialogContext, WithSnackBarContext {
 }
 
 const setOwnerAddress = (props: Props, poolingContract: PoolingContract) => {
@@ -81,16 +83,20 @@ class PoolCreate extends React.Component<Props, State> {
       isSaleAddressValid: false,
       isTokenAddressValid: false,
     },
+    whitelistPoolingContractUsers: [],
+    manuallyAddedPoolingContractUsers: [],
     originalPoolingContractUsers: [],
     loading: false,
     isSubmitting: false
   };
 
   componentWillMount(): void {
-    const {id, poolingContext: {getManagedFundingPoolDetails, getManagedFundingPoolContributions}, wanAddresses, ethAddresses,
-    snackBarContext: {
-      snackBarPush
-    }} = this.props;
+    const {
+      id, poolingContext: {getManagedFundingPoolDetails, getManagedFundingPoolContributions}, wanAddresses, ethAddresses,
+      snackBarContext: {
+        snackBarPush
+      }
+    } = this.props;
     if (id) {
       this.setState({loading: true});
       getManagedFundingPoolDetails(id).then(poolingContract => {
@@ -128,7 +134,7 @@ class PoolCreate extends React.Component<Props, State> {
             });
           }
         } else {
-          snackBarPush({key: new Date().toISOString(),message: "Something went wrong",type:"error"});
+          snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
           window.location.hash = "pooling";
         }
 
@@ -144,7 +150,7 @@ class PoolCreate extends React.Component<Props, State> {
         reset
       },
       poolingContext: {
-        deletePoolingContract,setPoolLocked
+        deletePoolingContract, setPoolLocked
       },
       id
     } = nextProps;
@@ -162,7 +168,7 @@ class PoolCreate extends React.Component<Props, State> {
       reset();
       if (result === "confirmed") {
         this.setState({isSubmitting: true});
-        setPoolLocked(id || 0,true).then(() => {
+        setPoolLocked(id || 0, true).then(() => {
           this.clearState().then(() => {
             window.location.hash = "pooling";
           });
@@ -172,7 +178,7 @@ class PoolCreate extends React.Component<Props, State> {
       reset();
       if (result === "confirmed") {
         this.setState({isSubmitting: true});
-        setPoolLocked(id || 0,false).then(() => {
+        setPoolLocked(id || 0, false).then(() => {
           this.clearState().then(() => {
             window.location.hash = "pooling";
           });
@@ -184,7 +190,7 @@ class PoolCreate extends React.Component<Props, State> {
   render() {
     const {ethAddresses, wanAddresses, classes, id, user} = this.props;
     const {
-      loading,isSubmitting,
+      loading, isSubmitting,
       poolingContract: {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus
       },
@@ -196,7 +202,7 @@ class PoolCreate extends React.Component<Props, State> {
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
     return (
       <React.Fragment>
-        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} loading={loading  || isSubmitting}/>
+        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} loading={loading || isSubmitting} />
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}
@@ -233,8 +239,8 @@ class PoolCreate extends React.Component<Props, State> {
             transactionFee={transactionFee}
             handleChange={this.handleChange}
           />
-          <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting}/>
-          <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting}/>
+          <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
+          <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
           <Grid container item justify="flex-end" className={classes.buttonGrid}>
             <Button
               disabled={!canSubmit}
@@ -245,7 +251,7 @@ class PoolCreate extends React.Component<Props, State> {
               onClick={this.submitCreatePool}
             >
               {id ? "UPDATE" : "CREATE"} POOL
-              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}}/>}
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
             {id && status < 1 && <Button
               className={classes.deployButton}
@@ -260,7 +266,7 @@ class PoolCreate extends React.Component<Props, State> {
             {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={loading || isSubmitting}>
               <DeleteIcon />
             </Fab>}
-            {id && status !== 0 &&status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={loading || isSubmitting}>
+            {id && status !== 0 && status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={loading || isSubmitting}>
               <LockIcon />
             </Fab>}
             {id && status === 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={loading || isSubmitting}>
@@ -300,8 +306,9 @@ class PoolCreate extends React.Component<Props, State> {
     const {dialogContext: {showDialog}} = this.props;
     showDialog("confirmation", "unlockPoolingContract");
   };
+
   deployPool = () => {
-    this.setState({isSubmitting:true});
+    this.setState({isSubmitting: true});
     const {
       id,
       poolingContext: {
@@ -314,6 +321,7 @@ class PoolCreate extends React.Component<Props, State> {
       });
     })
   };
+
   removeUserFromWhitelist = (contact: Contact) => {
     const {poolingContract} = this.state;
     const {whitelistedUsers: users} = poolingContract;
@@ -329,7 +337,7 @@ class PoolCreate extends React.Component<Props, State> {
     this.setState({poolingContract: {...poolingContract, whitelistedUsers: [...users]}});
   };
 
-  private handleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, checked?: boolean) => {
+  handleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, checked?: boolean) => {
     let poolingContract = {...this.state.poolingContract};
     let value;
     switch (fieldName) {
@@ -347,8 +355,34 @@ class PoolCreate extends React.Component<Props, State> {
         break;
       }
       case "existingWhitelistId": {
+        const {whitelistContext: {whitelists, getUserSavedWhitelistDetails}} = this.props;
+        console.log(whitelists);
         value = e.target.value;
-        break;
+        if (poolingContract.existingWhitelistId !== null) {
+          const existingWhitelistId = poolingContract.existingWhitelistId;
+          const nextWhitelistId = Number(value);
+          this.setState({loading: true, poolingContract: {...poolingContract, existingWhitelistId: nextWhitelistId}});
+          getUserSavedWhitelistDetails(Number(existingWhitelistId)).then(res => {
+            for (const user of res.users) {
+              this.removeUserFromWhitelist(user);
+            }
+            getUserSavedWhitelistDetails(nextWhitelistId).then(res => {
+              for (const user of res.users) {
+                this.addUserToWhitelist(user);
+              }
+              this.setState({loading: false});
+            });
+          });
+        } else {
+          this.setState({loading: true, poolingContract: {...poolingContract, existingWhitelistId: Number(value)}});
+          getUserSavedWhitelistDetails(Number(value)).then(res => {
+            for (const user of res.users) {
+              this.addUserToWhitelist(user);
+            }
+            this.setState({loading: false});
+          });
+        }
+        return;
       }
       case "maxContribution":
       case "minContribution":
@@ -359,8 +393,22 @@ class PoolCreate extends React.Component<Props, State> {
         value = checked;
         break;
       case "isWhitelistEnabled":
-        poolingContract = {...poolingContract, existingWhitelistId: -1};
-        value = checked;
+        console.log(checked);
+        if (!checked) {
+          const {whitelistContext: {getUserSavedWhitelistDetails}} = this.props;
+          const existingWhitelistId = poolingContract.existingWhitelistId;
+          this.setState({loading: true, poolingContract: {...poolingContract, existingWhitelistId: null, isWhitelistEnabled: false}});
+          getUserSavedWhitelistDetails(Number(existingWhitelistId)).then(res => {
+            for (const user of res.users) {
+              this.removeUserFromWhitelist(user);
+            }
+            this.setState({loading: false});
+          });
+          return;
+        } else {
+          poolingContract = {...poolingContract, existingWhitelistId: null};
+          value = checked;
+        }
         break;
       default:
         value = e.currentTarget.value;
@@ -372,7 +420,7 @@ class PoolCreate extends React.Component<Props, State> {
     })
   };
 
-  private checkValidation = (fieldName: keyof PoolingContract, value: string | number | boolean | PoolingContractBlockChain | EthAddress | WanAddress | undefined | null) => {
+  checkValidation = (fieldName: keyof PoolingContract, value: string | number | boolean | PoolingContractBlockChain | EthAddress | WanAddress | undefined | null) => {
     const {validation} = this.state;
     switch (fieldName) {
       case "name":
@@ -413,16 +461,21 @@ class PoolCreate extends React.Component<Props, State> {
       addUsersToPoolWhitelist(id || 0, addUsers.map(user => ({userId: user.userId, allocation: 0})))
       .then(() => removeUsersFromPoolWhitelist(id || 0, removeUsers.map(user => user.userId))
       .then(() => updatePoolingContract(id, poolingContract).then(res => {
-          const {snackBarContext: {snackBarPush}} = this.props;
+        const {snackBarContext: {snackBarPush}} = this.props;
         if (res === true) {
-          snackBarPush({key: new Date().toISOString(),message: "Pool Updated",type:"success"});
+          snackBarPush({key: new Date().toISOString(), message: "Pool Updated", type: "success"});
           window.location.hash = "pooling";
         } else {
-          snackBarPush({key: new Date().toISOString(),message: "Something went wrong",type:"error"});
+          snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
           window.location.hash = "pooling";
         }
       })));
     } else {
+      const userIds = [];
+      for (const user of poolingContract.whitelistedUsers) {
+        userIds.push(user.userId);
+      }
+      poolingContract.whitelistUserIds = userIds;
       createPoolingContract(poolingContract).then(res => {
         if (res.success === true) {
           window.location.hash = "pooling";
