@@ -13,6 +13,7 @@ import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
+import Typography from "@material-ui/core/Typography";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -61,6 +62,7 @@ class PoolBrowse extends React.Component<Props,State> {
       <React.Fragment>
         <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading}/>
         <Grid container direction="row" className={classes.containerGrid} spacing={32}>
+          {!availablePoolsLoading && availablePools.length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
           {availablePools.map(pool=>
             <Grid item xs={6} key={pool.id}>
               <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)}/>

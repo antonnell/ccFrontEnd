@@ -19,6 +19,7 @@ interface PoolingContextInterface {
   sendPoolFunds: (poolId: number) => void;
   confirmTokens: (poolId: number) => void;
   enableWithdrawTokens: (poolId: number) => void;
+  distributeAll: (poolId: number) => Promise<boolean>;
   depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<any>;
   withdrawFromPoolingContract: (poolId: number, userAddress: string, amount: number) => void;
   pledgeToPoolingContract: (poolId: number, userAddress: string, amount: number) => Promise<boolean>;
@@ -124,6 +125,18 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     enableWithdrawTokens: poolId => {
       console.log(poolId);
     },
+    distributeAll: (poolId) => {
+      const {appContext: {callApi}} = this.props;
+      const url = 'pooling/distributeAll';
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+        count: 0,
+      }).then(res => {
+        console.log(res);
+        return res.success;
+      });
+    },
     depositToPoolingContract: (poolId, fromAddress, amount, gwei = 0) => {
       console.log(poolId);
       console.log(fromAddress);
@@ -218,6 +231,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         const availPools: FundingPool[] = [];
         if (response && response.success) {
           let count = response.fundingPools.length;
+          count === 0 && this.setState({availablePoolsLoading: false});
           response.fundingPools.forEach(async (pool) => {
             await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
               getManagedFundingPoolContributions(pool.id).then(res => {

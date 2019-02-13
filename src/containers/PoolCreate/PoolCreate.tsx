@@ -242,6 +242,18 @@ class PoolCreate extends React.Component<Props, State> {
           <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
           <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
           <Grid container item justify="flex-end" className={classes.buttonGrid}>
+            {status === 4 && <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="contained"
+              size="large"
+              color="primary"
+              type="submit"
+              onClick={this.distributeTokens}
+            >
+              Distribute
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+            </Button>}
             <Button
               disabled={!canSubmit}
               variant="contained"
@@ -288,6 +300,21 @@ class PoolCreate extends React.Component<Props, State> {
     );
   }
 
+  distributeTokens = () => {
+    const {poolingContext: {distributeAll}, id} = this.props;
+    this.setState({isSubmitting: true});
+    distributeAll(id || 0).then(res => {
+      console.log(res);
+      const {snackBarContext: {snackBarPush}} = this.props;
+      if (res === true) {
+        snackBarPush({key: new Date().toISOString(), message: "Tokens Distributed", type: "success"});
+        window.location.hash = "pooling";
+      } else {
+        snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
+        window.location.hash = "pooling";
+      }
+    })
+  };
   cancelUpdate = () => {
     window.location.hash = "pooling";
   };
