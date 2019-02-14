@@ -1205,7 +1205,7 @@ class App extends Component {
               direction="row"
               style={ { minHeight: '622px', position: 'relative', flex: 1 } }
             >
-              <Grid item xs={ 12 } style={ { marginRight: 16 } }>
+              <Grid item xs={ 12 } style={ { marginRight: 16,flex:1,height: "100%" } }>
                 { this.state.user == null ? null : this.renderAppBar() }
                 { this.renderScreen() }
               </Grid>
@@ -1358,7 +1358,7 @@ class App extends Component {
       // case 'ethTransactions':
       //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'pooling':
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return !(ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <Pooling user={ this.state.user } /> : <Loader />;
       case 'createPool':
       case 'updatePool':
