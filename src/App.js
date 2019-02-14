@@ -1358,7 +1358,7 @@ class App extends Component {
       // case 'ethTransactions':
       //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
       case 'pooling':
-        return !(ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <Pooling user={ this.state.user } /> : <Loader />;
       case 'createPool':
       case 'updatePool':
