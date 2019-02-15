@@ -139,7 +139,7 @@ class Pools extends React.Component<Props, State> {
                     }
                   }
                   return (
-                    <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
+                    <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)} style={{cursor: "pointer"}}>
                       <TableCell>
                         <Typography
                           style={{lineHeight: "57px", fontSize: "17px"}}

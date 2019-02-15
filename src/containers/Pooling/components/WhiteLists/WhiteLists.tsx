@@ -128,7 +128,7 @@ class WhiteLists extends React.Component<Props, State> {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((n: Whitelist,i:number) => {
                         return (
-                            <TableRow hover tabIndex={-1} key={i} onClick={this.handleRowClick(n.id||0)}>
+                            <TableRow hover tabIndex={-1} key={i} onClick={this.handleRowClick(n.id||0)} style={{cursor: "pointer"}}>
                               <TableCell>
                                 <Typography
                                     style={{lineHeight: "57px", fontSize: "17px"}}
