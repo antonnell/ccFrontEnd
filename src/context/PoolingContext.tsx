@@ -239,6 +239,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
           response.fundingPools.forEach(async (pool) => {
             await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
               getManagedFundingPoolContributions(pool.id).then(res => {
+                console.log(res);
                 getManagedFundingPoolPendingTransactions(pool.id);
                 fetchedPool.whitelistedUsers = res;
                 availPools.push({...pool, ...fetchedPool});
