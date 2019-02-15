@@ -323,7 +323,7 @@ class PoolCreate extends React.Component {
               onKeyDown={this.props.onLoginKeyDown}
               helperText={this.props.searchUserErrorMessage}
               InputLabelProps={{ shrink: true }}
-              placeholder="Clark54"
+              placeholder="Username"
             />
           </Grid>
         </Grid>

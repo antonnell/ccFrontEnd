@@ -119,7 +119,7 @@ class AddUsers extends React.Component<Props, State> {
                   disabled: loading,
                   classes,
                   label: "Search User",
-                  placeholder: 'Clark54',
+                  placeholder: 'Username',
                   value: userSearch,
                   onChange: this.handleChange,
                   InputLabelProps: {
