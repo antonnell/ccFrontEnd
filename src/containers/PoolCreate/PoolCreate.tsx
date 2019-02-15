@@ -340,12 +340,22 @@ class PoolCreate extends React.Component<Props, State> {
       id,
       poolingContext: {
         deployPoolingContract
+      },
+      snackBarContext: {
+        snackBarPush
       }
     } = this.props;
-    deployPoolingContract(id || 0).then(() => {
-      this.clearState().then(() => {
-        window.location.hash = "pooling";
-      });
+    deployPoolingContract(id || 0).then(res => {
+      console.log(res);
+      this.setState({isSubmitting: false});
+      if (res.success) {
+        snackBarPush({type: "success", message: "Pool deploying", key: Date()});
+        this.clearState().then(() => {
+          window.location.hash = "pooling";
+        });
+      } else {
+        snackBarPush({type: "error", message: res.message, key: Date()})
+      }
     })
   };
 

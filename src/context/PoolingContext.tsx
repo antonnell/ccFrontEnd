@@ -3,6 +3,7 @@ import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsRes
 import {WithAppContext, withAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
+import {ApiResponse} from "../types/api";
 
 interface PoolingContextInterface {
   managedPools: FundingPool[];
@@ -11,7 +12,7 @@ interface PoolingContextInterface {
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId: number, poolingContract: PoolingContract) => Promise<any>
-  deployPoolingContract: (poolId: number) => Promise<boolean>;
+  deployPoolingContract: (poolId: number) => Promise<ApiResponse>;
   updateTokenAddress: (poolId: number, tokenAddress: string) => void;
   setPoolLocked: (poolId: number, isLocked: boolean) => Promise<boolean>;
   updatePledgesEndDate: (poolId: number, pledgesEndDate: string) => void;
@@ -88,7 +89,10 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {
         poolId,
       }).then(res => {
-        return res.success;
+        return {
+          success: res.success,
+          message: res.success?"":res.errorMsg
+        }
       });
     },
     updateTokenAddress: (poolId, tokenAddress) => {
