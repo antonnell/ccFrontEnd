@@ -41,7 +41,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Min Contribution"
-            value={minContribution}
+            value={minContribution === 0?"":minContribution}
             onChange={handleChange("minContribution")}
             inputProps={{type: "number"}}
             InputLabelProps={{shrink: true}}
@@ -54,7 +54,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Max Contribution"
-            value={maxContribution}
+            value={maxContribution === 0?"":maxContribution}
             onChange={handleChange("maxContribution")}
             margin="normal"
             inputProps={{type: "number"}}
@@ -68,7 +68,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Transaction Fee"
-            value={transactionFee}
+            value={transactionFee === 0?"":transactionFee}
             onChange={handleChange("transactionFee")}
             margin="normal"
             InputLabelProps={{shrink: true}}

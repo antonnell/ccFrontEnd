@@ -192,7 +192,8 @@ class PoolCreate extends React.Component<Props, State> {
     const {
       loading, isSubmitting,
       poolingContract: {
-        saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate, minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus
+        saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
+        minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
