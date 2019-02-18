@@ -59,24 +59,30 @@ interface State {
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
 }
 
-class PoolDetails extends React.Component<Props,State> {
+class PoolDetails extends React.Component<Props, State> {
   readonly state: State = {
     groups: [],
     loading: false,
     pool: initialFundingPool,
-    openPledgeDialog:false,
+    openPledgeDialog: false,
     openContributeDialog: false
   };
 
   componentWillMount(): void {
     const {
       id, poolingContext: {
-        getManagedFundingPoolDetails
+        getManagedFundingPoolDetails,
       }
     } = this.props;
     this.setState({loading: true});
-    console.log(id);
+    let pledged = 0;
     getManagedFundingPoolDetails(id).then(res => {
+      const whitelistedUsers = res.whitelistedUsers;
+      if (whitelistedUsers !== null) {
+        for (const user of whitelistedUsers) {
+          pledged = pledged + (user && user.pledge !== undefined ? user.pledge : 0);
+        }
+      }
       this.setState({
         loading: false,
         pool: res,
@@ -108,20 +114,21 @@ class PoolDetails extends React.Component<Props,State> {
           {
             title: "",
             items: [
-              {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 12},
+              {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 6},
+              {title: "Amount Pledged", text: `${pledged} ${res.blockchain}`, width: 6},
               {title: "Contributors", text: res.contributorCount || 0, width: 12},
             ]
           }
         ]
       });
-      console.log(res);
     });
   }
 
   public render() {
-    const {classes,ethAddresses,wanAddresses} = this.props;
+    const {classes, ethAddresses, wanAddresses} = this.props;
     const {
-      groups, loading, openPledgeDialog, openContributeDialog,pool} = this.state;
+      groups, loading, openPledgeDialog, openContributeDialog, pool
+    } = this.state;
     const {status} = pool;
     return (
       <React.Fragment>
@@ -155,7 +162,7 @@ class PoolDetails extends React.Component<Props,State> {
   };
 
   onDialogClose = () => {
-    this.setState({openPledgeDialog: false,openContributeDialog: false})
+    this.setState({openPledgeDialog: false, openContributeDialog: false})
   }
 }
 

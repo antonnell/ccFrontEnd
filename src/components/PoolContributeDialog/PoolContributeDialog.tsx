@@ -69,7 +69,6 @@ class PoolContributeDialog extends React.Component<Props, State> {
     const {pool, open, classes, ethAddresses, wanAddresses} = this.props;
     const {blockchain} = pool || initialPoolingContract;
     const {amount, isSubmitting, walletId} = this.state;
-    console.log(ethAddresses);
     const wallets = blockchain === "ETH" ? ethAddresses.map(address => (
       {
         id: address.id,

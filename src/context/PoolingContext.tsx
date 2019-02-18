@@ -191,7 +191,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
           managedPools[id] = {...managedPools[id], pendingTransactions: [...res.pendingTransactions]};
           this.setState({managedPools});
         }
-        console.log(res);
       });
     },
     getManagedFundingPoolContributions: poolId => {
@@ -231,7 +230,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       this.setState({availablePoolsLoading: true});
       callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
-        console.log(response);
         const availPools: FundingPool[] = [];
         if (response && response.success) {
           let count = response.fundingPools.length;
@@ -239,7 +237,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
           response.fundingPools.forEach(async (pool) => {
             await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
               getManagedFundingPoolContributions(pool.id).then(res => {
-                console.log(res);
                 getManagedFundingPoolPendingTransactions(pool.id);
                 fetchedPool.whitelistedUsers = res;
                 availPools.push({...pool, ...fetchedPool});
@@ -256,7 +253,18 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
-        return res.success ? res.fundingPool : {};
+        const {getManagedFundingPoolContributions} = this.state;
+        // console.log(res);
+        const pool = res.fundingPool;
+        if (res.success) {
+          return getManagedFundingPoolContributions(poolId).then(res => {
+            pool.whitelistedUsers = res;
+            return pool;
+          });
+        } else {
+          return {} as FundingPool;
+        }
+        // return res.success ? res.fundingPool : {};
       });
     },
     getPoolContribution: (poolId, address) => {

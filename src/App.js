@@ -277,7 +277,6 @@ class App extends Component {
     if (paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex);
     }
-    console.log(paramsIndex);
     if (
       ![
         'welcome',
@@ -658,7 +657,6 @@ class App extends Component {
     }
 
     if (data.success) {
-      console.log(data);
       if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked) {
         window.location.hash = 'createEth';
       }
