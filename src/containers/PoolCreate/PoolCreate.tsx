@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import headerItems from "../../constants/HeaderItems";
 import Settings from "./components/Settings";
 import {Button, Theme, WithStyles} from "@material-ui/core";
-import {initialPoolingContract, PoolingContract, PoolingContractBlockChain} from "../../types/pooling";
+import {initialPoolingContract, isFundingPool, PoolingContract, PoolingContractBlockChain} from "../../types/pooling";
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import Options from "./components/Options";
@@ -100,7 +100,7 @@ class PoolCreate extends React.Component<Props, State> {
     if (id) {
       this.setState({loading: true});
       getManagedFundingPoolDetails(id).then(poolingContract => {
-        if (poolingContract.ownerAddress) {
+        if (isFundingPool(poolingContract) && poolingContract.ownerAddress) {
           poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
             ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
           poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");

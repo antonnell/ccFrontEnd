@@ -124,3 +124,7 @@ export interface GetManagedFundingPoolsResponse {
 
 export interface GetAvailableFundingPoolsResponse extends GetManagedFundingPoolsResponse {
 }
+
+export const isFundingPool = (thing:any): thing is FundingPool => {
+  return thing && thing.id !== undefined;
+};

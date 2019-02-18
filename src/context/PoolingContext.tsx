@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContact, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
-import {WithAppContext, withAppContext} from "./AppContext";
+import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, isFundingPool, PoolingContact, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
+import {withAppContext, WithAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
 import {ApiResponse} from "../types/api";
@@ -30,7 +30,7 @@ interface PoolingContextInterface {
   getManagedFundingPoolContributions: (poolId: number) => Promise<PoolingContact[]>;
   getManagedFundingPools: (userId: string) => Promise<boolean>;
   getAvailableFundingPools: (userId: string) => void;
-  getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool>;
+  getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool|ApiResponse>;
   getPoolContribution: (poolId: number, address: string) => void;
 }
 
@@ -238,8 +238,14 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
             await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
               getManagedFundingPoolContributions(pool.id).then(res => {
                 getManagedFundingPoolPendingTransactions(pool.id);
-                fetchedPool.whitelistedUsers = res;
-                availPools.push({...pool, ...fetchedPool});
+                // console.log(fetchedPool);
+                // console.log(pool);
+                if (isFundingPool(fetchedPool)) {
+                  fetchedPool.whitelistedUsers = res;
+                  availPools.push({...pool, ...fetchedPool});
+                } else {
+                  availPools.push({...pool});
+                }
                 count--;
                 this.setState({availablePools: availPools, availablePoolsLoading: count !== 0});
               });
@@ -254,7 +260,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const method = "GET";
       return callApi(url, method, {}).then(res => {
         const {getManagedFundingPoolContributions} = this.state;
-        // console.log(res);
+        console.log(res);
         const pool = res.fundingPool;
         if (res.success) {
           return getManagedFundingPoolContributions(poolId).then(res => {
@@ -262,7 +268,10 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
             return pool;
           });
         } else {
-          return {} as FundingPool;
+          return {
+            message: res.errorMsg,
+            success: false
+          };
         }
         // return res.success ? res.fundingPool : {};
       });

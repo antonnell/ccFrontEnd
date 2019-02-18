@@ -10,11 +10,12 @@ import {WithPoolingContext, withPoolingContext} from "../../context/PoolingConte
 import DetailsGroup from "./components/DetailsGroup";
 import Button from "@material-ui/core/Button";
 import {colors} from "../../theme";
-import {FundingPool, initialFundingPool} from "../../types/pooling";
+import {FundingPool, initialFundingPool, isFundingPool} from "../../types/pooling";
 import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog";
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
+import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -56,7 +57,7 @@ interface State {
   openContributeDialog: boolean;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithSnackBarContext {
 }
 
 class PoolDetails extends React.Component<Props, State> {
@@ -76,51 +77,60 @@ class PoolDetails extends React.Component<Props, State> {
     } = this.props;
     this.setState({loading: true});
     let pledged = 0;
+    console.log(id);
     getManagedFundingPoolDetails(id).then(res => {
-      const whitelistedUsers = res.whitelistedUsers;
-      if (whitelistedUsers !== null) {
-        for (const user of whitelistedUsers) {
-          pledged = pledged + (user && user.pledge !== undefined ? user.pledge : 0);
-        }
-      }
-      this.setState({
-        loading: false,
-        pool: res,
-        groups: [
-          {
-            title: "Settings",
-            items: [
-              {title: "Pool Name", text: res.name || "Not Available", width: 6},
-              {title: "Creator", text: res.owner || "Not Available", width: 6},
-              {title: "Token Name", text: res.tokenSymbol || "Not Available", width: 6},
-              {title: "Token Address", text: res.tokenAddress, width: 12},
-            ]
-          },
-          // {
-          //   title: "Details",
-          //   items: [
-          //     {title: "Progress",text: "95% Complete",width: 12},
-          //   ]
-          // },
-          {
-            title: "Allocations",
-            items: [
-              // {title: "Contract Cap",text: "1000 ETH / $250,000",width: 6},
-              {title: "Fee", text: `${res.fee || 0} %`, width: 6},
-              {title: "Min-Cap", text: `${res.minContribution} ${res.blockchain}`, width: 6},
-              {title: "Max-Cap", text: `${res.maxContribution} ${res.blockchain}`, width: 6},
-            ]
-          },
-          {
-            title: "",
-            items: [
-              {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 6},
-              {title: "Amount Pledged", text: `${pledged} ${res.blockchain}`, width: 6},
-              {title: "Contributors", text: res.contributorCount || 0, width: 12},
-            ]
+      console.log(res);
+      if (!isFundingPool(res)) {
+        const {snackBarContext:{snackBarPush}} = this.props;
+        snackBarPush({message:res.message,type:"error",key: Date()});
+        window.location.hash = "browsePools";
+      } else {
+        const whitelistedUsers = res.whitelistedUsers;
+        if (whitelistedUsers !== null) {
+          for (const user of whitelistedUsers) {
+            pledged = pledged + (user && user.pledge !== undefined ? user.pledge : 0);
           }
-        ]
-      });
+        }
+        this.setState({
+          loading: false,
+          pool: res,
+          groups: [
+            {
+              title: "Settings",
+              items: [
+                {title: "Pool Name", text: res.name || "Not Available", width: 6},
+                {title: "Creator", text: res.owner || "Not Available", width: 6},
+                {title: "Token Name", text: res.tokenSymbol || "Not Available", width: 6},
+                {title: "Token Address", text: res.tokenAddress, width: 12},
+              ]
+            },
+            // {
+            //   title: "Details",
+            //   items: [
+            //     {title: "Progress",text: "95% Complete",width: 12},
+            //   ]
+            // },
+            {
+              title: "Allocations",
+              items: [
+                // {title: "Contract Cap",text: "1000 ETH / $250,000",width: 6},
+                {title: "Fee", text: `${res.fee || 0} %`, width: 6},
+                {title: "Min-Cap", text: `${res.minContribution} ${res.blockchain}`, width: 6},
+                {title: "Max-Cap", text: `${res.maxContribution} ${res.blockchain}`, width: 6},
+              ]
+            },
+            {
+              title: "",
+              items: [
+                {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 6},
+                {title: "Amount Pledged", text: `${pledged} ${res.blockchain}`, width: 6},
+                {title: "Contributors", text: res.contributorCount || 0, width: 12},
+              ]
+            }
+          ]
+        });
+      }
+
     });
   }
 
@@ -166,4 +176,4 @@ class PoolDetails extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(withPoolingContext(PoolDetails)) as unknown as React.ComponentClass<Props>;
+export default withStyles(styles)(withPoolingContext(withSnackBarContext(PoolDetails))) as unknown as React.ComponentClass<Props>;
