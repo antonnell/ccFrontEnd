@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import {version} from "../version";
 
 const styles = {};
 
@@ -208,7 +209,7 @@ class Footer extends Component {
               fontSize: '14px'
             }}
           >
-            V1.1.18-beta
+            V{version}-beta
           </Typography>
         </Grid>
       </Grid>
