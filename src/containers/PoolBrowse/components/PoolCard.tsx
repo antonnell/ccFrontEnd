@@ -7,8 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import {colors} from "../../../theme";
 import Button from "@material-ui/core/Button";
-import {ShareIcon} from "../../../theme/icons";
-import IconButton from "@material-ui/core/IconButton";
 import {FundingPool} from "../../../types/pooling";
 
 interface OwnProps {
@@ -116,7 +114,7 @@ class PoolCard extends React.Component<Props> {
               <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
             </Grid>
           </Grid>
-          <IconButton className={classes.shareButton}><ShareIcon /></IconButton>
+          {/*<IconButton className={classes.shareButton}><ShareIcon /></IconButton>*/}
         </Paper>
       </React.Fragment>
     );
