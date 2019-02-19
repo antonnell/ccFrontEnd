@@ -260,7 +260,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const method = "GET";
       return callApi(url, method, {}).then(res => {
         const {getManagedFundingPoolContributions} = this.state;
-        console.log(res);
         const pool = res.fundingPool;
         if (res.success) {
           return getManagedFundingPoolContributions(poolId).then(res => {

@@ -82,6 +82,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
         balance: address.balance,
         name: address.name
       }));
+    console.log(pool);
     return (
       <Dialog
         open={open}
@@ -126,6 +127,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
               placeholder="5"
               inputProps={{type: "number"}}
               InputProps={{endAdornment: <Typography>{blockchain}</Typography>}}
+              helperText={`You are allowed to contribute between ${pool.minContribution} and ${pool.maxContribution} ${pool.blockchain}`}
             />
           </DialogContent>
           <DialogActions>
