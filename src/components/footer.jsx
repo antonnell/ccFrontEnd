@@ -197,7 +197,7 @@ class Footer extends Component {
               fontSize: '14px'
             }}
           >
-            © 2018 CryptoCurve
+            © 2019 CryptoCurve
           </Typography>
           <Typography
             variant="body1"
