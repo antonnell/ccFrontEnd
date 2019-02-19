@@ -37,6 +37,7 @@ import Settings from './containers/settings.jsx';
 // import WanTransactions from './containers/wanTransactions.jsx';
 // import AionTransactions from './containers/aionTransactions.jsx';
 import Pooling from './containers/Pooling/index';
+import ResendConfirmationEmail from './containers/resendConfirmationEmail.jsx';
 
 // import WhitelistMeUnavailable from "./components/whitelistMeUnavailable.jsx";
 import ComingSoon from './components/comingSoon.jsx';
@@ -300,7 +301,8 @@ class App extends Component {
         'added',
         'addUnavailable',
         'whitelistStatus',
-        'verifyAccount'
+        'verifyAccount',
+        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (user == null) {
@@ -1027,7 +1029,8 @@ class App extends Component {
         'added',
         'addUnavailable',
         'whitelistStatus',
-        'verifyAccount'
+        'verifyAccount',
+        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (this.state.user == null) {
@@ -1398,6 +1401,8 @@ class App extends Component {
           /> : <Loader />;
       case 'ico':
         return <ComingSoon />;
+      case 'resendConfirmationEmail':
+        return <ResendConfirmationEmail />;
       case 'settings':
         return (
           <Settings

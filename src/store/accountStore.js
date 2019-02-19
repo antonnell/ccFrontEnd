@@ -71,6 +71,9 @@ class Store {
           case "allocateKycCode":
             this.allocateKycCode(payload);
             break;
+          case "resendConfirmationEmail":
+            this.resendConfirmationEmail(payload);
+            break;
           default: {
           }
         }
@@ -156,6 +159,16 @@ class Store {
     var url = "account/allocateKycCode";
     var postJson = {
       username: payload.content.username
+    }
+
+    this.callApi(url, "POST", postJson, payload);
+  };
+
+  resendConfirmationEmail = payload=> {
+    let url = "account/sendEmailConfirmationEmail";
+    let postJson = {
+      email: payload.content.email,
+      callbackUrl: `${ window.location.protocol }//${ window.location.host }/#verifyAccount`
     }
 
     this.callApi(url, "POST", postJson, payload);

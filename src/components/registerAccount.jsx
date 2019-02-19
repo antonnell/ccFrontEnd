@@ -183,6 +183,20 @@ class RegisterAccount extends Component {
                 Register
               </Button>
             </Grid>
+            <Grid item xs={12} align="center">
+              <Typography
+                variant="body1"
+                style={{
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  display: "inline-block",
+                  marginTop: "40px"
+                }}
+                onClick={this.props.resendConfirmationEmail}
+              >
+                Didn't receive confirmation email? Resend confirmation email!
+              </Typography>
+            </Grid>
           </Grid>
           </React.Fragment>:
             <React.Fragment>

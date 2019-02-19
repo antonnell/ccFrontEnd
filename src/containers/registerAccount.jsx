@@ -82,8 +82,13 @@ let RegisterAccount = createReactClass({
         handleTermsClose={ this.handleTermsClose }
         handleTermsAccepted={ this.handleTermsAccepted }
         confirmEmail={ this.state.confirmEmail }
+        resendConfirmationEmail={ this.resendConfirmationEmail }
       />
     );
+  },
+
+  resendConfirmationEmail() {
+    window.location.hash = 'resendConfirmationEmail';
   },
 
   handleChange(event, name) {
