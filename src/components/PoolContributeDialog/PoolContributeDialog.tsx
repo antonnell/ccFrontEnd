@@ -82,7 +82,6 @@ class PoolContributeDialog extends React.Component<Props, State> {
         balance: address.balance,
         name: address.name
       }));
-    console.log(pool);
     return (
       <Dialog
         open={open}

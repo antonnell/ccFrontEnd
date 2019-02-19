@@ -70,7 +70,6 @@ interface State {
   page: number;
   rowsPerPage: number;
   filtersVisible: boolean;
-  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
@@ -84,7 +83,6 @@ class Pools extends React.Component<Props, State> {
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false,
-    loading: false,
   };
 
   componentWillMount(): void {
@@ -94,17 +92,14 @@ class Pools extends React.Component<Props, State> {
         getManagedFundingPools,
       },
     } = this.props;
-    this.setState({loading: true});
-    getManagedFundingPools(user.id).then(()=>{
-      this.setState({loading: false});
-    });
+    getManagedFundingPools(user.id)
 
   }
 
   public render() {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
-    const {classes, poolingContext: {managedPools}} = this.props;
-    const {order, orderBy, page, rowsPerPage,loading} = this.state;
+    const {classes, poolingContext: {managedPools,managedPoolsLoading}} = this.props;
+    const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
@@ -120,7 +115,7 @@ class Pools extends React.Component<Props, State> {
                 onRequestSort={this.handleRequestSort}
               />
               <TableBody>
-                {loading && <TableRow style={{height: "auto"}}>
+                {managedPoolsLoading && <TableRow style={{height: "auto"}}>
                   <TableCell colSpan={3} style={{padding: 0}}>
                     <LinearProgress />
                   </TableCell>

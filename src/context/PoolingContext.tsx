@@ -9,6 +9,7 @@ interface PoolingContextInterface {
   managedPools: FundingPool[];
   availablePools: FundingPool[];
   availablePoolsLoading: boolean;
+  managedPoolsLoading: boolean;
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId: number, poolingContract: PoolingContract) => Promise<any>
@@ -28,7 +29,7 @@ interface PoolingContextInterface {
   getFundingPoolPendingTransactions: (blockchain: PoolingContractBlockChain, address: string) => void;
   getManagedFundingPoolPendingTransactions: (poolId: number) => void;
   getManagedFundingPoolContributions: (poolId: number) => Promise<PoolingContact[]>;
-  getManagedFundingPools: (userId: string) => Promise<boolean>;
+  getManagedFundingPools: (userId: string) => void;
   getAvailableFundingPools: (userId: string) => void;
   getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool|ApiResponse>;
   getPoolContribution: (poolId: number, address: string) => void;
@@ -46,6 +47,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     managedPools: [],
     availablePools: [],
     availablePoolsLoading: false,
+    managedPoolsLoading: false,
     createPoolingContract: async poolingContract => {
       const {appContext: {callApi}} = this.props;
       const url = 'pooling/createPoolingContract';
@@ -202,20 +204,43 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       });
     },
     getManagedFundingPools: (userId) => {
-      const {getManagedFundingPoolPendingTransactions} = this.state;
+      const {getManagedFundingPoolPendingTransactions,getManagedFundingPoolDetails,getManagedFundingPoolContributions} = this.state;
       const {appContext: {callApi}} = this.props;
-      this.setState({managedPools: []});
+      this.setState({managedPools: [],managedPoolsLoading: true});
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
+
+        // if (response && response.success) {
+        //   this.setState({managedPools: [...response.fundingPools]});
+        //   for (const pool of response.fundingPools) {
+        //     getManagedFundingPoolPendingTransactions(pool.id);
+        //   }
+        // }
+        // return response && response.success;
         const response: GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
+        const availPools: FundingPool[] = [];
         if (response && response.success) {
-          this.setState({managedPools: [...response.fundingPools]});
-          for (const pool of response.fundingPools) {
-            getManagedFundingPoolPendingTransactions(pool.id);
-          }
+          let count = response.fundingPools.length;
+          count === 0 && this.setState({managedPoolsLoading: false});
+          response.fundingPools.forEach(async (pool) => {
+            await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
+              getManagedFundingPoolContributions(pool.id).then(res => {
+                getManagedFundingPoolPendingTransactions(pool.id);
+                // console.log(fetchedPool);
+                // console.log(pool);
+                if (isFundingPool(fetchedPool)) {
+                  fetchedPool.whitelistedUsers = res;
+                  availPools.push({...pool, ...fetchedPool});
+                } else {
+                  availPools.push({...pool});
+                }
+                count--;
+                this.setState({managedPools: availPools, managedPoolsLoading: count !== 0});
+              });
+            })
+          });
         }
-        return response && response.success;
         // response.fundingPools.map(pool=>
         //     getManagedFundingPoolDetails(pool.id)
         // )
@@ -224,10 +249,9 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     getAvailableFundingPools: (userId) => {
       const {appContext: {callApi}} = this.props;
       const {getManagedFundingPoolDetails, getManagedFundingPoolContributions, getManagedFundingPoolPendingTransactions} = this.state;
-      this.setState({availablePools: []});
+      this.setState({availablePools: [],availablePoolsLoading: true});
       const url = `pooling/getAvailableFundingPools/${userId}`;
       const method = "GET";
-      this.setState({availablePoolsLoading: true});
       callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
         const availPools: FundingPool[] = [];
