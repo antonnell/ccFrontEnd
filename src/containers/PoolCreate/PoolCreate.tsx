@@ -327,12 +327,22 @@ class PoolCreate extends React.Component<Props, State> {
 
   lockPool = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "lockPoolingContract");
+    showDialog(
+      "confirmation",
+      "lockPoolingContract",
+      "Are you sure you want to lock the pool?",
+      "No contributions will be able to be made while the pool is locked."
+    );
   };
 
   unlockPool = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "unlockPoolingContract");
+    showDialog(
+      "confirmation",
+      "unlockPoolingContract",
+      "Are you sure you want to unlock the pool?",
+      "Contributions will be able to made and you will not be able to distribute the tokens while the pool is unlocked"
+      );
   };
 
   deployPool = () => {
