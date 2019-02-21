@@ -25,6 +25,7 @@ import {WithDialogContext, withDialogContext} from "../../context/DialogContext"
 import {sharedStyles} from "../../theme/theme";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {withSnackBarContext, WithSnackBarContext} from "../../context/SnackBarContext";
+import CustomList from "./components/CustomList";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -224,10 +225,7 @@ class PoolCreate extends React.Component<Props, State> {
           <Options
             loading={loading || isSubmitting}
             status={status}
-            id={id}
             user={user}
-            existingWhitelistId={existingWhitelistId}
-            isWhitelistEnabled={isWhitelistEnabled}
             isPledgesEnabled={isPledgesEnabled}
             pledgesEndDate={pledgesEndDate}
             handleChange={this.handleChange}
@@ -240,7 +238,16 @@ class PoolCreate extends React.Component<Props, State> {
             transactionFee={transactionFee}
             handleChange={this.handleChange}
           />
+          <Grid container item xs={12} md={5} />
           <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
+          <CustomList
+            loading={loading || isSubmitting}
+            id={id}
+            user={user}
+            existingWhitelistId={existingWhitelistId}
+            isWhitelistEnabled={isWhitelistEnabled}
+            handleChange={this.handleChange}
+          />
           <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
           <Grid container item justify="flex-end" className={classes.buttonGrid}>
             {status === 4 && <Button

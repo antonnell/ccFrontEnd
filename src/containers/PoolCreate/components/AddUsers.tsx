@@ -17,8 +17,7 @@ const styles = (theme: Theme) =>
         position: 'relative',
       },
       gridContainer: {
-        display: "flex",
-        flexDirection: "column"
+        marginTop: theme.spacing.unit * 5,
       },
       suggestionsContainerOpen: {
         position: 'absolute',
@@ -107,7 +106,6 @@ class AddUsers extends React.Component<Props, State> {
     const {suggestions, userSearch} = this.state;
     return (
         <Grid item xs={12} md={6} className={classes.gridContainer}>
-          <Grid item style={{flex:1}}/>
           <Grid item xs={12} style={{flex:0}}>
             <Typography variant="h2">Add Users</Typography>
           </Grid>

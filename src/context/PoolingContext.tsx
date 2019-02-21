@@ -252,7 +252,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       this.setState({availablePools: [],availablePoolsLoading: true});
       const url = `pooling/getAvailableFundingPools/${userId}`;
       const method = "GET";
-      callApi(url, method, {}).then(res => {
+      return callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
         const availPools: FundingPool[] = [];
         if (response && response.success) {
