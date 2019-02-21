@@ -30,7 +30,7 @@ interface PoolingContextInterface {
   getManagedFundingPoolPendingTransactions: (poolId: number) => void;
   getManagedFundingPoolContributions: (poolId: number) => Promise<PoolingContact[]>;
   getManagedFundingPools: (userId: string) => void;
-  getAvailableFundingPools: (userId: string) => void;
+  getAvailableFundingPools: (userId: string,poolId?:number) => void;
   getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool|ApiResponse>;
   getPoolContribution: (poolId: number, address: string) => void;
 }
@@ -246,36 +246,40 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         // )
       });
     },
-    getAvailableFundingPools: (userId) => {
+    getAvailableFundingPools: (userId,poolId) => {
       const {appContext: {callApi}} = this.props;
-      const {getManagedFundingPoolDetails, getManagedFundingPoolContributions, getManagedFundingPoolPendingTransactions} = this.state;
+      // const {getManagedFundingPoolDetails, getManagedFundingPoolContributions, getManagedFundingPoolPendingTransactions} = this.state;
       this.setState({availablePools: [],availablePoolsLoading: true});
-      const url = `pooling/getAvailableFundingPools/${userId}`;
+      let url = `pooling/getAvailableFundingPools/${userId}`;
+      if (poolId !== null) {
+        url = `${url}/${poolId}`
+      }
       const method = "GET";
       return callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
-        const availPools: FundingPool[] = [];
-        if (response && response.success) {
-          let count = response.fundingPools.length;
-          count === 0 && this.setState({availablePoolsLoading: false});
-          response.fundingPools.forEach(async (pool) => {
-            await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
-              getManagedFundingPoolContributions(pool.id).then(res => {
-                getManagedFundingPoolPendingTransactions(pool.id);
-                // console.log(fetchedPool);
-                // console.log(pool);
-                if (isFundingPool(fetchedPool)) {
-                  fetchedPool.whitelistedUsers = res;
-                  availPools.push({...pool, ...fetchedPool});
-                } else {
-                  availPools.push({...pool});
-                }
-                count--;
-                this.setState({availablePools: availPools, availablePoolsLoading: count !== 0});
-              });
-            })
-          });
-        }
+        // const availPools: FundingPool[] = [];
+        this.setState({availablePools: response.fundingPools, availablePoolsLoading: false});
+        // if (response && response.success) {
+        //   let count = response.fundingPools.length;
+        //   count === 0 && this.setState({availablePoolsLoading: false});
+        //   response.fundingPools.forEach(async (pool) => {
+        //     await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
+        //       getManagedFundingPoolContributions(pool.id).then(res => {
+        //         getManagedFundingPoolPendingTransactions(pool.id);
+        //         // console.log(fetchedPool);
+        //         // console.log(pool);
+        //         if (isFundingPool(fetchedPool)) {
+        //           fetchedPool.whitelistedUsers = res;
+        //           availPools.push({...pool, ...fetchedPool});
+        //         } else {
+        //           availPools.push({...pool});
+        //         }
+        //         count--;
+        //         this.setState({availablePools: availPools, availablePoolsLoading: count !== 0});
+        //       });
+        //     })
+        //   });
+        // }
       });
     },
     getManagedFundingPoolDetails: (poolId) => {

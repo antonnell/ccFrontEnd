@@ -71,7 +71,7 @@ class PoolDetails extends React.Component<Props, State> {
       user
     } = this.props;
     if (availablePools.findIndex((pool) => Number(pool.id) === Number(id)) === -1) {
-      getAvailableFundingPools(user.id);
+      getAvailableFundingPools(user.id,id);
     }
   }
 
@@ -117,7 +117,7 @@ class PoolDetails extends React.Component<Props, State> {
         title: "",
         items: [
           {title: "Amount Pooled", text: `${pool.totalPooled} ${pool.blockchain}`, width: 6},
-          {title: "Amount Pledged", text: `${pledged} ${pool.blockchain}`, width: 6},
+          {title: "Amount Pledged", text: `${pool.totalPledged} ${pool.blockchain}`, width: 6},
           {title: "Contributors", text: pool.contributorCount || 0, width: 12},
         ]
       });

@@ -76,14 +76,14 @@ class PoolCard extends React.Component<Props> {
 
   public render() {
     const {classes, pool,managedPool} = this.props;
-    const {name, owner, blockchain, contributorCount, totalPooled, status,whitelistedUsers} = pool;
-    let pledged = 0;
-    if (whitelistedUsers) {
-      for (const user of whitelistedUsers) {
-        pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
-      }
-    }
-    console.log("managedPool",managedPool);
+    const {name, owner, blockchain, contributorCount, totalPooled, status,totalPledged} = pool;
+    console.log(totalPledged);
+    // let pledged = 0;
+    // if (whitelistedUsers) {
+    //   for (const user of whitelistedUsers) {
+    //     pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
+    //   }
+    // }
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -104,7 +104,7 @@ class PoolCard extends React.Component<Props> {
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
               <Typography variant="subtitle1" className={classes.textMinHeight}>
-                {pledged > 0 && <React.Fragment><strong>{pledged}</strong> Pledged</React.Fragment>}
+                {totalPledged > 0 && <React.Fragment><strong>{totalPledged}</strong> Pledged</React.Fragment>}
             </Typography>
               {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>

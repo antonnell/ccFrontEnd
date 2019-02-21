@@ -82,6 +82,7 @@ export interface FundingPool extends PoolingContract {
   tokenAddress: string;
   tokenName: string;
   totalPooled: number;
+  totalPledged: number;
   balance: 0;
   isLocked: boolean;
   isPledgesEnabled: boolean;
@@ -108,6 +109,7 @@ export const initialFundingPool: FundingPool = {
   softCap: 0,
   tokenName: "",
   totalPooled: 0,
+  totalPledged: 0,
   balance: 0,
   isLocked: false,
   isTokensReceived: false,
