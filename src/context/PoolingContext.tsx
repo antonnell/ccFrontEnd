@@ -18,8 +18,8 @@ interface PoolingContextInterface {
   setPoolLocked: (poolId: number, isLocked: boolean) => Promise<boolean>;
   updatePledgesEndDate: (poolId: number, pledgesEndDate: string) => void;
   updateSaleAddress: (poolId: number, saleAddress: string) => void;
-  sendPoolFunds: (poolId: number) => void;
-  confirmTokens: (poolId: number) => void;
+  sendPoolFunds: (poolId: number) => Promise<ApiResponse>;
+  confirmTokens: (poolId: number) => Promise<ApiResponse>;
   enableWithdrawTokens: (poolId: number) => void;
   distributeAll: (poolId: number) => Promise<boolean>;
   depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<any>;
@@ -123,10 +123,32 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(saleAddress);
     },
     sendPoolFunds: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      const url = "pooling/sendPoolFunds";
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+      }).then(res => {
+        console.log(res);
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
+      });
     },
     confirmTokens: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      const url = "pooling/confirmTokens";
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+      }).then(res => {
+        console.log(res);
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
+      });
     },
     enableWithdrawTokens: poolId => {
       console.log(poolId);

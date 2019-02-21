@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Header from '../../components/Header';
+import * as React from "react";
+import Grid from "@material-ui/core/Grid";
+import Header from "../../components/Header";
 import headerItems from "../../constants/HeaderItems";
 import Settings from "./components/Settings";
 import {Button, Theme, WithStyles} from "@material-ui/core";
@@ -273,6 +273,32 @@ class PoolCreate extends React.Component<Props, State> {
               {id ? "UPDATE" : "CREATE"} POOL
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
+            {id && (status === 1 || status === 2) &&
+            <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={this.buyTokens}
+            >
+              Buy Tokens
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+            </Button>
+            }
+            {id && status === 3 &&
+            <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={this.confirmTokens}
+            >
+              Confirm Tokens
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+            </Button>
+            }
             {id && status < 1 && <Button
               className={classes.deployButton}
               disabled={!canSubmit}
@@ -323,6 +349,7 @@ class PoolCreate extends React.Component<Props, State> {
       }
     })
   };
+
   cancelUpdate = () => {
     window.location.hash = "pooling";
   };
@@ -349,7 +376,31 @@ class PoolCreate extends React.Component<Props, State> {
       "unlockPoolingContract",
       "Are you sure you want to unlock the pool?",
       "Contributions will be able to made and you will not be able to distribute the tokens while the pool is unlocked"
-      );
+    );
+  };
+
+  confirmTokens = () => {
+    this.setState({isSubmitting: true});
+    const {
+      id,
+      poolingContext: {
+        confirmTokens
+      },
+      snackBarContext: {
+        snackBarPush
+      }
+    } = this.props;
+    confirmTokens(id || 0).then(res => {
+      this.setState({isSubmitting: false});
+      if (res.success) {
+        snackBarPush({type: "success", message: "Confirming Tokens", key: Date()});
+        this.clearState().then(() => {
+          window.location.hash = "pooling";
+        });
+      } else {
+        snackBarPush({type: "error", message: res.message, key: Date()})
+      }
+    })
   };
 
   deployPool = () => {
@@ -364,10 +415,33 @@ class PoolCreate extends React.Component<Props, State> {
       }
     } = this.props;
     deployPoolingContract(id || 0).then(res => {
-      console.log(res);
       this.setState({isSubmitting: false});
       if (res.success) {
         snackBarPush({type: "success", message: "Pool deploying", key: Date()});
+        this.clearState().then(() => {
+          window.location.hash = "pooling";
+        });
+      } else {
+        snackBarPush({type: "error", message: res.message, key: Date()})
+      }
+    })
+  };
+
+  buyTokens = () => {
+    this.setState({isSubmitting: true});
+    const {
+      id,
+      poolingContext: {
+        sendPoolFunds
+      },
+      snackBarContext: {
+        snackBarPush
+      }
+    } = this.props;
+    sendPoolFunds(id || 0).then(res => {
+      this.setState({isSubmitting: false});
+      if (res.success) {
+        snackBarPush({type: "success", message: "Sending Pool Funds", key: Date()});
         this.clearState().then(() => {
           window.location.hash = "pooling";
         });
@@ -499,7 +573,7 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.props;
     const {poolingContract, originalPoolingContractUsers} = this.state;
     event.preventDefault();
-    console.log('SubmitCreatePool...');
+    console.log("SubmitCreatePool...");
     this.setState({isSubmitting: true});
     if (id) {
       // update users - adding new ones
