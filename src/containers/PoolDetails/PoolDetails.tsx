@@ -15,6 +15,7 @@ import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
+import {FundingPool, isFundingPool} from "../../types/pooling";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -51,6 +52,7 @@ interface OwnProps {
 interface State {
   openPledgeDialog: boolean;
   openContributeDialog: boolean;
+  pool: FundingPool | null;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithSnackBarContext {
@@ -58,6 +60,7 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext,
 
 class PoolDetails extends React.Component<Props, State> {
   readonly state: State = {
+    pool: null,
     openPledgeDialog: false,
     openContributeDialog: false
   };
@@ -66,12 +69,19 @@ class PoolDetails extends React.Component<Props, State> {
     const {
       id, poolingContext: {
         getAvailableFundingPools,
+        getManagedFundingPoolDetails,
         availablePools
       },
       user
     } = this.props;
     if (availablePools.findIndex((pool) => Number(pool.id) === Number(id)) === -1) {
       getAvailableFundingPools(user.id,id);
+      getManagedFundingPoolDetails(id).then(pool=>{
+        if (isFundingPool(pool)) {
+          this.setState({pool});
+        }
+      })
+
     }
   }
 
@@ -85,14 +95,18 @@ class PoolDetails extends React.Component<Props, State> {
       openPledgeDialog, openContributeDialog
     } = this.state;
     const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
-    const pool = poolId !== -1 ? availablePools[poolId] : null;
+    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? availablePools[poolId] : null;
     const groups: PoolDetailsGroups[] = [];
+    let contribution = 0;
     let pledged = 0;
+    let contributors = 0;
     if (pool !== null) {
       console.log(pool);
       if (pool.whitelistedUsers) {
         for (const user of pool.whitelistedUsers) {
           pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
+          contribution = contribution + (user && user.value !== undefined?user.value:0);
+          contributors = user && user.value !== undefined && user.value > 0?contributors+1:contributors;
         }
       }
       groups.push({
@@ -116,9 +130,9 @@ class PoolDetails extends React.Component<Props, State> {
       groups.push({
         title: "",
         items: [
-          {title: "Amount Pooled", text: `${pool.totalPooled} ${pool.blockchain}`, width: 6},
-          {title: "Amount Pledged", text: `${pool.totalPledged} ${pool.blockchain}`, width: 6},
-          {title: "Contributors", text: pool.contributorCount || 0, width: 12},
+          {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
+          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6},
+          {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 12},
         ]
       });
     } else {
