@@ -7,7 +7,8 @@ fs.readFile("./src/version.json","utf8",(err,data)=> {
   // console.log(split);
   version.version = split.join(".");
   // console.log(version);
-  fs.writeFile("./src/version.json",JSON.stringify(version),"utf8",(err)=>{
+  fs.writeFile("./src/version.json",JSON.stringify(version),"utf8",()=>{
+    console.log("0");
     // console.log(err);
   });
 });
