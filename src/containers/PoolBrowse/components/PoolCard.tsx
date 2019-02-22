@@ -76,13 +76,16 @@ class PoolCard extends React.Component<Props> {
 
   public render() {
     const {classes, pool, managedPool} = this.props;
-    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged} = pool;
-    // let pledged = 0;
-    // if (whitelistedUsers) {
-    //   for (const user of whitelistedUsers) {
-    //     pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
-    //   }
-    // }
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged,whitelistedUsers} = pool;
+    console.log(pool);
+    let pledged = 0;
+    let contribution = 0;
+    if (whitelistedUsers) {
+      for (const user of whitelistedUsers) {
+        pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
+        contribution = contribution + (user && user.value !== undefined?user.value:0);
+      }
+    }
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -103,12 +106,12 @@ class PoolCard extends React.Component<Props> {
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
               <Typography variant="subtitle1" className={classes.textMinHeight}>
-                {totalPledged > 0 && <React.Fragment><strong>{totalPledged}</strong> Pledged</React.Fragment>}
+                {((managedPool && pledged > 0) || (!managedPool && totalPledged > 0)) && <React.Fragment><strong>{managedPool?pledged:totalPledged}</strong> Pledged</React.Fragment>}
               </Typography>
               {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
-              <Typography align="center" variant="subtitle1"><b>{totalPooled}</b> Raised</Typography>
+              <Typography align="center" variant="subtitle1"><b>{managedPool?contribution:totalPooled}</b> Raised</Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
               {managedPool && <div style={{flex: 1}}>
