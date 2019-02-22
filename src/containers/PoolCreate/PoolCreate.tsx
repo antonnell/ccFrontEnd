@@ -26,6 +26,7 @@ import {sharedStyles} from "../../theme/theme";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {withSnackBarContext, WithSnackBarContext} from "../../context/SnackBarContext";
 import CustomList from "./components/CustomList";
+import Typography from "@material-ui/core/Typography";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -194,7 +195,10 @@ class PoolCreate extends React.Component<Props, State> {
       loading, isSubmitting,
       poolingContract: {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
-        minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus
+        minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus,
+        totalTokensRemaining,
+        totalTokensReceived,
+        tokenSymbol
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
@@ -202,6 +206,8 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
+    console.log(totalTokensRemaining,
+      totalTokensReceived);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -249,7 +255,21 @@ class PoolCreate extends React.Component<Props, State> {
             handleChange={this.handleChange}
           />
           <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
-          <Grid container item justify="flex-end" className={classes.buttonGrid}>
+          <Grid container item justify="flex-end" className={classes.buttonGrid} alignItems="center">
+            {totalTokensRemaining > 0 && <div className={classes.deployButton}><Typography variant="subtitle1">{totalTokensRemaining} {tokenSymbol}</Typography> </div>}
+            {id && status === 2 && totalTokensRemaining > 0 &&
+            <Button
+              className={classes.deployButton}
+              disabled={!canSubmit}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={this.confirmTokens}
+            >
+              Confirm Tokens
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+            </Button>
+            }
             {status === 4 && <Button
               className={classes.deployButton}
               disabled={!canSubmit}
@@ -273,7 +293,8 @@ class PoolCreate extends React.Component<Props, State> {
               {id ? "UPDATE" : "CREATE"} POOL
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
-            {id && (status === 1 || status === 2) &&
+
+            {id && (status === 1 || status === 2) && totalTokensRemaining === 0 &&
             <Button
               className={classes.deployButton}
               disabled={!canSubmit}
@@ -286,19 +307,7 @@ class PoolCreate extends React.Component<Props, State> {
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
             }
-            {id && status === 3 &&
-            <Button
-              className={classes.deployButton}
-              disabled={!canSubmit}
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={this.confirmTokens}
-            >
-              Confirm Tokens
-              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
-            </Button>
-            }
+
             {id && status < 1 && <Button
               className={classes.deployButton}
               disabled={!canSubmit}
@@ -315,7 +324,7 @@ class PoolCreate extends React.Component<Props, State> {
             {id && status !== 0 && status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={loading || isSubmitting}>
               <LockIcon />
             </Fab>}
-            {id && status === 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={loading || isSubmitting}>
+            {id && status === 2 && totalTokensRemaining === 0 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={loading || isSubmitting}>
               <LockOpenIcon />
             </Fab>}
             <Button

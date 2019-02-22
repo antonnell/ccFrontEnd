@@ -32,6 +32,9 @@ export interface PoolingContract {
   transactionFee: number;                       // Percentage cut that the owner will take of the total funding raised in this pool
   isWhitelistEnabled: boolean;                  // flag to indicate if this pool should use a whitelist
   existingWhitelistId: number | null;           // saved whitelist id to create this pool’s whitelist from
+  totalTokensReceived: number;
+  totalTokensRemaining: number;
+  tokenSymbol: string;
   whitelistUserIds?: string[];
   whitelistedUsers: PoolingContact[];
   pendingTransactions: PoolingTransaction[];
@@ -50,6 +53,9 @@ export const initialPoolingContract: PoolingContract = {
   transactionFee: 0,
   isWhitelistEnabled: false,
   existingWhitelistId: null,
+  totalTokensReceived: 0,
+  totalTokensRemaining: 0,
+  tokenSymbol: "",
   whitelistedUsers: [],
   pendingTransactions: []
 };
@@ -90,7 +96,6 @@ export interface FundingPool extends PoolingContract {
   isWhitelistEnabled: boolean;
   pledgesEndDate: string;
   saleAddress: string;
-  tokenSymbol: string | null;
   totalTokensReceived: number;
   totalTokensRemaining: number;
   transactionFee: number;
