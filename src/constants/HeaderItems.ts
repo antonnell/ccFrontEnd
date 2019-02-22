@@ -10,53 +10,58 @@ export interface HeaderItem {
 
 interface HeaderItemsInterface {
   pooling: HeaderItem;
-  poolCreate: HeaderItem;
+  createPool: HeaderItem;
   poolBrowse: HeaderItem;
+  createWhitelist: HeaderItem;
 }
 
-const poolingMenuItems = [
-  {
-    label: "Browse Pools",
+const poolHomeMenuItem = {
+  label: "Pool Home",
     link: "browsePools"
-  },
-  {
-    label: "Create Whitelist",
-    link: "createWhitelist"
-  }
-];
+};
 
-const poolingBrowseMenuItems = [
-  {
-    label: "New Pool",
-    link: "createPool"
-  },
-  {
-    label: "Create Whitelist",
-    link: "createWhitelist"
-  }
-];
+const createPoolMenuItem = {
+  label: "Create Pool",
+  link: "createPool"
+};
+
+const createWhitelistMenuItem = {
+  label: "Create Whitelist",
+  link: "createWhitelist"
+};
+const poolManagementMenuItem = {
+  label: "Pool Management",
+  link: "pooling"
+};
 
 const headerItems: HeaderItemsInterface = {
   pooling: {
-    buttons: [{
-      label: "New Pool",
-      link: "createPool"
-    }],
-    menuItems: poolingMenuItems
+    buttons: [poolHomeMenuItem],
+    menuItems: [
+      createPoolMenuItem,
+      createWhitelistMenuItem
+    ]
   },
-  poolCreate: {
-    buttons: [{
-      label: "Pool Home",
-      link: "pooling"
-    }],
-    menuItems: poolingMenuItems
+  createPool: {
+    buttons: [poolHomeMenuItem],
+    menuItems: [
+      poolManagementMenuItem,
+      createWhitelistMenuItem
+    ]
   },
   poolBrowse: {
-    buttons: [{
-      label: "Pool Home",
-      link: "pooling"
-    }],
-    menuItems: poolingBrowseMenuItems
+    buttons: [createPoolMenuItem],
+    menuItems: [
+      poolManagementMenuItem,
+      createWhitelistMenuItem
+    ]
+  },
+  createWhitelist: {
+    buttons: [poolHomeMenuItem],
+    menuItems: [
+      poolManagementMenuItem,
+      createPoolMenuItem,
+    ]
   }
 };
 

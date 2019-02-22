@@ -204,7 +204,7 @@ class PoolCreate extends React.Component<Props, State> {
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
     return (
       <React.Fragment>
-        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.poolCreate} loading={loading || isSubmitting} />
+        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}

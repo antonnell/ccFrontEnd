@@ -279,10 +279,10 @@ class AppDrawer extends Component {
             {/*<ListItemText primary="ICO Contributions" />*/}
           {/*</ListItem>*/}
           <ListItem
-            selected={ this.props.currentScreen === 'pooling' }
+            selected={ this.props.currentScreen === 'browsePools' }
             button
             onClick={ event => {
-              this.props.navClicked(event, 'pooling');
+              this.props.navClicked(event, 'browsePools');
             } }
           >
             <ListItemIcon>
