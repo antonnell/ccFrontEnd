@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -16,11 +16,12 @@ import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import {WithPoolingContext, withPoolingContext} from "../../context/PoolingContext";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
 
 interface OwnProps {
   pool: FundingPool | null;
   open: boolean;
-  onClose: ()=>void;
+  onClose: () => void;
   ethAddresses: EthAddress[],
   wanAddresses: WanAddress[],
 }
@@ -41,19 +42,19 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithSnackBarContext {
 }
 
-class PoolPledgeDialog extends React.Component<Props,State> {
+class PoolPledgeDialog extends React.Component<Props, State> {
   readonly state: State = {
     amount: undefined,
     isSubmitting: false,
   };
 
   public render() {
-    const {pool,open,classes} = this.props;
+    const {pool, open, classes} = this.props;
     const {blockchain} = pool || initialPoolingContract;
-    const {amount,isSubmitting} = this.state;
+    const {amount, isSubmitting} = this.state;
     return (
       <Dialog
         open={open}
@@ -73,7 +74,7 @@ class PoolPledgeDialog extends React.Component<Props,State> {
               required
               fullWidth
               label="Pledge Amount"
-              value={amount||0}
+              value={amount || 0}
               onChange={this.handleChange}
               margin="normal"
               InputLabelProps={{shrink: true}}
@@ -92,7 +93,7 @@ class PoolPledgeDialog extends React.Component<Props,State> {
               disabled={amount === undefined || amount < 1 || isSubmitting}
               className={classes.button} color="secondary" size="small" onClick={this.handleSubmit}>
               Pledge
-              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}}/>}
+              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -102,16 +103,21 @@ class PoolPledgeDialog extends React.Component<Props,State> {
   }
 
   handleSubmit = () => {
-    const {wanAddresses,ethAddresses,pool,
+    const {
+      wanAddresses, ethAddresses, pool,
       poolingContext: {
-      pledgeToPoolingContract
-    }} = this.props;
+        pledgeToPoolingContract
+      },
+      snackBarContext: {
+        snackBarPush
+      }
+    } = this.props;
     const {amount} = this.state;
-    this.setState({isSubmitting:true});
+    this.setState({isSubmitting: true});
     if (pool !== null && amount !== undefined) {
-      pledgeToPoolingContract(pool.id,pool.blockchain === "WAN"?wanAddresses[0].publicAddress:ethAddresses[0].address,amount).then(res=>{
-        console.log(res);
-        this.setState({isSubmitting:false});
+      pledgeToPoolingContract(pool.id, pool.blockchain === "WAN" ? wanAddresses[0].publicAddress : ethAddresses[0].address, amount).then(res => {
+        snackBarPush({key: new Date().toISOString(), message: !res.success ? res.message : "Pledge successful", type: !res.success ? "error" : "success"});
+        this.setState({isSubmitting: false});
         this.handleClose();
       });
     }
@@ -119,7 +125,7 @@ class PoolPledgeDialog extends React.Component<Props,State> {
 
   handleClose = () => {
     const {onClose} = this.props;
-    this.setState({isSubmitting: false,amount:undefined});
+    this.setState({isSubmitting: false, amount: undefined});
     onClose();
   };
 
@@ -129,4 +135,4 @@ class PoolPledgeDialog extends React.Component<Props,State> {
 
 }
 
-export default withStyles(styles)(withPoolingContext(PoolPledgeDialog)) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(withSnackBarContext(PoolPledgeDialog))) as React.ComponentClass<OwnProps>;

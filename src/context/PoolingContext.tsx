@@ -22,9 +22,9 @@ interface PoolingContextInterface {
   confirmTokens: (poolId: number) => Promise<ApiResponse>;
   enableWithdrawTokens: (poolId: number) => void;
   distributeAll: (poolId: number) => Promise<boolean>;
-  depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<any>;
+  depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<ApiResponse>;
   withdrawFromPoolingContract: (poolId: number, userAddress: string, amount: number) => void;
-  pledgeToPoolingContract: (poolId: number, userAddress: string, amount: number) => Promise<boolean>;
+  pledgeToPoolingContract: (poolId: number, userAddress: string, amount: number) => Promise<ApiResponse>;
   withdrawAllFromPoolingContract: (userAddress: string, poolAddress: string, blockchain: PoolingContractBlockChain) => void;
   getFundingPoolPendingTransactions: (blockchain: PoolingContractBlockChain, address: string) => void;
   getManagedFundingPoolPendingTransactions: (poolId: number) => void;
@@ -166,18 +166,16 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       });
     },
     depositToPoolingContract: (poolId, fromAddress, amount, gwei = 0) => {
-      console.log(poolId);
-      console.log(fromAddress);
-      console.log(amount);
-      console.log(gwei);
       const {appContext: {callApi}} = this.props;
       const url = "pooling/depositToPoolingContract";
       const method = "POST";
       return callApi(url, method, {
         poolId, amount, fromAddress, gwei
       }).then(res => {
-        console.log(res);
-        return res.success;
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
       });
     },
     withdrawFromPoolingContract: (poolId, userAddress, amount) => {
@@ -192,7 +190,10 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {
         userAddress, poolId, amount
       }).then(res => {
-        return res.success;
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
       });
     },
     withdrawAllFromPoolingContract: (userAddress, poolAddress, blockchain) => {

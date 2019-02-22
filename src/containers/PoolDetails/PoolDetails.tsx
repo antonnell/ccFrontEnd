@@ -101,7 +101,6 @@ class PoolDetails extends React.Component<Props, State> {
     let pledged = 0;
     let contributors = 0;
     if (pool !== null) {
-      console.log(pool);
       if (pool.whitelistedUsers) {
         for (const user of pool.whitelistedUsers) {
           pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);

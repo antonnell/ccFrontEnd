@@ -21,6 +21,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
 
 interface OwnProps {
   pool: FundingPool | null;
@@ -55,7 +56,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext,WithSnackBarContext {
 }
 
 class PoolContributeDialog extends React.Component<Props, State> {
@@ -153,6 +154,9 @@ class PoolContributeDialog extends React.Component<Props, State> {
       wanAddresses, ethAddresses, pool,
       poolingContext: {
         depositToPoolingContract
+      },
+      snackBarContext: {
+        snackBarPush
       }
     } = this.props;
     const {amount,walletId} = this.state;
@@ -162,7 +166,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
         pool.id,
         pool.blockchain === "WAN" ? wanAddresses[walletId||0].publicAddress : ethAddresses[walletId||0].address,
         amount,0).then(res => {
-        console.log(res);
+        snackBarPush({key: new Date().toISOString(), message: !res.success?res.message:"Deposit successful", type: !res.success?"error":"success"});
         this.setState({isSubmitting: false});
         this.handleClose();
       });
@@ -188,4 +192,4 @@ class PoolContributeDialog extends React.Component<Props, State> {
 
 }
 
-export default withStyles(styles)(withPoolingContext(PoolContributeDialog)) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(withSnackBarContext(PoolContributeDialog))) as React.ComponentClass<OwnProps>;
