@@ -270,7 +270,7 @@ class PoolCreate extends React.Component<Props, State> {
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>
             }
-            {status === 4 && <Button
+            {status === 3 && <Button
               className={classes.deployButton}
               disabled={!canSubmit}
               variant="contained"
