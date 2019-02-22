@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -7,12 +7,12 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import {colors} from "../../../theme";
 import Button from "@material-ui/core/Button";
-import {FundingPool} from "../../../types/pooling";
+import {FundingPool, PoolingContractStatus} from "../../../types/pooling";
 
 interface OwnProps {
   pool: FundingPool;
-  onPledgeClick: ()=>void;
-  onContributeClick: ()=>void;
+  onPledgeClick: () => void;
+  onContributeClick: () => void;
   managedPool?: boolean;
 }
 
@@ -75,8 +75,8 @@ class PoolCard extends React.Component<Props> {
   };
 
   public render() {
-    const {classes, pool,managedPool} = this.props;
-    const {name, owner, blockchain, contributorCount, totalPooled, status,totalPledged} = pool;
+    const {classes, pool, managedPool} = this.props;
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged} = pool;
     // let pledged = 0;
     // if (whitelistedUsers) {
     //   for (const user of whitelistedUsers) {
@@ -104,15 +104,18 @@ class PoolCard extends React.Component<Props> {
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
               <Typography variant="subtitle1" className={classes.textMinHeight}>
                 {totalPledged > 0 && <React.Fragment><strong>{totalPledged}</strong> Pledged</React.Fragment>}
-            </Typography>
+              </Typography>
               {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography align="center" variant="subtitle1"><b>{totalPooled}</b> Raised</Typography>
             </Grid>
-            <Grid item xs={12} container direction="row" justify="flex-end" className={classes.buttonRow}>
+            <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
+              {managedPool && <div style={{flex: 1}}>
+                <Typography variant="subtitle1">{PoolingContractStatus[status]}</Typography>
+              </div>}
               {managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
-              {status === 1 && !managedPool &&<Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
+              {status === 1 && !managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && !managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
               <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
