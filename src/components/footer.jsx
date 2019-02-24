@@ -34,12 +34,10 @@ class Footer extends Component {
         style={{
           backgroundColor: this.props.theme.custom.footer.background,
           color: "#FFFFFF",
-          position: "relative",
-          minHeight: "299px",
-          paddingTop: "100px"
+          position: "relative"
         }}
       >
-        <Grid item xs={12} sm={4} md={4} lg={4} align="center">
+        {/*<Grid item xs={12} sm={4} md={4} lg={4} align="center">
           <img
             style={{width: 155}}
             src={require("../assets/images/footer-logo.png")}
@@ -178,7 +176,7 @@ class Footer extends Component {
               </a>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid>*/}
         <Grid
           item
           xs={12}
@@ -196,7 +194,7 @@ class Footer extends Component {
               fontSize: '14px'
             }}
           >
-            © 2018 CryptoCurve
+            © 2019 CryptoCurve
           </Typography>
           <Typography
             variant="body1"
@@ -208,7 +206,7 @@ class Footer extends Component {
               fontSize: '14px'
             }}
           >
-            V1.1.19-beta
+            V1.1.20-beta
           </Typography>
         </Grid>
       </Grid>

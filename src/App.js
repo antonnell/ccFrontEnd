@@ -1207,7 +1207,7 @@ class App extends Component {
               justify="space-around"
               alignItems="flex-start"
               direction="row"
-              style={ { minHeight: '622px', position: 'relative', flex: 1 } }
+              style={ { minHeight: '924px', position: 'relative', flex: 1 } }
             >
               <Grid item xs={ 12 } style={ { marginRight: 16 } }>
                 { this.state.user == null ? null : this.renderAppBar() }
