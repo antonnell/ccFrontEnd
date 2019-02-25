@@ -35,6 +35,7 @@ export interface PoolDetailsGroupItems {
   title: string;
   text: string | number;
   width: 6 | 12;
+  hidden?:boolean;
 }
 
 interface PoolDetailsGroups {
@@ -130,8 +131,8 @@ class PoolDetails extends React.Component<Props, State> {
         title: "",
         items: [
           {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
-          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6},
-          {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 12},
+          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
+          {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 6},
         ]
       });
     } else {

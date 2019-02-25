@@ -42,7 +42,6 @@ class Options extends React.Component<Props> {
     const {
       isPledgesEnabled, pledgesEndDate, handleChange, classes, status, loading, handleDateChange
     } = this.props;
-    console.log(this.props);
     return (
       <Grid item xs={12} md={6}>
         <Grid item xs={12} className={classes.title}>

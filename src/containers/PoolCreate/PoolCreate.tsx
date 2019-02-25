@@ -198,7 +198,6 @@ class PoolCreate extends React.Component<Props, State> {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
         minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus,
         totalTokensRemaining,
-        totalTokensReceived,
         tokenSymbol
       },
       validation: {
@@ -207,8 +206,6 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
-    console.log(totalTokensRemaining,
-      totalTokensReceived);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
