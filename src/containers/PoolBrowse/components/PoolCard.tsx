@@ -14,6 +14,7 @@ interface OwnProps {
   onPledgeClick: () => void;
   onContributeClick: () => void;
   managedPool?: boolean;
+  completedPool?: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -75,7 +76,7 @@ class PoolCard extends React.Component<Props> {
   };
 
   public render() {
-    const {classes, pool, managedPool} = this.props;
+    const {classes, pool, managedPool,completedPool} = this.props;
     const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged,whitelistedUsers,isBusy} = pool;
     let pledged = 0;
     let contribution = 0;
@@ -108,10 +109,10 @@ class PoolCard extends React.Component<Props> {
               <Typography align="center" variant="subtitle1"><b>{managedPool?contribution:totalPooled}</b> Raised</Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
-              {managedPool && <div style={{flex: 1}}>
+              {(managedPool || completedPool) && <div style={{flex: 1}}>
                 <Typography variant="subtitle1">{PoolingContractStatus[status]}</Typography>
               </div>}
-              {managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
+              {managedPool && !completedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
               {status === 1 && !managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && !managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />

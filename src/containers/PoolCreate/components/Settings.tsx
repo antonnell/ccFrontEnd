@@ -58,7 +58,7 @@ class Settings extends React.Component<Props> {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            disabled={loading}
+            disabled={status === 10 || loading}
             required
             autoFocus
             fullWidth

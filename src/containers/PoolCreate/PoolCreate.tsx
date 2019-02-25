@@ -243,7 +243,7 @@ class PoolCreate extends React.Component<Props, State> {
             handleChange={this.handleChange}
           />
           <Grid container item xs={12} md={5} />
-          <AddUsers addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
+          <AddUsers status={status} addUserToWhitelist={this.addUserToWhitelist} loading={loading || isSubmitting} />
           <CustomList
             loading={loading || isSubmitting}
             id={id}
@@ -252,7 +252,7 @@ class PoolCreate extends React.Component<Props, State> {
             isWhitelistEnabled={isWhitelistEnabled}
             handleChange={this.handleChange}
           />
-          <AddedUsers users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
+          <AddedUsers status={status} users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
           <Grid container item justify="flex-end" className={classes.buttonGrid} alignItems="center">
             {totalTokensRemaining > 0 && <div className={classes.deployButton}><Typography variant="subtitle1">{totalTokensRemaining} {tokenSymbol}</Typography> </div>}
             {id && status === 2 && totalTokensRemaining > 0 &&
@@ -280,6 +280,7 @@ class PoolCreate extends React.Component<Props, State> {
               Distribute
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
             </Button>}
+            {status !== 10 &&
             <Button
               disabled={!canSubmit}
               variant="contained"
@@ -290,7 +291,7 @@ class PoolCreate extends React.Component<Props, State> {
             >
               {id ? "UPDATE" : "CREATE"} POOL
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
-            </Button>
+            </Button>}
 
             {id && (status === 1 || status === 2) && totalTokensRemaining === 0 &&
             <Button
@@ -319,7 +320,7 @@ class PoolCreate extends React.Component<Props, State> {
             {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
               <DeleteIcon />
             </Fab>}
-            {id && status !== 0 && status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={!canSubmit || loading || isSubmitting}>
+            {id && status !== 0 && status !== 2 && status !== 10 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={!canSubmit || loading || isSubmitting}>
               <LockIcon />
             </Fab>}
             {id && status === 2 && totalTokensRemaining === 0 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={!canSubmit || loading || isSubmitting}>

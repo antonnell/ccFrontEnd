@@ -45,6 +45,7 @@ interface State {
 interface OwnProps {
   addUserToWhitelist: (contact: Contact) => void;
   loading: boolean;
+  status: number;
 }
 
 
@@ -102,7 +103,7 @@ class AddUsers extends React.Component<Props, State> {
   };
 
   public render() {
-    const {classes,loading} = this.props;
+    const {classes,loading,status} = this.props;
     const {suggestions, userSearch} = this.state;
     return (
         <Grid item xs={12} md={6} className={classes.gridContainer}>
@@ -119,7 +120,7 @@ class AddUsers extends React.Component<Props, State> {
                 onSuggestionSelected={this.handleSuggestionSelected}
                 suggestions={suggestions}
                 inputProps={{
-                  disabled: loading,
+                  disabled: (status === 10 || loading),
                   classes,
                   label: "Search User",
                   placeholder: 'Username',

@@ -71,7 +71,8 @@ export const PoolingContractStatus = {
   2: "Locked",
   3: "Token Received",
   4: "Tokens Ready",
-  5: "Pledges"
+  5: "Pledges",
+  10: "Complete"
 };
 
 export interface FundingPool extends PoolingContract {
