@@ -16,6 +16,7 @@ import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
 import {FundingPool, isFundingPool} from "../../types/pooling";
+import moment from "moment";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -77,26 +78,27 @@ class PoolDetails extends React.Component<Props, State> {
     } = this.props;
     if (availablePools.findIndex((pool) => Number(pool.id) === Number(id)) === -1) {
       getAvailableFundingPools(user.id,id);
-      getManagedFundingPoolDetails(id).then(pool=>{
-        if (isFundingPool(pool)) {
-          this.setState({pool});
-        }
-      })
-
     }
+    getManagedFundingPoolDetails(id).then(pool=>{
+      if (isFundingPool(pool)) {
+        this.setState({pool});
+      }
+    })
   }
 
   public render() {
     const {
       id, classes, ethAddresses, wanAddresses, poolingContext: {
-        availablePools, availablePoolsLoading
+        availablePools, availablePoolsLoading,
+        managedPools
       }
     } = this.props;
     const {
       openPledgeDialog, openContributeDialog
     } = this.state;
     const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
-    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? availablePools[poolId] : null;
+    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? managedPools[poolId]?managedPools[poolId]:availablePools[poolId] : null;
+    console.log(pool);
     const groups: PoolDetailsGroups[] = [];
     let contribution = 0;
     let pledged = 0;
@@ -131,8 +133,9 @@ class PoolDetails extends React.Component<Props, State> {
         title: "",
         items: [
           {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
-          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
           {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 6},
+          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
+          {title: "Pledge End Date", text: `${this.state.pool !== null?moment(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
         ]
       });
     } else {

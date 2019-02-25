@@ -77,7 +77,6 @@ class PoolCard extends React.Component<Props> {
   public render() {
     const {classes, pool, managedPool} = this.props;
     const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged,whitelistedUsers} = pool;
-    console.log(pool);
     let pledged = 0;
     let contribution = 0;
     if (whitelistedUsers) {
