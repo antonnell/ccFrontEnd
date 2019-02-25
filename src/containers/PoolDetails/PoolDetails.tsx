@@ -99,6 +99,9 @@ class PoolDetails extends React.Component<Props, State> {
     const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
     const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? managedPools[poolId]?managedPools[poolId]:availablePools[poolId] : null;
     console.log(pool);
+    if (pool !== null) {
+      console.log(moment(pool.pledgesEndDate).format("YYYY-MM-DD"));
+    }
     const groups: PoolDetailsGroups[] = [];
     let contribution = 0;
     let pledged = 0;
@@ -135,7 +138,7 @@ class PoolDetails extends React.Component<Props, State> {
           {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
           {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 6},
           {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
-          {title: "Pledge End Date", text: `${this.state.pool !== null?moment(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
+          {title: "Pledge End Date", text: `${pool.pledgesEndDate !== null?moment(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
         ]
       });
     } else {
@@ -148,9 +151,9 @@ class PoolDetails extends React.Component<Props, State> {
           {!availablePoolsLoading && pool !== null && <Grid item container direction="row" justify="flex-end" xs={12}>
             <Button variant="outlined" color="secondary" className={classes.button} onClick={this.onBackClick}>Back</Button>
             <div className={classes.buttonSpacer} />
-            {pool.status === 1 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
+            {pool.status === 1 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
             <div className={classes.buttonSpacer} />
-            {pool.status === 5 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
+            {pool.status === 5 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
           </Grid>}
         </Grid>
         <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />

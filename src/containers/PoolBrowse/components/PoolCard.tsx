@@ -76,7 +76,7 @@ class PoolCard extends React.Component<Props> {
 
   public render() {
     const {classes, pool, managedPool} = this.props;
-    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged,whitelistedUsers} = pool;
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged,whitelistedUsers,isBusy} = pool;
     let pledged = 0;
     let contribution = 0;
     if (whitelistedUsers) {
@@ -97,17 +97,12 @@ class PoolCard extends React.Component<Props> {
               <Typography variant="subtitle1" className={classes.authorText}><b>{owner}</b></Typography>
             </Grid>
             <Grid item xs={6} container direction="column">
-              {/*<Grid className={classes.progressGrid}>*/}
-              {/*<CircularProgress size={80} className={classes.progress} variant="static" value={95} />*/}
-              {/*<Typography variant="h5" style={{position: "absolute"}}>95%</Typography>*/}
-              {/*</Grid>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
               <Typography variant="subtitle1" className={classes.textMinHeight}>
                 {((managedPool && pledged > 0) || (!managedPool && totalPledged > 0)) && <React.Fragment><strong>{managedPool?pledged:totalPledged}</strong> Pledged</React.Fragment>}
               </Typography>
-              {/*<Typography variant="subtitle1" className={classes.daysText}><b>51</b> days left</Typography>*/}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography align="center" variant="subtitle1"><b>{managedPool?contribution:totalPooled}</b> Raised</Typography>
@@ -116,9 +111,9 @@ class PoolCard extends React.Component<Props> {
               {managedPool && <div style={{flex: 1}}>
                 <Typography variant="subtitle1">{PoolingContractStatus[status]}</Typography>
               </div>}
-              {managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
-              {status === 1 && !managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
-              {status === 5 && !managedPool && <Button variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
+              {managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
+              {status === 1 && !managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
+              {status === 5 && !managedPool && <Button disabled={isBusy} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
               <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
             </Grid>

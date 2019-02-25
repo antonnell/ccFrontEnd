@@ -112,7 +112,6 @@ class PoolCreate extends React.Component<Props, State> {
           }
           if (poolingContract.status !== undefined && poolingContract.status > 0) {
             getManagedFundingPoolContributions(id).then(res => {
-              console.log(res);
               this.setState({
                 poolingContract: {...poolingContract, whitelistedUsers: res},
                 validation: {
@@ -198,14 +197,14 @@ class PoolCreate extends React.Component<Props, State> {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
         minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus,
         totalTokensRemaining,
-        tokenSymbol
+        tokenSymbol,isBusy
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
       }
     } = this.state;
     const status = poolStatus || 0;
-    const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid;
+    const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -317,13 +316,13 @@ class PoolCreate extends React.Component<Props, State> {
             >
               Deploy
             </Button>}
-            {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={loading || isSubmitting}>
+            {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
               <DeleteIcon />
             </Fab>}
-            {id && status !== 0 && status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={loading || isSubmitting}>
+            {id && status !== 0 && status !== 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={!canSubmit || loading || isSubmitting}>
               <LockIcon />
             </Fab>}
-            {id && status === 2 && totalTokensRemaining === 0 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={loading || isSubmitting}>
+            {id && status === 2 && totalTokensRemaining === 0 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={!canSubmit || loading || isSubmitting}>
               <LockOpenIcon />
             </Fab>}
             <Button

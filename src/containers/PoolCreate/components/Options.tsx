@@ -64,10 +64,11 @@ class Options extends React.Component<Props> {
         {isPledgesEnabled ? (
           <Grid item xs={10}>
             <DatePicker
+              disabled={status > 0 || loading}
               name="pledgesEndDate"
               value={new Date(pledgesEndDate)||moment(new Date()).add(1,'days')}
               onChange={handleDateChange("pledgesEndDate")}
-              minDate={moment(new Date()).add(1,'days')}
+              minDate={status > 0 || loading?null:moment(new Date()).add(1,'days')}
               format="YYYY-MM-DD"
             />
           </Grid>

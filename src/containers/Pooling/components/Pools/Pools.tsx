@@ -134,7 +134,7 @@ class Pools extends React.Component<Props, State> {
                     }
                   }
                   return (
-                    <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)} style={{cursor: "pointer"}}>
+                    <TableRow hover={!n.isBusy} tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.isBusy?null:n.id)} style={{cursor: n.isBusy?" not-allowed":"pointer"}}>
                       <TableCell>
                         <Typography
                           style={{lineHeight: "57px", fontSize: "17px"}}
@@ -208,8 +208,10 @@ class Pools extends React.Component<Props, State> {
   private handleChangeRowsPerPage = (event: any) => {
     this.setState({rowsPerPage: event.target.value});
   };
-  private handleRowClick = (id: number) => () => {
-    window.location.hash = `updatePool/${id}`;
+  private handleRowClick = (id: null|number) => () => {
+    if (id !== null) {
+      window.location.hash = `updatePool/${id}`;
+    }
   };
 }
 
