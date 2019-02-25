@@ -100,7 +100,6 @@ class Pools extends React.Component<Props, State> {
     console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
     const {classes, poolingContext: {managedPools,managedPoolsLoading}} = this.props;
     const {order, orderBy, page, rowsPerPage} = this.state;
-    console.log(managedPools);
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
