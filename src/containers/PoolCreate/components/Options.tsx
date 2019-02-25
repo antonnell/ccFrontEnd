@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -6,15 +6,19 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import TextField from "@material-ui/core/TextField";
-import {PoolCreateHandleChange} from "../PoolCreate";
+import {PoolCreateHandleChange, PoolCreateHandleDateChange} from "../PoolCreate";
 import {User} from "../../../types/account";
+import DatePicker from 'material-ui-pickers/DatePicker';
+import moment from "moment";
 
 
 const styles = (theme: Theme) =>
   createStyles({
     title: {
       marginBottom: theme.spacing.unit * 2
+    },
+    datePicker: {
+      overflow: "visible"
     }
   });
 
@@ -23,6 +27,7 @@ interface OwnProps {
   isPledgesEnabled: boolean;
   pledgesEndDate: string;
   handleChange: PoolCreateHandleChange;
+  handleDateChange: PoolCreateHandleDateChange;
   user: User;
   loading: boolean;
 }
@@ -35,8 +40,9 @@ class Options extends React.Component<Props> {
 
   public render() {
     const {
-      isPledgesEnabled, pledgesEndDate, handleChange, classes, status, loading
+      isPledgesEnabled, pledgesEndDate, handleChange, classes, status, loading, handleDateChange
     } = this.props;
+    console.log(this.props);
     return (
       <Grid item xs={12} md={6}>
         <Grid item xs={12} className={classes.title}>
@@ -58,17 +64,12 @@ class Options extends React.Component<Props> {
         </Grid>
         {isPledgesEnabled ? (
           <Grid item xs={10}>
-            <TextField
-              disabled={status > 0 || loading}
-              required
-              fullWidth
-              id="pledgeEndDate"
-              label="Pledge End Date"
-              value={pledgesEndDate}
-              type="date"
-              onChange={handleChange("pledgesEndDate")}
-              margin="normal"
-              InputLabelProps={{shrink: true}}
+            <DatePicker
+              name="pledgesEndDate"
+              value={new Date(pledgesEndDate)||moment(new Date()).add(1,'days')}
+              onChange={handleDateChange("pledgesEndDate")}
+              minDate={moment(new Date()).add(1,'days')}
+              format="YYYY-MM-DD"
             />
           </Grid>
         ) : null}

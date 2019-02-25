@@ -1,6 +1,7 @@
 import {EthAddress} from "./eth";
 import {WanAddress} from "./wan";
 import {Contact} from "./contacts";
+import moment from "moment";
 
 export type PoolingContractBlockChain = "ETH" | "WAN";
 
@@ -47,7 +48,7 @@ export const initialPoolingContract: PoolingContract = {
   minContribution: 0,
   maxContribution: 0,
   isPledgesEnabled: false,
-  pledgesEndDate: new Date().toDateString(),
+  pledgesEndDate: moment(new Date()).add(1,'days').format("YYYY-MM-DD"),
   saleAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   tokenAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   transactionFee: 0,

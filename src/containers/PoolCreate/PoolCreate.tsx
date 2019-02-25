@@ -13,7 +13,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Allocations from "./components/Allocations";
 import isEthereumAddress from "is-ethereum-address";
 import {WithPoolingContext, withPoolingContext} from "../../context/PoolingContext";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import {User} from "../../types/account";
 import AddedUsers from "./components/AddedUsers";
 import {Contact} from "../../types/contacts";
@@ -47,6 +47,7 @@ const styles = (theme: Theme) =>
   });
 
 export type PoolCreateHandleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+export type PoolCreateHandleDateChange = (fieldName: keyof PoolingContract) => (date:Moment) => void;
 
 interface OwnProps {
   ethAddresses: EthAddress[],
@@ -235,6 +236,7 @@ class PoolCreate extends React.Component<Props, State> {
             isPledgesEnabled={isPledgesEnabled}
             pledgesEndDate={pledgesEndDate}
             handleChange={this.handleChange}
+            handleDateChange={this.handleDateChange}
           />
           <Allocations
             loading={loading || isSubmitting}
@@ -473,6 +475,10 @@ class PoolCreate extends React.Component<Props, State> {
     const {whitelistedUsers: users} = poolingContract;
     users.findIndex(user => user.userId === contact.userId) === -1 && users.push(contact);
     this.setState({poolingContract: {...poolingContract, whitelistedUsers: [...users]}});
+  };
+  handleDateChange = (fieldName: keyof PoolingContract) => (date:Moment) => {
+    // console.log(date.format("YYYY-MM-DD"));
+    this.setState({poolingContract: {...this.state.poolingContract,[fieldName]: date.format("YYYY-MM-DD") }});
   };
 
   handleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, checked?: boolean) => {
