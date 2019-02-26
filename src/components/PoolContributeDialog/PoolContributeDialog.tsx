@@ -120,7 +120,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
               required
               fullWidth
               label="Contribute Amount"
-              value={amount || 0}
+              value={amount || ""}
               onChange={this.handleChange("amount")}
               margin="normal"
               InputLabelProps={{shrink: true}}
@@ -137,7 +137,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
             <div className={classes.buttonSpacer} />
             <Button
               variant="outlined"
-              disabled={amount === undefined || amount < 1 || isSubmitting}
+              disabled={amount === undefined || amount === 0 || isSubmitting}
               className={classes.button} color="secondary" size="small" onClick={this.handleSubmit}>
               Contribute
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
