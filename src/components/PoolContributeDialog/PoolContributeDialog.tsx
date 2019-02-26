@@ -33,6 +33,7 @@ interface OwnProps {
 
 interface State {
   amount: number | undefined;
+  gwei: number | undefined;
   walletId: number | null;
   isSubmitting: boolean;
 }
@@ -62,6 +63,7 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext,
 class PoolContributeDialog extends React.Component<Props, State> {
   readonly state: State = {
     amount: undefined,
+    gwei: 2,
     walletId: null,
     isSubmitting: false,
   };
@@ -69,7 +71,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
   public render() {
     const {pool, open, classes, ethAddresses, wanAddresses} = this.props;
     const {blockchain} = pool || initialPoolingContract;
-    const {amount, isSubmitting, walletId} = this.state;
+    const {amount, isSubmitting, walletId,gwei} = this.state;
     const wallets = blockchain === "ETH" ? ethAddresses.map(address => (
       {
         id: address.id,
@@ -129,6 +131,20 @@ class PoolContributeDialog extends React.Component<Props, State> {
               InputProps={{endAdornment: <Typography>{blockchain}</Typography>}}
               helperText={`You are allowed to contribute between ${pool.minContribution} and ${pool.maxContribution} ${pool.blockchain}`}
             />
+            {blockchain === "ETH" &&
+            <TextField
+              disabled={isSubmitting}
+              required
+              fullWidth
+              label="Gas Limit"
+              value={gwei || ""}
+              onChange={this.handleChange("gwei")}
+              margin="normal"
+              InputLabelProps={{shrink: true}}
+              placeholder="5"
+              inputProps={{type: "number"}}
+              InputProps={{endAdornment: <Typography>GWEI</Typography>}}
+            />}
           </DialogContent>
           <DialogActions>
             <Button disabled={isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.handleClose}>
@@ -159,13 +175,13 @@ class PoolContributeDialog extends React.Component<Props, State> {
         snackBarPush
       }
     } = this.props;
-    const {amount,walletId} = this.state;
+    const {amount,walletId,gwei} = this.state;
     this.setState({isSubmitting: true});
     if (pool !== null && amount !== undefined) {
       depositToPoolingContract(
         pool.id,
         pool.blockchain === "WAN" ? wanAddresses[walletId||0].publicAddress : ethAddresses[walletId||0].address,
-        amount,0).then(res => {
+        amount,pool.blockchain === "ETH"?gwei||0:0).then(res => {
         snackBarPush({key: new Date().toISOString(), message: !res.success?res.message:"Deposit successful", type: !res.success?"error":"success"});
         this.setState({isSubmitting: false});
         this.handleClose();
