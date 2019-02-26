@@ -38,7 +38,6 @@ const styles = (theme: Theme) =>
     },
     deployButton: {
       marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
     },
     fab: {
       marginLeft: theme.spacing.unit,
@@ -66,7 +65,7 @@ const styles = (theme: Theme) =>
   });
 
 export type PoolCreateHandleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-export type PoolCreateHandleDateChange = (fieldName: keyof PoolingContract) => (date:Moment) => void;
+export type PoolCreateHandleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => void;
 
 interface OwnProps {
   ethAddresses: EthAddress[],
@@ -215,13 +214,14 @@ class PoolCreate extends React.Component<Props, State> {
       poolingContract: {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
         minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus,
-        totalTokensRemaining,balance,
-        tokenSymbol,isBusy
+        totalTokensRemaining, balance,
+        tokenSymbol, isBusy
       },
       validation: {
         isNameValid, isTokenAddressValid, isSaleAddressValid
       }
     } = this.state;
+    console.log(this.state.poolingContract);
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
     return (
@@ -273,144 +273,109 @@ class PoolCreate extends React.Component<Props, State> {
           />
           <AddedUsers status={status} users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
           <Grid container item className={classes.buttonGrid} alignItems="center">
-            <div style={{flex:1}}>
+            <Grid item md={12} lg={6} style={{marginBottom: 16}}>
               <Button
+                size="small"
                 disabled={Boolean(id) || !canSubmit}
-                size="large"
                 variant="contained"
                 color="primary"
                 className={classes.progressFirst}
                 onClick={this.submitCreatePool}
               >Create</Button>
               <Button
+                size="small"
                 color="primary"
                 disabled={!Boolean(id) || status > 0 || !canSubmit}
-                size="large"
                 variant="contained"
-                style={!Boolean(id)?{backgroundColor: "white"}:{}}
+                style={!Boolean(id) ? {backgroundColor: "white"} : {}}
                 className={classes.progressMiddle}
                 onClick={this.deployPool}
               >Deploy</Button>
               <Button
+                size="small"
                 disabled={true}
-                size="large"
                 variant="contained"
                 color="primary"
-                style={status > 0?{}:{backgroundColor: "white"}}
+                style={status > 0 ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
               >Pledges</Button>
               <Button
+                size="small"
                 disabled={!id || status !== 1 || !canSubmit}
                 color="primary"
-                size="large"
                 variant="contained"
-                style={(status > 0 && status !== 5)?{}:{backgroundColor: "white"}}
+                style={(status > 0 && status !== 5) ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
                 onClick={this.lockPool}
               >Lock</Button>
               <Button
+                size="small"
                 disabled={(status !== 1 && status !== 2) || !canSubmit || balance === 0}
-                size="large"
                 variant="contained"
                 color="primary"
-                style={((status > 0 && status !== 5 && balance > 0)|| status === 3 || status === 10)?{}:{backgroundColor: "white"}}
+                style={((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
                 onClick={this.buyTokens}
               >Send Funds</Button>
               <Button
-                disabled={status !== 3 || !canSubmit}
-                size="large"
+                size="small"
+                disabled={status !== 4 || !canSubmit}
                 variant="contained"
                 color="primary"
-                style={(status === 3 || status === 10)?{}:{backgroundColor: "white"}}
+                style={(status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
                 className={classes.progressLast}
                 onClick={this.distributeTokens}
-              >Distribute Tokens</Button>
-            </div>
+              >Distribute</Button>
+            </Grid>
+            <Grid item md={12} lg={6} container justify="flex-end" style={{marginBottom: 16}} alignItems="center">
+              {totalTokensRemaining > 0 && <div className={classes.deployButton}><Typography variant="subtitle1">{totalTokensRemaining} {tokenSymbol}</Typography></div>}
+              {id && status === 2 && totalTokensRemaining > 0 &&
+              <Button
+                className={classes.deployButton}
+                disabled={!canSubmit}
+                variant="contained"
+                size="small"
+                color="primary"
+                onClick={this.confirmTokens}
+              >
+                Confirm Tokens
+                {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+              </Button>
+              }
 
-            {id && status !== 10 &&
-            <Button
-              disabled={!canSubmit}
-              variant="contained"
-              size="large"
-              color="primary"
-              type="submit"
-              onClick={this.submitCreatePool}
-            >
-              {id ? "UPDATE" : "CREATE"} POOL
-              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
-            </Button>}
-            {/*{id && status < 1 && <Button*/}
-              {/*className={classes.deployButton}*/}
-              {/*disabled={!canSubmit}*/}
-              {/*variant="contained"*/}
-              {/*size="large"*/}
-              {/*color="primary"*/}
-              {/*onClick={this.deployPool}*/}
-            {/*>*/}
-              {/*Deploy*/}
-            {/*</Button>}*/}
-            {/*{id && (status === 1 || status === 2) && totalTokensRemaining === 0 &&*/}
-            {/*<Button*/}
-              {/*className={classes.deployButton}*/}
-              {/*disabled={!canSubmit}*/}
-              {/*variant="contained"*/}
-              {/*size="large"*/}
-              {/*color="primary"*/}
-              {/*onClick={this.buyTokens}*/}
-            {/*>*/}
-              {/*Buy Tokens*/}
-              {/*{isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}*/}
-            {/*</Button>*/}
-            {/*}*/}
-
-            {totalTokensRemaining > 0 && <div className={classes.deployButton}><Typography variant="subtitle1">{totalTokensRemaining} {tokenSymbol}</Typography> </div>}
-            {id && status === 2 && totalTokensRemaining > 0 &&
-            <Button
-              className={classes.deployButton}
-              disabled={!canSubmit}
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={this.confirmTokens}
-            >
-              Confirm Tokens
-              {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
-            </Button>
-            }
-            {/*{status === 3 && <Button*/}
-              {/*className={classes.deployButton}*/}
-              {/*disabled={!canSubmit}*/}
-              {/*variant="contained"*/}
-              {/*size="large"*/}
-              {/*color="primary"*/}
-              {/*type="submit"*/}
-              {/*onClick={this.distributeTokens}*/}
-            {/*>*/}
-              {/*Distribute*/}
-              {/*{isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}*/}
-            {/*</Button>}*/}
-
-
-            {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
-              <DeleteIcon />
-            </Fab>}
-            {id && status !== 0 && status !== 2 && status !== 10 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={!canSubmit || loading || isSubmitting}>
-              <LockIcon />
-            </Fab>}
-            {id && status === 2 && totalTokensRemaining === 0 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={!canSubmit || loading || isSubmitting}>
-              <LockOpenIcon />
-            </Fab>}
-            <Button
-              className={classes.deployButton}
-              disabled={!canSubmit}
-              variant="outlined"
-              size="large"
-              color="secondary"
-              onClick={this.cancelUpdate}
-            >
-              Cancel
-            </Button>
+              {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
+                <DeleteIcon />
+              </Fab>}
+              {id && status === 1 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.lockPool} disabled={!canSubmit || loading || isSubmitting}>
+                <LockIcon />
+              </Fab>}
+              {id && status === 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={!canSubmit || loading || isSubmitting}>
+                <LockOpenIcon />
+              </Fab>}
+              {id && status !== 10 &&
+              <Button
+                className={classes.deployButton}
+                size="small"
+                disabled={!canSubmit}
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={this.submitCreatePool}
+              >
+                {id ? "UPDATE" : "CREATE"} POOL
+                {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
+              </Button>}
+              <Button
+                className={classes.deployButton}
+                disabled={!canSubmit}
+                variant="outlined"
+                size="small"
+                color="secondary"
+                onClick={this.cancelUpdate}
+              >
+                Cancel
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </React.Fragment>
@@ -547,8 +512,8 @@ class PoolCreate extends React.Component<Props, State> {
     users.findIndex(user => user.userId === contact.userId) === -1 && users.push(contact);
     this.setState({poolingContract: {...poolingContract, whitelistedUsers: [...users]}});
   };
-  handleDateChange = (fieldName: keyof PoolingContract) => (date:Moment) => {
-    this.setState({poolingContract: {...this.state.poolingContract,[fieldName]: date.format("YYYY-MM-DD") }});
+  handleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => {
+    this.setState({poolingContract: {...this.state.poolingContract, [fieldName]: date.format("YYYY-MM-DD")}});
   };
 
   handleChange = (fieldName: keyof PoolingContract) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, checked?: boolean) => {
