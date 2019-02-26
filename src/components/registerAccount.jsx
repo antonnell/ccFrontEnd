@@ -25,7 +25,6 @@ class RegisterAccount extends Component {
   // </FormControl>
   render() {
     const {confirmEmail} = this.props;
-    console.log(confirmEmail);
     return (
       <Grid
         container

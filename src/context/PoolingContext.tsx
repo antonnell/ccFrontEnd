@@ -102,15 +102,12 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(tokenAddress);
     },
     setPoolLocked: (poolId, isLocked) => {
-      console.log(poolId);
-      console.log(isLocked);
       const {appContext: {callApi}} = this.props;
       const url = "pooling/setPoolLocked";
       const method = "POST";
       return callApi(url, method, {
         poolId, isLocked
       }).then(res => {
-        console.log(res);
         return res.success;
       });
     },
@@ -129,7 +126,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {
         poolId,
       }).then(res => {
-        console.log(res);
         return {
           success: res.success,
           message: res.success ? "" : res.errorMsg
@@ -143,7 +139,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {
         poolId,
       }).then(res => {
-        console.log(res);
         return {
           success: res.success,
           message: res.success ? "" : res.errorMsg
@@ -161,7 +156,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         poolId,
         count: 0,
       }).then(res => {
-        console.log(res);
         return res.success;
       });
     },
@@ -250,8 +244,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
             await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
               getManagedFundingPoolContributions(pool.id).then(res => {
                 getManagedFundingPoolPendingTransactions(pool.id);
-                // console.log(fetchedPool);
-                // console.log(pool);
                 if (isFundingPool(fetchedPool)) {
                   fetchedPool.whitelistedUsers = res;
                   availPools.push({...pool, ...fetchedPool});
@@ -289,8 +281,6 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
         //     await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
         //       getManagedFundingPoolContributions(pool.id).then(res => {
         //         getManagedFundingPoolPendingTransactions(pool.id);
-        //         // console.log(fetchedPool);
-        //         // console.log(pool);
         //         if (isFundingPool(fetchedPool)) {
         //           fetchedPool.whitelistedUsers = res;
         //           availPools.push({...pool, ...fetchedPool});

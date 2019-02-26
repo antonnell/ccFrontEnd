@@ -56,7 +56,6 @@ import AppDialog from "./containers/AppDialog/AppDialog";
 import PoolBrowse from "./containers/PoolBrowse/index";
 import PoolDetails from "./containers/PoolDetails/PoolDetails";
 import AppSnackBar from "./containers/AppSnackBar/AppSnackBar";
-import { helperRenderConsoleText } from "./helpers/helpers";
 import VerifyAccount from "./containers/VerifyAccount/VerifyAccount";
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
 import MomentUtils from '@date-io/moment';
@@ -264,7 +263,6 @@ class App extends Component {
   }
 
   componentWillMount() {
-    // console.log(...helperRenderConsoleText('componentWillMount App', 'lightBlue'));
     ReactGA.initialize("UA-106832873-2", { cookieDomain: "auto" });
 
     var user = null;
@@ -385,7 +383,6 @@ class App extends Component {
     this.locationHashChanged();
 
     // const loader = document.getElementById("loader");
-    // console.log(loader);
     // document.body.removeChild(loader);
 
     emitter.on("getIp", this.getIpReturned);
@@ -623,8 +620,6 @@ class App extends Component {
       return this.setState({ error: error.toString() });
     }
     data = null;
-    // console.log(error);
-    // console.log(data);
     // if (data.success) {
     //   this.setState({ availablePools: data.etherPools });
     // } else if (data.errorMsg) {
@@ -965,7 +960,6 @@ class App extends Component {
   }
 
   locationHashChanged() {
-    console.log(...helperRenderConsoleText("locationHashChanged App", "lightsalmon"));
     const uriParameters = {};
     var currentScreen = "";
     var paramsIndex = window.location.hash.indexOf("?");
@@ -1175,7 +1169,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(...helperRenderConsoleText("Render App", "lightGreen"));
     let background = "#fff";
     let backgroundImage = null;
     if (this.state.currentTheme === "dark") {

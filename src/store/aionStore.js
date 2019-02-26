@@ -86,7 +86,6 @@ class Store {
       address: payload.content.address
     };
 
-    console.log(postJson);
 
     this.callApi(url, 'POST', postJson, payload);
   };
@@ -114,7 +113,6 @@ class Store {
       postJson.contactUsername = payload.content.contactUserName;
     }
 
-    console.log(postJson);
     this.callApi(url, 'POST', postJson, payload);
   };
 

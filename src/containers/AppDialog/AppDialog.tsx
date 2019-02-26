@@ -26,7 +26,6 @@ interface Props extends OwnProps, WithDialogContext, WithStyles<typeof styles> {
 class AppDialog extends React.Component<Props> {
 
   public render() {
-    // console.log(...helperRenderConsoleText('Render AppDialog', 'lightGreen'));
     const {
       classes, dialogContext: {
         title,

@@ -59,7 +59,6 @@ class AppSnackBar extends React.Component<Props, State> {
     const { open, messageInfo } = this.state;
     const { classes } = this.props;
     const { key, message, type } = messageInfo || { key: '', message: '', type: 'success' };
-    // console.log(...helperRenderConsoleText('Render AppSnackBar', 'lightGreen'));
 
     return (
       <div>

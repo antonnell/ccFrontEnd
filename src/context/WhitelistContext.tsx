@@ -44,7 +44,6 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
       const url = `whitelists/getUserSavedWhitelistDetails/${whitelistId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
-        console.log(res);
         return (res as GetUserSavedWhitelistDetailsResponse).whitelist;
       });
     },

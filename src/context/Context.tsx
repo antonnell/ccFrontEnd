@@ -15,7 +15,6 @@ type Props = OwnProps;
 
 class Context extends React.Component<Props> {
   public render() {
-    // console.log(...helperRenderConsoleText('Render Context', 'lightGreen'));
     const {children} = this.props;
     return (
       <AppContext>

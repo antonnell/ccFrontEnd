@@ -224,7 +224,6 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
-    console.log(status);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -422,7 +421,6 @@ class PoolCreate extends React.Component<Props, State> {
     const {poolingContext: {distributeAll}, id} = this.props;
     this.setState({isSubmitting: true});
     distributeAll(id || 0).then(res => {
-      console.log(res);
       const {snackBarContext: {snackBarPush}} = this.props;
       if (res === true) {
         snackBarPush({key: new Date().toISOString(), message: "Tokens Distributed", type: "success"});
@@ -550,7 +548,6 @@ class PoolCreate extends React.Component<Props, State> {
     this.setState({poolingContract: {...poolingContract, whitelistedUsers: [...users]}});
   };
   handleDateChange = (fieldName: keyof PoolingContract) => (date:Moment) => {
-    // console.log(date.format("YYYY-MM-DD"));
     this.setState({poolingContract: {...this.state.poolingContract,[fieldName]: date.format("YYYY-MM-DD") }});
   };
 
@@ -572,8 +569,7 @@ class PoolCreate extends React.Component<Props, State> {
         break;
       }
       case "existingWhitelistId": {
-        const {whitelistContext: {whitelists, getUserSavedWhitelistDetails}} = this.props;
-        console.log(whitelists);
+        const {whitelistContext: {getUserSavedWhitelistDetails}} = this.props;
         value = e.target.value;
         if (poolingContract.existingWhitelistId !== null) {
           const existingWhitelistId = poolingContract.existingWhitelistId;
@@ -610,7 +606,6 @@ class PoolCreate extends React.Component<Props, State> {
         value = checked;
         break;
       case "isWhitelistEnabled":
-        console.log(checked);
         if (!checked) {
           const {whitelistContext: {getUserSavedWhitelistDetails}} = this.props;
           const existingWhitelistId = poolingContract.existingWhitelistId;
@@ -661,7 +656,6 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.props;
     const {poolingContract, originalPoolingContractUsers} = this.state;
     event.preventDefault();
-    console.log("SubmitCreatePool...");
     this.setState({isSubmitting: true});
     if (id) {
       // update users - adding new ones
@@ -673,8 +667,6 @@ class PoolCreate extends React.Component<Props, State> {
       originalPoolingContractUsers.forEach(oUser => {
         poolingContract.whitelistedUsers.findIndex(user => user.userId === oUser.userId) === -1 && removeUsers.push(oUser);
       });
-      console.log("addUsers", addUsers);
-      console.log("removeUsers", removeUsers);
       addUsersToPoolWhitelist(id || 0, addUsers.map(user => ({userId: user.userId, allocation: 0})))
       .then(() => removeUsersFromPoolWhitelist(id || 0, removeUsers.map(user => user.userId))
       .then(() => updatePoolingContract(id, poolingContract).then(res => {

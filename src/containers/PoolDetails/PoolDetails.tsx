@@ -97,10 +97,6 @@ class PoolDetails extends React.Component<Props, State> {
     } = this.state;
     const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
     const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? availablePools[poolId] : null;
-    console.log(pool);
-    if (pool !== null) {
-      console.log(moment(pool.pledgesEndDate).format("YYYY-MM-DD"));
-    }
     const groups: PoolDetailsGroups[] = [];
     let contribution = 0;
     let pledged = 0;

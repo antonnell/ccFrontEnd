@@ -12,7 +12,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import EnhancedTableHead from "../../../../components/EnhancedTableHead";
 import {User} from "../../../../types/account";
 import {withWhitelistContext, WithWhitelistContext} from "../../../../context/WhitelistContext";
-import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {Whitelist} from "../../../../types/whitelist";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
@@ -98,7 +97,6 @@ class WhiteLists extends React.Component<Props, State> {
   }
 
   public render() {
-    console.log(...helperRenderConsoleText('Render Whitelists', 'lightGreen'));
     const {classes,whitelistContext: {whitelists}} = this.props;
     const {order, orderBy, page, rowsPerPage,loading} = this.state;
     const emptyRows =

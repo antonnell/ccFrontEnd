@@ -10,7 +10,6 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import EnhancedTableHead from "./EnhancedTableHead";
-import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
 import {User} from "../../../../types/account";
 import {FundingPool, PoolingContractStatus} from "../../../../types/pooling";
@@ -97,7 +96,6 @@ class Pools extends React.Component<Props, State> {
   }
 
   public render() {
-    console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
     const {classes, poolingContext: {managedPools,managedPoolsLoading}} = this.props;
     const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =

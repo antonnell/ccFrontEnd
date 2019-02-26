@@ -152,13 +152,11 @@ class AddUsers extends React.Component<Props, State> {
   }
 
   getSuggestionValue = (suggestion: Contact) => {
-    console.log(suggestion);
     this.setState({selectedUser: suggestion});
     return suggestion.userName;
   };
 
   handleChange = (event: any, {newValue}: { newValue: any }) => {
-    console.log(newValue);
     this.setState({
       userSearch: newValue,
     });

@@ -26,7 +26,6 @@ class AppContext extends React.Component<{}, AppContextInterface> {
     callApi: (url, method, postData) => {
       const {apiUrl} = config;
       //get X-curve-OTP from sessionStorage
-      // console.log(sessionStorage);
       const userString = sessionStorage.getItem('cc_user') || "{}";
       const user: User = JSON.parse(userString);
       const authOTP = user.authOTP;
@@ -87,7 +86,6 @@ class AppContext extends React.Component<{}, AppContextInterface> {
   };
 
   public render() {
-    // console.log(...helperRenderConsoleText('Render AppContext', 'lightGreen'));
     const {children} = this.props;
     return (
         <AppContextProvider value={this.state}>
