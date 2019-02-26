@@ -32,7 +32,7 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
       const method = "GET";
       return callApi(url, method, {}).then(res => {
         const response = res as GetUserSavedWhitelistsResponse;
-        if (response.whitelists) {
+        if (response.whitelists !== undefined) {
           const whitelists:Whitelist[] = response.whitelists.map(wl=>({id:wl.id,name:wl.name|| "",users:[],userCount: wl.userCount}));
           this.setState({whitelists});
         }

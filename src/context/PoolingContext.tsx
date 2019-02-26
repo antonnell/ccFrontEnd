@@ -281,7 +281,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
         // const availPools: FundingPool[] = [];
-        this.setState({availablePools: response.fundingPools, availablePoolsLoading: false});
+        this.setState({availablePools: response.fundingPools !== undefined?response.fundingPools:[], availablePoolsLoading: false});
         // if (response && response.success) {
         //   let count = response.fundingPools.length;
         //   count === 0 && this.setState({availablePoolsLoading: false});

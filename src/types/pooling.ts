@@ -20,6 +20,7 @@ export interface PoolingTransaction {
 }
 
 export interface PoolingContract {
+  balance: number;
   blockchain: PoolingContractBlockChain;
   ownerAddress: EthAddress | WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
   name: string;                                 // Easy reference display name for the user to assign to this pooling contract
@@ -43,6 +44,7 @@ export interface PoolingContract {
 }
 
 export const initialPoolingContract: PoolingContract = {
+  balance: 0,
   blockchain: "ETH",
   ownerAddress: null,
   name: "",
