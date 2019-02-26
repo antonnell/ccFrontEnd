@@ -89,15 +89,14 @@ class PoolDetails extends React.Component<Props, State> {
   public render() {
     const {
       id, classes, ethAddresses, wanAddresses, poolingContext: {
-        availablePools, availablePoolsLoading,
-        managedPools
+        availablePools, availablePoolsLoading
       }
     } = this.props;
     const {
       openPledgeDialog, openContributeDialog
     } = this.state;
     const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
-    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? managedPools[poolId]?managedPools[poolId]:availablePools[poolId] : null;
+    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? availablePools[poolId] : null;
     console.log(pool);
     if (pool !== null) {
       console.log(moment(pool.pledgesEndDate).format("YYYY-MM-DD"));
