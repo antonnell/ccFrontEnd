@@ -214,7 +214,7 @@ class PoolCreate extends React.Component<Props, State> {
       poolingContract: {
         saleAddress, tokenAddress, transactionFee, blockchain, ownerAddress, name, isPledgesEnabled, pledgesEndDate,
         minContribution, maxContribution, isWhitelistEnabled, existingWhitelistId, whitelistedUsers, status: poolStatus,
-        totalTokensRemaining, balance,
+        totalTokensRemaining, balance, totalTokensReceived,
         tokenSymbol, isBusy
       },
       validation: {
@@ -299,15 +299,6 @@ class PoolCreate extends React.Component<Props, State> {
                 style={status > 0 ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
               >Pledges</Button>
-              {/*<Button*/}
-                {/*size="small"*/}
-                {/*disabled={!id || status !== 1 || !canSubmit}*/}
-                {/*color="primary"*/}
-                {/*variant="contained"*/}
-                {/*style={(status > 0 && status !== 5) ? {} : {backgroundColor: "white"}}*/}
-                {/*className={classes.progressMiddle}*/}
-                {/*onClick={this.lockPool}*/}
-              {/*>Lock</Button>*/}
               <Button
                 size="small"
                 disabled={(status !== 1 && status !== 2) || !canSubmit || balance === 0}
@@ -319,6 +310,15 @@ class PoolCreate extends React.Component<Props, State> {
               >Send Funds</Button>
               <Button
                 size="small"
+                disabled={!id || status !== 3 || !canSubmit}
+                color="primary"
+                variant="contained"
+                style={(status === 3 || status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
+                className={classes.progressMiddle}
+                onClick={this.confirmTokens}
+              >Confirm</Button>
+              <Button
+                size="small"
                 disabled={status !== 4 || !canSubmit}
                 variant="contained"
                 color="primary"
@@ -328,20 +328,19 @@ class PoolCreate extends React.Component<Props, State> {
               >Distribute</Button>
             </Grid>
             <Grid item md={12} lg={6} container justify="flex-end" style={{marginBottom: 16}} alignItems="center">
-              {totalTokensRemaining > 0 && <div className={classes.deployButton}><Typography variant="subtitle1">{totalTokensRemaining} {tokenSymbol}</Typography></div>}
-              {id && status === 2 && totalTokensRemaining > 0 &&
-              <Button
-                className={classes.deployButton}
-                disabled={!canSubmit}
-                variant="contained"
-                size="small"
-                color="primary"
-                onClick={this.confirmTokens}
-              >
-                Confirm Tokens
-                {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
-              </Button>
-              }
+              {/*{id && status === 2 && totalTokensRemaining > 0 &&*/}
+              {/*<Button*/}
+                {/*className={classes.deployButton}*/}
+                {/*disabled={!canSubmit}*/}
+                {/*variant="contained"*/}
+                {/*size="small"*/}
+                {/*color="primary"*/}
+                {/*onClick={this.confirmTokens}*/}
+              {/*>*/}
+                {/*Confirm Tokens*/}
+                {/*{isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}*/}
+              {/*</Button>*/}
+              {/*}*/}
 
               {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
                 <DeleteIcon />
@@ -376,6 +375,18 @@ class PoolCreate extends React.Component<Props, State> {
                 Cancel
               </Button>
             </Grid>
+            {totalTokensRemaining > 0 &&
+            <Grid item xs={6}>
+              <Typography variant="h2">Tokens Remaining</Typography>
+              <Typography variant="subtitle1" style={{marginTop: 8}}>{totalTokensRemaining} {tokenSymbol}</Typography>
+            </Grid>
+            }
+            {totalTokensReceived > 0 &&
+            <Grid item xs={6}>
+              <Typography variant="h2">Tokens Received:</Typography>
+              <Typography variant="subtitle1" style={{marginTop: 8}}>{totalTokensReceived} {tokenSymbol}</Typography>
+            </Grid>
+            }
           </Grid>
         </Grid>
       </React.Fragment>
