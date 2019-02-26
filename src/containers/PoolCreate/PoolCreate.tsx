@@ -221,7 +221,6 @@ class PoolCreate extends React.Component<Props, State> {
         isNameValid, isTokenAddressValid, isSaleAddressValid
       }
     } = this.state;
-    console.log(this.state.poolingContract);
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
     return (

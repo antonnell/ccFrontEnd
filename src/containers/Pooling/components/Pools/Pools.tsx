@@ -121,7 +121,6 @@ class Pools extends React.Component<Props, State> {
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
-                  console.log(n);
                   let status = PoolingContractStatus[n.status];
                   if (n.pendingTransactions && n.pendingTransactions.length) {
                     if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1) {
