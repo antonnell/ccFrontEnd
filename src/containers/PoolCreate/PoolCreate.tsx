@@ -299,15 +299,15 @@ class PoolCreate extends React.Component<Props, State> {
                 style={status > 0 ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
               >Pledges</Button>
-              <Button
-                size="small"
-                disabled={!id || status !== 1 || !canSubmit}
-                color="primary"
-                variant="contained"
-                style={(status > 0 && status !== 5) ? {} : {backgroundColor: "white"}}
-                className={classes.progressMiddle}
-                onClick={this.lockPool}
-              >Lock</Button>
+              {/*<Button*/}
+                {/*size="small"*/}
+                {/*disabled={!id || status !== 1 || !canSubmit}*/}
+                {/*color="primary"*/}
+                {/*variant="contained"*/}
+                {/*style={(status > 0 && status !== 5) ? {} : {backgroundColor: "white"}}*/}
+                {/*className={classes.progressMiddle}*/}
+                {/*onClick={this.lockPool}*/}
+              {/*>Lock</Button>*/}
               <Button
                 size="small"
                 disabled={(status !== 1 && status !== 2) || !canSubmit || balance === 0}
