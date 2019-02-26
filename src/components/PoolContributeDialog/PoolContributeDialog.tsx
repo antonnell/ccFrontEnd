@@ -203,6 +203,9 @@ class PoolContributeDialog extends React.Component<Props, State> {
       case "amount":
         this.setState({amount: event.currentTarget.value});
         break;
+      case "gwei":
+        this.setState({gwei: event.currentTarget.value});
+        break;
     }
   }
 
