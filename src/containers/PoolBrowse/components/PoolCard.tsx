@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import {colors} from "../../../theme";
 import Button from "@material-ui/core/Button";
 import {FundingPool, PoolingContractStatus} from "../../../types/pooling";
+import {User} from "../../../types/account";
 
 interface OwnProps {
   pool: FundingPool;
@@ -15,6 +16,7 @@ interface OwnProps {
   onContributeClick: () => void;
   managedPool?: boolean;
   completedPool?: boolean;
+  user: User
 }
 
 const styles = (theme: Theme) =>
@@ -90,14 +92,12 @@ class PoolCard extends React.Component<Props> {
       <React.Fragment>
         <Paper className={classes.paper}>
           <Grid container direction="row">
-            <Grid item xs={6} container direction="column">
+            <Grid item xs={12} container direction="column">
               <Grid container direction="row" alignItems="baseline">
                 <Typography variant="h5">{name}</Typography>
                 <Typography variant="body1" className={classes.tokenText}>{blockchain}</Typography>
               </Grid>
-              <Typography variant="subtitle1" className={classes.authorText}><b>{owner}</b></Typography>
-            </Grid>
-            <Grid item xs={6} container direction="column">
+              <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}><b>{owner}</b></Typography></div>
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>

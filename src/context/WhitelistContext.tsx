@@ -116,7 +116,7 @@ class WhitelistContext extends React.Component<WithAppContext, WhitelistContextI
       return userIds.length? callApi(url, method, {
         poolId,
         userIds: [...userIds]
-      }).then(() => true):false;
+      }).then(() => true):true;
     }
   };
 

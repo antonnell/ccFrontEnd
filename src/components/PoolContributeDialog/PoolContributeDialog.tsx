@@ -36,6 +36,7 @@ interface State {
   gwei: number | undefined;
   walletId: number | null;
   isSubmitting: boolean;
+  validAmount: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -66,12 +67,13 @@ class PoolContributeDialog extends React.Component<Props, State> {
     gwei: 2,
     walletId: null,
     isSubmitting: false,
+    validAmount: false
   };
 
   public render() {
     const {pool, open, classes, ethAddresses, wanAddresses} = this.props;
     const {blockchain} = pool || initialPoolingContract;
-    const {amount, isSubmitting, walletId,gwei} = this.state;
+    const {amount, isSubmitting, walletId,gwei,validAmount} = this.state;
     const wallets = blockchain === "ETH" ? ethAddresses.map(address => (
       {
         id: address.id,
@@ -153,7 +155,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
             <div className={classes.buttonSpacer} />
             <Button
               variant="outlined"
-              disabled={amount === undefined || amount === 0 || isSubmitting}
+              disabled={amount === undefined || amount === null || amount === 0 || isSubmitting || !validAmount}
               className={classes.button} color="secondary" size="small" onClick={this.handleSubmit}>
               Contribute
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
@@ -196,12 +198,15 @@ class PoolContributeDialog extends React.Component<Props, State> {
   };
 
   handleChange = (field: keyof State) => (event: React.ChangeEvent<any>) => {
+    const {pool} = this.props;
+    const min = pool && pool.minContribution||0;
+    const max = pool && pool.maxContribution||0;
     switch (field) {
       case "walletId":
         this.setState({walletId: event.target.value});
         break;
       case "amount":
-        this.setState({amount: event.currentTarget.value});
+        this.setState({amount: event.currentTarget.value,validAmount: event.currentTarget.value >= min && event.currentTarget.value <= max});
         break;
       case "gwei":
         this.setState({gwei: event.currentTarget.value});

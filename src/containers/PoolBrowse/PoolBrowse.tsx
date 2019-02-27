@@ -65,7 +65,7 @@ class PoolBrowse extends React.Component<Props,State> {
   }
 
   public render() {
-    const {poolingContext: {availablePools,availablePoolsLoading,managedPools,managedPoolsLoading}, classes,ethAddresses,wanAddresses} = this.props;
+    const {poolingContext: {availablePools,availablePoolsLoading,managedPools,managedPoolsLoading}, classes,ethAddresses,wanAddresses,user} = this.props;
     const {selectedPool,openPledgeDialog,openContributeDialog} = this.state;
     return (
       <React.Fragment>
@@ -79,7 +79,7 @@ class PoolBrowse extends React.Component<Props,State> {
                 {!managedPoolsLoading && managedPools.length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
                 {managedPools.filter(pool=>pool.status !== 10).map(pool=>
                   <Grid item xs={6} key={pool.id}>
-                    <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} managedPool/>
+                    <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} managedPool user={user}/>
                   </Grid>
                 )}
               </Grid>
@@ -94,7 +94,7 @@ class PoolBrowse extends React.Component<Props,State> {
               {!availablePoolsLoading && availablePools.length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
               {availablePools.filter(pool=>pool.status !== 10).map(pool=>
                 <Grid item xs={6} key={pool.id}>
-                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)}/>
+                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} user={user}/>
                 </Grid>
               )}
             </Grid>
@@ -111,7 +111,7 @@ class PoolBrowse extends React.Component<Props,State> {
               managedPools.filter(pool=>pool.status === 10).length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
               {managedPools.filter(pool=>pool.status === 10).concat(availablePools.filter(pool=>pool.status === 10)).map(pool=>
                 <Grid item xs={6} key={pool.id}>
-                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} completedPool/>
+                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} completedPool user={user}/>
                 </Grid>
               )}
             </Grid>

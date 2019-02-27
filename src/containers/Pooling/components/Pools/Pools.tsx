@@ -121,6 +121,7 @@ class Pools extends React.Component<Props, State> {
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
+                  // console.log(n);
                   let status = PoolingContractStatus[n.status];
                   if (n.pendingTransactions && n.pendingTransactions.length) {
                     if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1) {
@@ -129,6 +130,14 @@ class Pools extends React.Component<Props, State> {
                       status = "Locking";
                     } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (False)") !== -1) {
                       status = "Unlocking";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "buyTokens") !== -1) {
+                      status = "Sending Funds";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deposit") !== -1) {
+                      status = "Processing Deposit";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setTokensReceived") !== -1) {
+                      status = "Confirming Tokens";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "distributeFunds (0)") !== -1) {
+                      status = "Distributing Tokens";
                     }
                   }
                   return (

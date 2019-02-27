@@ -21,12 +21,13 @@ import AddUsers from "./components/AddUsers";
 import {WithWhitelistContext, withWhitelistContext} from "../../context/WhitelistContext";
 import {DeleteIcon, LockIcon, LockOpenIcon} from "../../theme/icons";
 import Fab from "@material-ui/core/Fab";
-import {WithDialogContext, withDialogContext} from "../../context/DialogContext";
+import {DialogActions, WithDialogContext, withDialogContext} from "../../context/DialogContext";
 import {sharedStyles} from "../../theme/theme";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {withSnackBarContext, WithSnackBarContext} from "../../context/SnackBarContext";
 import CustomList from "./components/CustomList";
 import Typography from "@material-ui/core/Typography";
+import {DialogActionResult} from "../../types/dialog";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -167,43 +168,10 @@ class PoolCreate extends React.Component<Props, State> {
       dialogContext: {
         result,
         action,
-        reset
-      },
-      poolingContext: {
-        deletePoolingContract, setPoolLocked
-      },
-      id
+      }
     } = nextProps;
-    if (result !== "pending" && action === "deletePoolingContract") {
-      reset();
-      if (result === "confirmed") {
-        this.setState({isSubmitting: true});
-        deletePoolingContract(id || 0).then(() => {
-          this.clearState().then(() => {
-            window.location.hash = "pooling";
-          });
-        })
-      }
-    } else if (result !== "pending" && action === "lockPoolingContract") {
-      reset();
-      if (result === "confirmed") {
-        this.setState({isSubmitting: true});
-        setPoolLocked(id || 0, true).then(() => {
-          this.clearState().then(() => {
-            window.location.hash = "pooling";
-          });
-        })
-      }
-    } else if (result !== "pending" && action === "unlockPoolingContract") {
-      reset();
-      if (result === "confirmed") {
-        this.setState({isSubmitting: true});
-        setPoolLocked(id || 0, false).then(() => {
-          this.clearState().then(() => {
-            window.location.hash = "pooling";
-          });
-        })
-      }
+    if (result !== "pending") {
+      this.dialogReturns(action, result);
     }
   }
 
@@ -223,6 +191,7 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
+    console.log(this.state.poolingContract);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -270,7 +239,13 @@ class PoolCreate extends React.Component<Props, State> {
             isWhitelistEnabled={isWhitelistEnabled}
             handleChange={this.handleChange}
           />
-          <AddedUsers status={status} users={whitelistedUsers} removeUserFromWhitelist={this.removeUserFromWhitelist} loading={loading || isSubmitting} />
+          <AddedUsers
+            status={status}
+            totalTokensReceived={totalTokensReceived}
+            users={whitelistedUsers}
+            removeUserFromWhitelist={this.removeUserFromWhitelist}
+            loading={loading || isSubmitting}
+          />
           <Grid container item className={classes.buttonGrid} alignItems="center">
             <Grid item md={12} lg={6} style={{marginBottom: 16}}>
               <Button
@@ -279,14 +254,15 @@ class PoolCreate extends React.Component<Props, State> {
                 variant="contained"
                 color="primary"
                 className={classes.progressFirst}
-                onClick={this.submitCreatePool}
+                style={(!canSubmit) ? {backgroundColor: "white"} : {}}
+                onClick={this.createPool}
               >Create</Button>
               <Button
                 size="small"
                 color="primary"
                 disabled={!Boolean(id) || status > 0 || !canSubmit}
                 variant="contained"
-                style={!Boolean(id) ? {backgroundColor: "white"} : {}}
+                style={(!canSubmit || !Boolean(id)) ? {backgroundColor: "white"} : {}}
                 className={classes.progressMiddle}
                 onClick={this.deployPool}
               >Deploy</Button>
@@ -303,44 +279,30 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={(status !== 1 && status !== 2) || !canSubmit || balance === 0}
                 variant="contained"
                 color="primary"
-                style={((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
+                style={((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
                 onClick={this.buyTokens}
               >Send Funds</Button>
               <Button
                 size="small"
-                disabled={!id || status !== 3 || !canSubmit}
+                disabled={!id || !canSubmit || totalTokensRemaining <= 0 || totalTokensReceived > 0}
                 color="primary"
                 variant="contained"
-                style={(status === 3 || status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
+                style={(status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ? {} : {backgroundColor: "white"}}
                 className={classes.progressMiddle}
                 onClick={this.confirmTokens}
               >Confirm</Button>
               <Button
                 size="small"
-                disabled={status !== 4 || !canSubmit}
+                disabled={!id || !canSubmit || totalTokensReceived <= 0}
                 variant="contained"
                 color="primary"
-                style={(status === 4 || status === 10) ? {} : {backgroundColor: "white"}}
+                style={(status === 4 || status === 10 || totalTokensReceived > 0) ? {} : {backgroundColor: "white"}}
                 className={classes.progressLast}
                 onClick={this.distributeTokens}
               >Distribute</Button>
             </Grid>
             <Grid item md={12} lg={6} container justify="flex-end" style={{marginBottom: 16}} alignItems="center">
-              {/*{id && status === 2 && totalTokensRemaining > 0 &&*/}
-              {/*<Button*/}
-                {/*className={classes.deployButton}*/}
-                {/*disabled={!canSubmit}*/}
-                {/*variant="contained"*/}
-                {/*size="small"*/}
-                {/*color="primary"*/}
-                {/*onClick={this.confirmTokens}*/}
-              {/*>*/}
-                {/*Confirm Tokens*/}
-                {/*{isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}*/}
-              {/*</Button>*/}
-              {/*}*/}
-
               {id && status < 1 && <Fab aria-label="Delete" className={classes.fab} size="small" onClick={this.removePool} disabled={!canSubmit || loading || isSubmitting}>
                 <DeleteIcon />
               </Fab>}
@@ -350,7 +312,7 @@ class PoolCreate extends React.Component<Props, State> {
               {id && status === 2 && <Fab aria-label="Lock" className={classes.fab} size="small" onClick={this.unlockPool} disabled={!canSubmit || loading || isSubmitting}>
                 <LockOpenIcon />
               </Fab>}
-              {id && status !== 10 &&
+              {id && status !== 10 && totalTokensReceived <= 0 &&
               <Button
                 className={classes.deployButton}
                 size="small"
@@ -358,7 +320,7 @@ class PoolCreate extends React.Component<Props, State> {
                 variant="contained"
                 color="primary"
                 type="submit"
-                onClick={this.submitCreatePool}
+                onClick={this.createPool}
               >
                 {id ? "UPDATE" : "CREATE"} POOL
                 {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
@@ -374,6 +336,12 @@ class PoolCreate extends React.Component<Props, State> {
                 Cancel
               </Button>
             </Grid>
+            {balance > 0 &&
+            <Grid item xs={6}>
+              <Typography variant="h2">Balance</Typography>
+              <Typography variant="subtitle1" style={{marginTop: 8}}>{balance} {blockchain}</Typography>
+            </Grid>
+            }
             {totalTokensRemaining > 0 &&
             <Grid item xs={6}>
               <Typography variant="h2">Tokens Remaining</Typography>
@@ -393,18 +361,14 @@ class PoolCreate extends React.Component<Props, State> {
   }
 
   distributeTokens = () => {
-    const {poolingContext: {distributeAll}, id} = this.props;
-    this.setState({isSubmitting: true});
-    distributeAll(id || 0).then(res => {
-      const {snackBarContext: {snackBarPush}} = this.props;
-      if (res === true) {
-        snackBarPush({key: new Date().toISOString(), message: "Tokens Distributed", type: "success"});
-        window.location.hash = "pooling";
-      } else {
-        snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
-        window.location.hash = "pooling";
-      }
-    })
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "distributeTokens");
+  };
+
+  createPool = (event: React.FormEvent) => {
+    event.preventDefault();
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "createPool");
   };
 
   cancelUpdate = () => {
@@ -437,75 +401,18 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   confirmTokens = () => {
-    this.setState({isSubmitting: true});
-    const {
-      id,
-      poolingContext: {
-        confirmTokens
-      },
-      snackBarContext: {
-        snackBarPush
-      }
-    } = this.props;
-    confirmTokens(id || 0).then(res => {
-      this.setState({isSubmitting: false});
-      if (res.success) {
-        snackBarPush({type: "success", message: "Confirming Tokens", key: Date()});
-        this.clearState().then(() => {
-          window.location.hash = "pooling";
-        });
-      } else {
-        snackBarPush({type: "error", message: res.message, key: Date()})
-      }
-    })
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "confirmTokens");
   };
 
   deployPool = () => {
-    this.setState({isSubmitting: true});
-    const {
-      id,
-      poolingContext: {
-        deployPoolingContract
-      },
-      snackBarContext: {
-        snackBarPush
-      }
-    } = this.props;
-    deployPoolingContract(id || 0).then(res => {
-      this.setState({isSubmitting: false});
-      if (res.success) {
-        snackBarPush({type: "success", message: "Pool deploying", key: Date()});
-        this.clearState().then(() => {
-          window.location.hash = "pooling";
-        });
-      } else {
-        snackBarPush({type: "error", message: res.message, key: Date()})
-      }
-    })
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "deployPool");
   };
 
   buyTokens = () => {
-    this.setState({isSubmitting: true});
-    const {
-      id,
-      poolingContext: {
-        sendPoolFunds
-      },
-      snackBarContext: {
-        snackBarPush
-      }
-    } = this.props;
-    sendPoolFunds(id || 0).then(res => {
-      this.setState({isSubmitting: false});
-      if (res.success) {
-        snackBarPush({type: "success", message: "Sending Pool Funds", key: Date()});
-        this.clearState().then(() => {
-          window.location.hash = "pooling";
-        });
-      } else {
-        snackBarPush({type: "error", message: res.message, key: Date()})
-      }
-    })
+    const {dialogContext: {showDialog}} = this.props;
+    showDialog("confirmation", "buyTokens");
   };
 
   removeUserFromWhitelist = (contact: Contact) => {
@@ -522,6 +429,7 @@ class PoolCreate extends React.Component<Props, State> {
     users.findIndex(user => user.userId === contact.userId) === -1 && users.push(contact);
     this.setState({poolingContract: {...poolingContract, whitelistedUsers: [...users]}});
   };
+
   handleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => {
     this.setState({poolingContract: {...this.state.poolingContract, [fieldName]: date.format("YYYY-MM-DD")}});
   };
@@ -575,7 +483,7 @@ class PoolCreate extends React.Component<Props, State> {
       case "maxContribution":
       case "minContribution":
       case "transactionFee":
-        value = Number(e.currentTarget.value);
+        value = e.currentTarget.value === ""?null:Number(e.currentTarget.value);
         break;
       case "isPledgesEnabled":
         value = checked;
@@ -621,53 +529,6 @@ class PoolCreate extends React.Component<Props, State> {
     }
   };
 
-  submitCreatePool = (event: React.FormEvent) => {
-    const {
-      poolingContext: {createPoolingContract, updatePoolingContract}, id,
-      whitelistContext: {
-        addUsersToPoolWhitelist,
-        removeUsersFromPoolWhitelist
-      }
-    } = this.props;
-    const {poolingContract, originalPoolingContractUsers} = this.state;
-    event.preventDefault();
-    this.setState({isSubmitting: true});
-    if (id) {
-      // update users - adding new ones
-      const addUsers: Contact[] = [];
-      const removeUsers: Contact[] = [];
-      poolingContract.whitelistedUsers.forEach(user => {
-        originalPoolingContractUsers.findIndex(oUser => oUser.userId === user.userId) === -1 && addUsers.push(user);
-      });
-      originalPoolingContractUsers.forEach(oUser => {
-        poolingContract.whitelistedUsers.findIndex(user => user.userId === oUser.userId) === -1 && removeUsers.push(oUser);
-      });
-      addUsersToPoolWhitelist(id || 0, addUsers.map(user => ({userId: user.userId, allocation: 0})))
-      .then(() => removeUsersFromPoolWhitelist(id || 0, removeUsers.map(user => user.userId))
-      .then(() => updatePoolingContract(id, poolingContract).then(res => {
-        const {snackBarContext: {snackBarPush}} = this.props;
-        if (res === true) {
-          snackBarPush({key: new Date().toISOString(), message: "Pool Updated", type: "success"});
-          window.location.hash = "pooling";
-        } else {
-          snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
-          window.location.hash = "pooling";
-        }
-      })));
-    } else {
-      const userIds = [];
-      for (const user of poolingContract.whitelistedUsers) {
-        userIds.push(user.userId);
-      }
-      poolingContract.whitelistUserIds = userIds;
-      createPoolingContract(poolingContract).then(res => {
-        if (res.success === true) {
-          window.location.hash = "pooling";
-        }
-      });
-    }
-  };
-
   clearState = async () => {
     return this.setState({
       poolingContract: setOwnerAddress(this.props, initialPoolingContract),
@@ -678,7 +539,153 @@ class PoolCreate extends React.Component<Props, State> {
         isNameValid: false
       }
     })
-  }
+  };
+
+  dialogReturns = (action: DialogActions, result: DialogActionResult) => {
+    const {
+      dialogContext: {
+        reset
+      },
+      poolingContext: {
+        createPoolingContract,
+        deletePoolingContract,
+        deployPoolingContract,
+        setPoolLocked,
+        sendPoolFunds,
+        confirmTokens,
+        distributeAll
+      },
+      id,
+      whitelistContext: {
+        addUsersToPoolWhitelist,
+        removeUsersFromPoolWhitelist
+      },
+      snackBarContext: {
+        snackBarPush
+      }
+    } = this.props;
+    const {poolingContract, originalPoolingContractUsers} = this.state;
+    if (result === "confirmed") {
+      reset();
+      switch (action) {
+        case "deletePoolingContract":
+          this.setState({isSubmitting: true});
+          deletePoolingContract(id || 0).then(() => {
+            this.clearState().then(() => {
+              window.location.hash = "pooling";
+            });
+          });
+          break;
+        case "createPool":
+          this.setState({isSubmitting: true});
+          if (id) {
+            const addUsers: Contact[] = [];
+            const removeUsers: Contact[] = [];
+            poolingContract.whitelistedUsers.forEach(user => {
+              originalPoolingContractUsers.findIndex(oUser => oUser.userId === user.userId) === -1 && addUsers.push(user);
+            });
+            originalPoolingContractUsers.forEach(oUser => {
+              poolingContract.whitelistedUsers.findIndex(user => user.userId === oUser.userId) === -1 && removeUsers.push(oUser);
+            });
+            addUsersToPoolWhitelist(id || 0, addUsers.map(user => ({userId: user.userId, allocation: 0})))
+            .then(() => removeUsersFromPoolWhitelist(id || 0, removeUsers.map(user => user.userId))
+            // .then(() => updatePoolingContract(id, poolingContract)
+            .then(res => {
+              if (res === true) {
+                snackBarPush({key: new Date().toISOString(), message: "Pool Updated", type: "success"});
+                window.location.hash = "pooling";
+              } else {
+                snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
+                window.location.hash = "pooling";
+              }
+            }));
+          } else {
+            const userIds = [];
+            for (const user of poolingContract.whitelistedUsers) {
+              userIds.push(user.userId);
+            }
+            poolingContract.whitelistUserIds = userIds;
+            createPoolingContract(poolingContract).then(res => {
+              if (res.success === true) {
+                window.location.hash = "pooling";
+              }
+            });
+          }
+          break;
+        case "deployPool":
+          this.setState({isSubmitting: true});
+          deployPoolingContract(id || 0).then(res => {
+            this.setState({isSubmitting: false});
+            if (res.success) {
+              snackBarPush({type: "success", message: "Pool deploying", key: Date()});
+              this.clearState().then(() => {
+                window.location.hash = "pooling";
+              });
+            } else {
+              snackBarPush({type: "error", message: res.message, key: Date()})
+            }
+          });
+          break;
+        case "lockPoolingContract":
+          this.setState({isSubmitting: true});
+          setPoolLocked(id || 0, true).then(() => {
+            this.clearState().then(() => {
+              window.location.hash = "pooling";
+            });
+          });
+          break;
+        case "unlockPoolingContract":
+          this.setState({isSubmitting: true});
+          setPoolLocked(id || 0, false).then(() => {
+            this.clearState().then(() => {
+              window.location.hash = "pooling";
+            });
+          });
+          break;
+        case "buyTokens":
+          this.setState({isSubmitting: true});
+          sendPoolFunds(id || 0).then(res => {
+            this.setState({isSubmitting: false});
+            if (res.success) {
+              snackBarPush({type: "success", message: "Sending Pool Funds", key: Date()});
+              this.clearState().then(() => {
+                window.location.hash = "pooling";
+              });
+            } else {
+              snackBarPush({type: "error", message: res.message, key: Date()})
+            }
+          });
+          break;
+        case "confirmTokens":
+          this.setState({isSubmitting: true});
+          confirmTokens(id || 0).then(res => {
+            this.setState({isSubmitting: false});
+            if (res.success) {
+              snackBarPush({type: "success", message: "Confirming Tokens", key: Date()});
+              this.clearState().then(() => {
+                window.location.hash = "pooling";
+              });
+            } else {
+              snackBarPush({type: "error", message: res.message, key: Date()})
+            }
+          });
+          break;
+        case "distributeTokens":
+          this.setState({isSubmitting: true});
+          distributeAll(id || 0).then(res => {
+            const {snackBarContext: {snackBarPush}} = this.props;
+            if (res === true) {
+              snackBarPush({key: new Date().toISOString(), message: "Tokens Distributed", type: "success"});
+              window.location.hash = "pooling";
+            } else {
+              snackBarPush({key: new Date().toISOString(), message: "Something went wrong", type: "error"});
+              window.location.hash = "pooling";
+            }
+          });
+          break;
+      }
+        }
+  };
 }
 
 export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(withSnackBarContext(PoolCreate))))) as React.ComponentClass<OwnProps>;

@@ -12,7 +12,15 @@ export interface PoolingContact extends Contact {
 }
 
 export interface PoolingTransaction {
-  functionCall: "deployPoolingContract" | "setDepositsLocked (True)" | "setDepositsLocked (False)";
+  functionCall:
+    "deployPoolingContract" |
+    "setDepositsLocked (True)" |
+    "setDepositsLocked (False)"|
+    "buyTokens" |
+    "deposit" |
+    "setTokensReceived" |
+    "distributeFunds (0)"
+  ;
   poolName: string;
   timestamp: string;
   transactionId: string;
@@ -25,13 +33,13 @@ export interface PoolingContract {
   ownerAddress: EthAddress | WanAddress | null | undefined;   // An ethereum or wanchain address belonging to the current user to deploy the contract from. This address will become the contract owner
   name: string;                                 // Easy reference display name for the user to assign to this pooling contract
   status?: keyof typeof PoolingContractStatus;
-  minContribution: number;                      // Minimum individual contribution the contract should accept, in Eth
-  maxContribution: number;                      // Maximum individual contribution the contract should accept, in Eth
+  minContribution: number | null;                      // Minimum individual contribution the contract should accept, in Eth
+  maxContribution: number | null;                      // Maximum individual contribution the contract should accept, in Eth
+  transactionFee: number | null;                       // Percentage cut that the owner will take of the total funding raised in this pool
   isPledgesEnabled: boolean;                    // flag to indicate if pledges are enabled for this pooling contract
   pledgesEndDate: string;                       // if pledges are enabled, specifies the date/time at which the pledge stage ends and the deposit stage begins
   saleAddress: string;                          // Eth/Wan address to which the pooling contract will send its funds
   tokenAddress: string;                         // Eth/Wan address of the ERC20/WRC20 token which the users will withdraw from the contract after completion
-  transactionFee: number;                       // Percentage cut that the owner will take of the total funding raised in this pool
   isWhitelistEnabled: boolean;                  // flag to indicate if this pool should use a whitelist
   isBusy: boolean;
   existingWhitelistId: number | null;           // saved whitelist id to create this pool’s whitelist from
@@ -48,13 +56,13 @@ export const initialPoolingContract: PoolingContract = {
   blockchain: "ETH",
   ownerAddress: null,
   name: "",
-  minContribution: 0,
-  maxContribution: 0,
+  minContribution: null,
+  maxContribution: null,
   isPledgesEnabled: false,
   pledgesEndDate: moment(new Date()).add(1,'days').format("YYYY-MM-DD"),
   saleAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   tokenAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
-  transactionFee: 0,
+  transactionFee: null,
   isWhitelistEnabled: false,
   isBusy: false,
   existingWhitelistId: null,
@@ -87,8 +95,6 @@ export interface FundingPool extends PoolingContract {
   contributorCount: number;
   fee: number;
   hardCap: number;
-  maxContribution: number;
-  minContribution: number;
   owner: string;
   softCap: number;
   tokenAddress: string;
@@ -104,7 +110,6 @@ export interface FundingPool extends PoolingContract {
   saleAddress: string;
   totalTokensReceived: number;
   totalTokensRemaining: number;
-  transactionFee: number;
 }
 
 export const initialFundingPool: FundingPool = {
