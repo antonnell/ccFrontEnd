@@ -311,7 +311,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {}).then(res => {
         const {getManagedFundingPoolContributions} = this.state;
         const pool = res && res.fundingPool;
-        if (res.success) {
+        if (res && res.success) {
           return getManagedFundingPoolContributions(poolId).then(res => {
             if (res !== null) {
               pool.whitelistedUsers = res;
