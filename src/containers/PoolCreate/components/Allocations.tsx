@@ -9,9 +9,9 @@ import {PoolCreateHandleChange} from "../PoolCreate";
 
 interface OwnProps {
   status: number;
-  minContribution: number;
-  maxContribution: number;
-  transactionFee: number;
+  minContribution: number | null;
+  maxContribution: number | null;
+  transactionFee: number | null;
   handleChange: PoolCreateHandleChange;
   loading: boolean;
 }
@@ -41,7 +41,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Min Contribution"
-            value={minContribution}
+            value={minContribution === null?"":minContribution}
             onChange={handleChange("minContribution")}
             inputProps={{type: "number"}}
             InputLabelProps={{shrink: true}}
@@ -54,7 +54,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Max Contribution"
-            value={maxContribution}
+            value={maxContribution === null?"":maxContribution}
             onChange={handleChange("maxContribution")}
             margin="normal"
             inputProps={{type: "number"}}
@@ -68,7 +68,7 @@ class Allocations extends React.Component<Props> {
             required
             fullWidth
             label="Transaction Fee"
-            value={transactionFee}
+            value={transactionFee === null?"":transactionFee}
             onChange={handleChange("transactionFee")}
             margin="normal"
             InputLabelProps={{shrink: true}}

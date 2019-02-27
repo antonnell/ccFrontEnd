@@ -42,7 +42,6 @@ class HaveEthAddress extends Component {
 
   renderAddresses() {
     return this.props.ethAddresses.map((address) => {
-      console.log(address)
       return (
         <ListItem key={address.address} button onClick={(event) => { this.props.selectAddress(address); }}>
           <ListItemText primary={address.name} secondary={address.address} />

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, {SuggestionSelectedEventData} from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import Grid from "@material-ui/core/Grid";
@@ -17,8 +17,7 @@ const styles = (theme: Theme) =>
         position: 'relative',
       },
       gridContainer: {
-        display: "flex",
-        flexDirection: "column"
+        marginTop: theme.spacing.unit * 5,
       },
       suggestionsContainerOpen: {
         position: 'absolute',
@@ -46,6 +45,7 @@ interface State {
 interface OwnProps {
   addUserToWhitelist: (contact: Contact) => void;
   loading: boolean;
+  status: number;
 }
 
 
@@ -103,11 +103,10 @@ class AddUsers extends React.Component<Props, State> {
   };
 
   public render() {
-    const {classes,loading} = this.props;
+    const {classes,loading,status} = this.props;
     const {suggestions, userSearch} = this.state;
     return (
         <Grid item xs={12} md={6} className={classes.gridContainer}>
-          <Grid item style={{flex:1}}/>
           <Grid item xs={12} style={{flex:0}}>
             <Typography variant="h2">Add Users</Typography>
           </Grid>
@@ -121,10 +120,10 @@ class AddUsers extends React.Component<Props, State> {
                 onSuggestionSelected={this.handleSuggestionSelected}
                 suggestions={suggestions}
                 inputProps={{
-                  disabled: loading,
+                  disabled: (status === 10 || loading),
                   classes,
                   label: "Search User",
-                  placeholder: 'Clark54',
+                  placeholder: 'Username',
                   value: userSearch,
                   onChange: this.handleChange,
                   InputLabelProps: {
@@ -174,10 +173,11 @@ class AddUsers extends React.Component<Props, State> {
     });
   };
 
-  handleSuggestionSelected = () => {
+  handleSuggestionSelected = ({},value:SuggestionSelectedEventData<Contact>) => {
+    const suggestion = value.suggestion;
     const {addUserToWhitelist} = this.props;
     const {selectedUser} = this.state;
-    selectedUser !== null && addUserToWhitelist(selectedUser);
+    addUserToWhitelist(selectedUser||suggestion);
     this.handleSuggestionsClearRequested();
   };
 }

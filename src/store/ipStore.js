@@ -35,7 +35,6 @@ class Store {
     })
       .then(res => res.json())
       .then(res => {
-        // console.log(res);
         emitter.emit(payload.type, null, res);
       })
       .catch(error => {

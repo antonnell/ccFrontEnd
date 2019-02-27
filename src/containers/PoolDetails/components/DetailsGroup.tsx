@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -51,16 +51,21 @@ class DetailsGroup extends React.Component<Props> {
         <Grid container direction="row">
           {items.map((item, i) =>
             <React.Fragment key={i}>
-              {item.title === "Progress" ?
-                <Grid item xs={item.width} className={classes.progressGrid}>
-                  <CircularProgress size={300} className={classes.progress} variant="static" value={95} />
-                    <Typography variant="h5" style={{position: "absolute"}}>{item.text}</Typography>
-                </Grid>
-                :
-                <Grid item xs={item.width} className={classes.contentGrid}>
-                  <Typography variant="h5">{item.title}</Typography>
-                  <Typography variant="h5" className={classes.itemText}>{item.text}</Typography>
-                </Grid>}
+              {!item.hidden &&
+              <React.Fragment>
+                {item.title === "Progress" ?
+                    <Grid item xs={item.width} className={classes.progressGrid}>
+                      <CircularProgress size={300} className={classes.progress} variant="static" value={95} />
+                      <Typography variant="h5" style={{position: "absolute"}}>{item.text}</Typography>
+                    </Grid>
+                    :
+                    <Grid item xs={item.width} className={classes.contentGrid}>
+                      <Typography variant="h5">{item.title}</Typography>
+                      <Typography variant="h5" className={classes.itemText}>{item.text}</Typography>
+                    </Grid>
+                }
+              </React.Fragment>
+              }
             </React.Fragment>
           )}
         </Grid>

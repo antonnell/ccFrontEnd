@@ -44,10 +44,8 @@ class VerifyAccount extends React.Component<Props, State> {
   }
 
   public render() {
-    const {classes, token, code} = this.props;
+    const {classes} = this.props;
     const {verifying} = this.state;
-    console.log("token", token);
-    console.log("code", code);
     return (
       <React.Fragment>
         <Grid container className={classes.containerGrid} alignItems="center" spacing={40}>

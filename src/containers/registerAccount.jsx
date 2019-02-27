@@ -278,7 +278,6 @@ let RegisterAccount = createReactClass({
   },
 
   registerReturned(error, data) {
-    console.log(error, data);
     if (error) {
       return this.setState({ error: error.toString() });
     }

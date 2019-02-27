@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {DialogActionResult} from "../types/dialog";
 
-type DialogActions = "deleteWhitelist" | "deletePoolingContract" | "lockPoolingContract" | "unlockPoolingContract" | null;
+export type DialogActions = "buyTokens" | "deployPool" | "deleteWhitelist" | "deletePoolingContract" | "lockPoolingContract" | "unlockPoolingContract" | "distributeTokens" | "confirmTokens" | "createPool" | null;
 type DialogType = "confirmation";
 
 interface DialogContextInterface {
@@ -10,8 +10,9 @@ interface DialogContextInterface {
   open: boolean;
   action:DialogActions;
   result: DialogActionResult;
+  details: any;
   type: DialogType;
-  showDialog: (type:DialogType,action:DialogActions,title?:string,body?:string) => void;
+  showDialog: (type:DialogType,action:DialogActions,title?:string,body?:string,details?:any) => void;
   hideDialog: (result:DialogActionResult) => void;
   reset: ()=>void;
 }
@@ -31,7 +32,8 @@ class DialogContext extends React.Component<{}, DialogContextInterface> {
     type: "confirmation",
     action: null,
     result: "pending",
-    showDialog: (type,action,title,body) => {
+    details: null,
+    showDialog: (type,action,title,body,details) => {
       this.setState({
         type,
         action,
@@ -40,7 +42,8 @@ class DialogContext extends React.Component<{}, DialogContextInterface> {
         title: title?title:
             type==="confirmation"?"Are you sure?":"Default Title",
         body: body?body:
-            type==="confirmation"?"Are you sure you want to continue with this action":"Default Body"
+            type==="confirmation"?"Are you sure you want to continue with this action":"Default Body",
+        details
       });
     },
     hideDialog: (result) => {
@@ -53,6 +56,7 @@ class DialogContext extends React.Component<{}, DialogContextInterface> {
       type: "confirmation",
       action: null,
       result: "pending",
+      details: null
     })
   };
 

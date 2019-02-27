@@ -10,7 +10,6 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import EnhancedTableHead from "./EnhancedTableHead";
-import {helperRenderConsoleText} from "../../../../helpers/helpers";
 import {WithPoolingContext, withPoolingContext} from "../../../../context/PoolingContext";
 import {User} from "../../../../types/account";
 import {FundingPool, PoolingContractStatus} from "../../../../types/pooling";
@@ -70,7 +69,6 @@ interface State {
   page: number;
   rowsPerPage: number;
   filtersVisible: boolean;
-  loading: boolean;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
@@ -78,13 +76,12 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext 
 
 class Pools extends React.Component<Props, State> {
   readonly state: State = {
-    order: "asc",
-    orderBy: "name",
+    order: "desc",
+    orderBy: "id",
     selected: [],
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false,
-    loading: false,
   };
 
   componentWillMount(): void {
@@ -94,17 +91,13 @@ class Pools extends React.Component<Props, State> {
         getManagedFundingPools,
       },
     } = this.props;
-    this.setState({loading: true});
-    getManagedFundingPools(user.id).then(()=>{
-      this.setState({loading: false});
-    });
+    getManagedFundingPools(user.id)
 
   }
 
   public render() {
-    console.log(...helperRenderConsoleText('Render Pools', 'lightGreen'));
-    const {classes, poolingContext: {managedPools}} = this.props;
-    const {order, orderBy, page, rowsPerPage,loading} = this.state;
+    const {classes, poolingContext: {managedPools,managedPoolsLoading}} = this.props;
+    const {order, orderBy, page, rowsPerPage} = this.state;
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, managedPools ? managedPools.length : 0 - page * rowsPerPage);
@@ -120,7 +113,7 @@ class Pools extends React.Component<Props, State> {
                 onRequestSort={this.handleRequestSort}
               />
               <TableBody>
-                {loading && <TableRow style={{height: "auto"}}>
+                {managedPoolsLoading && <TableRow style={{height: "auto"}}>
                   <TableCell colSpan={3} style={{padding: 0}}>
                     <LinearProgress />
                   </TableCell>
@@ -128,6 +121,7 @@ class Pools extends React.Component<Props, State> {
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
+                  // console.log(n);
                   let status = PoolingContractStatus[n.status];
                   if (n.pendingTransactions && n.pendingTransactions.length) {
                     if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deployPoolingContract") !== -1) {
@@ -136,10 +130,18 @@ class Pools extends React.Component<Props, State> {
                       status = "Locking";
                     } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setDepositsLocked (False)") !== -1) {
                       status = "Unlocking";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "buyTokens") !== -1) {
+                      status = "Sending Funds";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "deposit") !== -1) {
+                      status = "Processing Deposit";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "setTokensReceived") !== -1) {
+                      status = "Confirming Tokens";
+                    } else if (n.pendingTransactions.findIndex(transaction=>transaction.functionCall === "distributeFunds (0)") !== -1) {
+                      status = "Distributing Tokens";
                     }
                   }
                   return (
-                    <TableRow hover tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.id)}>
+                    <TableRow hover={!n.isBusy} tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.isBusy?null:n.id)} style={{cursor: n.isBusy?" not-allowed":"pointer"}}>
                       <TableCell>
                         <Typography
                           style={{lineHeight: "57px", fontSize: "17px"}}
@@ -213,8 +215,10 @@ class Pools extends React.Component<Props, State> {
   private handleChangeRowsPerPage = (event: any) => {
     this.setState({rowsPerPage: event.target.value});
   };
-  private handleRowClick = (id: number) => () => {
-    window.location.hash = `updatePool/${id}`;
+  private handleRowClick = (id: null|number) => () => {
+    if (id !== null) {
+      window.location.hash = `updatePool/${id}`;
+    }
   };
 }
 

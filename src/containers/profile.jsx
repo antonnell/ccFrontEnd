@@ -87,7 +87,6 @@ let Profile = createReactClass({
           extension: extension
         };
 
-        console.log(content)
         dispatcher.dispatch({ type: "uploadProfilePhoto", content, token: state.props.user.token });
       }
       // reader.readAsArrayBuffer(event.target.files[0]);
@@ -105,9 +104,8 @@ let Profile = createReactClass({
   },
 
   getUserProfileReturned(error, data) {
-    console.log('asdasd')
-    console.log(error)
-    console.log(data)
+    console.log(error);
+    console.log(data);
 
     let user = this.props.user
     user.profilePhoto = data.user.profilePhoto

@@ -26,7 +26,6 @@ interface Props extends OwnProps, WithDialogContext, WithStyles<typeof styles> {
 class AppDialog extends React.Component<Props> {
 
   public render() {
-    // console.log(...helperRenderConsoleText('Render AppDialog', 'lightGreen'));
     const {
       classes, dialogContext: {
         title,
@@ -40,10 +39,10 @@ class AppDialog extends React.Component<Props> {
           <DialogContentText className={classes.dialogContent}>{body}</DialogContentText>
           <DialogActions>
             <Button onClick={this.handleClick("denied")} color="primary">
-              Disagree
+              Cancel
             </Button>
             <Button onClick={this.handleClick("confirmed")} color="primary" autoFocus>
-              Agree
+              Confirm
             </Button>
           </DialogActions>
         </Dialog>

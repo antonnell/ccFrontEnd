@@ -28,6 +28,8 @@ interface OwnProps {
   users: Contact[]
   removeUserFromWhitelist: (contact: Contact) => void;
   loading: boolean;
+  status: number;
+  totalTokensReceived: number;
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
@@ -35,7 +37,7 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 
 class AddedUsers extends React.Component<Props> {
   public render() {
-    const {classes, users,loading} = this.props;
+    const {classes, users,loading,status,totalTokensReceived} = this.props;
     return (
         <Grid item xs={12} className={classes.outerGrid}>
           <Grid item xs={12}>
@@ -46,7 +48,7 @@ class AddedUsers extends React.Component<Props> {
               {users.map((user, i) => {
                 return (
                     <Chip key={i} label={user.userName} color="primary"
-                          onDelete={loading?undefined:this.removeUser(user)} className={classes.chips}
+                          onDelete={(status === 10 || loading || totalTokensReceived > 0)?undefined:this.removeUser(user)} className={classes.chips}
                     />
                 );
               })}

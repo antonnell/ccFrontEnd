@@ -375,7 +375,6 @@ let SendEther = createReactClass({
       return false;
     }
 
-    console.log(content);
     ethDispatcher.dispatch({
       type: "sendEther",
       content,
