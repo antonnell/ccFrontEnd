@@ -293,7 +293,7 @@ class PoolCreate extends React.Component<Props, State> {
               >Confirm</Button>
               <Button
                 size="small"
-                disabled={!id || !canSubmit || totalTokensReceived <= 0}
+                disabled={!id || !canSubmit || totalTokensReceived <= 0 || status === 10}
                 variant="contained"
                 color="primary"
                 style={(status === 4 || status === 10 || totalTokensReceived > 0) ? {} : {backgroundColor: "white"}}
