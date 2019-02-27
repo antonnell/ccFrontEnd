@@ -117,7 +117,7 @@ class WhitelistCreate extends React.Component<Props, State> {
     } = this.state;
     return (
       <React.Fragment>
-        <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.poolCreate} loading={loading || isSubmitting} />
+        <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.createWhitelist} loading={loading || isSubmitting} />
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}

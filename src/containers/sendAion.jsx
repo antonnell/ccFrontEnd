@@ -81,7 +81,6 @@ let SendAion = createReactClass({
   },
 
   componentDidMount() {
-    console.log(this.props);
     if (this.props.sendAionContact) {
       this.setState({
         contact: this.props.sendAionContact,

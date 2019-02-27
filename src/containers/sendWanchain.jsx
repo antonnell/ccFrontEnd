@@ -374,7 +374,6 @@ let SendWanchain = createReactClass({
       return false;
     }
 
-    console.log(content);
     wanDispatcher.dispatch({
       type: "sendWan",
       content,
