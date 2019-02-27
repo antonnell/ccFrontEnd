@@ -320,7 +320,7 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
           });
         } else {
           return {
-            message: res.errorMsg,
+            message: res && res.errorMsg||"",
             success: false
           };
         }

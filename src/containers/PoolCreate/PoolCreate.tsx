@@ -361,7 +361,12 @@ class PoolCreate extends React.Component<Props, State> {
 
   distributeTokens = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "distributeTokens");
+    showDialog(
+      "confirmation",
+      "distributeTokens",
+      "Are you sure you want to distribute the tokens?",
+      "This action cannot be undone once confirmed.",
+      );
   };
 
   createPool = (event: React.FormEvent) => {
@@ -401,17 +406,32 @@ class PoolCreate extends React.Component<Props, State> {
 
   confirmTokens = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "confirmTokens");
+    showDialog(
+      "confirmation",
+      "confirmTokens",
+      "Are you sure you want to confirm the tokens?",
+      "This action cannot be undone once confirmed.",
+    );
   };
 
   deployPool = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "deployPool");
+    showDialog(
+      "confirmation",
+      "deployPool",
+      "Are you sure you want to deploy the pool?",
+      "This action cannot be undone once confirmed.",
+    );
   };
 
   buyTokens = () => {
     const {dialogContext: {showDialog}} = this.props;
-    showDialog("confirmation", "buyTokens");
+    showDialog(
+      "confirmation",
+      "buyTokens",
+      "Are you sure you want to send the funds?",
+      "This cannot be undone once confirmed.",
+    );
   };
 
   removeUserFromWhitelist = (contact: Contact) => {
@@ -482,7 +502,7 @@ class PoolCreate extends React.Component<Props, State> {
       case "maxContribution":
       case "minContribution":
       case "transactionFee":
-        value = e.currentTarget.value === ""?null:Number(e.currentTarget.value);
+        value = e.currentTarget.value === "" ? null : Number(e.currentTarget.value);
         break;
       case "isPledgesEnabled":
         value = checked;
@@ -683,7 +703,7 @@ class PoolCreate extends React.Component<Props, State> {
           });
           break;
       }
-        }
+    }
   };
 }
 
