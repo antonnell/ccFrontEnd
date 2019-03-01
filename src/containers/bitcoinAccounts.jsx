@@ -30,7 +30,8 @@ let BitcoinAccounts = createReactClass({
       editAddressNameErrorMessage: "",
       editAccount: null,
       keyOpen: false,
-      currentAccountKey: "",
+      currentAccountKey: null,
+      currentAccountPhrase: null,
       optionsAccount: null,
       loadingAccount: null,
       deleteOpen: false,
@@ -62,6 +63,9 @@ let BitcoinAccounts = createReactClass({
         privateKey={this.state.privateKey}
         privateKeyError={this.state.privateKeyError}
         privateKeyErrorMessage={this.state.privateKeyErrorMessage}
+        mnemonicPhrase={this.state.mnemonicPhrase}
+        mnemonicPhraseError={this.state.mnemonicPhraseError}
+        mnemonicPhraseErrorMessage={this.state.mnemonicPhraseErrorMessage}
         handleChecked={this.handleChecked}
         sendBitcoinClicked={this.props.openSendBitcoin}
         validateField={this.validateField}
@@ -74,9 +78,11 @@ let BitcoinAccounts = createReactClass({
         onEditAddressNameKeyDown={this.onEditAddressNameKeyDown}
         onEditAddressNameBlur={this.onEditAddressNameBlur}
         currentAccountKey={this.state.currentAccountKey}
+        currentAccountPhrase={this.state.currentAccountPhrase}
         keyOpen={this.state.keyOpen}
         handleKeyClose={this.handleKeyClose}
         copyKey={this.copyKey}
+        copyPhrase={this.copyPhrase}
         exportKeyAccount={this.state.exportKeyAccount}
         optionsClicked={this.optionsClicked}
         optionsClosed={this.optionsClosed}
@@ -215,12 +221,18 @@ let BitcoinAccounts = createReactClass({
     }
 
     if (data.success) {
-      const encodedKeyHex = data.encryptedPrivateKey;
       const mnemonic = this.state.mnemonic;
+
+      const encodedKeyHex = data.encryptedPrivateKey;
       const encodedKey = encodedKeyHex.hexDecode();
 
+      const encodedPhraseHex = data.encryptedPhrase;
+      const encodedPhrase = encodedPhraseHex.hexDecode();
+
       var privateKey = decrypt(encodedKey, mnemonic);
-      this.setState({ keyOpen: true, currentAccountKey: privateKey });
+      var phrase = decrypt(encodedPhrase, mnemonic);
+
+      this.setState({ keyOpen: true, currentAccountKey: privateKey, currentAccountPhrase: phrase });
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -352,7 +364,6 @@ let BitcoinAccounts = createReactClass({
   },
 
   editNameClicked(editAccount) {
-    console.log(editAccount)
     this.optionsClosed();
     this.setState({ editAccount, editAddressName: editAccount.displayName });
   },
@@ -467,13 +478,34 @@ let BitcoinAccounts = createReactClass({
         displayName: this.state.addressName,
         isPrimary: this.state.primary,
         privateKey: this.state.privateKey,
-        mnemonic: this.state.mnemonic
+        mnemonic: this.state.mnemonicPhrase
       };
       bitcoinDispatcher.dispatch({
         type: "importBitcoinAddress",
         content,
         token: this.props.user.token
       });
+    }
+  },
+
+  copyPhrase() {
+    var elm = document.getElementById("currentAccountPhrase");
+    let range;
+    // for Internet Explorer
+
+    if (document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(elm);
+      range.select();
+      document.execCommand("Copy");
+    } else if (window.getSelection) {
+      // other browsers
+      var selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(elm);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("Copy");
     }
   },
 

@@ -75,7 +75,7 @@ class Store {
       displayName: payload.content.displayName,
       isPrimary: payload.content.isPrimary,
       privateKey: payload.content.privateKey,
-      mnemonic: payload.content.mnemonic
+      phrase: payload.content.mnemonic
     };
 
     this.callApi(url, 'POST', postJson, payload);

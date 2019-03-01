@@ -462,6 +462,8 @@ class BitcoinAccounts extends Component {
           handleClose={this.props.handleKeyClose}
           currentAccountKey={this.props.currentAccountKey}
           copyKey={this.props.copyKey}
+          currentAccountPhrase={this.props.currentAccountPhrase}
+          copyPhrase={this.props.copyPhrase}
         />
         <CreateModal
           isOpen={this.props.createOpen}

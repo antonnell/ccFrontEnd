@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import Grid from '@material-ui/core/Grid';
 
 function CopyIcon(props) {
   return (
@@ -28,19 +29,39 @@ class PrivateKeyModal extends Component {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" align='center'>
-            Your Private Key:
-          </Typography>
-          <div style={{lineHeight: '46px', display: 'inline-block'}} id='currentAccountKey'>
-            <Typography variant="body1">
-              {this.props.currentAccountKey}
-            </Typography>
-          </div>
-          <Tooltip style={{display: 'inline-block'}} title='Copy Private Key' placement="right">
-            <IconButton style={{ verticalAlign: 'top', marginTop: '-12px'}} onClick={() => { this.props.copyKey(this.props.currentAccountKey) }}>
-              <CopyIcon />
-            </IconButton>
-          </Tooltip>
+          <Grid container alignItems="center" justifyContent="center">
+            <Grid item xs={12} style={{textAlign: 'center'}}>
+              <Typography variant="h6" align='center'>
+                Private Key:
+              </Typography>
+              <div style={{lineHeight: '46px', display: 'inline-block'}} id='currentAccountKey'>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {this.props.currentAccountKey}
+                </Typography>
+              </div>
+              <Tooltip style={{display: 'inline-block'}} title='Copy Private Key' placement="right">
+                <IconButton style={{ verticalAlign: 'top', marginTop: '-12px'}} onClick={() => { this.props.copyKey(this.props.currentAccountKey) }}>
+                  <CopyIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            {this.props.currentAccountPhrase &&
+              <Grid item xs={12} style={{textAlign: 'center'}}>
+                <Typography variant="h6" align='center'>
+                  Mnemonic Phrase:
+                </Typography>
+                <div style={{lineHeight: '46px', display: 'inline-block'}} id='currentAccountPhrase'>
+                  <Typography variant="subtitle1" color='textSecondary'>
+                    {this.props.currentAccountPhrase}
+                  </Typography>
+                </div>
+                <Tooltip style={{display: 'inline-block'}} title='Copy Phrase' placement="right">
+                  <IconButton style={{ verticalAlign: 'top', marginTop: '-12px'}} onClick={() => { this.props.copyPhrase(this.props.currentAccountPhrase) }}>
+                    <CopyIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>}
+            </Grid>
         </DialogContent>
         <DialogActions>
           <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>
