@@ -1,34 +1,37 @@
-import * as React from 'react';
-import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, PoolingContact, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
-import {WithAppContext, withAppContext} from "./AppContext";
+import * as React from "react";
+import {FundingPool, GetAvailableFundingPoolsResponse, GetManagedFundingPoolsResponse, isFundingPool, PoolingContact, PoolingContract, PoolingContractBlockChain} from "../types/pooling";
+import {withAppContext, WithAppContext} from "./AppContext";
 import {EthAddress} from "../types/eth";
 import {WanAddress} from "../types/wan";
+import {ApiResponse} from "../types/api";
 
 interface PoolingContextInterface {
   managedPools: FundingPool[];
   availablePools: FundingPool[];
   availablePoolsLoading: boolean;
+  managedPoolsLoading: boolean;
   createPoolingContract: (poolingContract: PoolingContract) => Promise<any>
   deletePoolingContract: (poolId: number) => Promise<any>
   updatePoolingContract: (poolId: number, poolingContract: PoolingContract) => Promise<any>
-  deployPoolingContract: (poolId: number) => Promise<boolean>;
+  deployPoolingContract: (poolId: number) => Promise<ApiResponse>;
   updateTokenAddress: (poolId: number, tokenAddress: string) => void;
   setPoolLocked: (poolId: number, isLocked: boolean) => Promise<boolean>;
   updatePledgesEndDate: (poolId: number, pledgesEndDate: string) => void;
   updateSaleAddress: (poolId: number, saleAddress: string) => void;
-  sendPoolFunds: (poolId: number) => void;
-  confirmTokens: (poolId: number) => void;
+  sendPoolFunds: (poolId: number) => Promise<ApiResponse>;
+  confirmTokens: (poolId: number) => Promise<ApiResponse>;
   enableWithdrawTokens: (poolId: number) => void;
-  depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<any>;
+  distributeAll: (poolId: number) => Promise<boolean>;
+  depositToPoolingContract: (poolId: number, fromAddress: string, amount: number, gwei: number) => Promise<ApiResponse>;
   withdrawFromPoolingContract: (poolId: number, userAddress: string, amount: number) => void;
-  pledgeToPoolingContract: (poolId: number, userAddress: string, amount: number) => Promise<boolean>;
+  pledgeToPoolingContract: (poolId: number, userAddress: string, amount: number) => Promise<ApiResponse>;
   withdrawAllFromPoolingContract: (userAddress: string, poolAddress: string, blockchain: PoolingContractBlockChain) => void;
   getFundingPoolPendingTransactions: (blockchain: PoolingContractBlockChain, address: string) => void;
   getManagedFundingPoolPendingTransactions: (poolId: number) => void;
   getManagedFundingPoolContributions: (poolId: number) => Promise<PoolingContact[]>;
-  getManagedFundingPools: (userId: string) => Promise<boolean>;
-  getAvailableFundingPools: (userId: string) => void;
-  getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool>;
+  getManagedFundingPools: (userId: string) => void;
+  getAvailableFundingPools: (userId: string, poolId?: number) => void;
+  getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool | ApiResponse>;
   getPoolContribution: (poolId: number, address: string) => void;
 }
 
@@ -44,18 +47,27 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     managedPools: [],
     availablePools: [],
     availablePoolsLoading: false,
-    createPoolingContract: poolingContract => {
+    managedPoolsLoading: false,
+    createPoolingContract: async poolingContract => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/createPoolingContract';
+      const url = "pooling/createPoolingContract";
       const method = "POST";
+      // const userIds = [];
+      // for (const id of poolingContract.whitelistedUsers) {
+      //   userIds.push(id.userId);
+      // }
       return callApi(url, method, {
         ...poolingContract,
+        minContribution: poolingContract.minContribution === null ? 0 : poolingContract.minContribution,
+        maxContribution: poolingContract.maxContribution === null ? 0 : poolingContract.maxContribution,
+        transactionFee: poolingContract.transactionFee === null ? 0 : poolingContract.transactionFee,
+        // whitelistUserIds: userIds,
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
       });
     },
     deletePoolingContract: poolId => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/deletePoolingContract';
+      const url = "pooling/deletePoolingContract";
       const method = "POST";
       return callApi(url, method, {
         poolId
@@ -65,24 +77,32 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     updatePoolingContract: (poolId, poolingContract) => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/updatePoolingContract';
+      const url = "pooling/updatePoolingContract";
       const method = "POST";
-      return callApi(url, method, {
+      console.log((poolingContract.status && poolingContract.status > 0)?{name:poolingContract.name,poolId}:{
         ...poolingContract,
         poolId,
         ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
-      }).then(res=>{
+      });
+      return callApi(url, method, (poolingContract.status && poolingContract.status > 0)?{name:poolingContract.name,poolId}:{
+        ...poolingContract,
+        poolId,
+        ownerAddress: poolingContract.blockchain === "ETH" ? (poolingContract.ownerAddress as EthAddress).address : (poolingContract.ownerAddress as WanAddress).publicAddress
+      }).then(res => {
         return res.success;
       });
     },
     deployPoolingContract: poolId => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/deployPoolingContract';
+      const url = "pooling/deployPoolingContract";
       const method = "POST";
       return callApi(url, method, {
         poolId,
       }).then(res => {
-        return res.success;
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
       });
     },
     updateTokenAddress: (poolId, tokenAddress) => {
@@ -90,15 +110,13 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(tokenAddress);
     },
     setPoolLocked: (poolId, isLocked) => {
-      console.log(poolId);
-      console.log(isLocked);
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/setPoolLocked';
+      const url = "pooling/setPoolLocked";
       const method = "POST";
+      console.log(poolId, isLocked);
       return callApi(url, method, {
-        poolId,isLocked
+        poolId, isLocked
       }).then(res => {
-        console.log(res);
         return res.success;
       });
     },
@@ -111,27 +129,56 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       console.log(saleAddress);
     },
     sendPoolFunds: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      const url = "pooling/sendPoolFunds";
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+      }).then(res => {
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
+      });
     },
     confirmTokens: poolId => {
-      console.log(poolId);
+      const {appContext: {callApi}} = this.props;
+      const url = "pooling/confirmTokens";
+      const method = "POST";
+      return callApi(url, method, {
+        poolId,
+      }).then(res => {
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
+      });
     },
     enableWithdrawTokens: poolId => {
       console.log(poolId);
     },
-    depositToPoolingContract: (poolId, fromAddress, amount, gwei = 0) => {
-      console.log(poolId);
-      console.log(fromAddress);
-      console.log(amount);
-      console.log(gwei);
+    distributeAll: (poolId) => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/depositToPoolingContract';
+      const url = "pooling/distributeAll";
       const method = "POST";
       return callApi(url, method, {
-        poolId, amount,fromAddress,gwei
+        poolId,
+        count: 0,
       }).then(res => {
-        console.log(res);
         return res.success;
+      });
+    },
+    depositToPoolingContract: (poolId, fromAddress, amount, gwei = 0) => {
+      const {appContext: {callApi}} = this.props;
+      const url = "pooling/depositToPoolingContract";
+      const method = "POST";
+      return callApi(url, method, {
+        poolId, amount, fromAddress, gwei
+      }).then(res => {
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
       });
     },
     withdrawFromPoolingContract: (poolId, userAddress, amount) => {
@@ -141,12 +188,15 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
     },
     pledgeToPoolingContract: (poolId, userAddress, amount) => {
       const {appContext: {callApi}} = this.props;
-      const url = 'pooling/pledgeToPoolingContract';
+      const url = "pooling/pledgeToPoolingContract";
       const method = "POST";
       return callApi(url, method, {
         userAddress, poolId, amount
       }).then(res => {
-        return res.success;
+        return {
+          success: res.success,
+          message: res.success ? "" : res.errorMsg
+        }
       });
     },
     withdrawAllFromPoolingContract: (userAddress, poolAddress, blockchain) => {
@@ -165,11 +215,10 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       return callApi(url, method, {}).then(res => {
         if (res && res.success) {
           const {managedPools} = this.state;
-          const id = managedPools.findIndex(pool=>pool.id === poolId);
-          managedPools[id] = {...managedPools[id],pendingTransactions:[...res.pendingTransactions]};
+          const id = managedPools.findIndex(pool => pool.id === poolId);
+          managedPools[id] = {...managedPools[id], pendingTransactions: [...res.pendingTransactions]};
           this.setState({managedPools});
         }
-        console.log(res);
       });
     },
     getManagedFundingPoolContributions: poolId => {
@@ -181,50 +230,78 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       });
     },
     getManagedFundingPools: (userId) => {
-      const {getManagedFundingPoolPendingTransactions} = this.state;
+      const {getManagedFundingPoolPendingTransactions, getManagedFundingPoolDetails, getManagedFundingPoolContributions} = this.state;
       const {appContext: {callApi}} = this.props;
-      this.setState({managedPools:[]});
+      this.setState({managedPools: [], managedPoolsLoading: true});
       const url = `pooling/getManagedFundingPools/${userId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
+
+        // if (response && response.success) {
+        //   this.setState({managedPools: [...response.fundingPools]});
+        //   for (const pool of response.fundingPools) {
+        //     getManagedFundingPoolPendingTransactions(pool.id);
+        //   }
+        // }
+        // return response && response.success;
         const response: GetManagedFundingPoolsResponse = res as GetManagedFundingPoolsResponse;
+        const availPools: FundingPool[] = [];
         if (response && response.success) {
-          this.setState({managedPools: [...response.fundingPools]});
-          for (const pool of response.fundingPools) {
-            getManagedFundingPoolPendingTransactions(pool.id);
-          }
+          let count = response.fundingPools.length;
+          count === 0 && this.setState({managedPoolsLoading: false});
+          response.fundingPools.forEach(async (pool) => {
+            await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
+              getManagedFundingPoolContributions(pool.id).then(res => {
+                getManagedFundingPoolPendingTransactions(pool.id);
+                if (isFundingPool(fetchedPool)) {
+                  fetchedPool.whitelistedUsers = res;
+                  availPools.push({...pool, ...fetchedPool});
+                } else {
+                  availPools.push({...pool});
+                }
+                count--;
+                this.setState({managedPools: availPools, managedPoolsLoading: count !== 0});
+              });
+            })
+          });
         }
-        return response && response.success;
         // response.fundingPools.map(pool=>
         //     getManagedFundingPoolDetails(pool.id)
         // )
       });
     },
-    getAvailableFundingPools: (userId) => {
+    getAvailableFundingPools: (userId, poolId) => {
       const {appContext: {callApi}} = this.props;
-      const {getManagedFundingPoolDetails, getManagedFundingPoolContributions,getManagedFundingPoolPendingTransactions} = this.state;
-      this.setState({availablePools:[]});
-      const url = `pooling/getAvailableFundingPools/${userId}`;
+      // const {getManagedFundingPoolDetails, getManagedFundingPoolContributions, getManagedFundingPoolPendingTransactions} = this.state;
+      this.setState({availablePools: [], availablePoolsLoading: true});
+      let url = `pooling/getAvailableFundingPools/${userId}`;
+      if (poolId !== null) {
+        url = `${url}/${poolId}`
+      }
       const method = "GET";
-      this.setState({availablePoolsLoading: true});
-      callApi(url, method, {}).then(res => {
+      return callApi(url, method, {}).then(res => {
         const response: GetAvailableFundingPoolsResponse = res as GetAvailableFundingPoolsResponse;
-        console.log(response);
-        const availPools: FundingPool[] = [];
-        if (response && response.success) {
-          let count = response.fundingPools.length;
-          response.fundingPools.forEach(async (pool) => {
-            await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
-              getManagedFundingPoolContributions(pool.id).then(res => {
-                getManagedFundingPoolPendingTransactions(pool.id);
-                fetchedPool.whitelistedUsers = res;
-                availPools.push({...pool, ...fetchedPool});
-                count--;
-                this.setState({availablePools: availPools, availablePoolsLoading: count !== 0});
-              });
-            })
-          });
-        }
+        // const availPools: FundingPool[] = [];
+        this.setState({availablePools: (response && response.fundingPools !== undefined) ? response.fundingPools : [], availablePoolsLoading: false});
+        // if (response && response.success) {
+        //   let count = response.fundingPools.length;
+        //   count === 0 && this.setState({availablePoolsLoading: false});
+        //   response.fundingPools.forEach(async (pool) => {
+        //     await getManagedFundingPoolDetails(pool.id).then(fetchedPool => {
+        //       getManagedFundingPoolContributions(pool.id).then(res => {
+        //         getManagedFundingPoolPendingTransactions(pool.id);
+        //         if (isFundingPool(fetchedPool)) {
+        //           fetchedPool.whitelistedUsers = res;
+        //           availPools.push({...pool, ...fetchedPool});
+        //         } else {
+        //           availPools.push({...pool});
+        //         }
+        //         count--;
+        //         this.setState({availablePools: availPools, availablePoolsLoading: count !== 0});
+        //       });
+        //     })
+        //   });
+        // }
       });
     },
     getManagedFundingPoolDetails: (poolId) => {
@@ -232,7 +309,22 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const url = `pooling/getManagedFundingPoolDetails/${poolId}`;
       const method = "GET";
       return callApi(url, method, {}).then(res => {
-        return res.success ? res.fundingPool : {};
+        const {getManagedFundingPoolContributions} = this.state;
+        const pool = res && res.fundingPool;
+        if (res && res.success) {
+          return getManagedFundingPoolContributions(poolId).then(res => {
+            if (res !== null) {
+              pool.whitelistedUsers = res;
+            }
+            return pool;
+          });
+        } else {
+          return {
+            message: res && res.errorMsg||"",
+            success: false
+          };
+        }
+        // return res.success ? res.fundingPool : {};
       });
     },
     getPoolContribution: (poolId, address) => {
@@ -259,7 +351,7 @@ export interface WithPoolingContext {
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export function withPoolingContext<P extends { poolingContext?: PoolingContextInterface },
-  R = Omit<P, 'poolingContext'>>(
+  R = Omit<P, "poolingContext">>(
   Component: React.ComponentClass<P> | React.StatelessComponent<P>
 ): React.SFC<R> {
   return function BoundComponent(props: R) {

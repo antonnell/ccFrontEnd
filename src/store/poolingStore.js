@@ -39,7 +39,6 @@ class Store {
   }
 
   getEtherPools = function (payload) {
-    console.log('here');
     const url = 'etherPooling/getManagedEtherPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
@@ -52,7 +51,6 @@ class Store {
   };
 
   getAvailableFundingPools = function (payload) {
-    // console.log(payload);
     const url = 'pooling/getAvailableFundingPools/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload);
@@ -80,14 +78,12 @@ class Store {
       postJson.pledgesEndDate = payload.content.pledgeEndDate;
     }
 
-    console.log(postJson);
 
     this.callApi(url, 'POST', postJson, payload);
   };
 
   callApi = function (url, method, postData, payload, customEmit) {
     //get X-curve-OTP from sessionStorage
-    // console.log(sessionStorage);
     const userString = sessionStorage.getItem('cc_user');
     let authOTP = '';
     if (userString) {

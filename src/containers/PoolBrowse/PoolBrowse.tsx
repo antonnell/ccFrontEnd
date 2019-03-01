@@ -13,11 +13,19 @@ import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
+import Typography from "@material-ui/core/Typography";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import {ExpandMoreIcon} from "../../theme/icons";
 
 const styles = (theme: Theme) =>
   createStyles({
     containerGrid: {
       paddingRight: theme.spacing.unit * 3
+    },
+    expansionPanel: {
+      marginTop: theme.spacing.unit * 3
     }
   });
 
@@ -47,26 +55,70 @@ class PoolBrowse extends React.Component<Props,State> {
   componentWillMount(): void {
     const {
       poolingContext: {
-        getAvailableFundingPools
+        getAvailableFundingPools,
+        getManagedFundingPools
       },
       user
     } = this.props;
     getAvailableFundingPools(user.id);
+    getManagedFundingPools(user.id);
   }
 
   public render() {
-    const {poolingContext: {availablePools,availablePoolsLoading}, classes,ethAddresses,wanAddresses} = this.props;
+    const {poolingContext: {availablePools,availablePoolsLoading,managedPools,managedPoolsLoading}, classes,ethAddresses,wanAddresses,user} = this.props;
     const {selectedPool,openPledgeDialog,openContributeDialog} = this.state;
     return (
       <React.Fragment>
-        <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading}/>
-        <Grid container direction="row" className={classes.containerGrid} spacing={32}>
-          {availablePools.map(pool=>
-            <Grid item xs={6} key={pool.id}>
-              <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)}/>
+        <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading || managedPoolsLoading}/>
+          <ExpansionPanel className={classes.expansionPanel} defaultExpanded>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h3">My Pools</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Grid container direction="row" className={classes.containerGrid} spacing={32}>
+                {!managedPoolsLoading && managedPools.length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
+                {managedPools.filter(pool=>pool.status !== 10).map(pool=>
+                  <Grid item xs={6} key={pool.id}>
+                    <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} managedPool user={user}/>
+                  </Grid>
+                )}
+              </Grid>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        <ExpansionPanel className={classes.expansionPanel} style={{marginBottom: 50}} defaultExpanded>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h3">Joined Pools</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid container direction="row" className={classes.containerGrid} spacing={32}>
+              {!availablePoolsLoading && availablePools.length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
+              {availablePools.filter(pool=>pool.status !== 10).map(pool=>
+                <Grid item xs={6} key={pool.id}>
+                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} user={user}/>
+                </Grid>
+              )}
             </Grid>
-          )}
-        </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel className={classes.expansionPanel} style={{marginBottom: 50}}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h3">Completed Pools</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid container direction="row" className={classes.containerGrid} spacing={32}>
+              {!availablePoolsLoading && managedPoolsLoading &&
+              availablePools.filter(pool=>pool.status === 10).length === 0 &&
+              managedPools.filter(pool=>pool.status === 10).length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
+              {managedPools.filter(pool=>pool.status === 10).concat(availablePools.filter(pool=>
+                (pool.status === 10 && managedPools.filter(pool=>pool.status === 10).findIndex(p=>p.id === pool.id) === -1))).map((pool,index)=>
+                <Grid item xs={6} key={index}>
+                  <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} completedPool user={user}/>
+                </Grid>
+              )}
+            </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+
         <PoolPledgeDialog pool={selectedPool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses}/>
         <PoolContributeDialog pool={selectedPool} open={openContributeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses}/>
       </React.Fragment>)

@@ -21,6 +21,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
 
 interface OwnProps {
   pool: FundingPool | null;
@@ -32,8 +33,10 @@ interface OwnProps {
 
 interface State {
   amount: number | undefined;
+  gwei: number | undefined;
   walletId: number | null;
   isSubmitting: boolean;
+  validAmount: boolean;
 }
 
 const styles = (theme: Theme) =>
@@ -55,21 +58,22 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext,WithSnackBarContext {
 }
 
 class PoolContributeDialog extends React.Component<Props, State> {
   readonly state: State = {
     amount: undefined,
+    gwei: 2,
     walletId: null,
     isSubmitting: false,
+    validAmount: false
   };
 
   public render() {
     const {pool, open, classes, ethAddresses, wanAddresses} = this.props;
     const {blockchain} = pool || initialPoolingContract;
-    const {amount, isSubmitting, walletId} = this.state;
-    console.log(ethAddresses);
+    const {amount, isSubmitting, walletId,gwei,validAmount} = this.state;
     const wallets = blockchain === "ETH" ? ethAddresses.map(address => (
       {
         id: address.id,
@@ -120,14 +124,29 @@ class PoolContributeDialog extends React.Component<Props, State> {
               required
               fullWidth
               label="Contribute Amount"
-              value={amount || 0}
+              value={amount || ""}
               onChange={this.handleChange("amount")}
               margin="normal"
               InputLabelProps={{shrink: true}}
               placeholder="5"
               inputProps={{type: "number"}}
               InputProps={{endAdornment: <Typography>{blockchain}</Typography>}}
+              helperText={`You are allowed to contribute between ${pool.minContribution} and ${pool.maxContribution} ${pool.blockchain}`}
             />
+            {blockchain === "ETH" &&
+            <TextField
+              disabled={isSubmitting}
+              required
+              fullWidth
+              label="Gas Limit"
+              value={gwei || ""}
+              onChange={this.handleChange("gwei")}
+              margin="normal"
+              InputLabelProps={{shrink: true}}
+              placeholder="5"
+              inputProps={{type: "number"}}
+              InputProps={{endAdornment: <Typography>GWEI</Typography>}}
+            />}
           </DialogContent>
           <DialogActions>
             <Button disabled={isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.handleClose}>
@@ -136,7 +155,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
             <div className={classes.buttonSpacer} />
             <Button
               variant="outlined"
-              disabled={amount === undefined || amount < 1 || isSubmitting}
+              disabled={amount === undefined || amount === null || amount === 0 || isSubmitting || !validAmount}
               className={classes.button} color="secondary" size="small" onClick={this.handleSubmit}>
               Contribute
               {isSubmitting && <CircularProgress size={20} style={{position: "absolute"}} />}
@@ -153,16 +172,19 @@ class PoolContributeDialog extends React.Component<Props, State> {
       wanAddresses, ethAddresses, pool,
       poolingContext: {
         depositToPoolingContract
+      },
+      snackBarContext: {
+        snackBarPush
       }
     } = this.props;
-    const {amount,walletId} = this.state;
+    const {amount,walletId,gwei} = this.state;
     this.setState({isSubmitting: true});
     if (pool !== null && amount !== undefined) {
       depositToPoolingContract(
         pool.id,
         pool.blockchain === "WAN" ? wanAddresses[walletId||0].publicAddress : ethAddresses[walletId||0].address,
-        amount,0).then(res => {
-        console.log(res);
+        amount,pool.blockchain === "ETH"?gwei||0:0).then(res => {
+        snackBarPush({key: new Date().toISOString(), message: !res.success?res.message:"Deposit successful", type: !res.success?"error":"success"});
         this.setState({isSubmitting: false});
         this.handleClose();
       });
@@ -176,16 +198,22 @@ class PoolContributeDialog extends React.Component<Props, State> {
   };
 
   handleChange = (field: keyof State) => (event: React.ChangeEvent<any>) => {
+    const {pool} = this.props;
+    const min = pool && pool.minContribution||0;
+    const max = pool && pool.maxContribution||0;
     switch (field) {
       case "walletId":
         this.setState({walletId: event.target.value});
         break;
       case "amount":
-        this.setState({amount: event.currentTarget.value});
+        this.setState({amount: event.currentTarget.value,validAmount: event.currentTarget.value >= min && event.currentTarget.value <= max});
+        break;
+      case "gwei":
+        this.setState({gwei: event.currentTarget.value});
         break;
     }
   }
 
 }
 
-export default withStyles(styles)(withPoolingContext(PoolContributeDialog)) as React.ComponentClass<OwnProps>;
+export default withStyles(styles)(withPoolingContext(withSnackBarContext(PoolContributeDialog))) as React.ComponentClass<OwnProps>;

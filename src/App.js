@@ -54,21 +54,23 @@ import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
 import { helperRenderConsoleText } from './helpers/helpers';
 import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
+import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
+import MomentUtils from '@date-io/moment';
 
-let accountEmitter = require('./store/accountStore.js').default.emitter;
-let accountDispatcher = require('./store/accountStore.js').default.dispatcher;
+let accountEmitter = require("./store/accountStore.js").default.emitter;
+let accountDispatcher = require("./store/accountStore.js").default.dispatcher;
 
-let contactsEmitter = require('./store/contactsStore.js').default.emitter;
-let contactsDispatcher = require('./store/contactsStore.js').default.dispatcher;
+let contactsEmitter = require("./store/contactsStore.js").default.emitter;
+let contactsDispatcher = require("./store/contactsStore.js").default.dispatcher;
 
-let ethEmitter = require('./store/ethStore.js').default.emitter;
-let ethDispatcher = require('./store/ethStore.js').default.dispatcher;
+let ethEmitter = require("./store/ethStore.js").default.emitter;
+let ethDispatcher = require("./store/ethStore.js").default.dispatcher;
 
-let wanEmitter = require('./store/wanStore.js').default.emitter;
-let wanDispatcher = require('./store/wanStore.js').default.dispatcher;
+let wanEmitter = require("./store/wanStore.js").default.emitter;
+let wanDispatcher = require("./store/wanStore.js").default.dispatcher;
 
-let aionEmitter = require('./store/aionStore.js').default.emitter;
-let aionDispatcher = require('./store/aionStore.js').default.dispatcher;
+let aionEmitter = require("./store/aionStore.js").default.emitter;
+let aionDispatcher = require("./store/aionStore.js").default.dispatcher;
 
 let bitcoinEmitter = require('./store/bitcoinStore.js').default.emitter;
 let bitcoinDispatcher = require('./store/bitcoinStore.js').default.dispatcher;
@@ -80,17 +82,17 @@ let whitelistEmitter = require('./store/whitelistStore.js').default.emitter;
 // let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default
 //   .dispatcher;
 
-let emitter = require('./store/ipStore.js').default.emitter;
-let dispatcher = require('./store/ipStore.js').default.dispatcher;
+let emitter = require("./store/ipStore.js").default.emitter;
+let dispatcher = require("./store/ipStore.js").default.dispatcher;
 
-const setInitialUser = ()=> {
-  const userString = sessionStorage.getItem('cc_user');
-  return userString !== null?JSON.parse(userString):null;
+const setInitialUser = () => {
+  const userString = sessionStorage.getItem("cc_user");
+  return userString !== null ? JSON.parse(userString) : null;
 };
 
-const setInitialTheme = ()=> {
-  let themeString = localStorage.getItem('cc_theme');
-  return themeString !== null?themeString:"light";
+const setInitialTheme = () => {
+  let themeString = localStorage.getItem("cc_theme");
+  return themeString !== null ? themeString : "light";
 };
 
 class App extends Component {
@@ -107,7 +109,7 @@ class App extends Component {
     uriParameters: {},
     ipValid: false,
     ipLoading: true,
-    rejectionReason: '',
+    rejectionReason: "",
     erc20Tokens: null,
     wrc20Tokens: null,
     // crowdsales: null,
@@ -212,10 +214,10 @@ class App extends Component {
         this.setUser(user);
       }
 
-      if (user.verificationResult !== 'complete' && user) {
+      if (user.verificationResult !== "complete" && user) {
         setTimeout(() => {
           accountDispatcher.dispatch({
-            type: 'verificationResult',
+            type: "verificationResult",
             content: { userId: user.id },
             token: user.token
           });
@@ -309,49 +311,47 @@ class App extends Component {
   }
 
   componentWillMount() {
-    // console.log(...helperRenderConsoleText('componentWillMount App', 'lightBlue'));
-    ReactGA.initialize('UA-106832873-2', { cookieDomain: 'auto' });
+    ReactGA.initialize("UA-106832873-2", { cookieDomain: "auto" });
 
     var user = null;
-    var userString = sessionStorage.getItem('cc_user');
+    var userString = sessionStorage.getItem("cc_user");
     if (userString) {
       user = JSON.parse(userString);
       this.setUser(user);
     }
 
     var currentScreen = window.location.hash.substring(1);
-    var paramsIndex = window.location.hash.indexOf('?');
+    var paramsIndex = window.location.hash.indexOf("?");
     if (paramsIndex > -1) {
       currentScreen = window.location.hash.substring(1, paramsIndex);
     }
-    console.log(paramsIndex);
     if (
       ![
-        'welcome',
-        'registerAccount',
-        'forgotPassword',
-        'forgotPasswordDone',
-        'resetPassword',
-        'privacyPolicy',
-        'cookiePolicy',
-        'termsAndConditions',
-        'about',
-        'press',
-        'contactUs',
-        'bugBounty',
-        'blog',
-        'faq',
-        'fees',
-        'add',
-        'added',
-        'addUnavailable',
-        'whitelistStatus',
-        'verifyAccount',
+        "welcome",
+        "registerAccount",
+        "forgotPassword",
+        "forgotPasswordDone",
+        "resetPassword",
+        "privacyPolicy",
+        "cookiePolicy",
+        "termsAndConditions",
+        "about",
+        "press",
+        "contactUs",
+        "bugBounty",
+        "blog",
+        "faq",
+        "fees",
+        "add",
+        "added",
+        "addUnavailable",
+        "whitelistStatus",
+        "verifyAccount",
         'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (user == null) {
-        window.location.hash = 'welcome';
+        window.location.hash = "welcome";
       }
     }
 
@@ -401,11 +401,11 @@ class App extends Component {
     contactsEmitter.on('getContacts', this.getContactsReturned);
     whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
     ethEmitter.on(
-      'getSupportedERC20Tokens',
+      "getSupportedERC20Tokens",
       this.getSupportedERC20TokensReturned
     );
     wanEmitter.on(
-      'getSupportedWRC20Tokens',
+      "getSupportedWRC20Tokens",
       this.getSupportedWRC20TokensReturned
     );
     // crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
@@ -415,15 +415,15 @@ class App extends Component {
     // );
     accountEmitter.on('verificationResult', this.verificationResultReturned);
     ethEmitter.on(
-      'getEthTransactionHistory',
+      "getEthTransactionHistory",
       this.getEthTransactionHistoryReturned
     );
     wanEmitter.on(
-      'getWanTransactionHistory',
+      "getWanTransactionHistory",
       this.getWanTransactionHistoryReturned
     );
     aionEmitter.on(
-      'getAionTransactionHistory',
+      "getAionTransactionHistory",
       this.getAionTransactionHistoryReturned
     );
     bitcoinEmitter.on(
@@ -436,17 +436,16 @@ class App extends Component {
     );
     poolingEmitter.on('getEtherPools', this.getEtherPoolsReturned);
     poolingEmitter.on(
-      'getAvailableFundingPools',
+      "getAvailableFundingPools",
       this.getAvailableFundingPoolsReturned
     );
     this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
+    window.addEventListener("resize", this.updateWindowDimensions);
 
     window.onhashchange = this.locationHashChanged;
     this.locationHashChanged();
 
     // const loader = document.getElementById("loader");
-    // console.log(loader);
     // document.body.removeChild(loader);
 
     if (this.state.user) {
@@ -454,12 +453,12 @@ class App extends Component {
 
       if (this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
         ethDispatcher.dispatch({
-          type: 'getSupportedERC20Tokens',
+          type: "getSupportedERC20Tokens",
           content,
           token: this.state.user.token
         });
         wanDispatcher.dispatch({
-          type: 'getSupportedWRC20Tokens',
+          type: "getSupportedWRC20Tokens",
           content,
           token: this.state.user.token
         });
@@ -472,12 +471,12 @@ class App extends Component {
       // });
 
       if (
-        this.state.user.verificationResult !== 'complete' &&
+        this.state.user.verificationResult !== "complete" &&
         this.state.verificationSearching === false
       ) {
         this.setState({ verificationSearching: true });
         accountDispatcher.dispatch({
-          type: 'verificationResult',
+          type: "verificationResult",
           content: { userId: this.state.user.id },
           token: this.state.user.token
         });
@@ -485,7 +484,7 @@ class App extends Component {
 
       content = { id: user.id };
       accountDispatcher.dispatch({
-        type: 'generate2faKey',
+        type: "generate2faKey",
         content,
         token: user.token
       });
@@ -644,7 +643,7 @@ class App extends Component {
       //   token: user.token
       // });
       poolingDispatcher.dispatch({
-        type: 'getAvailableFundingPools',
+        type: "getAvailableFundingPools",
         content,
         token: user.token
       });
@@ -670,8 +669,6 @@ class App extends Component {
       return this.setState({ error: error.toString() });
     }
     data = null;
-    // console.log(error);
-    // console.log(data);
     // if (data.success) {
     //   this.setState({ availablePools: data.etherPools });
     // } else if (data.errorMsg) {
@@ -691,7 +688,7 @@ class App extends Component {
       if (whitelistState) {
         this.setWhitelistState(whitelistState);
       } else {
-        this.setState({ error: 'An unexpected error has occurred' });
+        this.setState({ error: "An unexpected error has occurred" });
       }
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
@@ -717,7 +714,7 @@ class App extends Component {
         let content = { address: address.address };
 
         return ethDispatcher.dispatch({
-          type: 'getERC20Address',
+          type: "getERC20Address",
           content,
           token: this.state.user.token
         });
@@ -778,7 +775,7 @@ class App extends Component {
         let content = { address: address.publicAddress };
 
         return wanDispatcher.dispatch({
-          type: 'getWRC20Address',
+          type: "getWRC20Address",
           content,
           token: this.state.user.token
         });
@@ -887,15 +884,15 @@ class App extends Component {
   }
 
   updateWindowDimensions() {
-    var size = 'sm';
+    var size = "sm";
     if (window.innerWidth < 600) {
-      size = 'xs';
+      size = "xs";
     } else if (window.innerWidth < 1024) {
-      size = 'sm';
+      size = "sm";
     } else if (window.innerWidth < 1440) {
-      size = 'md';
+      size = "md";
     } else {
-      size = 'lg';
+      size = "lg";
     }
 
     this.setState({
@@ -919,14 +916,14 @@ class App extends Component {
   }
 
   logUserOut = () => {
-    sessionStorage.removeItem('cc_user');
-    sessionStorage.removeItem('cc_whiteliststate');
-    window.location.hash = 'welcome';
+    sessionStorage.removeItem("cc_user");
+    sessionStorage.removeItem("cc_whiteliststate");
+    window.location.hash = "welcome";
   };
 
   setUser(user) {
     this.setState({ user });
-    sessionStorage.setItem('cc_user', JSON.stringify(user));
+    sessionStorage.setItem("cc_user", JSON.stringify(user));
     this.getUserDetails(user);
   }
 
@@ -940,7 +937,7 @@ class App extends Component {
         delete whitelistState.jwt;
 
         this.setState({ user });
-        sessionStorage.setItem('cc_user', JSON.stringify(user));
+        sessionStorage.setItem("cc_user", JSON.stringify(user));
       }
 
       if (whitelistState.activeStep == null) {
@@ -950,33 +947,33 @@ class App extends Component {
     }
 
     this.setState({ whitelistState });
-    sessionStorage.setItem('cc_whiteliststate', JSON.stringify(whitelistState));
+    sessionStorage.setItem("cc_whiteliststate", JSON.stringify(whitelistState));
     // whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistState, token: this.state.user.whitelistToken, tokenKey: this.state.user.whitelistTokenKey });
   }
 
   openSendEther(sendEtherContact, sendEtherAccount) {
     this.setState({ sendEtherContact, sendEtherAccount });
-    window.location.hash = 'sendEthereum';
+    window.location.hash = "sendEthereum";
   }
 
   openSendERC(sendERC20Symbol, sendERC20Account) {
     this.setState({ sendERC20Symbol, sendERC20Account });
-    window.location.hash = 'sendERC20';
+    window.location.hash = "sendERC20";
   }
 
   openSendWanchain(sendWanchainContact, sendWanchainAccount) {
     this.setState({ sendWanchainContact, sendWanchainAccount });
-    window.location.hash = 'sendWanchain';
+    window.location.hash = "sendWanchain";
   }
 
   openSendWRC(sendWRC20Symbol, sendWRC20Account) {
     this.setState({ sendWRC20Symbol, sendWRC20Account });
-    window.location.hash = 'sendWRC20';
+    window.location.hash = "sendWRC20";
   }
 
   openSendAion(sendAionContact, sendAionAccount) {
     this.setState({ sendAionContact, sendAionAccount });
-    window.location.hash = 'sendAion';
+    window.location.hash = "sendAion";
   }
 
   openSendBitcoin(sendBitcoinContact, sendBitcoinAccount) {
@@ -988,24 +985,23 @@ class App extends Component {
     let theme = this.state.currentTheme;
 
     this.setState({
-      currentTheme: theme === 'dark' ? 'light' : 'dark',
-      theme: theme === 'dark' ? curveTheme.light : curveTheme.dark
+      currentTheme: theme === "dark" ? "light" : "dark",
+      theme: theme === "dark" ? curveTheme.light : curveTheme.dark
     });
 
-    localStorage.setItem('cc_theme', theme === 'dark' ? 'light' : 'dark');
+    localStorage.setItem("cc_theme", theme === "dark" ? "light" : "dark");
   }
 
   locationHashChanged() {
-    console.log(...helperRenderConsoleText('locationHashChanged App', 'lightsalmon'));
     const uriParameters = {};
-    var currentScreen = '';
-    var paramsIndex = window.location.hash.indexOf('?');
+    var currentScreen = "";
+    var paramsIndex = window.location.hash.indexOf("?");
     if (paramsIndex > -1) {
       var params = window.location.hash.substring(paramsIndex + 1);
-      params.split('&').forEach(pair => {
-        var arr = pair.split('=');
+      params.split("&").forEach(pair => {
+        var arr = pair.split("=");
         var val = decodeURIComponent(arr[1]);
-        if (val.indexOf('\'>here</a') > -1) {
+        if (val.indexOf("'>here</a") > -1) {
           val = val.substring(0, val.length - 9);
         }
         uriParameters[decodeURIComponent(arr[0])] = val;
@@ -1014,9 +1010,9 @@ class App extends Component {
     } else {
       currentScreen = window.location.hash.substring(1);
     }
-    if (['', 'welcome', 'logOut', 'registerAccount'].includes(currentScreen)) {
-      sessionStorage.removeItem('cc_user');
-      sessionStorage.removeItem('cc_whiteliststate');
+    if (["", "welcome", "logOut", "registerAccount"].includes(currentScreen)) {
+      sessionStorage.removeItem("cc_user");
+      sessionStorage.removeItem("cc_whiteliststate");
 
       this.setState({
         drawerOpen: false,
@@ -1033,52 +1029,52 @@ class App extends Component {
         bitcoinTransactions: null
       });
 
-      if (currentScreen !== 'registerAccount') {
-        this.setState({ currentScreen: 'welcome' });
+      if (currentScreen !== "registerAccount") {
+        this.setState({ currentScreen: "welcome" });
       }
     }
 
     if (
       ![
-        'welcome',
-        'registerAccount',
-        'forgotPassword',
-        'forgotPasswordDone',
-        'resetPassword',
-        'privacyPolicy',
-        'cookiePolicy',
-        'termsAndConditions',
-        'about',
-        'press',
-        'contactUs',
-        'bugBounty',
-        'blog',
-        'faq',
-        'fees',
-        'add',
-        'added',
-        'addUnavailable',
-        'whitelistStatus',
-        'verifyAccount',
+        "welcome",
+        "registerAccount",
+        "forgotPassword",
+        "forgotPasswordDone",
+        "resetPassword",
+        "privacyPolicy",
+        "cookiePolicy",
+        "termsAndConditions",
+        "about",
+        "press",
+        "contactUs",
+        "bugBounty",
+        "blog",
+        "faq",
+        "fees",
+        "add",
+        "added",
+        "addUnavailable",
+        "whitelistStatus",
+        "verifyAccount",
         'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (this.state.user == null) {
-        return (window.location.hash = 'welcome');
+        return (window.location.hash = "welcome");
       }
     }
 
     if (this.state.user) {
       var content = {};
-      if (currentScreen === 'wanAccounts' || currentScreen === 'sendWanchain') {
+      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "SendWRC20") {
         content = { id: this.state.user.id };
         wanDispatcher.dispatch({
-          type: 'getWanAddress',
+          type: "getWanAddress",
           content,
           token: this.state.user.token
         });
         wanDispatcher.dispatch({
-          type: 'getWanTransactionHistory',
+          type: "getWanTransactionHistory",
           content,
           token: this.state.user.token
         });
@@ -1088,17 +1084,18 @@ class App extends Component {
           token: this.state.user.token
         });
       } else if (
-        currentScreen === 'ethAccounts' ||
-        currentScreen === 'sendEthereum'
+        currentScreen === "ethAccounts" ||
+        currentScreen === "sendEthereum" ||
+        currentScreen === "sendERC20"
       ) {
         content = { id: this.state.user.id };
         ethDispatcher.dispatch({
-          type: 'getEthAddress',
+          type: "getEthAddress",
           content,
           token: this.state.user.token
         });
         ethDispatcher.dispatch({
-          type: 'getEthTransactionHistory',
+          type: "getEthTransactionHistory",
           content,
           token: this.state.user.token
         });
@@ -1108,17 +1105,17 @@ class App extends Component {
           token: this.state.user.token
         });
       } else if (
-        currentScreen === 'aionAccounts' ||
-        currentScreen === 'sendAion'
+        currentScreen === "aionAccounts" ||
+        currentScreen === "sendAion"
       ) {
         content = { id: this.state.user.id };
         aionDispatcher.dispatch({
-          type: 'getAionAddress',
+          type: "getAionAddress",
           content,
           token: this.state.user.token
         });
         aionDispatcher.dispatch({
-          type: 'getAionTransactionHistory',
+          type: "getAionTransactionHistory",
           content,
           token: this.state.user.token
         });
@@ -1150,7 +1147,19 @@ class App extends Component {
       } else if (currentScreen === 'contacts') {
         content = { id: this.state.user.id };
         contactsDispatcher.dispatch({
-          type: 'getContacts',
+          type: "getContacts",
+          content,
+          token: this.state.user.token
+        });
+      } else if (currentScreen === 'browsePools') {
+        content = { id: this.state.user.id };
+        wanDispatcher.dispatch({
+          type: "getWanAddress",
+          content,
+          token: this.state.user.token
+        });
+        ethDispatcher.dispatch({
+          type: "getEthAddress",
           content,
           token: this.state.user.token
         });
@@ -1159,12 +1168,12 @@ class App extends Component {
       if (this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
         content = {};
         ethDispatcher.dispatch({
-          type: 'getSupportedERC20Tokens',
+          type: "getSupportedERC20Tokens",
           content,
           token: this.state.user.token
         });
         wanDispatcher.dispatch({
-          type: 'getSupportedWRC20Tokens',
+          type: "getSupportedWRC20Tokens",
           content,
           token: this.state.user.token
         });
@@ -1180,12 +1189,12 @@ class App extends Component {
       // }
 
       if (
-        this.state.user.verificationResult !== 'complete' &&
+        this.state.user.verificationResult !== "complete" &&
         this.state.verificationSearching === false
       ) {
         this.setState({ verificationSearching: true });
         accountDispatcher.dispatch({
-          type: 'verificationResult',
+          type: "verificationResult",
           content: { userId: this.state.user.id },
           token: this.state.user.token
         });
@@ -1244,46 +1253,47 @@ class App extends Component {
   }
 
   render() {
-    console.log(...helperRenderConsoleText('Render App', 'lightGreen'));
-    let background = '#fff';
+    let background = "#fff";
     let backgroundImage = null;
-    if (this.state.currentTheme === 'dark') {
+    if (this.state.currentTheme === "dark") {
       backgroundImage =
-        'radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)';
+        "radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)";
     }
     return (
       <Context>
-        <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
-          <CssBaseline />
-          <div
-            style={ {
-              display: 'flex',
-              padding:
-                this.state.size === 'xs' || this.state.size === 'sm'
-                  ? '0px'
-                  : this.state.theme.custom.page.padding,
-              background: background,
-              backgroundImage: backgroundImage
-            } }
-          >
-            { this.renderDrawer() }
-            <Grid
-              container
-              justify="space-around"
-              alignItems="flex-start"
-              direction="row"
-              style={ { minHeight: '924px', position: 'relative', flex: 1 } }
+        <MuiPickersUtilsProvider utils={ MomentUtils }>
+          <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
+            <CssBaseline />
+            <div
+              style={ {
+                display: "flex",
+                padding:
+                  this.state.size === "xs" || this.state.size === "sm"
+                    ? "0px"
+                    : this.state.theme.custom.page.padding,
+                background: background,
+                backgroundImage: backgroundImage
+              } }
             >
-              <Grid item xs={ 12 } style={ { marginRight: 16 } }>
-                { this.state.user == null ? null : this.renderAppBar() }
-                { this.renderScreen() }
+              { this.renderDrawer() }
+              <Grid
+                container
+                justify="space-around"
+                alignItems="flex-start"
+                direction="row"
+                style={ { minHeight: "924px", position: "relative", flex: 1 } }
+              >
+                <Grid item xs={ 12 } style={ { marginRight: 16, flex: 1, height: "100%" } }>
+                  { this.state.user == null ? null : this.renderAppBar() }
+                  { this.renderScreen() }
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
-          { this.renderFooter() }
-          <AppDialog />
-          <AppSnackBar />
-        </MuiThemeProvider>
+            </div>
+            { this.renderFooter() }
+            <AppDialog />
+            <AppSnackBar />
+          </MuiThemeProvider>
+        </MuiPickersUtilsProvider>
       </Context>
     );
   }
@@ -1294,11 +1304,11 @@ class App extends Component {
     const params = currentScreen.split('/')[1] || null;
 
     switch (path) {
-      case 'welcome':
+      case "welcome":
         return <Welcome setUser={ this.setUser } />;
-      case 'registerAccount':
+      case "registerAccount":
         return <RegisterAccount setUser={ this.setUser } />;
-      case 'verifyAccount':
+      case "verifyAccount":
         const { uriParameters: { token, code } } = this.state;
         return <VerifyAccount token={ token } code={ code } />;
       case 'createEth':
@@ -1311,17 +1321,17 @@ class App extends Component {
         return <CreateBitcoin user={ this.state.user } theme={ this.state.theme } />;
       case 'kyc':
         return <KYC user={ this.state.user } setUser={ this.setUser } />;
-      case 'setUsername':
+      case "setUsername":
         return <SetUsername user={ this.state.user } setUser={ this.setUser } />;
-      case 'forgotPassword':
+      case "forgotPassword":
         return <ForgotPassword />;
-      case 'forgotPasswordDone':
+      case "forgotPasswordDone":
         return <ForgotPasswordDone />;
-      case 'resetPassword':
+      case "resetPassword":
         return <ResetPassword uriParameters={ this.state.uriParameters } />;
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
-      case 'ethAccounts':
+      case "ethAccounts":
         return (
           <EthAccounts
             theme={ this.state.theme }
@@ -1333,7 +1343,7 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-      case 'wanAccounts':
+      case "wanAccounts":
         return (
           <WanAccounts
             theme={ this.state.theme }
@@ -1347,7 +1357,7 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-      case 'aionAccounts':
+      case "aionAccounts":
         return (
           <AionAccounts
             theme={ this.state.theme }
@@ -1385,13 +1395,13 @@ class App extends Component {
       //   return (<UpdatePassword user={this.state.user} />);
       // case 'manage2FA':
       //   return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
-      case 'privacyPolicy':
+      case "privacyPolicy":
         return <PrivacyPolicy />;
-      case 'cookiePolicy':
+      case "cookiePolicy":
         return <CookiePolicy />;
-      case 'termsAndConditions':
+      case "termsAndConditions":
         return <TermsAndConditions />;
-      case 'sendEthereum':
+      case "sendEthereum":
         return (
           <SendEthereum
             user={ this.state.user }
@@ -1402,7 +1412,7 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-      case 'sendERC20':
+      case "sendERC20":
         return (
           <SendERC20
             user={ this.state.user }
@@ -1415,7 +1425,7 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-      case 'sendWanchain':
+      case "sendWanchain":
         return (
           <SendWanchain
             user={ this.state.user }
@@ -1428,7 +1438,7 @@ class App extends Component {
         );
       case 'sendWRC20':
         return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
-      case 'sendAion':
+      case "sendAion":
         return (
           <SendAion
             user={ this.state.user }
@@ -1454,8 +1464,8 @@ class App extends Component {
       case 'pooling':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <Pooling user={ this.state.user } /> : <Loader />;
-      case 'createPool':
-      case 'updatePool':
+      case "createPool":
+      case "updatePool":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolCreate
             // theme={this.state.theme}
@@ -1464,8 +1474,8 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
-      case 'createWhitelist':
-      case 'updateWhitelist':
+      case "createWhitelist":
+      case "updateWhitelist":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <WhitelistCreate
             // theme={this.state.theme}
@@ -1474,14 +1484,14 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
-      case 'browsePools':
+      case "browsePools":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolBrowse
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
-      case 'poolDetails':
+      case "poolDetails":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolDetails
             id={ params }
@@ -1489,11 +1499,11 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
           /> : <Loader />;
-      case 'ico':
+      case "ico":
         return <ComingSoon />;
       case 'resendConfirmationEmail':
         return <ResendConfirmationEmail />;
-      case 'settings':
+      case "settings":
         return (
           <Settings
             theme={ this.state.theme }
@@ -1502,19 +1512,19 @@ class App extends Component {
             changeTheme={ this.changeTheme }
           />
         );
-      case 'about':
+      case "about":
         return <ComingSoon />;
-      case 'press':
+      case "press":
         return <ComingSoon />;
-      case 'contactUs':
+      case "contactUs":
         return <ContactUs />;
-      case 'bugBounty':
+      case "bugBounty":
         return <ComingSoon />;
-      case 'blog':
+      case "blog":
         return <ComingSoon />;
-      case 'faq':
+      case "faq":
         return <ComingSoon />;
-      case 'fees':
+      case "fees":
         return <ComingSoon />;
       // case 'add':
       //   if(!this.state.ipValid) {
@@ -1532,7 +1542,7 @@ class App extends Component {
       //   return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
       // case 'whitelistStatus':
       //   return (<WhitelistCheck />)
-      case 'logOut':
+      case "logOut":
         return <Welcome setUser={ this.setUser } />;
       default:
         return <Welcome setUser={ this.setUser } />;
@@ -1571,9 +1581,9 @@ class App extends Component {
 }
 
 function decrypt(text, seed) {
-  const decipher = crypto.createDecipher('aes-256-cbc', seed);
-  let dec = decipher.update(text, 'base64', 'utf8');
-  dec += decipher.final('utf8');
+  const decipher = crypto.createDecipher("aes-256-cbc", seed);
+  let dec = decipher.update(text, "base64", "utf8");
+  dec += decipher.final("utf8");
   return dec;
 }
 
@@ -1581,7 +1591,7 @@ function decrypt(text, seed) {
 String.prototype.hexDecode = function () {
   let j;
   const hexes = this.match(/.{1,4}/g) || [];
-  let back = '';
+  let back = "";
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }

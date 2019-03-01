@@ -10,11 +10,13 @@ import {WithPoolingContext, withPoolingContext} from "../../context/PoolingConte
 import DetailsGroup from "./components/DetailsGroup";
 import Button from "@material-ui/core/Button";
 import {colors} from "../../theme";
-import {FundingPool, initialFundingPool} from "../../types/pooling";
 import PoolPledgeDialog from "../../components/PoolPledgeDialog/PoolPledgeDialog";
 import {EthAddress} from "../../types/eth";
 import {WanAddress} from "../../types/wan";
 import PoolContributeDialog from "../../components/PoolContributeDialog/PoolContributeDialog";
+import {WithSnackBarContext, withSnackBarContext} from "../../context/SnackBarContext";
+import {FundingPool, isFundingPool} from "../../types/pooling";
+import moment from "moment";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -34,6 +36,7 @@ export interface PoolDetailsGroupItems {
   title: string;
   text: string | number;
   width: 6 | 12;
+  hidden?:boolean;
 }
 
 interface PoolDetailsGroups {
@@ -49,91 +52,103 @@ interface OwnProps {
 }
 
 interface State {
-  groups: PoolDetailsGroups[];
-  loading: boolean;
-  pool: FundingPool;
   openPledgeDialog: boolean;
   openContributeDialog: boolean;
+  pool: FundingPool | null;
 }
 
-interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext {
+interface Props extends OwnProps, WithStyles<typeof styles>, WithPoolingContext, WithSnackBarContext {
 }
 
-class PoolDetails extends React.Component<Props,State> {
+class PoolDetails extends React.Component<Props, State> {
   readonly state: State = {
-    groups: [],
-    loading: false,
-    pool: initialFundingPool,
-    openPledgeDialog:false,
+    pool: null,
+    openPledgeDialog: false,
     openContributeDialog: false
   };
 
   componentWillMount(): void {
     const {
       id, poolingContext: {
-        getManagedFundingPoolDetails
-      }
+        getAvailableFundingPools,
+        getManagedFundingPoolDetails,
+        availablePools
+      },
+      user
     } = this.props;
-    this.setState({loading: true});
-    console.log(id);
-    getManagedFundingPoolDetails(id).then(res => {
-      this.setState({
-        loading: false,
-        pool: res,
-        groups: [
-          {
-            title: "Settings",
-            items: [
-              {title: "Pool Name", text: res.name || "Not Available", width: 6},
-              {title: "Creator", text: res.owner || "Not Available", width: 6},
-              {title: "Token Name", text: res.tokenSymbol || "Not Available", width: 6},
-              {title: "Token Address", text: res.tokenAddress, width: 12},
-            ]
-          },
-          // {
-          //   title: "Details",
-          //   items: [
-          //     {title: "Progress",text: "95% Complete",width: 12},
-          //   ]
-          // },
-          {
-            title: "Allocations",
-            items: [
-              // {title: "Contract Cap",text: "1000 ETH / $250,000",width: 6},
-              {title: "Fee", text: `${res.fee || 0} %`, width: 6},
-              {title: "Min-Cap", text: `${res.minContribution} ${res.blockchain}`, width: 6},
-              {title: "Max-Cap", text: `${res.maxContribution} ${res.blockchain}`, width: 6},
-            ]
-          },
-          {
-            title: "",
-            items: [
-              {title: "Amount Pooled", text: `${res.balance} ${res.blockchain}`, width: 12},
-              {title: "Contributors", text: res.contributorCount || 0, width: 12},
-            ]
-          }
-        ]
-      });
-      console.log(res);
-    });
+    if (availablePools.findIndex((pool) => Number(pool.id) === Number(id)) === -1) {
+      getAvailableFundingPools(user.id,id);
+    }
+    getManagedFundingPoolDetails(id).then(pool=>{
+      if (isFundingPool(pool)) {
+        this.setState({pool});
+      }
+    })
   }
 
   public render() {
-    const {classes,ethAddresses,wanAddresses} = this.props;
     const {
-      groups, loading, openPledgeDialog, openContributeDialog,pool} = this.state;
-    const {status} = pool;
+      id, classes, ethAddresses, wanAddresses, poolingContext: {
+        availablePools, availablePoolsLoading
+      }
+    } = this.props;
+    const {
+      openPledgeDialog, openContributeDialog
+    } = this.state;
+    const poolId = availablePools.findIndex((pool) => Number(pool.id) === Number(id));
+    const pool = this.state.pool !== null?this.state.pool:poolId !== -1 ? availablePools[poolId] : null;
+    const groups: PoolDetailsGroups[] = [];
+    let contribution = 0;
+    let pledged = 0;
+    let contributors = 0;
+    if (pool !== null) {
+      if (pool.whitelistedUsers) {
+        for (const user of pool.whitelistedUsers) {
+          pledged = pledged + (user && user.pledge !== undefined?user.pledge:0);
+          contribution = contribution + (user && user.value !== undefined?user.value:0);
+          contributors = user && user.value !== undefined && user.value > 0?contributors+1:contributors;
+        }
+      }
+      groups.push({
+          title: "Settings",
+          items: [
+            {title: "Pool Name", text: pool.name || "Not Available", width: 6},
+            {title: "Creator", text: pool.owner || "Not Available", width: 6},
+            {title: "Token Name", text: pool.tokenSymbol || "Not Available", width: 6},
+            {title: "Token Address", text: pool.tokenAddress, width: 12},
+          ]
+        }
+      );
+      groups.push({
+        title: "Allocations",
+        items: [
+          {title: "Fee", text: `${pool.fee || 0} %`, width: 6},
+          {title: "Min-Cap", text: `${pool.minContribution} ${pool.blockchain}`, width: 6},
+          {title: "Max-Cap", text: `${pool.maxContribution} ${pool.blockchain}`, width: 6},
+        ]
+      });
+      groups.push({
+        title: "",
+        items: [
+          {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
+          {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 6},
+          {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
+          {title: "Pledge End Date", text: `${pool.pledgesEndDate !== null?moment(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
+        ]
+      });
+    } else {
+    }
     return (
       <React.Fragment>
-        <Header title="Pool Details" headerItems={headerItems.pooling} loading={loading} />
+        <Header title="Pool Details" headerItems={headerItems.pooling} loading={availablePoolsLoading} />
         <Grid container direction="row" className={classes.containerGrid} spacing={40}>
           {groups.map((group, i) => <DetailsGroup key={i} title={group.title} items={group.items} />)}
-          {!loading && <Grid item container direction="row" justify="flex-end" xs={12}>
+          {!availablePoolsLoading && pool !== null && <Grid item container direction="row" justify="flex-end" xs={12}>
             <Button variant="outlined" color="secondary" className={classes.button} onClick={this.onBackClick}>Back</Button>
             <div className={classes.buttonSpacer} />
-            {status === 1 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
+            {pool.status === 1 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
             <div className={classes.buttonSpacer} />
-            {status === 5 && <Button variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
+            {pool.status === 5 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
           </Grid>}
         </Grid>
         <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />
@@ -155,8 +170,8 @@ class PoolDetails extends React.Component<Props,State> {
   };
 
   onDialogClose = () => {
-    this.setState({openPledgeDialog: false,openContributeDialog: false})
+    this.setState({openPledgeDialog: false, openContributeDialog: false})
   }
 }
 
-export default withStyles(styles)(withPoolingContext(PoolDetails)) as unknown as React.ComponentClass<Props>;
+export default withStyles(styles)(withPoolingContext(withSnackBarContext(PoolDetails))) as unknown as React.ComponentClass<Props>;
