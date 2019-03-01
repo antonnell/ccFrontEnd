@@ -326,7 +326,7 @@ class PoolCreate extends React.Component<Props, State> {
               </Button>}
               <Button
                 className={classes.deployButton}
-                disabled={!canSubmit}
+                disabled={isSubmitting || loading}
                 variant="outlined"
                 size="small"
                 color="secondary"
