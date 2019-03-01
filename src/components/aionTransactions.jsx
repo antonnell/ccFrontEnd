@@ -417,8 +417,8 @@ class EnhancedTable extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="h5" style={{ marginBottom: "20px" }}>
-          Aion Transactions
+        <Typography variant="h6" style={{ marginBottom: "20px" }}>
+          Transactions
         </Typography>
         <Paper>
           <EnhancedTableToolbar

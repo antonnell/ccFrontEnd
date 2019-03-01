@@ -193,7 +193,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedFilterBar = props => {
   const {
-    wanAddresses,
+    bitcoinAddresses,
     selectedAddress,
     selectedAddressError,
     selectedAddressErrorMessage,
@@ -235,8 +235,8 @@ let EnhancedFilterBar = props => {
             <MenuItem key="a" value="">
               --
             </MenuItem>
-            {wanAddresses
-              ? wanAddresses.map(address => {
+            {bitcoinAddresses
+              ? bitcoinAddresses.map(address => {
                   return (
                     <MenuItem key={address.name} value={address.name}>
                       {address.name}
@@ -371,7 +371,7 @@ class EnhancedTable extends React.Component {
     order: "asc",
     orderBy: "timestamp",
     selected: [],
-    data: this.props.wanTransactions,
+    data: this.props.bitcoinTransactions,
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false
@@ -396,9 +396,9 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  // handleToggleFilters = event => {
-  //   this.setState({ filtersVisible: !this.state.filtersVisible });
-  // };
+  handleToggleFilters = () => {
+    this.setState({ filtersVisible: !this.state.filtersVisible });
+  };
 
   render() {
     const { classes } = this.props;
@@ -410,7 +410,7 @@ class EnhancedTable extends React.Component {
       page,
       filtersVisible
     } = this.state;
-    const data = this.props.wanTransactions;
+    const data = this.props.bitcoinTransactions;
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, data ? data.length : 0 - page * rowsPerPage);
@@ -430,7 +430,7 @@ class EnhancedTable extends React.Component {
             selectedContact={this.props.selectedContact}
             selectContact={this.props.selectContact}
             selectAddress={this.props.selectAddress}
-            wanAddresses={this.props.wanAddresses}
+            bitcoinAddresses={this.props.bitcoinAddresses}
             contacts={this.props.contacts}
             fromDate={this.props.fromDate}
             toDate={this.props.toDate}
@@ -501,7 +501,7 @@ class EnhancedTable extends React.Component {
                             noWrap
                           >
                             <a
-                              href={config.wanscanURL + n.transactionId}
+                              href={config.bitcoinscanURL + n.transactionId}
                               target="_blank"
                               rel="noopener noreferrer"
                             >

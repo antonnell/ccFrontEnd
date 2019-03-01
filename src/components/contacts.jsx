@@ -206,6 +206,20 @@ class Contacts extends Component {
                   >
                     Send Aion
                   </Button>
+                  <Button
+                    disabled={
+                      contact.hasBitcoinWallet !== true
+                    }
+                    size="small"
+                    variant="text"
+                    style={{ border: "1px solid #ccc", marginLeft: "12px" }}
+                    color="primary"
+                    onClick={() => {
+                      this.props.sendBitcoinClicked(contact);
+                    }}
+                  >
+                    Send BTC
+                  </Button>
                 </Grid>
               </Grid>
             </CardContent>

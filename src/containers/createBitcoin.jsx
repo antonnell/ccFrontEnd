@@ -1,30 +1,30 @@
 import React from "react";
-import CreateWanComponent from "../components/createWan";
+import CreateBitcoinComponent from "../components/createBitcoin";
 
 // const crypto = require("crypto");
 
 const createReactClass = require("create-react-class");
 
-let wanEmitter = require("../store/wanStore.js").default.emitter;
-let wanDispatcher = require("../store/wanStore.js").default.dispatcher;
+let bitcoinEmitter = require("../store/bitcoinStore.js").default.emitter;
+let bitcoinDispatcher = require("../store/bitcoinStore.js").default.dispatcher;
 
-let WanAccounts = createReactClass({
+let BitcoinAccounts = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
       addressName: "",
       addressNameError: false,
-      addressNameErrorMessage: "This is the name of your new Wanchain account",
+      addressNameErrorMessage: "This is the name of your new Bitcoin account",
       addressNameValid: false
     };
   },
   render() {
     return (
-      <CreateWanComponent
+      <CreateBitcoinComponent
         handleChange={this.handleChange}
         onCreateKeyDown={this.onCreateKeyDown}
-        createWanAddress={this.createWanAddress}
+        createBitcoinAddress={this.createBitcoinAddress}
         navigateSkip={this.navigateSkip}
         loading={this.state.loading}
         error={this.state.error}
@@ -38,8 +38,8 @@ let WanAccounts = createReactClass({
   },
 
   componentWillMount() {
-    wanEmitter.removeAllListeners("createWanAddress");
-    wanEmitter.on("createWanAddress", this.createWanAddressReturned);
+    bitcoinEmitter.removeAllListeners("createBitcoinAddress");
+    bitcoinEmitter.on("createBitcoinAddress", this.createBitcoinAddressReturned);
   },
 
   resetInputs() {
@@ -49,7 +49,7 @@ let WanAccounts = createReactClass({
     });
   },
 
-  createWanAddressReturned(error, data) {
+  createBitcoinAddressReturned(error, data) {
     this.setState({ loading: false });
     if (error) {
       return this.setState({ error: error.toString() });
@@ -58,13 +58,13 @@ let WanAccounts = createReactClass({
     if (data.success) {
       this.resetInputs();
       var content = { id: this.props.user.id };
-      wanDispatcher.dispatch({
-        type: "getWanAddress",
+      bitcoinDispatcher.dispatch({
+        type: "getBitcoinAddress",
         content,
         token: this.props.user.token
       });
 
-      window.location.hash = "wanAccounts";
+      window.location.hash = "bitcoinAccounts";
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -73,12 +73,12 @@ let WanAccounts = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = "wanAccounts";
+    window.location.hash = "bitcoinAccounts";
   },
 
   onCreateKeyDown(event) {
     if (event.which === 13) {
-      this.createWanAddress();
+      this.createBitcoinAddress();
     }
   },
 
@@ -86,7 +86,7 @@ let WanAccounts = createReactClass({
     this.setState({
       addressNameValid: false,
       addressNameError: false,
-      addressNameErrorMessage: "This is the name of your new Wanchain account"
+      addressNameErrorMessage: "This is the name of your new Bitcoin account"
     });
     if (value == null) {
       value = this.state.addressName;
@@ -102,16 +102,16 @@ let WanAccounts = createReactClass({
     return true;
   },
 
-  createWanAddress() {
+  createBitcoinAddress() {
     if (this.validateAddressName()) {
       this.setState({ loading: true });
       var content = {
         username: this.props.user.username,
-        name: this.state.addressName,
+        displayName: this.state.addressName,
         isPrimary: this.state.primary
       };
-      wanDispatcher.dispatch({
-        type: "createWanAddress",
+      bitcoinDispatcher.dispatch({
+        type: "createBitcoinAddress",
         content,
         token: this.props.user.token
       });
@@ -138,4 +138,4 @@ let WanAccounts = createReactClass({
 //   return dec;
 // }
 
-export default WanAccounts;
+export default BitcoinAccounts;

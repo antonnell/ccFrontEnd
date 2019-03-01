@@ -32,6 +32,7 @@ let AionAccounts = createReactClass({
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
         addressNameValid={this.state.addressNameValid}
+        theme={this.props.theme}
       />
     );
   },
@@ -63,7 +64,7 @@ let AionAccounts = createReactClass({
         token: this.props.user.token
       });
 
-      window.location.hash = "wanAccounts";
+      window.location.hash = "aionAccounts";
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -72,7 +73,7 @@ let AionAccounts = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = "wanAccounts";
+    window.location.hash = "aionAccounts";
   },
 
   onCreateKeyDown(event) {

@@ -7,22 +7,22 @@ const styles = {};
 
 class Footer extends Component {
   render() {
-    var login = "Login";
-    if (this.props.user != null) {
-      login = "Logout";
-    }
-    var linkStyle = { cursor: "pointer", marginBottom: "6px", color: "#fff" };
-    var headingStyle = { color: "#FFFFFF", marginBottom: "12px" };
+    // var login = "Login";
+    // if (this.props.user != null) {
+    //   login = "Logout";
+    // }
+    // var linkStyle = { cursor: "pointer", marginBottom: "6px", color: "#fff" };
+    // var headingStyle = { color: "#FFFFFF", marginBottom: "12px" };
     //onPledgeClick={(event) => { this.props.navClicked(event, 'registerAccount'); }}
-    var aStyle = { textDecoration: "none", color: "white" };
-    var line = {
-      width: "30px",
-      height: "5px",
-      borderRadius: "3px",
-      background: "#95e2f1",
-      marginBottom: "12px",
-      marginTop: "12px"
-    };
+    // var aStyle = { textDecoration: "none", color: "white" };
+    // var line = {
+    //   width: "30px",
+    //   height: "5px",
+    //   borderRadius: "3px",
+    //   background: "#95e2f1",
+    //   marginBottom: "12px",
+    //   marginTop: "12px"
+    // };
 
     return (
       <Grid

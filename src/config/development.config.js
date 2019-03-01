@@ -4,7 +4,8 @@ const config = {
   apiUrl: "http://api.testnet.cryptocurve.network/",
   etherscanUrl: "https://ropsten.etherscan.io/tx/",
   wanscanURL: "https://explorer.cryptocurve.xyz/tx/",
-  aionscanURL: "https://mastery.aion.network/#/transaction/"
+  aionscanURL: "https://mastery.aion.network/#/transaction/",
+  bitcoinscanURL: "https://live.blockcypher.com/btc-testnet/tx/"
 };
 
 export default config;

@@ -12,84 +12,14 @@ import Tab from "@material-ui/core/Tab";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControlLabel  from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
-class SetupWRC20Payment extends Component {
-  renderTokens() {
-    if (this.props.wrc20Tokens == null || this.props.wrc20Tokens.length === 0) {
-      return (
-        <Typography variant="subtitle1">
-          Oh no, we couldn't find any supported tokens.
-        </Typography>
-      );
-    }
-
-    return (
-      <FormControl error style={{ minWidth: "300px", width: "100%" }}>
-        <Select
-          error={this.props.tokenError}
-          value={this.props.sendWRC20Symbol}
-          onChange={this.props.selectToken}
-          renderValue={value => {
-            var selectedToken = this.props.wrc20Tokens.filter(token => {
-              return token.symbol === value;
-            })[0];
-
-            return (
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                direction="row"
-              >
-                <Grid item xs={8} align="left">
-                  <Typography variant="h3" noWrap>
-                    {selectedToken.name}
-                  </Typography>
-                  <Typography variant="body1" noWrap>
-                    {selectedToken.contractAddress}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={4}
-                  style={{ borderLeft: "1px solid #dedede" }}
-                  align="center"
-                >
-                  <div />
-                  <Typography variant="h6" noWrap>
-                    {selectedToken.symbol}
-                  </Typography>
-                  <Typography variant="subtitle1" noWrap>
-                    Ticker Symbol
-                  </Typography>
-                </Grid>
-              </Grid>
-            );
-          }}
-        >
-          {this.props.wrc20Tokens.map(token => {
-            return (
-              <MenuItem value={token.symbol} key={token.contractAddress}>
-                <ListItemText
-                  primary={token.name}
-                  secondary={token.contractAddress}
-                />
-                <ListItemSecondaryAction style={{ right: "24px" }}>
-                  <Typography>{token.symbol}</Typography>
-                </ListItemSecondaryAction>
-              </MenuItem>
-            );
-          })}
-        </Select>
-        <FormHelperText>{this.props.tokenErrorMessage}</FormHelperText>
-      </FormControl>
-    );
-  }
-
+class SetupBitcoinPayment extends Component {
   renderAddresses(accountValue, error, errorMessage, onChange, type) {
     if (
-      this.props.wanAddresses == null ||
-      this.props.wanAddresses.length === 0
+      this.props.bitcoinAddresses == null ||
+      this.props.bitcoinAddresses.length === 0
     ) {
       return (
         <Typography variant="subtitle1">
@@ -109,8 +39,8 @@ class SetupWRC20Payment extends Component {
             if (!value) {
               return <div />;
             }
-            var selectedAddress = this.props.wanAddresses.filter(address => {
-              return address.publicAddress === value;
+            var selectedAddress = this.props.bitcoinAddresses.filter(address => {
+              return address.id === value;
             })[0];
 
             return (
@@ -122,10 +52,7 @@ class SetupWRC20Payment extends Component {
               >
                 <Grid item xs={8} align="left">
                   <Typography variant="h3" noWrap>
-                    {selectedAddress.name}
-                  </Typography>
-                  <Typography variant="body1" noWrap>
-                    {selectedAddress.publicAddress}
+                    {selectedAddress.displayName}
                   </Typography>
                 </Grid>
                 <Grid
@@ -136,54 +63,34 @@ class SetupWRC20Payment extends Component {
                 >
                   <div />
                   <Typography variant="h6" noWrap>
-                    {this.props.sendWRC20Symbol
-                      ? selectedAddress.wrc20Tokens.filter(token => {
-                          return token.symbol === this.props.sendWRC20Symbol;
-                        })[0].balance +
-                        " " +
-                        this.props.sendWRC20Symbol
-                      : ""}
+                    {selectedAddress.balance + " BTC"}
                   </Typography>
                   <Typography variant="subtitle1" noWrap>
-                    {this.props.sendWRC20Symbol
-                      ? "Available Balance"
-                      : "Select a token"}
+                    Available Balance
                   </Typography>
                 </Grid>
               </Grid>
             );
           }}
         >
-          {this.props.wanAddresses.map(address => {
-            if (type === "own" && address.publicAddress === this.props.accountValue) {
+          {this.props.bitcoinAddresses.map(address => {
+            if (type === "own" && address.id === this.props.accountValue) {
               return false;
             }
 
             return (
-              <MenuItem
-                value={address.publicAddress}
-                key={address.publicAddress}
-              >
+              <MenuItem value={address.id} key={address.id}>
                 <ListItemText
-                  primary={address.name}
-                  secondary={address.publicAddress}
+                  primary={address.displayName}
                 />
                 <ListItemSecondaryAction style={{ right: "24px" }}>
-                  <Typography>
-                    {this.props.sendWRC20Symbol
-                      ? address.wrc20Tokens.filter(token => {
-                          return token.symbol === this.props.sendWRC20Symbol;
-                        })[0].balance +
-                        " " +
-                        this.props.sendWRC20Symbol
-                      : ""}
-                  </Typography>
+                  <Typography>{address.balance + " BTC"}</Typography>
                 </ListItemSecondaryAction>
               </MenuItem>
             );
           })}
         </Select>
-        <FormHelperText>{this.props.accountErrorMessage}</FormHelperText>
+        <FormHelperText>{errorMessage}</FormHelperText>
       </FormControl>
     );
   }
@@ -207,7 +114,7 @@ class SetupWRC20Payment extends Component {
           style={{ minWidth: "300px", width: "100%" }}
           renderValue={value => {
             var selectedContact = this.props.contacts.filter(contact => {
-              return contact.primaryWanAddress === value;
+              return contact.displayName === value;
             })[0];
 
             return (
@@ -220,13 +127,6 @@ class SetupWRC20Payment extends Component {
                 <Grid item xs={8} align="left">
                   <Typography variant="h3" noWrap>
                     {selectedContact.displayName}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    noWrap
-                    style={{ color: "rgba(0, 0, 0, 0.54)" }}
-                  >
-                    {selectedContact.primaryWanAddress}
                   </Typography>
                 </Grid>
                 <Grid
@@ -244,15 +144,18 @@ class SetupWRC20Payment extends Component {
             );
           }}
         >
-          {this.props.contacts.map(contact => {
+          {this.props.contacts
+            .filter(contact => {
+              return contact.hasBitcoinWallet === true
+            })
+            .map(contact => {
             return (
               <MenuItem
-                value={contact.primaryWanAddress}
-                key={contact.primaryWanAddress}
+                value={contact.displayName}
+                key={contact.displayName}
               >
                 <ListItemText
                   primary={contact.displayName}
-                  secondary={contact.primaryWanAddress}
                 />
               </MenuItem>
             );
@@ -326,7 +229,6 @@ class SetupWRC20Payment extends Component {
               background: "#b5b5b5",
               width: "100%",
               padding: "12px",
-              fontStyle: "italic",
               marginBottom: "12px"
             }}
           >
@@ -370,31 +272,6 @@ class SetupWRC20Payment extends Component {
           direction="row"
           spacing={0}
           style={{ position: "relative", marginTop: "24px" }}
-        >
-          <Grid
-            item
-            xs={12}
-            align="left"
-            style={{ borderBottom: "1px solid #aaaaaa", paddingBottom: "12px" }}
-          >
-            <Typography variant="h5">Token details</Typography>
-          </Grid>
-          <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
-            <Typography variant="subtitle1">
-              Select the WRC20 token to transfer*
-            </Typography>
-          </Grid>
-          <Grid item xs={12} altign="left">
-            {this.renderTokens()}
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          justify="flex-start"
-          alignItems="flex-start"
-          direction="row"
-          spacing={0}
-          style={{ position: "relative", marginTop: "48px" }}
         >
           <Grid
             item
@@ -469,39 +346,24 @@ class SetupWRC20Payment extends Component {
               }}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
-                    {this.props.sendWRC20Symbol}
-                  </InputAdornment>
+                  <InputAdornment position="end">BTC</InputAdornment>
                 )
               }}
             />
           </Grid>
-          <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
-            <Typography variant="subtitle1">Gas limit*</Typography>
-            <TextField
-              required
-              fullWidth={false}
-              color="textSecondary"
-              error={this.props.gweiError}
-              style={{ minWidth: "300px", maxWidth: "400px", marginTop: "0px" }}
-              id="gwei"
-              placeholder="Gwin"
-              value={this.props.gwei}
-              onChange={event => {
-                this.props.handleChange(event, "gwei");
-              }}
-              margin="normal"
-              helperText={this.props.gweiErrorMessage}
-              onBlur={event => {
-                this.props.validateField(event, "gwei");
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">Gwin</InputAdornment>
-                )
-              }}
-            />
-          </Grid>
+        </Grid>
+        <Grid item xs={12} align="left" style={{ marginTop: "24px" }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.props.useNewChangeAddress}
+                onChange={ (event) => { this.props.handleChecked(event, 'useNewChangeAddress'); }}
+                value='useNewChangeAddress'
+                color='primary'
+              />
+            }
+            label="Send unused balance to a new address"
+          />
         </Grid>
         <Grid
           container
@@ -527,4 +389,4 @@ class SetupWRC20Payment extends Component {
   }
 }
 
-export default SetupWRC20Payment;
+export default SetupBitcoinPayment;

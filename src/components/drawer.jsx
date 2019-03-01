@@ -50,6 +50,19 @@ function AionIconPng() {
   );
 }
 
+function BitcoinIconPng() {
+  return (
+    <div style={ { overflow: 'hidden' } }>
+      <img
+        alt=""
+        src={ require('../assets/images/bitcoin-logo.png') }
+        width="24px"
+        height="24px"
+      />
+    </div>
+  );
+}
+
 function ContactIcon(props) {
   const { color, ...excludingColor } = props;
   return (
@@ -191,6 +204,18 @@ class AppDrawer extends Component {
           <ListItemText primary="Aion Accounts" />
         </ListItem>
         <ListItem
+          selected={ this.props.currentScreen === 'bitcoinAccounts' }
+          button
+          onClick={ event => {
+            this.props.navClicked(event, 'bitcoinAccounts');
+          } }
+        >
+          <ListItemIcon>
+            <BitcoinIconPng />
+          </ListItemIcon>
+          <ListItemText primary="Bitcoin Accounts" />
+        </ListItem>
+        <ListItem
           selected={ this.props.currentScreen === 'ethAccounts' }
           button
           onClick={ event => {
@@ -226,6 +251,18 @@ class AppDrawer extends Component {
             <AionIconPng />
           </ListItemIcon>
           <ListItemText primary="Send Aion" />
+        </ListItem>
+        <ListItem
+          selected={ this.props.currentScreen === 'sendBitcoin' }
+          button
+          onClick={ event => {
+            this.props.navClicked(event, 'sendBitcoin');
+          } }
+        >
+          <ListItemIcon>
+            <BitcoinIconPng />
+          </ListItemIcon>
+          <ListItemText primary="Send Bitcoin" />
         </ListItem>
         <ListItem
           selected={ this.props.currentScreen === 'sendEthereum' }

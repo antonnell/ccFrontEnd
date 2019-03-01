@@ -21,23 +21,23 @@ class PrivateKeyModal extends Component {
 
   render() {
     return (
-      <Dialog open={this.props.isOpen} title="Export" onClose={this.props.handleClose} >
+      <Dialog open={this.props.isOpen} title="Export" onClose={this.props.handleClose} fullWidth={true} maxWidth={'lg'}>
         <DialogTitle id="alert-dialog-title">
           <Typography variant='h6' align='center'>
             Export private keys at your own risk
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography align='center'>
+          <Typography variant="body1" align='center'>
             Your Private Key:
           </Typography>
           <div style={{lineHeight: '46px', display: 'inline-block'}} id='currentAccountKey'>
-            <Typography>
+            <Typography variant="body1">
               {this.props.currentAccountKey}
             </Typography>
           </div>
           <Tooltip style={{display: 'inline-block'}} title='Copy Private Key' placement="right">
-            <IconButton style={{ verticalAlign: 'top'}} onClick={() => { this.props.copyKey(this.props.currentAccountKey) }}>
+            <IconButton style={{ verticalAlign: 'top', marginTop: '-12px'}} onClick={() => { this.props.copyKey(this.props.currentAccountKey) }}>
               <CopyIcon />
             </IconButton>
           </Tooltip>

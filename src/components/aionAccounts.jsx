@@ -353,6 +353,48 @@ class AionAccounts extends Component {
   }
 
   render() {
+  
+    if (this.props.addresses === null) {
+      return (
+        <Grid container justify="center" alignItems="flex-start" direction="row">
+          <Grid
+            item
+            xs={12}
+            align="left"
+            style={{
+              margin: "12px",
+              padding: "24px 0px",
+              borderBottom:
+                "2px solid " + this.props.theme.custom.headingBorder.color,
+              display: "flex"
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <Typography variant="h6">Aion Accounts</Typography>
+            </div>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            xl={12}
+            align="left"
+            style={{ minHeight: "190px", position: "relative" }}
+          >
+            <CircularProgress
+              size={36}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: -12,
+                marginLeft: -12
+              }}
+            />
+          </Grid>
+        </Grid>
+      );
+    }
+
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row">
         <Grid

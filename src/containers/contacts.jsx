@@ -78,6 +78,7 @@ let Contacts = createReactClass({
         updateNavigateClicked={this.updateNavigateClicked}
         sendEtherClicked={this.sendEtherClicked}
         sendAionClicked={this.sendAionClicked}
+        sendBitcoinClicked={this.sendBitcoinClicked}
         sendWanClicked={this.sendWanClicked}
         username={this.state.username}
         usernameError={this.state.usernameError}
@@ -137,6 +138,10 @@ let Contacts = createReactClass({
 
   sendAionClicked(contact) {
     this.props.openSendAion(contact)
+  },
+
+  sendBitcoinClicked(contact) {
+    this.props.openSendBitcoin(contact)
   },
 
   handleChange (event, name) {

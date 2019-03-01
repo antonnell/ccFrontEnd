@@ -109,7 +109,7 @@ class WanAccounts extends Component {
           align="center"
           style={ { minHeight: '190px', paddingTop: '100px' } }
         >
-          <Typography variant="h4">
+          <Typography variant="h5">
             Oh no, we couldn't find any accounts for you. Why don't you
             create/import one?
           </Typography>
@@ -718,19 +718,49 @@ class WanAccounts extends Component {
     );
   }
 
-  /*
-  <Button
-    style={ { marginLeft: '12px' } }
-    size="small"
-    variant="contained"
-    color="secondary"
-    onClick={ this.props.handleImportOpen }
-  >
-    Import Account
-  </Button>
-  */
-
   render() {
+
+    if (this.props.addresses === null) {
+      return (
+        <Grid container justify="center" alignItems="flex-start" direction="row">
+          <Grid
+            item
+            xs={12}
+            align="left"
+            style={{
+              margin: "12px",
+              padding: "24px 0px",
+              borderBottom:
+                "2px solid " + this.props.theme.custom.headingBorder.color,
+              display: "flex"
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <Typography variant="h6">Wanchain Accounts</Typography>
+            </div>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            xl={12}
+            align="left"
+            style={{ minHeight: "190px", position: "relative" }}
+          >
+            <CircularProgress
+              size={36}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: -12,
+                marginLeft: -12
+              }}
+            />
+          </Grid>
+        </Grid>
+      );
+    }
+
     return (
       <Grid container justify="center" direction="row">
         <Grid

@@ -9,15 +9,24 @@ class CreateAion extends Component {
 
   render() {
     return (
-      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '100px', marginBottom: '100px'}}>
-        <Grid item xs={10} sm={6} md={4} lg={3} align='left'>
-          <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
-            <Grid item xs={12} align='center'>
-              <Typography variant="h5">
-                Create Aion Account
-              </Typography>
-            </Grid>
-          </Grid>
+      <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}>
+        <Grid
+          item
+          xs={12}
+          align="left"
+          style={{
+            margin: "12px",
+            padding: "24px 0px",
+            borderBottom:
+              "2px solid " + this.props.theme.custom.headingBorder.color,
+            display: "flex"
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <Typography variant="h6">Aion Accounts</Typography>
+          </div>
+        </Grid>
+        <Grid item xs={10} sm={6} md={4} lg={3}  align='left'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>
             <Grid item xs={12} align='center'>
               <TextField style={{maxWidth:'400px', width: '100%'}} fullWidth={false} required color="textSecondary" error={this.props.addressNameError} disabled={this.props.loading}

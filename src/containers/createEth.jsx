@@ -32,6 +32,7 @@ let CreateEth = createReactClass({
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
         addressNameValid={this.state.addressNameValid}
+        theme={this.props.theme}
       />
     );
   },
@@ -63,7 +64,7 @@ let CreateEth = createReactClass({
         token: this.props.user.token
       });
 
-      window.location.hash = "createWan";
+      window.location.hash = "ethAccounts";
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -72,7 +73,7 @@ let CreateEth = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = "createWan";
+    window.location.hash = "ethAccounts";
   },
 
   onCreateKeyDown(event) {
