@@ -108,7 +108,7 @@ class PoolCard extends React.Component<Props, State> {
   public render() {
     const {classes, pool, managedPool, completedPool} = this.props;
     const {isSubmitting} = this.state;
-    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived} = pool;
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived,userContribution} = pool;
     let pledged = 0;
     let contribution = 0;
     if (whitelistedUsers) {
@@ -117,6 +117,8 @@ class PoolCard extends React.Component<Props, State> {
         contribution = contribution + (user && user.value !== undefined ? user.value : 0);
       }
     }
+    const myContribution = userContribution?userContribution.contribution:0;
+    // console.log("managedPool",managedPool,myContribution,pool);
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -134,8 +136,11 @@ class PoolCard extends React.Component<Props, State> {
                 {((managedPool && pledged > 0) || (!managedPool && totalPledged > 0)) && <React.Fragment><strong>{managedPool ? pledged : totalPledged}</strong> Pledged</React.Fragment>}
               </Typography>
             </Grid>
-            <Grid item xs={6} className={classes.gridSecondRow}>
-              <Typography align="center" variant="subtitle1"><b>{managedPool ? contribution : totalPooled}</b> Raised</Typography>
+            <Grid item xs={6} className={classes.gridSecondRow} style={{paddingLeft: 16}}>
+              <Typography variant="subtitle1"><b>{managedPool ? contribution : totalPooled}</b> Raised</Typography>
+              <Typography variant="subtitle1" className={classes.textMinHeight}>
+                {myContribution !== 0 && <React.Fragment><strong>{myContribution}</strong> Contributed</React.Fragment>}
+              </Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
               {(managedPool || completedPool) && <div style={{flex: 1}}>

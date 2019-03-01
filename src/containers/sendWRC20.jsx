@@ -87,6 +87,7 @@ let SendWRC20 = createReactClass({
   },
 
   componentDidMount() {
+    // noinspection JSUnresolvedVariable
     if (this.props.sendWRC20Contact != null) {
       this.setState({
         contact: this.props.sendWRC20Contact,
@@ -290,7 +291,7 @@ let SendWRC20 = createReactClass({
   },
 
   selectOwnAddress(event) {
-    var selectedAccount = this.props.wanAddresses.filter(address => {
+    let selectedAccount = this.props.wanAddresses.filter(address => {
       return address.publicAddress === event.target.value;
     });
     if (selectedAccount.length > 0) {
@@ -309,8 +310,8 @@ let SendWRC20 = createReactClass({
   },
 
   selectToken(event) {
-    var selectedToken = this.props.wrc20Tokens.filter(token => {
-      return token.symbol == event.target.value;
+    let selectedToken = this.props.wrc20Tokens.filter(token => {
+      return token.symbol === event.target.value;
     });
     if (selectedToken.length > 0) {
       selectedToken = selectedToken[0];
@@ -324,8 +325,8 @@ let SendWRC20 = createReactClass({
   },
 
   selectAddress(event) {
-    var selectedAccount = this.props.wanAddresses.filter(address => {
-      return address.publicAddress == event.target.value;
+    let selectedAccount = this.props.wanAddresses.filter(address => {
+      return address.publicAddress === event.target.value;
     });
     if (selectedAccount.length > 0) {
       selectedAccount = selectedAccount[0];
@@ -343,8 +344,8 @@ let SendWRC20 = createReactClass({
   },
 
   selectContact(event) {
-    var selectedContact = this.props.contacts.filter(contact => {
-      return contact.primaryWanAddress == event.target.value;
+    let selectedContact = this.props.contacts.filter(contact => {
+      return contact.primaryWanAddress === event.target.value;
     });
     if (selectedContact.length > 0) {
       selectedContact = selectedContact[0];
@@ -371,7 +372,7 @@ let SendWRC20 = createReactClass({
     this.validateContact();
 
     if (this.validateSetupPayment()) {
-      var completed = this.state.completed;
+      const completed = this.state.completed;
       completed[0] = true;
       this.setState({
         currentScreen: "confirmWRC20Payment",
@@ -383,26 +384,26 @@ let SendWRC20 = createReactClass({
 
   confirmClicked() {
     this.setState({ error: null, loading: true });
-    var tokenAddress;
+    let tokenAddress;
     if (this.state.sendWRC20Symbol) {
       tokenAddress = this.props.wrc20Tokens.filter(token => {
-        return token.symbol == this.state.sendWRC20Symbol;
+        return token.symbol === this.state.sendWRC20Symbol;
       })[0].contractAddress;
     } else {
       return false;
     }
 
-    var content = {
+    const content = {
       fromAddress: this.state.accountValue,
       amount: this.state.amount,
       gwei: this.state.gwei,
       tokenAddress: tokenAddress
     };
 
-    if (this.state.tabValue == 0) {
+    if (this.state.tabValue === 0) {
       //beneficiary payment
       content.contactUserName = this.state.contact.userName;
-    } else if (this.state.tabValue == 1) {
+    } else if (this.state.tabValue === 1) {
       //public address payment
       content.toAddress = this.state.publicAddress;
     }  else if (this.state.tabValue === 2) {
@@ -424,7 +425,7 @@ let SendWRC20 = createReactClass({
       return this.setState({ error: error.toString() });
     }
 
-    var completed = this.state.completed;
+    const completed = this.state.completed;
     completed[1] = true;
     if (data.success) {
       this.setState({
@@ -451,7 +452,7 @@ let SendWRC20 = createReactClass({
   },
 
   backClicked() {
-    var completed = this.state.completed;
+    const completed = this.state.completed;
     completed[0] = false;
     this.setState({
       currentScreen: "setupWRC20Payment",
@@ -525,16 +526,16 @@ let SendWRC20 = createReactClass({
   handleChange(event, name) {
     if (event != null && event.target != null) {
       if (name === "amount") {
-        if (event.target.value.charAt(0) == ".") {
+        if (event.target.value.charAt(0) === ".") {
           event.target.value = "0" + event.target.value;
         }
-        if (!this.isNumeric(event.target.value) && event.target.value != "")
+        if (!this.isNumeric(event.target.value) && event.target.value !== "")
           return false;
       } else if (name === "gwei") {
-        if (event.target.value.charAt(0) == ".") {
+        if (event.target.value.charAt(0) === ".") {
           event.target.value = "0" + event.target.value;
         }
-        if (!this.isNumeric(event.target.value) && event.target.value != "")
+        if (!this.isNumeric(event.target.value) && event.target.value !== "")
           return false;
       }
 
@@ -545,13 +546,12 @@ let SendWRC20 = createReactClass({
   },
 
   handleTabChange(event, tabValue) {
-    if (tabValue == 0) {
+    if (tabValue === 0) {
       this.setState({
         tabValue,
         publicAddress: "",
         publicAddressError: false,
         publicAddressErrorMessage: "",
-        publicAddressValid: true,
         ownAccount: null,
         ownAccountValue: "",
         ownAccountError: false,
@@ -560,7 +560,7 @@ let SendWRC20 = createReactClass({
         contactValid: false,
         ownAccountValid: true
       });
-    } else if (tabValue == 1) {
+    } else if (tabValue === 1) {
       this.setState({
         tabValue,
         contact: null,
@@ -613,7 +613,7 @@ let SendWRC20 = createReactClass({
   },
 
   validateSetupPayment() {
-    var valid =
+    const valid =
       this.state.accountValid &&
       this.state.ownAccountValid &&
       this.state.contactValid &&
@@ -627,11 +627,11 @@ let SendWRC20 = createReactClass({
 
   validateToken(value) {
     this.setState({ tokenError: false, tokenErrorMessage: "" });
-    if (value == null || value == "") {
+    if (value == null || value === "") {
       value = this.state.sendWRC20Symbol;
     }
 
-    if (value == null || value == "") {
+    if (value == null || value === "") {
       this.setState({
         tokenError: true,
         tokenErrorMessage: "The token is required"
@@ -732,11 +732,11 @@ let SendWRC20 = createReactClass({
 
     if (this.state.account) {
       tokenBalance = this.state.account.wrc20Tokens.filter(token => {
-        return token.symbol == this.state.sendWRC20Symbol;
+        return token.symbol === this.state.sendWRC20Symbol;
       })[0].balance;
     }
 
-    if (value == "" || value == "0") {
+    if (value === "" || value === "0") {
       this.setState({
         amountError: true,
         amountErrorMessage: "Amount is requred"
@@ -767,7 +767,7 @@ let SendWRC20 = createReactClass({
       value = this.state.gwei;
     }
 
-    if (value == "") {
+    if (value === "") {
       this.setState({
         gweiValid: false,
         gweiError: true,

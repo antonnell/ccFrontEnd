@@ -85,6 +85,17 @@ export const PoolingContractStatus = {
   10: "Complete"
 };
 
+export interface UserContribution {
+  allocation: number;
+  balance: number;
+  contribution: number;
+  max: number;
+  min: number;
+  pledge: number;
+  poolId: number;
+  tokenCount: number;
+  tokenSymbol: string;
+}
 export interface FundingPool extends PoolingContract {
   blockchain: PoolingContractBlockChain;
   contractAddress: string;
@@ -110,6 +121,7 @@ export interface FundingPool extends PoolingContract {
   saleAddress: string;
   totalTokensReceived: number;
   totalTokensRemaining: number;
+  userContribution: UserContribution | null;
 }
 
 export const initialFundingPool: FundingPool = {
@@ -132,6 +144,7 @@ export const initialFundingPool: FundingPool = {
   tokenSymbol: "",
   totalTokensReceived: 0,
   totalTokensRemaining: 0,
+  userContribution: null
 };
 
 export interface GetManagedFundingPoolsResponse {
@@ -145,4 +158,8 @@ export interface GetAvailableFundingPoolsResponse extends GetManagedFundingPools
 
 export const isFundingPool = (thing:any): thing is FundingPool => {
   return thing && thing.id !== undefined;
+};
+
+export const isUserContribution = (thing:any): thing is UserContribution => {
+  return thing && thing.contribution !== undefined;
 };
