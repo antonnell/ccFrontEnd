@@ -27,6 +27,7 @@ import SendEthereum from "./containers/sendEthereum.jsx";
 import SendERC20 from "./containers/sendERC20.jsx";
 import SendWanchain from "./containers/sendWanchain.jsx";
 import SendAion from "./containers/sendAion.jsx";
+import SendWRC20 from "./containers/sendWRC20.jsx";
 // import WhitelistMe from "./containers/whitelistMe.jsx";
 // import WhitelistMeDone from "./containers/whitelistMeDone.jsx";
 // import WhitelistCheck from "./containers/whitelistCheck.jsx";
@@ -36,6 +37,7 @@ import Settings from "./containers/settings.jsx";
 // import WanTransactions from './containers/wanTransactions.jsx';
 // import AionTransactions from './containers/aionTransactions.jsx';
 import Pooling from "./containers/Pooling/index";
+import ResendConfirmationEmail from './containers/resendConfirmationEmail.jsx';
 
 // import WhitelistMeUnavailable from "./components/whitelistMeUnavailable.jsx";
 import ComingSoon from "./components/comingSoon.jsx";
@@ -298,7 +300,8 @@ class App extends Component {
         "added",
         "addUnavailable",
         "whitelistStatus",
-        "verifyAccount"
+        "verifyAccount",
+        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (user == null) {
@@ -1020,7 +1023,8 @@ class App extends Component {
         "added",
         "addUnavailable",
         "whitelistStatus",
-        "verifyAccount"
+        "verifyAccount",
+        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (this.state.user == null) {
@@ -1030,7 +1034,7 @@ class App extends Component {
 
     if (this.state.user) {
       var content = {};
-      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain") {
+      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "SendWRC20") {
         content = { id: this.state.user.id };
         wanDispatcher.dispatch({
           type: "getWanAddress",
@@ -1044,7 +1048,8 @@ class App extends Component {
         });
       } else if (
         currentScreen === "ethAccounts" ||
-        currentScreen === "sendEthereum"
+        currentScreen === "sendEthereum" ||
+        currentScreen === "sendERC20"
       ) {
         content = { id: this.state.user.id };
         ethDispatcher.dispatch({
@@ -1197,7 +1202,7 @@ class App extends Component {
                 justify="space-around"
                 alignItems="flex-start"
                 direction="row"
-                style={ { minHeight: "622px", position: "relative", flex: 1 } }
+                style={ { minHeight: "924px", position: "relative", flex: 1 } }
               >
                 <Grid item xs={ 12 } style={ { marginRight: 16, flex: 1, height: "100%" } }>
                   { this.state.user == null ? null : this.renderAppBar() }
@@ -1337,8 +1342,8 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-      // case 'sendWRC20':
-      //   return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+      case 'sendWRC20':
+        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
       case "sendAion":
         return (
           <SendAion
@@ -1392,6 +1397,8 @@ class App extends Component {
           /> : <Loader />;
       case "ico":
         return <ComingSoon />;
+      case 'resendConfirmationEmail':
+        return <ResendConfirmationEmail />;
       case "settings":
         return (
           <Settings

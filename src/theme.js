@@ -45,7 +45,6 @@ let customTheme =  {
           color: '#3cabff'
         },
         body1: {
-          color: '#888888',
           fontSize: '16px'
         },
         // body2: {
