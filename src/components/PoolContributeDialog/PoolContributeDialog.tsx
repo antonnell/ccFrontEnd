@@ -206,7 +206,10 @@ class PoolContributeDialog extends React.Component<Props, State> {
         this.setState({walletId: event.target.value});
         break;
       case "amount":
-        this.setState({amount: event.currentTarget.value,validAmount: event.currentTarget.value >= min && event.currentTarget.value <= max});
+        const contributed = (pool && pool.userContribution)?pool.userContribution.contribution:0;
+        this.setState({amount: event.currentTarget.value,
+          validAmount:
+            Number(event.currentTarget.value) >= min && (Number(event.currentTarget.value) + Number(contributed)) <= max});
         break;
       case "gwei":
         this.setState({gwei: event.currentTarget.value});
