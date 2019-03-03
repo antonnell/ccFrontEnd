@@ -14,6 +14,8 @@ import {DialogActionResult} from "../../../types/dialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../../context/SnackBarContext";
 import {WithPoolingContext, withPoolingContext} from "../../../context/PoolingContext";
 
+const theme = localStorage.getItem("cc_theme");
+
 interface OwnProps {
   pool: FundingPool;
   onPledgeClick: () => void;
@@ -77,6 +79,9 @@ const styles = (theme: Theme) =>
     },
     textMinHeight: {
       minHeight: 30
+    },
+    whiteLabel: {
+      color: colors.white
     }
   });
 
@@ -194,7 +199,8 @@ class PoolCard extends React.Component<Props, State> {
               {status === 1 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
-              <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+              <Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
+                variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick} >view</Button>
             </Grid>
           </Grid>
           {/*<IconButton className={classes.shareButton}><ShareIcon /></IconButton>*/}

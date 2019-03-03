@@ -28,6 +28,9 @@ import {withSnackBarContext, WithSnackBarContext} from "../../context/SnackBarCo
 import CustomList from "./components/CustomList";
 import Typography from "@material-ui/core/Typography";
 import {DialogActionResult} from "../../types/dialog";
+import {colors} from "../../theme";
+
+const theme = localStorage.getItem("cc_theme");
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -62,6 +65,15 @@ const styles = (theme: Theme) =>
       borderBottomLeftRadius: 0,
       borderTopLeftRadius: 0,
       boxShadow: `${theme.shadows[2]} !important`
+    },
+    disabledProgressDark: {
+      backgroundColor: [colors["robin-s-egg"], "!important"].join(" ")
+    },
+    disabledProgressDarkNext: {
+      backgroundColor: [colors.dark, "!important"].join(" ")
+    },
+    disabledProgressLightNext: {
+      backgroundColor: ["white", "!important"].join(" ")
     }
   });
 
@@ -191,6 +203,7 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
+    console.log(theme);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -252,16 +265,32 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={Boolean(id) || !canSubmit}
                 variant="contained"
                 color="primary"
+                classes={{
+                  disabled:
+                    !(!canSubmit) ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 className={classes.progressFirst}
-                style={(!canSubmit) ? {backgroundColor: "white"} : {}}
                 onClick={this.createPool}
               >Create</Button>
               <Button
                 size="small"
                 color="primary"
                 disabled={!Boolean(id) || status > 0 || !canSubmit}
+                classes={{
+                  disabled:
+                    !(!canSubmit || !Boolean(id)) ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 variant="contained"
-                style={(!canSubmit || !Boolean(id)) ? {backgroundColor: "white"} : {}}
                 className={classes.progressMiddle}
                 onClick={this.deployPool}
               >Deploy</Button>
@@ -270,7 +299,15 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={true}
                 variant="contained"
                 color="primary"
-                style={status > 0 ? {} : {backgroundColor: "white"}}
+                classes={{
+                  disabled:
+                    status > 0 ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 className={classes.progressMiddle}
               >Pledges</Button>
               <Button
@@ -278,7 +315,15 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={(status !== 1 && status !== 2) || !canSubmit || balance === 0}
                 variant="contained"
                 color="primary"
-                style={((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ? {} : {backgroundColor: "white"}}
+                classes={{
+                  disabled:
+                    ((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 className={classes.progressMiddle}
                 onClick={this.buyTokens}
               >Send Funds</Button>
@@ -287,7 +332,15 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={!id || !canSubmit || totalTokensRemaining <= 0 || totalTokensReceived > 0}
                 color="primary"
                 variant="contained"
-                style={(status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ? {} : {backgroundColor: "white"}}
+                classes={{
+                  disabled:
+                    (status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 className={classes.progressMiddle}
                 onClick={this.confirmTokens}
               >Confirm</Button>
@@ -296,7 +349,15 @@ class PoolCreate extends React.Component<Props, State> {
                 disabled={!id || !canSubmit || totalTokensReceived <= 0 || status === 10}
                 variant="contained"
                 color="primary"
-                style={(status === 4 || status === 10 || totalTokensReceived > 0) ? {} : {backgroundColor: "white"}}
+                classes={{
+                  disabled:
+                    (status === 4 || status === 10 || totalTokensReceived > 0) ?
+                      theme === "dark" ?
+                        classes.disabledProgressDark :
+                        undefined :
+                      theme === "dark" ? classes.disabledProgressDarkNext :
+                        classes.disabledProgressLightNext
+                }}
                 className={classes.progressLast}
                 onClick={this.distributeTokens}
               >Distribute</Button>
@@ -366,7 +427,7 @@ class PoolCreate extends React.Component<Props, State> {
       "distributeTokens",
       "Are you sure you want to distribute the tokens?",
       "This action cannot be undone once confirmed.",
-      );
+    );
   };
 
   createPool = (event: React.FormEvent) => {
