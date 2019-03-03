@@ -66,9 +66,9 @@ class Options extends React.Component<Props> {
             <DatePicker
               disabled={status > 0 || loading}
               name="pledgesEndDate"
-              value={new Date(pledgesEndDate)||moment(new Date()).add(1,'days')}
+              value={new Date(pledgesEndDate)||moment().add(1,'days')}
               onChange={handleDateChange("pledgesEndDate")}
-              minDate={status > 0 || loading?null:moment(new Date()).add(1,'days')}
+              minDate={status > 0 || loading?null:moment().add(1,'days')}
               format="YYYY-MM-DD"
             />
           </Grid>

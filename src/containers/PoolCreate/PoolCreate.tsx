@@ -203,7 +203,6 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
-    console.log(theme);
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
@@ -511,6 +510,7 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   handleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => {
+    date.utc();
     this.setState({poolingContract: {...this.state.poolingContract, [fieldName]: date.format("YYYY-MM-DD")}});
   };
 
