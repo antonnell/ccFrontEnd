@@ -91,7 +91,7 @@ let customTheme =  {
         },
         MuiFormLabel: {
           root: {
-            color: '#c0c0c0'
+            // color: '#c0c0c0'
           }
         },
         MuiInputBase: {
