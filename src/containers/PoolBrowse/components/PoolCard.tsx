@@ -13,8 +13,12 @@ import {DialogActions, WithDialogContext, withDialogContext} from "../../../cont
 import {DialogActionResult} from "../../../types/dialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../../context/SnackBarContext";
 import {WithPoolingContext, withPoolingContext} from "../../../context/PoolingContext";
+import ReactExport from "react-data-export";
 
 const theme = localStorage.getItem("cc_theme");
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 interface OwnProps {
   pool: FundingPool;
@@ -123,7 +127,7 @@ class PoolCard extends React.Component<Props, State> {
       }
     }
     const myContribution = userContribution?userContribution.contribution:0;
-    // console.log("managedPool",managedPool,myContribution,pool);
+    console.log("managedPool",managedPool,myContribution,pool);
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -201,6 +205,19 @@ class PoolCard extends React.Component<Props, State> {
               <div className={classes.buttonSpacer} />
               <Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
                 variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick} >view</Button>
+              {managedPool && pool.whitelistedUsers && <ExcelFile element={<Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
+                                                                                   variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
+                <ExcelSheet data={pool.whitelistedUsers} name="whitelistedUsers">
+                <ExcelColumn label="Address" value="address"/>
+                <ExcelColumn label="Allocation" value="allocation"/>
+                <ExcelColumn label="Pledge" value="pledge"/>
+                <ExcelColumn label="User Id" value="userId"/>
+                <ExcelColumn label="User Id" value="userId"/>
+                <ExcelColumn label="User Name" value="userName"/>
+                <ExcelColumn label="Value" value="value"/>
+                </ExcelSheet>
+
+                </ExcelFile>}
             </Grid>
           </Grid>
           {/*<IconButton className={classes.shareButton}><ShareIcon /></IconButton>*/}
