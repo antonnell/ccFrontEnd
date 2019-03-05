@@ -33,6 +33,7 @@ interface PoolingContextInterface {
   getAvailableFundingPools: (userId: string, poolId?: number) => void;
   getManagedFundingPoolDetails: (poolId: number) => Promise<FundingPool | ApiResponse>;
   getPoolContribution: (poolId: number, address: string) => void;
+  getPoolingTransactions: (poolId: number) => Promise<ApiResponse>;
 }
 
 const ctxt = React.createContext<PoolingContextInterface | null>(null);
@@ -227,6 +228,14 @@ class PoolingContext extends React.Component<WithAppContext, PoolingContextInter
       const method = "GET";
       return callApi(url, method, {}).then(res => {
         return res ? res.contributions : [];
+      });
+    },
+    getPoolingTransactions: (poolId) => {
+      const {appContext: {callApi}} = this.props;
+      const url = `/pooling/getManagedFundingPoolTransactions/${poolId}`;
+      const method = "GET";
+      return callApi(url, method, {}).then(res => {
+        return res ? res.transactions : [];
       });
     },
     getManagedFundingPools: (userId) => {
