@@ -14,11 +14,7 @@ import {DialogActionResult} from "../../../types/dialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../../context/SnackBarContext";
 import {WithPoolingContext, withPoolingContext} from "../../../context/PoolingContext";
 import ReactExport from "react-data-export";
-import {ApiResponse} from "../../../types/api";
 
-
-
-const theme = localStorage.getItem("cc_theme");
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -33,6 +29,7 @@ interface OwnProps {
 
   user: User;
 }
+
 interface poolTransaction {
   blockchain: string,
   functionCall: string,
@@ -87,7 +84,8 @@ const styles = (theme: Theme) =>
       minWidth: 100,
     },
     buttonSpacer: {
-      margin: theme.spacing.unit
+      margin: theme.spacing.unit,
+      marginTop: theme.spacing.unit * 5
     },
     buttonRow: {
       marginTop: theme.spacing.unit
@@ -120,12 +118,14 @@ class PoolCard extends React.Component<Props, State> {
 
 
   componentWillMount(): void {
-    const {pool,managedPool,
-      poolingContext: {getPoolingTransactions}} = this.props;
+    const {
+      pool, managedPool,
+      poolingContext: {getPoolingTransactions}
+    } = this.props;
     if (managedPool) {
       //let txs: poolTransaction[] = [];
       getPoolingTransactions(pool.id).then(res => {
-        console.log("res over here",res);
+        console.log("res over here", res);
         this.setState({poolTransactions: res as unknown as poolTransaction[]})
         //console.log("for pool ",pool.id,res);
         //let item: poolTransaction = {poolId: pool.id, transactions: res};
@@ -134,7 +134,6 @@ class PoolCard extends React.Component<Props, State> {
       });
     }
   }
-
 
 
   componentWillUpdate(nextProps: Readonly<Props>, nextState: Readonly<{}>, nextContext: any): void {
@@ -164,8 +163,8 @@ class PoolCard extends React.Component<Props, State> {
   public render() {
 
     const {classes, pool, managedPool, completedPool} = this.props;
-    const {isSubmitting,poolTransactions} = this.state;
-    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived,userContribution} = pool;
+    const {isSubmitting, poolTransactions} = this.state;
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived, userContribution} = pool;
     let pledged = 0;
     let contribution = 0;
     //let filteredPool = this.filteredPool(poolTransactions,pool.id);
@@ -181,7 +180,7 @@ class PoolCard extends React.Component<Props, State> {
 
 
     //console.log("managedPool",managedPool,myContribution,pool);
-    console.log("poolTransactions",poolTransactions);
+    console.log("poolTransactions", poolTransactions);
 
     const theme = localStorage.getItem("cc_theme");
     const myContribution = userContribution ? userContribution.contribution : 0;
@@ -263,20 +262,25 @@ class PoolCard extends React.Component<Props, State> {
               {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
 
-              <Button classes={theme === "dark"?{label: classes.whiteLabel}:{}}
+              <Button classes={theme === "dark" ? {label: classes.whiteLabel} : {}}
                       variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+              <div className={classes.buttonSpacer} />
+              {managedPool && poolTransactions && poolTransactions.length > 0 &&
+              <React.Fragment>
+                <ExcelFile element={<Button classes={{label: theme === "dark" ? classes.whiteLabel : undefined}}
+                                            variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
+                  <ExcelSheet data={poolTransactions} name="Transactions">
+                    <ExcelColumn label="User Name" value="userName" />
+                    <ExcelColumn label="Type" value="functionCall" />
+                    <ExcelColumn label="Date" value="timestamp" />
+                    <ExcelColumn label="Transaction Id" value="transactionId" />
+                    <ExcelColumn label="Value" value="value" />
+                  </ExcelSheet>
 
-              {managedPool && poolTransactions && poolTransactions.length > 0 && <ExcelFile element={<Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
-                                                                                                             variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
-                <ExcelSheet data={poolTransactions} name="Transactions">
-                  <ExcelColumn label="User Name" value="userName"/>
-                  <ExcelColumn label="Type" value="functionCall"/>
-                  <ExcelColumn label="Date" value="timestamp"/>
-                  <ExcelColumn label="Transaction Id" value="transactionId"/>
-                  <ExcelColumn label="Value" value="value"/>
-                </ExcelSheet>
-
-              </ExcelFile>}
+                </ExcelFile>
+                <div className={classes.buttonSpacer} />
+              </React.Fragment>
+              }
 
 
             </Grid>
