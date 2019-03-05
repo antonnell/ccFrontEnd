@@ -30,8 +30,6 @@ import Typography from "@material-ui/core/Typography";
 import {DialogActionResult} from "../../types/dialog";
 import {colors} from "../../theme";
 
-const theme = localStorage.getItem("cc_theme");
-
 const styles = (theme: Theme) =>
   createStyles({
     containerGrid: sharedStyles(theme).containerGrid,
@@ -203,6 +201,7 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
+    const theme = localStorage.getItem("cc_theme");
     return (
       <React.Fragment>
         <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />

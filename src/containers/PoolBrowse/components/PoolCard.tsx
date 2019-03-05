@@ -17,10 +17,12 @@ import ReactExport from "react-data-export";
 import {ApiResponse} from "../../../types/api";
 
 
+
 const theme = localStorage.getItem("cc_theme");
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
 
 interface OwnProps {
   pool: FundingPool;
@@ -176,9 +178,14 @@ class PoolCard extends React.Component<Props, State> {
       }
 
     }
-    const myContribution = userContribution?userContribution.contribution:0;
+
+
     //console.log("managedPool",managedPool,myContribution,pool);
     console.log("poolTransactions",poolTransactions);
+
+    const theme = localStorage.getItem("cc_theme");
+    const myContribution = userContribution ? userContribution.contribution : 0;
+    // console.log("managedPool",managedPool,myContribution,pool);
 
     return (
       <React.Fragment>
@@ -189,7 +196,10 @@ class PoolCard extends React.Component<Props, State> {
                 <Typography variant="h5">{name}</Typography>
                 <Typography variant="body1" className={classes.tokenText}>{blockchain}</Typography>
               </Grid>
-              <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}><b>{owner}</b></Typography></div>
+              <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}>Owner: <b>{owner}</b></Typography></div>
+              {(managedPool || completedPool) && <div style={{minHeight: 36}}>
+                <Typography variant="subtitle1">Status: <b>{PoolingContractStatus[status]}</b></Typography>
+              </div>}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
@@ -204,9 +214,6 @@ class PoolCard extends React.Component<Props, State> {
               </Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
-              {(managedPool || completedPool) && <div style={{flex: 1}}>
-                <Typography variant="subtitle1">{PoolingContractStatus[status]}</Typography>
-              </div>}
               {managedPool && status === 0 && <React.Fragment>
                 <Button
                   size="small"
@@ -255,8 +262,10 @@ class PoolCard extends React.Component<Props, State> {
               {status === 1 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
-              <Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
-                variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick} >view</Button>
+
+              <Button classes={theme === "dark"?{label: classes.whiteLabel}:{}}
+                      variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+
               {managedPool && poolTransactions && poolTransactions.length > 0 && <ExcelFile element={<Button classes={{label: theme === "dark"?classes.whiteLabel:undefined}}
                                                                                                              variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
                 <ExcelSheet data={poolTransactions} name="Transactions">
@@ -268,6 +277,8 @@ class PoolCard extends React.Component<Props, State> {
                 </ExcelSheet>
 
               </ExcelFile>}
+
+
             </Grid>
           </Grid>
           {/*<IconButton className={classes.shareButton}><ShareIcon /></IconButton>*/}
