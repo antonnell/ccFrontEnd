@@ -23,13 +23,13 @@ class ViewAddressModal extends Component {
 
   renderHeader() {
     let headerStyle = {
-      padding: '16px',
+      padding: '17px 24px',
       backgroundColor: '#2f3031'
     }
     let textStyle = {
       color: '#ffffff',
-      fontSize: '18px',
-      fontWeight: '800'
+      fontSize: '14px',
+      fontWeight: '600'
     }
 
     return (<Grid item xs={12} align='left'>
@@ -63,18 +63,18 @@ class ViewAddressModal extends Component {
   renderAddress(address) {
 
     let bodyStyle = {
-      padding: '16px',
+      padding: '12px 0px 12px 24px',
     }
     let textStyle = {
       color: '#2f3031',
-      fontSize: '18px',
-      fontWeight: '800'
+      fontSize: '14px',
+      fontWeight: '400'
     }
-    if(this.props.theme.name=='dark') {
+    if(this.props.theme.name==='dark') {
       textStyle = {
         color: '#ffffff',
-        fontSize: '18px',
-        fontWeight: '800'
+        fontSize: '14px',
+        fontWeight: '400'
       }
     }
     let subTextStyle = {
@@ -103,7 +103,7 @@ class ViewAddressModal extends Component {
                 <Typography variant="body1" style={textStyle}>
                   Bitcoin
                 </Typography>
-                <Typography variant="subtitle2" style={subTextStyle}>
+                <Typography variant="subtitle2">
                   {address.isUsed?'used':'unused'}
                 </Typography>
               </div>
@@ -117,7 +117,7 @@ class ViewAddressModal extends Component {
               <Typography variant="body1" style={textStyle}>
                 {address.balance + ' BTC'}
               </Typography>
-              <Typography variant="subtitle2" style={subTextStyle}>
+              <Typography variant="subtitle2">
                 {'$' + (address.usdBalance?address.usdBalance:'0.00')}
               </Typography>
             </Grid>

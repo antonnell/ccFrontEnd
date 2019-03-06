@@ -136,7 +136,7 @@ class SetupERC20Payment extends Component {
                 >
                   <div />
                   <Typography variant="h6" noWrap>
-                    {this.props.sendERC20Symbol
+                    {this.props.sendERC20Symbol && selectedAddress.erc20Tokens
                       ? selectedAddress.erc20Tokens.filter(token => {
                           return token.symbol === this.props.sendERC20Symbol;
                         })[0].balance +
@@ -170,7 +170,7 @@ class SetupERC20Payment extends Component {
                 />
                 <ListItemSecondaryAction style={{ right: "24px" }}>
                   <Typography>
-                    {this.props.sendERC20Symbol
+                    {this.props.sendERC20Symbol && address.erc20Tokens
                       ? address.erc20Tokens.filter(token => {
                           return token.symbol === this.props.sendERC20Symbol;
                         })[0].balance +
@@ -326,11 +326,10 @@ class SetupERC20Payment extends Component {
               background: "#b5b5b5",
               width: "100%",
               padding: "12px",
-              fontStyle: "italic",
               marginBottom: "12px"
             }}
           >
-            <Typography style={{fontStyle: "italic"}}>
+            <Typography variant='body1' style={{fontStyle: "italic"}}>
               {this.props.disclaimer}
             </Typography>
           </div>

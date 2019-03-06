@@ -3,7 +3,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -19,31 +18,18 @@ import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import BitcoinTransactions from "../containers/bitcoinTransactions";
 import CreateModal from "./createModal";
 import ImportModal from "./importModal";
+import PageTItle from './pageTitle';
 import ViewAddressModal from "./viewAddressModal";
+import PageLoader from "./pageLoader";
+import SectionLoader from "./sectionLoader";
 
 function MoreIcon(props) {
   return (
     <SvgIcon {...props}>
       <path
-        fill="#b5b5b5"
+        fill={props.theme?props.theme.custom.icon.color:'#888888'}
         d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
       />
-    </SvgIcon>
-  );
-}
-
-function PrimaryIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-    </SvgIcon>
-  );
-}
-
-function SetPrimaryIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
     </SvgIcon>
   );
 }
@@ -83,13 +69,15 @@ class BitcoinAccounts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h5">
+          <Typography variant="h2">
             Oh no, we couldn't find any accounts for you. Why don't you
             create/import one?
           </Typography>
         </Grid>
       );
     }
+
+    let index = -1
 
     return this.props.addresses.map((address) => {
       address.editing = false;
@@ -107,16 +95,7 @@ class BitcoinAccounts extends Component {
       if (this.props.loadingAccount != null) {
         if (address.id === this.props.loadingAccount.id) {
           loading = (
-            <CircularProgress
-              size={36}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: -12,
-                marginLeft: -12
-              }}
-            />
+            <SectionLoader />
           );
         }
       }
@@ -126,16 +105,7 @@ class BitcoinAccounts extends Component {
           address.editing = true;
           if (this.props.cardLoading) {
             loading = (
-              <CircularProgress
-                size={36}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  marginTop: -12,
-                  marginLeft: -12
-                }}
-              />
+              <SectionLoader />
             );
           }
         }
@@ -145,66 +115,42 @@ class BitcoinAccounts extends Component {
         if (address.id === this.props.exportKeyAccount) {
           if (this.props.privateKeyLoading) {
             loading = (
-              <CircularProgress
-                size={36}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  marginTop: -12,
-                  marginLeft: -12
-                }}
-              />
+              <SectionLoader />
             );
           }
         }
       }
 
+      index ++
+
+      let { theme, size } = this.props
+
+      let cardStyle = index%2==0?theme.custom.accountCard0:theme.custom.accountCard1
+      if(['xs', 'sm', 'md'].includes(size)) {
+        cardStyle = index%2==0?theme.custom.accountCardSmall0:theme.custom.accountCardSmall1
+      }
+
       return (
-        <Grid item xs={12} lg={6} align="left" key={address.id}>
-          <Card style={{ margin: "12px" }}>
+        <Grid item xs={12} lg={6} align={index%2==0?"left":"right"} key={address.address}>
+          <Card style={cardStyle}>
             <CardContent style={{ position: "relative" }}>
               <Grid
                 container
-                justify="flex-start"
                 alignItems="flex-start"
                 direction="row"
+                style= { { marginBottom: '6px' }}
               >
                 <Grid item xs={11} align="left">
                   {address.editing !== true && (
                     <Typography
                       noWrap
                       variant="h3"
-                      style={{ minHeight: "32px", display: "inline-block" }}
                     >
-                      {address.isPrimary === true && (
-                        <Tooltip title="This is your primary Bitcoin account">
-                          <PrimaryIcon
-                            style={{
-                              marginTop: "3.5px",
-                              marginRight: "5px",
-                              verticalAlign: "top"
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                      {address.isPrimary === false && (
-                        <Tooltip title="Make this account my primary Bitcoin account">
-                          <SetPrimaryIcon
-                            onClick={() => {
-                              this.props.updatePrimaryClicked(address);
-                            }}
-                            style={{
-                              cursor: "pointer",
-                              marginTop: "3.5px",
-                              marginRight: "5px",
-                              verticalAlign: "top"
-                            }}
-                          />
-                        </Tooltip>
-                      )}
                       {address.displayName}
                     </Typography>
+                  )}
+                  {address.editing !== true && address.isPrimary === true && (
+                    <Typography variant='body1' style={theme.custom.primaryText}>Primary</Typography>
                   )}
                   {address.editing === true && (
                     <TextField
@@ -257,7 +203,7 @@ class BitcoinAccounts extends Component {
                       this.props.privateKeyLoading
                     }
                   >
-                    <MoreIcon />
+                    <MoreIcon theme={theme} />
                   </IconButton>
                   <Popover
                     open={open}
@@ -318,19 +264,25 @@ class BitcoinAccounts extends Component {
                     </List>
                   </Popover>
                 </Grid>
-                <Grid item xs={6} style={{ marginTop: "6px" }}>
-                  <Typography variant="h5" noWrap>
-                    {address.balance +
-                      " BTC ($" +
-                      (address.usdBalance ? address.usdBalance.toFixed(2) : '0.00') +
-                      ")"}
+              </Grid>
+              <Grid
+                container
+                alignItems="flex-end"
+                direction="row"
+              >
+                <Grid item xs={6}  align="left" style={{ marginTop: "6px" }}>
+                  <Typography variant="h4" noWrap>
+                    {address.balance + " BTC"}
+                  </Typography>
+                  <Typography variant="h4" noWrap>
+                    {"$" + address.usdBalance.toFixed(2)}
                   </Typography>
                 </Grid>
-                <Grid item xs={6} align="right">
+                <Grid item xs={6} align="right" style={{ height: "42px" }}>
                   <Button
                     size="small"
-                    variant="text"
-                    style={{ border: "1px solid #ccc" }}
+                    variant="contained"
+                    color="primary"
                     disabled={
                       this.props.loadingAccount ||
                       this.props.cardLoading ||
@@ -340,7 +292,7 @@ class BitcoinAccounts extends Component {
                       this.props.sendBitcoinClicked(null, address);
                     }}
                   >
-                    Send Bitcoin
+                    Send
                   </Button>
                 </Grid>
               </Grid>
@@ -354,24 +306,17 @@ class BitcoinAccounts extends Component {
 
   render() {
 
-    if (this.props.addresses === null) {
+    let { addresses, theme, handleCreateOpen, handleImportOpen } = this.props
+
+    if (addresses === null) {
       return (
         <Grid container justify="center" alignItems="flex-start" direction="row">
           <Grid
             item
             xs={12}
             align="left"
-            style={{
-              margin: "12px",
-              padding: "24px 0px",
-              borderBottom:
-                "2px solid " + this.props.theme.custom.headingBorder.color,
-              display: "flex"
-            }}
           >
-            <div style={{ flex: 1 }}>
-              <Typography variant="h6">Bitcoin Accounts</Typography>
-            </div>
+            <PageTItle theme={theme} root={'Accounts'} screen={'Bitcoin'} />
           </Grid>
           <Grid
             item
@@ -380,16 +325,7 @@ class BitcoinAccounts extends Component {
             align="left"
             style={{ minHeight: "190px", position: "relative" }}
           >
-            <CircularProgress
-              size={36}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: -12,
-                marginLeft: -12
-              }}
-            />
+            <PageLoader />
           </Grid>
         </Grid>
       );
@@ -401,36 +337,8 @@ class BitcoinAccounts extends Component {
           item
           xs={12}
           align="left"
-          style={{
-            margin: "12px",
-            padding: "24px 0px",
-            borderBottom:
-              "2px solid " + this.props.theme.custom.headingBorder.color,
-            display: "flex"
-          }}
         >
-          <div style={{ flex: 1 }}>
-            <Typography variant="h6">Bitcoin Accounts</Typography>
-          </div>
-          <div>
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={this.props.handleCreateOpen}
-            >
-              Create Account
-            </Button>
-            <Button
-              style={{ marginLeft: "12px" }}
-              size="small"
-              variant="contained"
-              color="secondary"
-              onClick={this.props.handleImportOpen}
-            >
-              Import Account
-            </Button>
-          </div>
+          <PageTItle theme={theme} root={'Accounts'} screen={'Bitcoin'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -439,13 +347,45 @@ class BitcoinAccounts extends Component {
             alignItems="flex-start"
             direction="row"
             spacing={0}
-            style={{ paddingTop: "24px" }}
+            style={theme.custom.sectionTitle}
+          >
+            <Grid item xs={6} align='left'>
+              <Typography variant='h2' align='left'>Accounts</Typography>
+            </Grid>
+            <Grid item xs={6} align='right'>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={handleCreateOpen}
+              >
+                Create Account
+              </Button>
+              <Button
+                style={{ marginLeft: "12px" }}
+                size="small"
+                variant="contained"
+                color="secondary"
+                onClick={handleImportOpen}
+              >
+                Import Account
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid
+            container
+            justify="space-between"
+            alignItems="flex-start"
+            direction="row"
           >
             {this.renderAddresses()}
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <BitcoinTransactions
+            theme={this.props.theme}
             bitcoinAddresses={this.props.addresses}
             bitcoinTransactions={this.props.bitcoinTransactions}
             contacts={this.props.contacts}

@@ -15,7 +15,7 @@ class ImportModal extends Component {
   render() {
     const { type } = this.props
 
-    if(type == 'bitcoin') {
+    if(type === 'bitcoin') {
       return (
         <Dialog open={this.props.isOpen} onClose={this.props.handleClose} >
           <DialogContent>

@@ -29,7 +29,7 @@
     "react-dom": "^16.6.3",
     "react-ga": "^2.5.3",
     "react-loader-spinner": "^2.2.0",
-    "react-perfect-scrollbar": "^1.4.2",
+    "react-perfect-scrollbar": "^1.4.4",
     "react-scripts": "^2.1.1",
     "react-scrollbar": "^0.5.4",
     "sha256": "^0.2.0",

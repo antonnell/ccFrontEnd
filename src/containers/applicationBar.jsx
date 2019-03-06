@@ -13,6 +13,7 @@ let ApplicationBar = createReactClass({
         user={this.props.user}
         size={this.props.size}
         title={this.props.title}
+        theme={this.props.theme}
       />
     )
   },

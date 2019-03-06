@@ -232,7 +232,7 @@ class SetupBitcoinPayment extends Component {
               marginBottom: "12px"
             }}
           >
-            <Typography style={{fontStyle: "italic"}}>
+            <Typography variant='body1' style={{fontStyle: "italic"}}>
               {this.props.disclaimer}
             </Typography>
           </div>

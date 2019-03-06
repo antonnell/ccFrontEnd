@@ -41,6 +41,7 @@ let AionTransactions = createReactClass({
         toDate={this.state.toDate}
         selectContact={this.selectContact}
         selectAddress={this.selectAddress}
+        theme={this.props.theme}
       />
     );
   },

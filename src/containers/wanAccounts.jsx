@@ -143,6 +143,7 @@ let WanAccounts = createReactClass({
         importOpen={ this.state.importOpen }
         handleImportClose={ this.handleImportClose }
         refundClicked={ this.refundClicked }
+        width={ this.props.width }
       />
     );
   },

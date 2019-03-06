@@ -22,7 +22,8 @@ let Contacts = createReactClass({
       notes: "",
       notesError: false,
       notesErrorMessage: "",
-      addOpen: false
+      addOpen: false,
+      optionsContact: null
     }
   },
 
@@ -99,8 +100,20 @@ let Contacts = createReactClass({
         handleAddOpen={this.handleAddOpen}
         addOpen={this.state.addOpen}
         handleAddClose={this.handleAddClose}
+        optionsClicked={this.optionsClicked}
+        optionsContact={this.state.optionsContact}
+        optionsClosed={this.optionsClosed}
         />
     )
+  },
+
+  optionsClicked(event, optionsContact) {
+    optionsContact.anchorEl = event.currentTarget;
+    this.setState({ optionsContact });
+  },
+
+  optionsClosed() {
+    this.setState({ optionsContact: null });
   },
 
   handleAddOpen() {

@@ -4,27 +4,22 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PageTItle from "./pageTitle";
 
 class CreateWan extends Component {
 
   render() {
+
+    let { theme } = this.props
+    
     return (
       <Grid container justify="space-around" alignItems="center" direction="row" spacing={0} >
         <Grid
           item
           xs={12}
           align="left"
-          style={{
-            margin: "12px",
-            padding: "24px 0px",
-            borderBottom:
-              "2px solid " + this.props.theme.custom.headingBorder.color,
-            display: "flex"
-          }}
         >
-          <div style={{ flex: 1 }}>
-            <Typography variant="h6">Wanchain Accounts</Typography>
-          </div>
+          <PageTItle theme={theme} root={'Accounts'} screen={'Wanchain'} />
         </Grid>
         <Grid item xs={10} sm={6} md={4} lg={3} align='left'>
           <Grid container justify="space-around" alignItems="center" direction="row" spacing={0}  style={{marginTop: '50px'}}>

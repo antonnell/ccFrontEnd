@@ -10,7 +10,8 @@ let ForgotPasswordDone = createReactClass({
     return (
       <ForgotPasswordDoneComponent
         submitLoginNavigate={this.submitLoginNavigate}
-        />
+        theme={ this.props.theme }
+      />
     )
   },
 

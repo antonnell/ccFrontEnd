@@ -556,7 +556,6 @@ let SendWRC20 = createReactClass({
         ownAccountValue: "",
         ownAccountError: false,
         ownAccountErrorMessage: "",
-        publicAddressValid: true,
         contactValid: false,
         ownAccountValid: true
       });

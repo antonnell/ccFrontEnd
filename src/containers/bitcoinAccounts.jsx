@@ -105,6 +105,7 @@ let BitcoinAccounts = createReactClass({
         viewOpen={this.state.viewOpen}
         handleViewClose={this.handleViewClose}
         copyViewKey={this.copyViewKey}
+        size={this.props.size}
       />
     );
   },

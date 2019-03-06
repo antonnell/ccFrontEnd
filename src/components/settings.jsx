@@ -10,6 +10,7 @@ import UpdatePassword from '../containers/updatePassword.jsx';
 import Profile from '../containers/profile.jsx';
 import ThemePicker from '../containers/themePicker.jsx';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import PageTItle from "./pageTitle";
 
 import IconButton from '@material-ui/core/IconButton';
 
@@ -57,29 +58,27 @@ class Settings extends Component {
   render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row">
-        <Grid item xs={12} align='left' style={{margin: '12px', padding: '24px 0px', borderBottom: '2px solid '+this.props.theme.custom.headingBorder.color, display: 'flex' }}>
-          <div style={{marginRight: '12px', marginTop: '8px'}}>
-            <Typography variant="h5">
-              Settings
-            </Typography>
-          </div>
-          <div style={{flex: 1}}>
-            <Tabs
-              value={this.props.tabValue}
-              onChange={this.props.handleTabChange}
-              indicatorColor="primary"
-              textColor="primary" >
-              <Tab label="Profile" />
-              <Tab label="Security" />
-            </Tabs>
-          </div>
-          <div>
-            <IconButton
-              color="primary"
-              onClick={() => { this.props.changeTheme() }}>
-              <ThemeIcon />
-            </IconButton>
-          </div>
+        <Grid
+          item
+          xs={9}
+          align="left"
+        >
+          <PageTItle theme={this.props.theme} root={'Accounts'} screen={'Aion'} />
+        </Grid>
+        <Grid item xs={3} align='right' style={{paddingTop: '35px'}}>
+          <Tabs
+            value={this.props.tabValue}
+            onChange={this.props.handleTabChange}
+            indicatorColor="primary"
+            textColor="primary" >
+            <Tab label="Profile" />
+            <Tab label="Security" />
+          </Tabs>
+          {/*<IconButton
+            color="primary"
+            onClick={() => { this.props.changeTheme() }}>
+            <ThemeIcon />
+          </IconButton>*/}
         </Grid>
         <Grid item xs={12} align='left' style={{margin: '12px'}}>
           {

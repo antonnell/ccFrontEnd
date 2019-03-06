@@ -52,7 +52,6 @@ import AppDialog from './containers/AppDialog/AppDialog';
 import PoolBrowse from './containers/PoolBrowse/index';
 import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
-import { helperRenderConsoleText } from './helpers/helpers';
 import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
 import MomentUtils from '@date-io/moment';
@@ -81,9 +80,9 @@ let whitelistEmitter = require('./store/whitelistStore.js').default.emitter;
 // let crowdsaleEmitter = require('./store/crowdsaleStore.js').default.emitter;
 // let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default
 //   .dispatcher;
-
-let emitter = require("./store/ipStore.js").default.emitter;
-let dispatcher = require("./store/ipStore.js").default.dispatcher;
+//
+// let emitter = require("./store/ipStore.js").default.emitter;
+// let dispatcher = require("./store/ipStore.js").default.dispatcher;
 
 const setInitialUser = () => {
   const userString = sessionStorage.getItem("cc_user");
@@ -884,14 +883,14 @@ class App extends Component {
   }
 
   updateWindowDimensions() {
-    var size = "sm";
+    var size = "xl";
     if (window.innerWidth < 600) {
       size = "xs";
-    } else if (window.innerWidth < 1024) {
+    } else if (window.innerWidth < 960) {
       size = "sm";
-    } else if (window.innerWidth < 1440) {
+    } else if (window.innerWidth < 1280) {
       size = "md";
-    } else {
+    } else  if (window.innerWidth < 1920) {
       size = "lg";
     }
 
@@ -1066,7 +1065,7 @@ class App extends Component {
 
     if (this.state.user) {
       var content = {};
-      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "SendWRC20") {
+      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "sendWRC20") {
         content = { id: this.state.user.id };
         wanDispatcher.dispatch({
           type: "getWanAddress",
@@ -1219,6 +1218,7 @@ class App extends Component {
         user={ this.state.user }
         size={ this.state.size }
         title={ this.state.title }
+        theme={ this.state.theme }
       />
     );
   }
@@ -1259,6 +1259,19 @@ class App extends Component {
       backgroundImage =
         "radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)";
     }
+
+    const { currentScreen } = this.state;
+    const path = currentScreen.split('/')[0];
+    if(['welcome', 'resetPassword'].includes(path)) {
+      return (
+        <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
+          <CssBaseline />
+          { this.renderScreen() }
+        </MuiThemeProvider>
+      )
+    }
+
+
     return (
       <Context>
         <MuiPickersUtilsProvider utils={ MomentUtils }>
@@ -1281,15 +1294,26 @@ class App extends Component {
                 justify="space-around"
                 alignItems="flex-start"
                 direction="row"
-                style={ { minHeight: "924px", position: "relative", flex: 1 } }
+                style={ {
+                  minHeight: "924px",
+                  position: "relative",
+                  flex: 1,
+                  marginLeft: this.state.size === "xs" || this.state.size === "sm"
+                    ? "0px" : '100px',
+                  marginRight: this.state.size === "xs" || this.state.size === "sm"
+                    ? "0px" : '24px'
+                } }
               >
-                <Grid item xs={ 12 } style={ { marginRight: 16, flex: 1, height: "100%" } }>
+                <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
                   { this.state.user == null ? null : this.renderAppBar() }
-                  { this.renderScreen() }
+                  <div style={{paddingLeft: this.state.size === "xs" || this.state.size === "sm"
+                    ? "24px" : "0px", paddingRight:  this.state.size === "xs" || this.state.size === "sm"
+                      ? "24px" : "0px"}}>
+                    { this.renderScreen() }
+                  </div>
                 </Grid>
               </Grid>
             </div>
-            { this.renderFooter() }
             <AppDialog />
             <AppSnackBar />
           </MuiThemeProvider>
@@ -1299,13 +1323,13 @@ class App extends Component {
   }
 
   renderScreen() {
-    const { ethAddresses, wanAddresses, currentScreen } = this.state;
+    const { ethAddresses, wanAddresses, currentScreen, width } = this.state;
     const path = currentScreen.split('/')[0];
     const params = currentScreen.split('/')[1] || null;
 
     switch (path) {
       case "welcome":
-        return <Welcome setUser={ this.setUser } />;
+        return <Welcome setUser={ this.setUser } theme={ this.state.theme } />;
       case "registerAccount":
         return <RegisterAccount setUser={ this.setUser } />;
       case "verifyAccount":
@@ -1328,7 +1352,7 @@ class App extends Component {
       case "forgotPasswordDone":
         return <ForgotPasswordDone />;
       case "resetPassword":
-        return <ResetPassword uriParameters={ this.state.uriParameters } />;
+        return <Welcome setUser={ this.setUser } theme={ this.state.theme } initialScreen='resetPassword' uriParameters={ this.state.uriParameters } />;
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case "ethAccounts":
@@ -1341,6 +1365,7 @@ class App extends Component {
             openSendERC={ this.openSendERC }
             ethTransactions={ this.state.ethTransactions }
             contacts={ this.state.contacts }
+            size={ this.state.size }
           />
         );
       case "wanAccounts":
@@ -1355,6 +1380,7 @@ class App extends Component {
             size={ this.state.size }
             wanTransactions={ this.state.wanTransactions }
             contacts={ this.state.contacts }
+            width={ width }
           />
         );
       case "aionAccounts":
@@ -1366,6 +1392,7 @@ class App extends Component {
             openSendAion={ this.openSendAion }
             aionTransactions={ this.state.aionTransactions }
             contacts={ this.state.contacts }
+            size={ this.state.size }
           />
         );
       case 'bitcoinAccounts':
@@ -1377,6 +1404,7 @@ class App extends Component {
             openSendBitcoin={ this.openSendBitcoin }
             bitcoinTransactions={ this.state.bitcoinTransactions }
             contacts={ this.state.contacts }
+            size={ this.state.size }
           />
         );
       case 'contacts':
@@ -1460,7 +1488,6 @@ class App extends Component {
             contacts={ this.state.contacts }
           />
         );
-        return
       case 'pooling':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <Pooling user={ this.state.user } /> : <Loader />;
