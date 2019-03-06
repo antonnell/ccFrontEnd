@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel  from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress  from '@material-ui/core/CircularProgress';
+import SectionLoader from './sectionLoader';
 
 class ImportModal extends Component {
 
@@ -65,7 +65,7 @@ class ImportModal extends Component {
                 </Grid>
               </Grid>
             </Grid>
-            {this.props.importLoading?<CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>:''}
+            {this.props.importLoading?<SectionLoader />:''}
           </DialogContent>
           <DialogActions>
             <Button disabled={this.props.importLoading} style={{border: '1px solid #ccc'}} onClick={this.props.handleImport} color="primary" autoFocus>
@@ -124,10 +124,10 @@ class ImportModal extends Component {
               </Grid>
             </Grid>
           </Grid>
-          {this.props.importLoading?<CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>:''}
+          {this.props.importLoading?<SectionLoader />:''}
         </DialogContent>
         <DialogActions>
-          <Button disabled={this.props.importLoading} style={{border: '1px solid #ccc'}} onClick={this.props.handleImport} color="primary" autoFocus>
+          <Button disabled={this.props.importLoading} variant='contained' size='small' onClick={this.props.handleImport} color="primary" autoFocus>
             Import Account
           </Button>
         </DialogActions>

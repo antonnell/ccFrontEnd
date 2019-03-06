@@ -64,7 +64,7 @@ class PrivateKeyModal extends Component {
             </Grid>
         </DialogContent>
         <DialogActions>
-          <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>
+          <Button variant='contained' size='small' onClick={this.props.handleClose} color="primary" autoFocus>
             Done
           </Button>
         </DialogActions>

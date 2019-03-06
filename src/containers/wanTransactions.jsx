@@ -43,6 +43,7 @@ let WanTransactions = createReactClass({
         selectAddress={this.selectAddress}
         theme={this.props.theme}
         width={this.props.width}
+        size={this.props.size}
       />
     );
   },

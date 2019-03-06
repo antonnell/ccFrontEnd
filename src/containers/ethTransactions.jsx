@@ -42,6 +42,7 @@ let EthTransactions = createReactClass({
         selectContact={this.selectContact}
         selectAddress={this.selectAddress}
         theme={this.props.theme}
+        size={this.props.size}
       />
     );
   },

@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import AddModal from "./createContactModal";
 import PageTItle from "./pageTitle";
 import PageLoader from "./pageLoader";
@@ -67,8 +66,8 @@ class Contacts extends Component {
 
       return (
 
-        <Grid item xs={12} lg={6} align={index%2==0?"left":"right"} key={contact.userName}>
-          <Card style={index%2==0?theme.custom.accountCard0:theme.custom.accountCard1}>
+        <Grid item xs={12} lg={6} align={index%2===0?"left":"right"} key={contact.userName}>
+          <Card style={index%2===0?theme.custom.accountCard0:theme.custom.accountCard1}>
             <CardContent>
               <Grid
                 container

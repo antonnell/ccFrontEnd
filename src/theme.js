@@ -9,7 +9,10 @@ export const colors = {
   darkBlue: "#2B323C",
   gray: "#ababab",
   darkGray: "#888888",
-  dodgerBlue: "354356"
+  dodgerBlue: "354356",
+  orange: '#EF8D24',
+  green: '#21F14A',
+  red: '#EE144C'
 };
 
 // const defaultTheme = createMuiTheme();
@@ -265,7 +268,7 @@ let customTheme =  {
         MuiTableCell: {
           root: {
             borderBottom: 'none',
-            padding: "12px 24px 12px 24px"
+            padding: "12px 0px 12px 24px"
           }
         },
         MuiTableHead: {

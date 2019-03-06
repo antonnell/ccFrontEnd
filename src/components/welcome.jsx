@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import LinearProgress from "@material-ui/core/LinearProgress";
-
 
 import PageLoader from "./pageLoader";
 import WelcomeImage from "../assets/images/welcome.png";

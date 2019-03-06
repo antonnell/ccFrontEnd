@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import ScrollArea  from 'react-scrollbar';
 
 class TermsModal extends Component {

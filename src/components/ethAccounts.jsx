@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import moment from "moment";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import IconButton from "@material-ui/core/IconButton";
 import Popover from "@material-ui/core/Popover";
@@ -28,7 +26,6 @@ import EthTransactions from "../containers/ethTransactions";
 import CreateModal from "./createModal";
 import ImportModal from "./importModal";
 import PageTItle from "./pageTitle";
-import config from "../config";
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
@@ -69,16 +66,7 @@ class EthAccounts extends Component {
           align="left"
           style={{ minHeight: "190px", position: "relative" }}
         >
-          <CircularProgress
-            size={36}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: -12,
-              marginLeft: -12
-            }}
-          />
+          <PageLoader />
         </Grid>
       );
     }
@@ -506,6 +494,7 @@ class EthAccounts extends Component {
             ethAddresses={this.props.addresses}
             ethTransactions={this.props.ethTransactions}
             contacts={this.props.contacts}
+            size={this.props.size}
           />
         </Grid>
         <PrivateKeyModal

@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
+import ScrollArea  from 'react-scrollbar';
 
 import TheAppBar from './containers/applicationBar.jsx';
 import AppDrawer from './containers/drawer.jsx';
@@ -17,7 +18,6 @@ import CreateBitcoin from './containers/createBitcoin.jsx';
 import KYC from './containers/kyc.jsx';
 import ForgotPassword from './containers/forgotPassword.jsx';
 import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
-import ResetPassword from './containers/resetPassword.jsx';
 import EthAccounts from './containers/ethAccounts.jsx';
 import WanAccounts from './containers/wanAccounts.jsx';
 import AionAccounts from './containers/aionAccounts.jsx';
@@ -1277,43 +1277,45 @@ class App extends Component {
         <MuiPickersUtilsProvider utils={ MomentUtils }>
           <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
             <CssBaseline />
-            <div
-              style={ {
-                display: "flex",
-                padding:
-                  this.state.size === "xs" || this.state.size === "sm"
-                    ? "0px"
-                    : this.state.theme.custom.page.padding,
-                background: background,
-                backgroundImage: backgroundImage
-              } }
-            >
-              { this.renderDrawer() }
-              <Grid
-                container
-                justify="space-around"
-                alignItems="flex-start"
-                direction="row"
-                style={ {
-                  minHeight: "924px",
-                  position: "relative",
-                  flex: 1,
-                  marginLeft: this.state.size === "xs" || this.state.size === "sm"
-                    ? "0px" : '100px',
-                  marginRight: this.state.size === "xs" || this.state.size === "sm"
-                    ? "0px" : '24px'
-                } }
-              >
-                <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
-                  { this.state.user == null ? null : this.renderAppBar() }
-                  <div style={{paddingLeft: this.state.size === "xs" || this.state.size === "sm"
-                    ? "24px" : "0px", paddingRight:  this.state.size === "xs" || this.state.size === "sm"
-                      ? "24px" : "0px"}}>
-                    { this.renderScreen() }
-                  </div>
-                </Grid>
-              </Grid>
-            </div>
+              <ScrollArea horizontal={false} style={{ maxHeight: this.state.height }} >
+                <div
+                  style={ {
+                    display: "flex",
+                    padding:
+                      this.state.size === "xs" || this.state.size === "sm"
+                        ? "0px"
+                        : this.state.theme.custom.page.padding,
+                    background: background,
+                    backgroundImage: backgroundImage
+                  } }
+                >
+                  { this.renderDrawer() }
+                  <Grid
+                    container
+                    justify="space-around"
+                    alignItems="flex-start"
+                    direction="row"
+                    style={ {
+                      minHeight: "924px",
+                      position: "relative",
+                      flex: 1,
+                      marginLeft: ["xs", "sm"].includes(this.state.size) ? "0px" : this.state.size === "md" ? "24px" : "100px",
+                      marginRight: ["xs", "sm"].includes(this.state.size) ? "0px" : '24px'
+                    } }
+                  >
+                    <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
+                      { this.state.user == null ? null : this.renderAppBar() }
+                      <div style={ {
+                          paddingLeft: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px",
+                          paddingRight: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px"
+                        } }
+                      >
+                        { this.renderScreen() }
+                      </div>
+                    </Grid>
+                  </Grid>
+                </div>
+              </ScrollArea>
             <AppDialog />
             <AppSnackBar />
           </MuiThemeProvider>

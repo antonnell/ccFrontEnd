@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 function TickIcon(props) {
-  const { color, fontSize } = props;
+  const { color } = props;
   return (
     <SvgIcon style={{fontSize: '60px', marginRight: '40px'}}>
       <path

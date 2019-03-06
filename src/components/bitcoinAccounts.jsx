@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import IconButton from "@material-ui/core/IconButton";
 import Popover from "@material-ui/core/Popover";
@@ -46,16 +45,7 @@ class BitcoinAccounts extends Component {
           align="left"
           style={{ minHeight: "190px", position: "relative" }}
         >
-          <CircularProgress
-            size={36}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: -12,
-              marginLeft: -12
-            }}
-          />
+          <PageLoader />
         </Grid>
       );
     }
@@ -389,6 +379,7 @@ class BitcoinAccounts extends Component {
             bitcoinAddresses={this.props.addresses}
             bitcoinTransactions={this.props.bitcoinTransactions}
             contacts={this.props.contacts}
+            size={this.props.size}
           />
         </Grid>
         <DeleteAccountConfirmation

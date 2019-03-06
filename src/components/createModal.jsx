@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel  from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress  from '@material-ui/core/CircularProgress';
+import SectionLoader from './sectionLoader';
 
 class CreateModal extends Component {
 
@@ -50,10 +50,10 @@ class CreateModal extends Component {
               </Grid>
             </Grid>
           </Grid>
-          {this.props.createLoading?<CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>:''}
+          {this.props.createLoading?<SectionLoader />:''}
         </DialogContent>
         <DialogActions>
-          <Button disabled={this.props.createLoading} style={{border: '1px solid #ccc'}} onClick={this.props.handleCreate} color="primary" autoFocus>
+          <Button disabled={this.props.createLoading} variant='contained' size='small' onClick={this.props.handleCreate} color="primary" autoFocus>
             Create Account
           </Button>
         </DialogActions>

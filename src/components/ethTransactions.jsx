@@ -23,6 +23,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import config from "../config";
+import ListItemText from "@material-ui/core/ListItemText";
+import { colors } from '../theme.js';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -85,34 +87,50 @@ function filtering(array, props) {
   });
 }
 
-const rows = [
-  {
-    id: "timestamp",
-    numeric: false,
-    disablePadding: false,
-    label: "Date"
-  },
-  {
-    id: "transactionId",
-    numeric: false,
-    disablePadding: false,
-    label: "Transaction"
-  },
-  {
-    id: "value",
-    numeric: false,
-    disablePadding: false,
-    label: "Amount"
-  }
-];
-
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order, orderBy, size } = this.props;
+    let rows = [
+      {
+        id: "timestamp",
+        numeric: false,
+        disablePadding: false,
+        label: "Date"
+      },
+      {
+        id: "transactionId",
+        numeric: false,
+        disablePadding: false,
+        label: "Transaction"
+      },
+      {
+        id: "value",
+        numeric: false,
+        disablePadding: false,
+        label: "Amount"
+      }
+    ];
+
+    if(!['xl', 'lg'].includes(size)) {
+      rows = [
+        {
+          id: "timestamp",
+          numeric: false,
+          disablePadding: false,
+          label: "Date"
+        },
+        {
+          id: "value",
+          numeric: false,
+          disablePadding: false,
+          label: "Amount"
+        }
+      ];
+    }
 
     return (
       <TableHead>
@@ -221,15 +239,26 @@ let EnhancedFilterBar = props => {
             value={selectedAddress}
             onChange={selectAddress}
             disabled={loading}
+            renderValue={value => {
+              return (
+                <Typography variant="body1" noWrap>
+                  {value}
+                </Typography>
+              );
+            }}
           >
             <MenuItem key="a" value="">
-              --
+              <ListItemText
+                primary={"--"}
+              />
             </MenuItem>
             {ethAddresses
               ? ethAddresses.map(address => {
                   return (
                     <MenuItem key={address.name} value={address.name}>
-                      {address.name}
+                      <ListItemText
+                        primary={address.name}
+                      />
                     </MenuItem>
                   );
                 })
@@ -252,9 +281,18 @@ let EnhancedFilterBar = props => {
             value={selectedContact}
             onChange={selectContact}
             disabled={loading}
+            renderValue={value => {
+              return (
+                <Typography variant="body1" noWrap>
+                  {value}
+                </Typography>
+              );
+            }}
           >
             <MenuItem key="b" value="">
-              --
+              <ListItemText
+                primary={"--"}
+              />
             </MenuItem>
             {contacts
               ? contacts.map(contact => {
@@ -263,7 +301,9 @@ let EnhancedFilterBar = props => {
                       key={contact.displayName}
                       value={contact.displayName}
                     >
-                      {contact.displayName}
+                      <ListItemText
+                        primary={contact.displayName}
+                      />
                     </MenuItem>
                   );
                 })
@@ -373,7 +413,7 @@ class EnhancedTable extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, size } = this.props;
     const {
       order,
       orderBy,
@@ -416,6 +456,7 @@ class EnhancedTable extends React.Component {
               onRequestSort={this.handleRequestSort}
               rowCount={data ? data.length : 0}
               theme={theme}
+              size={size}
             />
             <TableBody>
               {stableSort(
@@ -437,7 +478,7 @@ class EnhancedTable extends React.Component {
                           />
                         </div>
                         <div style={divStyle}>
-                          <Typography variant="body1">
+                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.green.red, fontFamily: 'Montserrat-SemiBold' }}>
                             {n.status}
                           </Typography>
                           <Typography variant="subtitle2">
@@ -445,9 +486,9 @@ class EnhancedTable extends React.Component {
                           </Typography>
                         </div>
                       </TableCell>
-                      <TableCell>
+                      {['xl', 'lg'].includes(size) && (<TableCell>
                         <a
-                          href={config.etherscanUrl + n.transactionId}
+                          href={config.bitcoinscanURL + n.transactionId}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
@@ -456,7 +497,7 @@ class EnhancedTable extends React.Component {
                             {n.transactionId}
                           </Typography>
                         </a>
-                      </TableCell>
+                      </TableCell>)}
                       <TableCell>
                         <Typography variant="body1">{n.value + " " +n.currency}</Typography>
                       </TableCell>

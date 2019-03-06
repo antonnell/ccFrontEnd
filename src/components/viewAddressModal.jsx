@@ -77,10 +77,6 @@ class ViewAddressModal extends Component {
         fontWeight: '400'
       }
     }
-    let subTextStyle = {
-      color: '#666666',
-      marginTop: '-6px'
-    }
     let divStyle = {
       display: 'inline-block'
     }

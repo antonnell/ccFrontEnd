@@ -11,6 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
 import { Grid } from '@material-ui/core';
 import {version} from "../version";
+import ScrollArea  from 'react-scrollbar';
 
 // function EthIconPng() {
 //   return (
@@ -143,7 +144,9 @@ class AppDrawer extends Component {
         open={ open }
         onClose={ closeDrawer }
       >
-        { this.renderGridList() }
+        <ScrollArea horizontal={false} >
+          { this.renderGridList() }
+        </ScrollArea>
       </Drawer>
     ) : (
       <div style={ theme.custom.drawerContainer }>

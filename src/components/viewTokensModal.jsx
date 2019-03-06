@@ -142,7 +142,7 @@ class ViewTokensModal extends Component {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button disabled={this.props.createLoading} style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" autoFocus>
+          <Button disabled={this.props.createLoading} variant='contained' size='small' onClick={this.props.handleClose} color="primary" autoFocus>
             Close
           </Button>
         </DialogActions>
