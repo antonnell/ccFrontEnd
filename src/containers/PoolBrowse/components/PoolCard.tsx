@@ -13,6 +13,12 @@ import {DialogActions, WithDialogContext, withDialogContext} from "../../../cont
 import {DialogActionResult} from "../../../types/dialog";
 import {WithSnackBarContext, withSnackBarContext} from "../../../context/SnackBarContext";
 import {WithPoolingContext, withPoolingContext} from "../../../context/PoolingContext";
+import ReactExport from "react-data-export";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
 
 interface OwnProps {
   pool: FundingPool;
@@ -20,11 +26,24 @@ interface OwnProps {
   onContributeClick: () => void;
   managedPool?: boolean;
   completedPool?: boolean;
-  user: User
+
+  user: User;
 }
+
+interface poolTransaction {
+  blockchain: string,
+  functionCall: string,
+  poolName: string,
+  timestamp: string,
+  transactionId: string,
+  userName: string,
+  value: number
+}
+
 
 interface State {
   isSubmitting: boolean;
+  poolTransactions: poolTransaction[];
 }
 
 const styles = (theme: Theme) =>
@@ -65,7 +84,8 @@ const styles = (theme: Theme) =>
       minWidth: 100,
     },
     buttonSpacer: {
-      margin: theme.spacing.unit
+      margin: theme.spacing.unit,
+      marginTop: theme.spacing.unit * 5
     },
     buttonRow: {
       marginTop: theme.spacing.unit
@@ -77,6 +97,9 @@ const styles = (theme: Theme) =>
     },
     textMinHeight: {
       minHeight: 30
+    },
+    whiteLabel: {
+      color: colors.white
     }
   });
 
@@ -85,14 +108,36 @@ interface Props extends OwnProps, WithStyles<typeof styles>, WithDialogContext, 
 
 class PoolCard extends React.Component<Props, State> {
   readonly state: State = {
-    isSubmitting: false
+    isSubmitting: false,
+    poolTransactions: []
   };
 
   static defaultProps = {
     managedPool: false
   };
 
+
+  componentWillMount(): void {
+    const {
+      pool, managedPool,
+      poolingContext: {getPoolingTransactions}
+    } = this.props;
+    if (managedPool) {
+      //let txs: poolTransaction[] = [];
+      getPoolingTransactions(pool.id).then(res => {
+        console.log("res over here", res);
+        this.setState({poolTransactions: res as unknown as poolTransaction[]})
+        //console.log("for pool ",pool.id,res);
+        //let item: poolTransaction = {poolId: pool.id, transactions: res};
+        //txs.push(item);
+        //this.setState({poolTransactions: txs});
+      });
+    }
+  }
+
+
   componentWillUpdate(nextProps: Readonly<Props>, nextState: Readonly<{}>, nextContext: any): void {
+
     const {
       dialogContext: {
         result,
@@ -100,23 +145,47 @@ class PoolCard extends React.Component<Props, State> {
         details,
       }
     } = nextProps;
+
     if (result !== "pending") {
       this.dialogReturns(action, result, details as { id: number });
     }
+
   }
 
+  // filteredPool = (poolArray: poolTransaction[],poolId:number) => {
+  //
+  //   let filteredArray:poolTransaction[] = poolArray.filter(function (el) {
+  //       return el.poolId === poolId;
+  //     });
+  //   return filteredArray.map(a => a.transactions);;
+  // }
+
   public render() {
+
     const {classes, pool, managedPool, completedPool} = this.props;
-    const {isSubmitting} = this.state;
-    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived} = pool;
+    const {isSubmitting, poolTransactions} = this.state;
+    const {name, owner, blockchain, contributorCount, totalPooled, status, totalPledged, whitelistedUsers, isBusy, balance, totalTokensRemaining, totalTokensReceived, userContribution} = pool;
     let pledged = 0;
     let contribution = 0;
+    //let filteredPool = this.filteredPool(poolTransactions,pool.id);
     if (whitelistedUsers) {
       for (const user of whitelistedUsers) {
+
         pledged = pledged + (user && user.pledge !== undefined ? user.pledge : 0);
         contribution = contribution + (user && user.value !== undefined ? user.value : 0);
+
       }
+
     }
+
+
+    //console.log("managedPool",managedPool,myContribution,pool);
+    console.log("poolTransactions", poolTransactions);
+
+    const theme = localStorage.getItem("cc_theme");
+    const myContribution = userContribution ? userContribution.contribution : 0;
+    // console.log("managedPool",managedPool,myContribution,pool);
+
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -126,7 +195,10 @@ class PoolCard extends React.Component<Props, State> {
                 <Typography variant="h5">{name}</Typography>
                 <Typography variant="body1" className={classes.tokenText}>{blockchain}</Typography>
               </Grid>
-              <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}><b>{owner}</b></Typography></div>
+              <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}>Owner: <b>{owner}</b></Typography></div>
+              {(managedPool || completedPool) && <div style={{minHeight: 36}}>
+                <Typography variant="subtitle1">Status: <b>{PoolingContractStatus[status]}</b></Typography>
+              </div>}
             </Grid>
             <Grid item xs={6} className={classes.gridSecondRow}>
               <Typography variant="subtitle1"><strong>{contributorCount}</strong> Contributors</Typography>
@@ -134,13 +206,13 @@ class PoolCard extends React.Component<Props, State> {
                 {((managedPool && pledged > 0) || (!managedPool && totalPledged > 0)) && <React.Fragment><strong>{managedPool ? pledged : totalPledged}</strong> Pledged</React.Fragment>}
               </Typography>
             </Grid>
-            <Grid item xs={6} className={classes.gridSecondRow}>
-              <Typography align="center" variant="subtitle1"><b>{managedPool ? contribution : totalPooled}</b> Raised</Typography>
+            <Grid item xs={6} className={classes.gridSecondRow} style={{paddingLeft: 16}}>
+              <Typography variant="subtitle1"><b>{managedPool ? contribution : totalPooled}</b> Raised</Typography>
+              <Typography variant="subtitle1" className={classes.textMinHeight}>
+                {myContribution !== 0 && <React.Fragment><strong>{myContribution}</strong> Contributed</React.Fragment>}
+              </Typography>
             </Grid>
             <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center" className={classes.buttonRow}>
-              {(managedPool || completedPool) && <div style={{flex: 1}}>
-                <Typography variant="subtitle1">{PoolingContractStatus[status]}</Typography>
-              </div>}
               {managedPool && status === 0 && <React.Fragment>
                 <Button
                   size="small"
@@ -189,7 +261,28 @@ class PoolCard extends React.Component<Props, State> {
               {status === 1 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
               {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
-              <Button variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+
+              <Button classes={theme === "dark" ? {label: classes.whiteLabel} : {}}
+                      variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+              <div className={classes.buttonSpacer} />
+              {managedPool && poolTransactions && poolTransactions.length > 0 &&
+              <React.Fragment>
+                <ExcelFile element={<Button classes={{label: theme === "dark" ? classes.whiteLabel : undefined}}
+                                            variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
+                  <ExcelSheet data={poolTransactions} name="Transactions">
+                    <ExcelColumn label="User Name" value="userName" />
+                    <ExcelColumn label="Type" value="functionCall" />
+                    <ExcelColumn label="Date" value="timestamp" />
+                    <ExcelColumn label="Transaction Id" value="transactionId" />
+                    <ExcelColumn label="Value" value="value" />
+                  </ExcelSheet>
+
+                </ExcelFile>
+                <div className={classes.buttonSpacer} />
+              </React.Fragment>
+              }
+
+
             </Grid>
           </Grid>
           {/*<IconButton className={classes.shareButton}><ShareIcon /></IconButton>*/}

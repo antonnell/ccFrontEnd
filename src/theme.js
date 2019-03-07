@@ -1,5 +1,6 @@
 
 export const colors = {
+  white: "#fff",
   dodgerBlue: "#3cabff",
   "robin-s-egg": "#6be6fd",
   dark: "#1a191d"
@@ -90,7 +91,7 @@ let customTheme =  {
         },
         MuiFormLabel: {
           root: {
-            color: '#c0c0c0'
+            // color: '#c0c0c0'
           }
         },
         MuiInputBase: {
@@ -231,6 +232,16 @@ let customTheme =  {
           },
           label: {
             fontSize: '12px'
+          },
+          outlined: {
+            borderWidth: 2,
+          },
+          outlinedSecondary: {
+            borderWidth: 2,
+            "&:hover": {
+              borderWidth: 2,
+            },
+            color: "white",
           },
           sizeSmall: {
             padding: '10px 20px'

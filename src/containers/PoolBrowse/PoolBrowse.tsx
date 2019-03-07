@@ -109,8 +109,8 @@ class PoolBrowse extends React.Component<Props,State> {
               {!availablePoolsLoading && managedPoolsLoading &&
               availablePools.filter(pool=>pool.status === 10).length === 0 &&
               managedPools.filter(pool=>pool.status === 10).length === 0 && <Grid item><Typography variant="body1">No Pools to display</Typography></Grid> }
-              {managedPools.filter(pool=>pool.status === 10).concat(availablePools.filter(pool=>
-                (pool.status === 10 && managedPools.filter(pool=>pool.status === 10).findIndex(p=>p.id === pool.id) === -1))).map((pool,index)=>
+              {availablePools.filter(pool=>pool.status === 10).concat(managedPools.filter(pool=>
+                (pool.status === 10 && availablePools.filter(pool=>pool.status === 10).findIndex(p=>p.id === pool.id) === -1))).map((pool,index)=>
                 <Grid item xs={6} key={index}>
                   <PoolCard pool={pool} onPledgeClick={this.onPledgeClick(pool)} onContributeClick={this.onContributeClick(pool)} completedPool user={user}/>
                 </Grid>
