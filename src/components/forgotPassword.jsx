@@ -14,7 +14,7 @@ class ForgotPassword extends Component {
         direction="row"
         style={{ marginTop: "35%", position: 'relative' }}
       >
-        <Grid item xs={10} md={6} align='left'>
+        <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Reset Password</Typography>
           <Typography variant="body1" style={ { marginTop: '24px', lineHeight: '35px', fontSize: '15px' } }>Enter your email address associated with your account to receive a password reset email.</Typography>
           <TextField required fullWidth={true} color="textSecondary" error={this.props.emailAddressError} disabled={this.props.loading}

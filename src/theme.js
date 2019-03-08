@@ -31,22 +31,22 @@ let customTheme =  {
           fontSize: 21,
           color: colors.white,
           lineHeight: "25px",
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         h2: {
           letterSpacing: '0.5px',
           fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
           fontSize: '18px',
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         h3: {
           letterSpacing: '0.5px',
           fontFamily: ['Montserrat-Bold', 'sans-serif'].join(","),
           fontSize: '18px',
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
           display: "inline-block"
         },
         h4: {
@@ -54,22 +54,22 @@ let customTheme =  {
           letterSpacing: '0.5px',
           color: colors.text,
           fontSize: '15px',
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         h5: {
           letterSpacing: '0.5px',
           fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
           fontSize: '20px',
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         h6: {
           letterSpacing: '0.5px',
           fontSize: '14px',
           fontWeight: '400',
-          "-webkit-font-smoothing": "antialiased",
-          "-moz-osx-font-smoothing": "grayscale",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         body1: {
           letterSpacing: '0.5px',
@@ -224,7 +224,7 @@ let customTheme =  {
           sizeSmall: {
             fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
             fontSize: '12px',
-            padding: '10px 24px',
+            padding: '10px 12pxpx',
             minWidth: '100px'
           }
         },
@@ -235,15 +235,36 @@ let customTheme =  {
         },
         MuiTab: {
           textColorPrimary: {
-            color: colors.black
-          },
-          selected: {
-            color: colors.black
+            color: colors.black,
+            "&$selected": {
+              color: colors.black
+            }
+          }
+        },
+        MuiSnackbar : {
+          anchorOriginBottomLeft: {
+            bottom: '50px',
+            left: '80px',
+            '@media (min-width: 960px)': {
+              bottom: '50px',
+              left: '80px'
+            }
           }
         },
         MuiSnackbarContent: {
           root: {
-            backgroundColor: colors.darkBlue
+            backgroundColor: colors.white,
+            padding: '0px',
+            minWidth: '450px',
+            '@media (min-width: 960px)': {
+              minWidth: '450px',
+            }
+          },
+          message: {
+            padding: '0px'
+          },
+          action: {
+            marginRight: '0px'
           }
         },
         MuiPaper: {
@@ -291,9 +312,6 @@ let customTheme =  {
             }
           },
           active: {
-            color: colors.white
-          },
-          focus: {
             color: colors.white
           }
         },
@@ -399,21 +417,9 @@ let customTheme =  {
         marginTop: '60px',
         marginBottom: '36px'
       },
-      accountCard0: {
-        maxWidth: '660px',
-        margin: '24px',
-        marginLeft: '0px'
-      },
-      accountCard1: {
-        maxWidth: '660px',
-        margin: '24px',
-        marginRight: '0px'
-      },
-      accountCardSmall0: {
-        marginBottom: '24px'
-      },
-      accountCardSmall1: {
-        marginBottom: '24px'
+      accountsContainer: {
+        width: 'calc(100% + 48px)',
+        marginLeft: '-24px'
       },
       primaryText: {
         background: colors.lightBlue,
@@ -428,7 +434,8 @@ let customTheme =  {
         color: colors.darkGray
       },
       appBar: {
-        background: colors.darkBlue
+        background: colors.darkBlue,
+        padding: '12px'
       },
       welcomeBase: {
         left: '0px',
@@ -441,15 +448,15 @@ let customTheme =  {
         fontSize: '40px',
         letterSpacing: '2px',
         color: colors.white,
-        "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
       },
       welcomeText: {
         fontSize: '35px',
         letterSpacing: '2px',
         color: colors.white,
-        "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
       },
       welcomeContent: {
         marginTop: '314px',

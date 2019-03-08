@@ -11,6 +11,8 @@ const styles = {};
 class Enable2FA extends Component {
 
   render() {
+    const inputStyle = { fontSize: '20px', fontFamily: 'Montserrat-SemiBold', marginLeft: '30px' }
+
     return (
       <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '24px'}}>
         <Grid item xs={12} sm={10} align='left'>
@@ -46,32 +48,32 @@ class Enable2FA extends Component {
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required autoFocus={true} fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code1" value={this.props.code1}
                 onChange={(event) => { this.props.handleChange(event, 'code1'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code2" value={this.props.code2}
                 onChange={(event) => { this.props.handleChange(event, 'code2'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code3" value={this.props.code3}
                 onChange={(event) => { this.props.handleChange(event, 'code3'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code4" value={this.props.code4}
                 onChange={(event) => { this.props.handleChange(event, 'code4'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code5" value={this.props.code5}
                 onChange={(event) => { this.props.handleChange(event, 'code5'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={2} style={{marginTop: '50px'}}>
               <TextField required fullWidth={true} color="textSecondary" disabled={this.props.loading} id="code6" value={this.props.code6}
                 onChange={(event) => { this.props.handleChange(event, 'code6'); }} margin="normal"
-                InputProps={{ classes: { input: 'big-input', }, }} onKeyDown={this.props.onCodeKeyDown}/>
+                inputProps={{ style: inputStyle }} onKeyDown={this.props.onCodeKeyDown}/>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h5" style={{color: 'rgb(244, 67, 54)', fontSize: '0.875rem', fontWeight: '400', lineHeight: '1.46429em', minHeight: '30px'}}>

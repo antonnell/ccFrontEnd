@@ -97,19 +97,16 @@ class EnhancedTableHead extends React.Component {
     let rows = [
       {
         id: "timestamp",
-        numeric: false,
         disablePadding: false,
         label: "Date"
       },
       {
         id: "transactionId",
-        numeric: false,
         disablePadding: false,
         label: "Transaction"
       },
       {
         id: "value",
-        numeric: false,
         disablePadding: false,
         label: "Amount"
       }
@@ -119,13 +116,11 @@ class EnhancedTableHead extends React.Component {
       rows = [
         {
           id: "timestamp",
-          numeric: false,
           disablePadding: false,
           label: "Date"
         },
         {
           id: "value",
-          numeric: false,
           disablePadding: false,
           label: "Amount"
         }
@@ -139,13 +134,12 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={row.id}
-                numeric={row.numeric}
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
                   title="Sort"
-                  placement={row.numeric ? "bottom-end" : "bottom-start"}
+                  placement={"bottom-start"}
                   enterDelay={300}
                 >
                   <TableSortLabel
@@ -493,7 +487,7 @@ class EnhancedTable extends React.Component {
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
                         >
-                          <Typography variant="body1">
+                          <Typography variant="body1" noWrap style={{ maxWidth: size=='lg'?'530px':'auto' }}>
                             {n.transactionId}
                           </Typography>
                         </a>

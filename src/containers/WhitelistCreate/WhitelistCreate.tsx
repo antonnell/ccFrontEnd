@@ -37,7 +37,8 @@ export type WhitelistCreateHandleChange = (fieldName: keyof Whitelist) => (e: Re
 interface OwnProps {
   ethAddresses: EthAddress[],
   wanAddresses: WanAddress[],
-  id: number | null
+  id: number | null,
+  theme: object
 }
 
 interface State {
@@ -103,7 +104,7 @@ class WhitelistCreate extends React.Component<Props, State> {
   }
 
   render() {
-    const {classes, id} = this.props;
+    const {classes, id, theme} = this.props;
     const {
       loading,
       isSubmitting,
@@ -117,7 +118,7 @@ class WhitelistCreate extends React.Component<Props, State> {
     } = this.state;
     return (
       <React.Fragment>
-        <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.createWhitelist} loading={loading || isSubmitting} />
+        <Header title={`${id ? "Update" : "Create"} Whitelist`} headerItems={headerItems.createWhitelist} loading={loading || isSubmitting} theme={theme}/>
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}

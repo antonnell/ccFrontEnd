@@ -73,6 +73,7 @@ interface OwnProps {
   wanAddresses: WanAddress[],
   id: number | null;
   user: User;
+  theme: object
 }
 
 interface State {
@@ -176,7 +177,7 @@ class PoolCreate extends React.Component<Props, State> {
   }
 
   render() {
-    const {ethAddresses, wanAddresses, classes, id, user} = this.props;
+    const {ethAddresses, wanAddresses, classes, id, user, theme} = this.props;
     const {
       loading, isSubmitting,
       poolingContract: {
@@ -193,7 +194,7 @@ class PoolCreate extends React.Component<Props, State> {
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
     return (
       <React.Fragment>
-        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
+        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} theme={theme}/>
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}
@@ -708,5 +709,3 @@ class PoolCreate extends React.Component<Props, State> {
 }
 
 export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(withSnackBarContext(PoolCreate))))) as React.ComponentClass<OwnProps>;
-
-

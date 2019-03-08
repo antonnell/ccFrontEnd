@@ -9,12 +9,12 @@ import Card from '@material-ui/core/Card'
 
 class ViewTokensModal extends Component {
 
-  renderAddresses() {
-    let { viewAddress } = this.props
+  renderTokens() {
+    let { tokens } = this.props
 
-    if(viewAddress && viewAddress.addresses && viewAddress.addresses.length > 0 ) {
-      return viewAddress.addresses.map((address) => {
-        return this.renderAddress(address)
+    if(tokens && tokens.length > 0 ) {
+      return tokens.map((token) => {
+        return this.renderToken(token)
       })
     } else {
       //something went wrong
@@ -28,21 +28,16 @@ class ViewTokensModal extends Component {
     }
     let textStyle = {
       color: '#ffffff',
-      fontSize: '18px',
-      fontWeight: '800'
+      fontSize: '14px',
+      fontWeight: '600'
     }
 
     return (<Grid item xs={12} align='left'>
       <Card style={{borderRadius: '3px'}}>
         <Grid container>
-          <Grid item xs={2} align='left' style={headerStyle}>
-            <Typography variant="body1" style={textStyle}>
-              Token
-            </Typography>
-          </Grid>
           <Grid item xs={6} align='left' style={headerStyle}>
             <Typography variant="body1" style={textStyle}>
-              Address
+              Token
             </Typography>
           </Grid>
           <Grid item xs={3} align='left' style={headerStyle}>
@@ -50,9 +45,9 @@ class ViewTokensModal extends Component {
               Balance
             </Typography>
           </Grid>
-          <Grid item xs={1} align='left' style={headerStyle}>
+          <Grid item xs={3} align='left' style={headerStyle}>
             <Typography variant="body1" style={textStyle}>
-              Txs
+              Send
             </Typography>
           </Grid>
         </Grid>
@@ -60,71 +55,53 @@ class ViewTokensModal extends Component {
     </Grid>)
   }
 
-  renderAddress(address) {
+  renderToken(token) {
 
     let bodyStyle = {
       padding: '16px',
     }
     let textStyle = {
       color: '#2f3031',
-      fontSize: '18px',
-      fontWeight: '800'
-    }
-    if(this.props.theme.name=='dark') {
-      textStyle = {
-        color: '#ffffff',
-        fontSize: '18px',
-        fontWeight: '800'
-      }
+      fontSize: '14px',
+      fontWeight: '400',
+      verticalAlign: 'middle'
     }
     let subTextStyle = {
       color: '#666666',
       marginTop: '-6px'
     }
     let divStyle = {
-      display: 'inline-block'
+      display: 'inline-block',
+      verticalAlign: 'middle'
     }
 
     return(
       <Grid item xs={12} align='left'>
-        <Card style={{marginTop:'16px', borderRadius: '3px'}} onClick={(event) => {this.props.onCardClicked(address.address) }}>
+        <Card style={{marginTop:'16px', borderRadius: '3px'}}>
           <Grid container justify="center" alignItems="center" direction="row">
-            <Grid item xs={2} align='left' style={bodyStyle}>
-              <div style={divStyle}>
-                <img
-                  alt=""
-                  src={ require('../assets/images/bitcoin-logo.png') }
-                  width="30px"
-                  height="30px"
-                  style={{marginRight: '12px'}}
-                />
-              </div>
+            <Grid item xs={6} align='left' style={bodyStyle}>
               <div style={divStyle}>
                 <Typography variant="body1" style={textStyle}>
-                  Bitcoin
-                </Typography>
-                <Typography variant="subtitle2" style={subTextStyle}>
-                  {address.isUsed?'used':'unused'}
+                  {token.name}
                 </Typography>
               </div>
-            </Grid>
-            <Grid item xs={6} align='left' style={bodyStyle}>
-              <Typography variant="body1" style={textStyle} id={address.address}>
-                {address.address}
-              </Typography>
             </Grid>
             <Grid item xs={3} align='left' style={bodyStyle}>
               <Typography variant="body1" style={textStyle}>
-                {address.balance + ' BTC'}
-              </Typography>
-              <Typography variant="subtitle2" style={subTextStyle}>
-                {'$' + (address.usdBalance?address.usdBalance:'0.00')}
+                { token.balance + ' ' + token.symbol }
               </Typography>
             </Grid>
-            <Grid item xs={1} align='left' style={bodyStyle}>
-              <Typography variant="body1" style={textStyle}>
-                {address.txCount}
-              </Typography>
+            <Grid item xs={3} align='left' style={bodyStyle}>
+              <Button
+                size="medium"
+                variant="contained"
+                color="primary"
+                onClick={ () => {
+                  this.props.send(token.symbol);
+                } }
+              >
+                Send
+              </Button>
             </Grid>
           </Grid>
         </Card>
@@ -138,7 +115,7 @@ class ViewTokensModal extends Component {
         <DialogContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             {this.renderHeader()}
-            {this.renderAddresses()}
+            {this.renderTokens()}
           </Grid>
         </DialogContent>
         <DialogActions>

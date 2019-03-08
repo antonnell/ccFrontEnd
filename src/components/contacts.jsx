@@ -52,7 +52,7 @@ class Contacts extends Component {
 
       index ++
 
-      let { theme } = this.props
+      let { theme, size } = this.props
 
       let open = false;
       let anchorEl = null;
@@ -65,35 +65,27 @@ class Contacts extends Component {
       }
 
       return (
-
-        <Grid item xs={12} lg={6} align={index%2===0?"left":"right"} key={contact.userName}>
-          <Card style={index%2===0?theme.custom.accountCard0:theme.custom.accountCard1}>
+        <Grid item xs={12} lg={6} xl={4} key={contact.userName} style={{ padding: '24px' }}>
+          <Card>
             <CardContent>
               <Grid
                 container
                 justify="flex-start"
                 alignItems="flex-start"
                 direction="row"
-                spacing={0}
               >
-                <Grid item xs={12} align="left">
+                <Grid item xs={6} align="left">
                   <Tooltip placement="top-start" title={contact.userName}>
                     <Typography
                       noWrap
                       variant="h3"
+                      style={{ lineHeight: '33px' }}
                     >
                       {contact.displayName}
                     </Typography>
                   </Tooltip>
                 </Grid>
-                <Grid item xs={12} align="left">
-                  <Typography
-                  variant="subtitle1"
-                  color="textSecondary">
-                    {contact.notes}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} align="right" style={{ marginTop: "12px" }}>
+                <Grid item xs={6} align="right">
                   <Button
                     size="small"
                     variant="contained"
@@ -169,6 +161,13 @@ class Contacts extends Component {
                     </List>
                   </Popover>
                 </Grid>
+                <Grid item xs={12} align="left">
+                  <Typography
+                  variant="subtitle1"
+                  color="textSecondary">
+                    {contact.notes}
+                  </Typography>
+                </Grid>
               </Grid>
             </CardContent>
           </Card>
@@ -203,17 +202,17 @@ class Contacts extends Component {
             spacing={0}
             style={this.props.theme.custom.sectionTitle}
           >
-            <Grid item xs={9} align='left'>
+            <Grid item xs={6} align='left'>
               <Typography variant='h2' align='left'>Contacts</Typography>
             </Grid>
-            <Grid item xs={3} align='right'>
+            <Grid item xs={6} align='right'>
               <Button
                 size="small"
                 variant="contained"
-                color="primary"
+                color="secondary"
                 onClick={this.props.handleAddOpen}
               >
-                Add Contact
+                Add
               </Button>
             </Grid>
           </Grid>

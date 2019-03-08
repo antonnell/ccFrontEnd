@@ -8,7 +8,8 @@ let Welcome = createReactClass({
     return {
       currentScreen: this.props.initialScreen!=null?this.props.initialScreen:'login', // login, register, otp, registrationSuccessful, resendConfirmation, forgotPassword, verifyAccount
       email: "",
-      loading: false
+      loading: false,
+      credentials: null
     };
   },
 
@@ -27,8 +28,14 @@ let Welcome = createReactClass({
         uriParameters={ this.props.uriParameters }
         token={ this.props.token }
         code={ this.props.code }
+        setCredentials={ this.setCredentials }
+        credentials={ this.state.credentials }
       />
     )
+  },
+
+  setCredentials(credentials) {
+    this.setState({ credentials })
   },
 
   startLoading() {

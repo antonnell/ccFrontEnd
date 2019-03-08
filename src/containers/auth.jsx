@@ -1,5 +1,4 @@
 import React from "react";
-import LoginComponent from "../components/login";
 import AuthComponent from "../components/authComponent";
 
 import createReactClass from "create-react-class";
@@ -28,11 +27,11 @@ let Auth = createReactClass({
   },
 
   componentWillMount() {
-    emitter.on("login", this.loginReturned);
+    emitter.on("loginOTP", this.loginReturned);
   },
 
   componentWillUnmount() {
-    emitter.removeAllListeners("login");
+    emitter.removeAllListeners("loginOTP");
   },
 
   render() {
@@ -52,13 +51,9 @@ let Auth = createReactClass({
         codeErrorMessage={this.state.codeErrorMessage}
         codeValid={this.state.codeValid}
         loading={this.state.loading}
-        submitLoginNavigate={this.submitLoginNavigate}
+        error={this.state.error}
       />
     );
-  },
-
-  submitLoginNavigate() {
-    this.setState({ requires2fa: false });
   },
 
   isNumeric(n) {
@@ -165,17 +160,16 @@ let Auth = createReactClass({
 
     if (!error) {
       this.setState({ loading: true, error: null });
-      var content = {
-        username: this.props.username,
-        password: this.props.password
-      };
-      dispatcher.dispatch({ type: "login", content, authOTP: this.state.code });
+      var content = this.props.credentials;
+      dispatcher.dispatch({ type: "loginOTP", content, authOTP: this.state.code });
     }
   },
 
   loginReturned(error, data) {
+    this.setState({ loading: false });
+    this.props.stopLoading()
+
     if (error) {
-      this.setState({ loading: false });
       return this.setState({ error: error.toString() });
     }
 
@@ -195,12 +189,10 @@ let Auth = createReactClass({
       } else {
         window.location.hash = "wanAccounts";
       }
-    } else if (data.requires2fa) {
-      this.setState({ requires2fa: true, loading: false });
     } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg, loading: false });
+      this.setState({ error: data.errorMsg });
     } else {
-      this.setState({ error: data.statusText, loading: false });
+      this.setState({ error: data.statusText });
     }
   }
 });

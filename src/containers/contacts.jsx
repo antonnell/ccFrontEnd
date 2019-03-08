@@ -103,6 +103,7 @@ let Contacts = createReactClass({
         optionsClicked={this.optionsClicked}
         optionsContact={this.state.optionsContact}
         optionsClosed={this.optionsClosed}
+        size={this.props.size}
         />
     )
   },

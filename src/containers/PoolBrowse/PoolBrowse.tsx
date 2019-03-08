@@ -33,6 +33,7 @@ interface OwnProps {
   user: User;
   ethAddresses: EthAddress[],
   wanAddresses: WanAddress[],
+  theme: object
 }
 interface State {
   openPledgeDialog: boolean;
@@ -65,11 +66,11 @@ class PoolBrowse extends React.Component<Props,State> {
   }
 
   public render() {
-    const {poolingContext: {availablePools,availablePoolsLoading,managedPools,managedPoolsLoading}, classes,ethAddresses,wanAddresses,user} = this.props;
+    const {poolingContext: {availablePools,availablePoolsLoading,managedPools,managedPoolsLoading}, classes,ethAddresses,wanAddresses,user,theme} = this.props;
     const {selectedPool,openPledgeDialog,openContributeDialog} = this.state;
     return (
       <React.Fragment>
-        <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading || managedPoolsLoading}/>
+        <Header title="Browse Pools" headerItems={headerItems.poolBrowse} loading={availablePoolsLoading || managedPoolsLoading} theme={theme}/>
           <ExpansionPanel className={classes.expansionPanel} defaultExpanded>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="h3">My Pools</Typography>

@@ -113,14 +113,9 @@ class AionAccounts extends Component {
 
       let { theme, size } = this.props
 
-      let cardStyle = index%2==0?theme.custom.accountCard0:theme.custom.accountCard1
-      if(['xs', 'sm', 'md'].includes(size)) {
-        cardStyle = index%2==0?theme.custom.accountCardSmall0:theme.custom.accountCardSmall1
-      }
-
       return (
-        <Grid item xs={12} lg={6} align={index%2==0?"left":"right"} key={address.address}>
-          <Card style={cardStyle}>
+        <Grid item xs={12} lg={6} xl={4} key={address.address} style={{ padding: '24px' }}>
+          <Card>
             <CardContent style={{ position: "relative" }}>
               <Grid
                 container
@@ -362,7 +357,7 @@ class AionAccounts extends Component {
                 color="primary"
                 onClick={handleCreateOpen}
               >
-                Create Account
+                Create
               </Button>
               <Button
                 style={{ marginLeft: "12px" }}
@@ -371,7 +366,7 @@ class AionAccounts extends Component {
                 color="secondary"
                 onClick={handleImportOpen}
               >
-                Import Account
+                Import
               </Button>
             </Grid>
           </Grid>
@@ -379,9 +374,10 @@ class AionAccounts extends Component {
         <Grid item xs={12}>
           <Grid
             container
-            justify="space-between"
+            justify="flex-start"
             alignItems="flex-start"
             direction="row"
+            style={theme.custom.accountsContainer}
           >
             {this.renderAddresses()}
           </Grid>

@@ -11,7 +11,7 @@ import SectionLoader from './sectionLoader';
 class CreateContactModal extends Component {
   render() {
     return (
-      <Dialog open={this.props.isOpen} onClose={this.props.handleClose}>
+      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} fullWidth={true} maxWidth={'md'}>
         <DialogContent>
           <Grid
             container
@@ -107,7 +107,8 @@ class CreateContactModal extends Component {
         <DialogActions>
           <Button
             disabled={this.props.addLoading}
-            style={{ border: "1px solid #ccc" }}
+            variant='contained'
+            size='small'
             onClick={this.props.addClicked}
             color="primary"
             autoFocus

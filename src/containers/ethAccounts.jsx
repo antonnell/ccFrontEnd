@@ -36,7 +36,9 @@ let EthAccounts = createReactClass({
       loadingAccount: null,
       deleteOpen: false,
       createOpen: false,
-      importOpen: false
+      importOpen: false,
+      viewOpen: false,
+      tokens: null
     };
   },
   render() {
@@ -65,7 +67,7 @@ let EthAccounts = createReactClass({
         publicAddressErrorMessage={this.state.publicAddressErrorMessage}
         handleChecked={this.handleChecked}
         sendEtherClicked={this.props.openSendEther}
-        sendERC20={this.props.openSendERC}
+        sendERC20={this.sendERC20}
         validateField={this.validateField}
         updatePrimaryClicked={this.updatePrimaryClicked}
         editNameClicked={this.editNameClicked}
@@ -98,6 +100,10 @@ let EthAccounts = createReactClass({
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
         size={this.props.size}
+        viewTokens={ this.viewTokens }
+        viewTokensClose={ this.viewTokensClose }
+        viewOpen={ this.state.viewOpen }
+        tokens={ this.state.tokens }
       />
     );
   },
@@ -114,6 +120,10 @@ let EthAccounts = createReactClass({
     ethEmitter.on("updateEthAddress", this.updateEthAddressReturned);
     ethEmitter.on("exportEthereumKey", this.exportEthereumKeyReturned);
     ethEmitter.on("deleteEthAddress", this.deleteEthAddressReturned);
+  },
+
+  sendERC20(symbol) {
+    this.props.openSendERC(symbol, this.state.optionsAccount)
   },
 
   resetInputs() {
@@ -247,6 +257,13 @@ let EthAccounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
+  },
+
+  viewTokens(address) {
+    this.setState({ viewOpen: true, tokens: address.erc20Tokens });
+  },
+  viewTokensClose() {
+    this.setState({ viewOpen: false });
   },
 
   handleCreateOpen() {

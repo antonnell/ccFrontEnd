@@ -49,6 +49,7 @@ interface OwnProps {
   user: User;
   ethAddresses: EthAddress[],
   wanAddresses: WanAddress[],
+  theme: object
 }
 
 interface State {
@@ -90,7 +91,8 @@ class PoolDetails extends React.Component<Props, State> {
     const {
       id, classes, ethAddresses, wanAddresses, poolingContext: {
         availablePools, availablePoolsLoading
-      }
+      },
+      theme
     } = this.props;
     const {
       openPledgeDialog, openContributeDialog
@@ -140,7 +142,7 @@ class PoolDetails extends React.Component<Props, State> {
     }
     return (
       <React.Fragment>
-        <Header title="Pool Details" headerItems={headerItems.pooling} loading={availablePoolsLoading} />
+        <Header title="Pool Details" headerItems={headerItems.pooling} loading={availablePoolsLoading} theme={theme} />
         <Grid container direction="row" className={classes.containerGrid} spacing={40}>
           {groups.map((group, i) => <DetailsGroup key={i} title={group.title} items={group.items} />)}
           {!availablePoolsLoading && pool !== null && <Grid item container direction="row" justify="flex-end" xs={12}>

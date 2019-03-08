@@ -8,6 +8,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import Snackbar from './snackbar';
 
 class RegisterAccount extends Component {
 
@@ -50,7 +51,7 @@ class RegisterAccount extends Component {
         direction="row"
         style={{ marginTop: "200px", position: 'relative' }}
       >
-        <Grid item xs={10} md={6} align='left'>
+        <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Register</Typography>
           <TextField
             required
@@ -136,9 +137,6 @@ class RegisterAccount extends Component {
             />
             <FormHelperText>{acceptedErrorMessage}</FormHelperText>
           </FormControl>
-          <Typography style={{ color: "#f44336" }}>
-            {error}
-          </Typography>
           <Button
             variant="contained"
             size="large"
@@ -154,6 +152,7 @@ class RegisterAccount extends Component {
           handleClose={handleTermsClose}
           handleTermsAccepted={handleTermsAccepted}
         />
+        {this.props.error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     );
   }

@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import PageLoader from "./pageLoader";
+import Snackbar from "./snackbar";
 import WelcomeImage from "../assets/images/welcome.png";
 
 import Login from "../containers/login.jsx";
@@ -14,6 +15,7 @@ import ForgotPassword from '../containers/forgotPassword.jsx';
 import ForgotPasswordDone from '../containers/forgotPasswordDone.jsx';
 import ResetPassword from '../containers/resetPassword.jsx';
 import VerifyAccount from '../containers/VerifyAccount/VerifyAccount';
+import Auth from '../containers/auth';
 
 class Welcome extends Component {
   render() {
@@ -27,7 +29,7 @@ class Welcome extends Component {
       <Grid container style={theme.custom.welcomeBase}>
         {loading && (<PageLoader />)}
         {this.renderBase()}
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6} style={ { minHeight: '100%' } }>
           {this.renderScreen()}
         </Grid>
       </Grid>
@@ -35,14 +37,13 @@ class Welcome extends Component {
   }
 
   renderScreen() {
-    let { currentScreen, theme, navigate, setUser, email, setEmail, startLoading, stopLoading, uriParameters, token, code } = this.props
+    let { currentScreen, theme, navigate, setUser, email, setEmail, startLoading, stopLoading, uriParameters, token, code, credentials, setCredentials } = this.props
 
     switch(currentScreen) {
       case 'login' :
-        return (<Login theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } />)
+        return (<Login theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } setCredentials={ setCredentials } />)
       case 'otp' :
-
-      break;
+        return (<Auth theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } credentials={ credentials } />)
       case 'register' :
         return (<Register theme={ theme } navigate={ navigate } setEmail={ setEmail } startLoading={ startLoading } stopLoading={ stopLoading } />)
       case 'registrationSuccessful' :
@@ -67,7 +68,7 @@ class Welcome extends Component {
     let { theme } = this.props
 
     return (
-      <Grid item xs={6} style={ { padding: '80px', backgroundImage: "url(" + WelcomeImage + ")", backgroundSize: 'cover' } }>
+      <Grid item xs={12} md={6} style={ { padding: '80px', backgroundImage: "url(" + WelcomeImage + ")", backgroundSize: 'cover', minHeight: '100%' } }>
         <Typography style={ theme.custom.welcomeCurve }>Curve</Typography>
 
         {this.renderGenText()}

@@ -45,7 +45,7 @@ import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
 import sha256 from 'sha256';
 import crypto from 'crypto';
 import PoolCreate from './containers/PoolCreate/index';
-import Loader from './components/Loader';
+import PageLoader from './components/pageLoader';
 import Context from './context/Context';
 import WhitelistCreate from './containers/WhitelistCreate';
 import AppDialog from './containers/AppDialog/AppDialog';
@@ -1277,45 +1277,43 @@ class App extends Component {
         <MuiPickersUtilsProvider utils={ MomentUtils }>
           <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
             <CssBaseline />
-              <ScrollArea horizontal={false} style={{ maxHeight: this.state.height }} >
-                <div
-                  style={ {
-                    display: "flex",
-                    padding:
-                      this.state.size === "xs" || this.state.size === "sm"
-                        ? "0px"
-                        : this.state.theme.custom.page.padding,
-                    background: background,
-                    backgroundImage: backgroundImage
-                  } }
-                >
-                  { this.renderDrawer() }
-                  <Grid
-                    container
-                    justify="space-around"
-                    alignItems="flex-start"
-                    direction="row"
-                    style={ {
-                      minHeight: "924px",
-                      position: "relative",
-                      flex: 1,
-                      marginLeft: ["xs", "sm"].includes(this.state.size) ? "0px" : this.state.size === "md" ? "24px" : "100px",
-                      marginRight: ["xs", "sm"].includes(this.state.size) ? "0px" : '24px'
+            <div
+              style={ {
+                display: "flex",
+                padding:
+                  this.state.size === "xs" || this.state.size === "sm"
+                    ? "0px"
+                    : this.state.theme.custom.page.padding,
+                background: background,
+                backgroundImage: backgroundImage
+              } }
+            >
+              { this.renderDrawer() }
+              <Grid
+                container
+                justify="space-around"
+                alignItems="flex-start"
+                direction="row"
+                style={ {
+                  minHeight: "924px",
+                  position: "relative",
+                  flex: 1,
+                  marginLeft: ["xs", "sm"].includes(this.state.size) ? "0px" : this.state.size === "md" ? "24px" : "100px",
+                  marginRight: ["xs", "sm"].includes(this.state.size) ? "0px" : '24px'
+                } }
+              >
+                <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
+                  { this.state.user == null ? null : this.renderAppBar() }
+                  <div style={ {
+                      paddingLeft: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px",
+                      paddingRight: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px"
                     } }
                   >
-                    <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
-                      { this.state.user == null ? null : this.renderAppBar() }
-                      <div style={ {
-                          paddingLeft: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px",
-                          paddingRight: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px"
-                        } }
-                      >
-                        { this.renderScreen() }
-                      </div>
-                    </Grid>
-                  </Grid>
-                </div>
-              </ScrollArea>
+                    { this.renderScreen() }
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
             <AppDialog />
             <AppSnackBar />
           </MuiThemeProvider>
@@ -1419,6 +1417,7 @@ class App extends Component {
             openSendWanchain={ this.openSendWanchain }
             openSendAion={ this.openSendAion }
             openSendBitcoin={ this.openSendBitcoin }
+            size={ this.state.size }
           />
         );
       // case 'updatePassword':
@@ -1492,7 +1491,9 @@ class App extends Component {
         );
       case 'pooling':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
-          <Pooling user={ this.state.user } /> : <Loader />;
+          <Pooling
+            user={ this.state.user }
+            theme={ this.state.theme } /> : <PageLoader />;
       case "createPool":
       case "updatePool":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
@@ -1502,7 +1503,8 @@ class App extends Component {
             id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "createWhitelist":
       case "updateWhitelist":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
@@ -1512,14 +1514,16 @@ class App extends Component {
             id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "browsePools":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolBrowse
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "poolDetails":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolDetails
@@ -1527,7 +1531,8 @@ class App extends Component {
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "ico":
         return <ComingSoon />;
       case 'resendConfirmationEmail':

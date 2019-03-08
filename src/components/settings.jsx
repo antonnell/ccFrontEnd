@@ -73,23 +73,23 @@ class Settings extends Component {
           {
             this.props.tabValue===0?
             <Grid container>
-              <Grid item xs={12} sm={6}>{this.renderProfile()}</Grid>
-              <Grid item xs={12} sm={6}>{this.renderKYC()}</Grid>
+              <Grid item xs={12} md={6}>{this.renderProfile()}</Grid>
+              <Grid item xs={12} md={6}>{this.renderKYC()}</Grid>
             </Grid>
             :null
           }
           {
             this.props.tabValue===1?
             <Grid container>
-              <Grid item xs={12} sm={6}>{this.render2FA()}</Grid>
-              <Grid item xs={12} sm={6}>{this.renderUpdatePassword()}</Grid>
+              <Grid item xs={12} md={6}>{this.render2FA()}</Grid>
+              <Grid item xs={12} md={6}>{this.renderUpdatePassword()}</Grid>
             </Grid>
             :null
           }
           {
             this.props.tabValue===2?
             <Grid container>
-              <Grid item xs={12} sm={6}>{this.renderTheme()}</Grid>
+              <Grid item xs={12} md={6}>{this.renderTheme()}</Grid>
             </Grid>
             :null
           }

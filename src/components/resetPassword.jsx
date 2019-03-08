@@ -17,7 +17,7 @@ class ResetPassword extends Component {
         direction="row"
         style={{ marginTop: "35%", position: 'relative' }}
       >
-        <Grid item xs={10} md={6} align='left'>
+        <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Reset Password</Typography>
           <TextField required fullWidth={true} color="textSecondary" type="password" error={this.props.passwordError} disabled={this.props.loading}
             id="password" label="Password" value={this.props.password}

@@ -33,7 +33,7 @@ class RegisterCompleted extends Component {
         direction="row"
         style={{ marginTop: "25%", position: 'relative' }}
       >
-        <Grid item xs={10} md={6} align='left'>
+        <Grid item xs={8} md={6} align='left'>
           <div style={{display: 'inline-block'}}>
             <TickIcon
               color={theme.custom.tickIcon.color}

@@ -154,8 +154,6 @@ class Store {
 
     var call = apiUrl + url;
 
-    console.log(postData);
-
     if (method === 'GET') {
       postData = null;
     } else {

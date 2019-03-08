@@ -1,6 +1,5 @@
 import React from "react";
 import LoginComponent from "../components/login";
-import AuthComponent from "../components/authComponent";
 
 import createReactClass from "create-react-class";
 let emitter = require("../store/accountStore.js").default.emitter;
@@ -48,10 +47,6 @@ let Login = createReactClass({
         theme={this.props.theme}
       />
     );
-  },
-
-  submitLoginNavigate() {
-    this.setState({ requires2fa: false });
   },
 
   handleChange(event, name) {
@@ -119,7 +114,11 @@ let Login = createReactClass({
         window.location.hash = "wanAccounts";
       }
     } else if (data.requires2fa) {
-      this.setState({ requires2fa: true });
+      this.props.setCredentials({
+        username: this.state.username,
+        password: this.state.password
+      })
+      this.props.navigate('otp');
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {

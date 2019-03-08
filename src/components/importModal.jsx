@@ -17,7 +17,7 @@ class ImportModal extends Component {
 
     if(type === 'bitcoin') {
       return (
-        <Dialog open={this.props.isOpen} onClose={this.props.handleClose} >
+        <Dialog open={this.props.isOpen} onClose={this.props.handleClose} fullWidth={true} maxWidth={'md'}>
           <DialogContent>
             <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
               <Grid item xs={12} align='left'>
@@ -68,7 +68,7 @@ class ImportModal extends Component {
             {this.props.importLoading?<SectionLoader />:''}
           </DialogContent>
           <DialogActions>
-            <Button disabled={this.props.importLoading} style={{border: '1px solid #ccc'}} onClick={this.props.handleImport} color="primary" autoFocus>
+            <Button disabled={this.props.importLoading} variant='contained' size='small' onClick={this.props.handleImport} color="primary" autoFocus>
               Import Account
             </Button>
           </DialogActions>
@@ -76,7 +76,7 @@ class ImportModal extends Component {
     }
 
     return (
-      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} >
+      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} fullWidth={true} maxWidth={'md'}>
         <DialogContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='left'>

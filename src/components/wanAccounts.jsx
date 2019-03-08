@@ -32,6 +32,7 @@ import PageTItle from './pageTitle';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
+import ViewTokensModal from "./viewTokensModal";
 
 function ExpandMoreIcon(props) {
   return (
@@ -136,111 +137,11 @@ class WanAccounts extends Component {
         }
       }
 
-      let wrc20 = (
-        <ExpansionPanel
-          style={ {
-            boxShadow: 'none',
-            marginLeft: '-24px',
-            marginRight: '-24px'
-          } }
-        >
-          <ExpansionPanelSummary expandIcon={ <ExpandMoreIcon theme={theme}/> }>
-            <Typography>WRC20 Tokens</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography variant="body1" noWrap>
-              Updating WRC20 tokens
-            </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      );
-
-      if (address.wrc20Tokens) {
-        wrc20 = (
-          <ExpansionPanel
-            style={ {
-              boxShadow: 'none',
-              marginLeft: '-24px',
-              marginRight: '-24px'
-            } }
-          >
-            <ExpansionPanelSummary expandIcon={ <ExpandMoreIcon theme={theme} /> }>
-              <Typography>WRC20 Tokens</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Divider />
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <TableSortLabel
-                        active={false}
-                      >
-                        Symbol
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell numeric>
-                      <TableSortLabel
-                        active={false}
-                      >
-                        Balance
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell numeric>
-                      <TableSortLabel
-                        active={false}
-                      >
-                        Send
-                      </TableSortLabel>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  { address.wrc20Tokens.map(n => {
-                    return (
-                      <TableRow key={ n.name }>
-                        <TableCell scope="row">
-                          <Typography variant="body1" noWrap>
-                            { n.name }
-                          </Typography>
-                        </TableCell>
-                        <TableCell numeric>
-                          <Typography variant="body1">
-                            { n.balance + ' ' + n.symbol }
-                          </Typography>
-                        </TableCell>
-                        <TableCell numeric>
-                          <Button
-                            size="medium"
-                            variant="contained"
-                            color="primary"
-                            onClick={ () => {
-                              sendWRC20(n.symbol, address);
-                            } }
-                          >
-                            Send
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }) }
-                </TableBody>
-              </Table>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        );
-      }
-
       index ++
 
-      let cardStyle = index%2==0?theme.custom.accountCard0:theme.custom.accountCard1
-      if(['xs', 'sm', 'md'].includes(size)) {
-        cardStyle = index%2==0?theme.custom.accountCardSmall0:theme.custom.accountCardSmall1
-      }
-
       return (
-        <Grid item xs={12} lg={6} align={index%2==0?"left":"right"} key={address.publicAddress}>
-          <Card style={cardStyle}>
+        <Grid item xs={12} lg={6} xl={4} key={address.publicAddress} style={{ padding: '24px' }}>
+          <Card>
             <CardContent style={ { position: 'relative' } }>
               <Grid
                 container
@@ -361,6 +262,15 @@ class WanAccounts extends Component {
                       >
                         <ListItemText primary="Set Primary" />
                       </ListItem>
+                      <ListItem
+                        button
+                        disabled={ !(address.wrc20Tokens && address.wrc20Tokens.length > 0) }
+                        onClick={( ) => {
+                          this.props.viewTokens(address)
+                        } }
+                      >
+                        <ListItemText primary="View Tokens" />
+                      </ListItem>
                       <Divider />
                       <ListItem
                         button
@@ -403,9 +313,6 @@ class WanAccounts extends Component {
                   >
                     Send
                   </Button>
-                </Grid>
-                <Grid item xs={ 12 } align="left">
-                  { wrc20 }
                 </Grid>
               </Grid>
               { loading }
@@ -471,7 +378,7 @@ class WanAccounts extends Component {
                 color="primary"
                 onClick={handleCreateOpen}
               >
-                Create Account
+                Create
               </Button>
               <Button
                 style={{ marginLeft: "12px" }}
@@ -480,7 +387,7 @@ class WanAccounts extends Component {
                 color="secondary"
                 onClick={handleImportOpen}
               >
-                Import Account
+                Import
               </Button>
             </Grid>
           </Grid>
@@ -488,9 +395,10 @@ class WanAccounts extends Component {
         <Grid item xs={12}>
           <Grid
             container
-            justify="space-between"
+            justify="flex-start"
             alignItems="flex-start"
             direction="row"
+            style={theme.custom.accountsContainer}
           >
             {this.renderAddresses()}
           </Grid>
@@ -567,6 +475,13 @@ class WanAccounts extends Component {
           validateField={this.props.validateField}
           handleImport={this.props.createImportClicked}
           error={this.props.error}
+        />
+        <ViewTokensModal
+          isOpen={this.props.viewOpen}
+          handleClose={this.props.viewTokensClose}
+          tokens={this.props.tokens}
+          theme={this.props.theme}
+          send={this.props.sendWRC20}
         />
       </Grid>
     );

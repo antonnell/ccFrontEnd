@@ -24,6 +24,7 @@ class Store {
       payload => {
         switch (payload.type) {
           case 'login':
+          case 'loginOTP':
             this.login(payload);
             break;
           case 'register':

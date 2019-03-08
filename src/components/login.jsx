@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from './snackbar';
 
 class Login extends Component {
   render() {
@@ -41,7 +42,7 @@ class Login extends Component {
         direction="row"
         style={{ marginTop: "346px", position: 'relative' }}
       >
-        <Grid item xs={10} md={6} align='left'>
+        <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Login</Typography>
           <TextField
             required
@@ -83,9 +84,6 @@ class Login extends Component {
           >
             Forgot Password?
           </Typography>
-          <Typography variant="body1" color="error">
-            {error}
-          </Typography>
           <Button
             variant="contained"
             size="large"
@@ -103,6 +101,7 @@ class Login extends Component {
             Didn't receive confirmation email?
           </Typography>
         </Grid>
+        {this.props.error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     );
   }
