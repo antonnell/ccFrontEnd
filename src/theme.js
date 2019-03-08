@@ -224,8 +224,11 @@ let customTheme =  {
           sizeSmall: {
             fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
             fontSize: '12px',
-            padding: '10px 12pxpx',
+            padding: '10px 12px',
             minWidth: '100px'
+          },
+          text: {
+            border: '1px solid'
           }
         },
         MuiCard: {
@@ -352,9 +355,31 @@ let customTheme =  {
           root: {
             padding: '30px 40px'
           }
+        },
+        MuiExpansionPanel: {
+          root: {
+            boxShadow: 'none',
+            '&:before': {
+              opacity: '0'
+            },
+          }
+        },
+        MuiExpansionPanelDetails: {
+          root: {
+            padding: '0px'
+          }
+        },
+        MuiExpansionPanelSummary: {
+          root: {
+            padding: '0px'
+          }
+        },
+        MuiDialog: {
+          paper: {
+            margin: '0px'
+          }
         }
       },
-
       palette: {
         primary: {
           main: colors.lightBlue,

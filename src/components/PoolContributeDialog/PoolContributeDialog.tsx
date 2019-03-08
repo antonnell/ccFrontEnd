@@ -42,8 +42,7 @@ interface State {
 const styles = (theme: Theme) =>
   createStyles({
     button: {
-      minWidth: 100,
-      color: colors.dark
+      minWidth: 100
     },
     buttonSpacer: {
       margin: theme.spacing.unit
@@ -92,6 +91,8 @@ class PoolContributeDialog extends React.Component<Props, State> {
         open={open}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
+        fullWidth={true}
+        maxWidth={'md'}
       >
         {pool !== null &&
         <React.Fragment>
@@ -154,7 +155,7 @@ class PoolContributeDialog extends React.Component<Props, State> {
             </Button>
             <div className={classes.buttonSpacer} />
             <Button
-              variant="outlined"
+              variant="text"
               disabled={amount === undefined || amount === null || amount === 0 || isSubmitting || !validAmount}
               className={classes.button} color="secondary" size="small" onClick={this.handleSubmit}>
               Contribute

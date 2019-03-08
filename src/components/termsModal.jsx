@@ -6,12 +6,18 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ScrollArea  from 'react-scrollbar';
+import Slide from '@material-ui/core/Slide';
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
 
 class TermsModal extends Component {
 
   render() {
     return (
-      <Dialog open={this.props.isOpen} title="Terms & Conditions" onClose={this.props.handleClose} fullWidth={true} maxWidth={'lg'}>
+      <Dialog open={this.props.isOpen} title="Terms & Conditions" onClose={this.props.handleClose} fullWidth={true} maxWidth={'lg'} TransitionComponent={Transition}>
         <DialogTitle id="alert-dialog-title">
           <Typography variant='h6' align='center'>
             CURVE ACCOUNT TERMS & CONDITIONS

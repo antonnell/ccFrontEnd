@@ -5,7 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -51,7 +50,7 @@ const styles = (theme: Theme) =>
       containerGrid: sharedStyles(theme).containerGrid,
       table: {},
       tableWrapper: {
-        overflowX: "auto"
+        position: 'relative'
       }
     });
 
@@ -107,72 +106,65 @@ class WhiteLists extends React.Component<Props, State> {
           <Typography variant="h3" style={{marginBottom: "20px"}}>
             My Whitelists
           </Typography>
-          <Paper>
-            <div className={classes.tableWrapper}>
-              <Table className={classes.table} aria-labelledby="tableTitle">
-                <EnhancedTableHead
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={this.handleRequestSort}
-                    // rowCount={data ? data.length : 0}
-                />
-                <TableBody>
-                  {loading && <TableRow style={{height: "auto"}}>
-                    <TableCell colSpan={3} style={{padding: 0}}>
-                      <LinearProgress />
-                    </TableCell>
-                  </TableRow>}
-                  {stableSort(whitelists, getSorting(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((n: Whitelist,i:number) => {
-                        return (
-                            <TableRow hover tabIndex={-1} key={i} onClick={this.handleRowClick(n.id||0)} style={{cursor: "pointer"}}>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.name}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                    style={{lineHeight: "57px", fontSize: "17px"}}
-                                    noWrap
-                                >
-                                  {n.userCount}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography style={{lineHeight: "57px", fontSize: "17px"}} noWrap>-</Typography>
-                              </TableCell>
-                            </TableRow>
-                        );
-                      })}
-                  {emptyRows > 0 && (
-                      <TableRow style={{height: 49 * emptyRows}}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <TablePagination
-                component="div"
-                count={whitelists ? whitelists.length : 0}
-                rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={[10]}
-                page={page}
-                backIconButtonProps={{
-                  "aria-label": "Previous Page"
-                }}
-                nextIconButtonProps={{
-                  "aria-label": "Next Page"
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-          </Paper>
+          <div className={classes.tableWrapper}>
+            {loading && <LinearProgress style={ {
+              position: 'absolute',
+              width: '100%',
+              top: '15px'
+            } } />}
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={this.handleRequestSort}
+                  // rowCount={data ? data.length : 0}
+              />
+              <TableBody>
+                {stableSort(whitelists, getSorting(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((n: Whitelist,i:number) => {
+                      return (
+                          <TableRow hover tabIndex={-1} key={i} onClick={this.handleRowClick(n.id||0)} style={{cursor: "pointer"}}>
+                            <TableCell>
+                              <Typography
+                                  variant="body1"
+                                  noWrap
+                              >
+                                {n.name}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography
+                                  variant="body1"
+                                  noWrap
+                              >
+                                {n.userCount}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body1" noWrap>-</Typography>
+                            </TableCell>
+                          </TableRow>
+                      );
+                    })}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+              component="div"
+              count={whitelists ? whitelists.length : 0}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[10]}
+              page={page}
+              backIconButtonProps={{
+                "aria-label": "Previous Page"
+              }}
+              nextIconButtonProps={{
+                "aria-label": "Next Page"
+              }}
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
         </Grid>
     );
   }

@@ -3,7 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
-import ScrollArea  from 'react-scrollbar';
 
 import TheAppBar from './containers/applicationBar.jsx';
 import AppDrawer from './containers/drawer.jsx';
@@ -1163,6 +1162,26 @@ class App extends Component {
           token: this.state.user.token
         });
       }
+
+      const path = currentScreen.split('/')[0];
+      if (['poolDetails', 'updatePool', 'createPool', 'pooling'].includes(path)) {
+        content = { id: this.state.user.id };
+        if(this.state.ethAddresses == null) {
+          ethDispatcher.dispatch({
+            type: "getEthAddress",
+            content,
+            token: this.state.user.token
+          });
+        }
+        if(this.state.wanAddresses == null) {
+          wanDispatcher.dispatch({
+            type: "getWanAddress",
+            content,
+            token: this.state.user.token
+          });
+        }
+      }
+
 
       if (this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
         content = {};

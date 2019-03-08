@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import {colors} from "../theme";
 import {HeaderItem} from "../constants/HeaderItems";
@@ -20,7 +19,6 @@ const styles = (theme: Theme) =>
   createStyles({
     header: {
       marginBottom: theme.spacing.unit * 1.5,
-      padding: theme.spacing.unit,
       borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
       display: "flex"
     },
@@ -57,9 +55,8 @@ class Header extends React.Component<Props, State> {
     const {optionsOpen} = this.state;
     return (
       <React.Fragment>
-        <PageTItle theme={theme} root={'Invest'} screen={'Pooling'} />
         <Grid container item xs={12} alignItems="center" className={classes.header}>
-          <Typography variant="h5" style={{flexGrow: 1}}>{title}</Typography>
+          <PageTItle theme={theme} root={'Invest > Pooling'} screen={title} />
           {headerItems.buttons.map((button, index) =>
             <Button
               key={index}

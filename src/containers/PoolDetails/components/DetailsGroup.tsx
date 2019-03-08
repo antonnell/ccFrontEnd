@@ -56,12 +56,12 @@ class DetailsGroup extends React.Component<Props> {
                 {item.title === "Progress" ?
                     <Grid item xs={item.width} className={classes.progressGrid}>
                       <CircularProgress size={300} className={classes.progress} variant="static" value={95} />
-                      <Typography variant="h5" style={{position: "absolute"}}>{item.text}</Typography>
+                      <Typography variant="body1" style={{position: "absolute"}}>{item.text}</Typography>
                     </Grid>
                     :
                     <Grid item xs={item.width} className={classes.contentGrid}>
-                      <Typography variant="h5">{item.title}</Typography>
-                      <Typography variant="h5" className={classes.itemText}>{item.text}</Typography>
+                      <Typography variant="body1">{item.title}</Typography>
+                      <Typography variant="body1" className={classes.itemText}>{item.text}</Typography>
                     </Grid>
                 }
               </React.Fragment>

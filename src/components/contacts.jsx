@@ -202,10 +202,10 @@ class Contacts extends Component {
             spacing={0}
             style={this.props.theme.custom.sectionTitle}
           >
-            <Grid item xs={6} align='left'>
-              <Typography variant='h2' align='left'>Contacts</Typography>
+            <Grid item xs={6} align='left' >
+              <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Contacts</Typography>
             </Grid>
-            <Grid item xs={6} align='right'>
+            <Grid item xs={6} align='right' >
               <Button
                 size="small"
                 variant="contained"
@@ -220,9 +220,10 @@ class Contacts extends Component {
         <Grid item xs={12} align="center">
           <Grid
             container
-            justify="space-between"
+            justify="flex-start"
             alignItems="flex-start"
             direction="row"
+            style={this.props.theme.custom.accountsContainer}
           >
             {this.renderContacts()}
           </Grid>

@@ -5,7 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -49,7 +48,7 @@ const styles = (theme: Theme) =>
   createStyles({
     table: {},
     tableWrapper: {
-      overflowX: "auto"
+      position: 'relative'
     },
     row: {
       '&:nth-of-type(odd)': {
@@ -104,8 +103,12 @@ class Pools extends React.Component<Props, State> {
     return (
       <Grid item xs={12}>
         <Typography variant="h3" style={{marginBottom: "20px"}}>My Pools</Typography>
-        <Paper>
           <div className={classes.tableWrapper}>
+            {managedPoolsLoading && <LinearProgress style={ {
+              position: 'absolute',
+              width: '100%',
+              top: '15px'
+            } } />}
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHead
                 order={order}
@@ -113,11 +116,6 @@ class Pools extends React.Component<Props, State> {
                 onRequestSort={this.handleRequestSort}
               />
               <TableBody>
-                {managedPoolsLoading && <TableRow style={{height: "auto"}}>
-                  <TableCell colSpan={3} style={{padding: 0}}>
-                    <LinearProgress />
-                  </TableCell>
-                </TableRow>}
                 {stableSort(managedPools, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n: FundingPool) => {
@@ -144,7 +142,7 @@ class Pools extends React.Component<Props, State> {
                     <TableRow hover={!n.isBusy} tabIndex={-1} key={n.id} className={classes.row} onClick={this.handleRowClick(n.isBusy?null:n.id)} style={{cursor: n.isBusy?" not-allowed":"pointer"}}>
                       <TableCell>
                         <Typography
-                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          variant="body1"
                           noWrap
                         >
                           {n.name}
@@ -152,7 +150,7 @@ class Pools extends React.Component<Props, State> {
                       </TableCell>
                       <TableCell>
                         <Typography
-                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          variant="body1"
                           noWrap
                         >
                           {status}
@@ -160,7 +158,7 @@ class Pools extends React.Component<Props, State> {
                       </TableCell>
                       <TableCell>
                         <Typography
-                          style={{lineHeight: "57px", fontSize: "17px"}}
+                          variant="body1"
                           noWrap
                         >
                           {n.blockchain}
@@ -169,11 +167,6 @@ class Pools extends React.Component<Props, State> {
                     </TableRow>
                   );
                 })}
-                {emptyRows > 0 && (
-                  <TableRow style={{height: 49 * emptyRows}}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </div>
@@ -192,7 +185,6 @@ class Pools extends React.Component<Props, State> {
             onChangePage={this.handleChangePage}
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
-        </Paper>
       </Grid>
     );
   }

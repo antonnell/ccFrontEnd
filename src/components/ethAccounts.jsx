@@ -363,7 +363,7 @@ class EthAccounts extends Component {
             style={theme.custom.sectionTitle}
           >
             <Grid item xs={6} align='left'>
-              <Typography variant='h2' align='left'>Accounts</Typography>
+              <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Accounts</Typography>
             </Grid>
             <Grid item xs={6} align='right'>
               <Button

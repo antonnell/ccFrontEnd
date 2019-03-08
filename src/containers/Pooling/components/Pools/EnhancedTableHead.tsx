@@ -63,7 +63,7 @@ class EnhancedTableHead  extends React.Component<Props> {
                           direction={order === false?undefined:order}
                           onClick={this.createSortHandler(row.id)}
                       >
-                        <Typography variant="body1">{row.label}</Typography>
+                        {row.label}
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
