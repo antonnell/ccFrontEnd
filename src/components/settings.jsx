@@ -52,7 +52,7 @@ class Settings extends Component {
           xs={9}
           align="left"
         >
-          <PageTItle theme={this.props.theme} root={'Accounts'} screen={'Aion'} />
+          <PageTItle theme={this.props.theme} root={'Profile'} screen={'Settings'} />
         </Grid>
         <Grid item xs={3} align='right' style={{paddingTop: '35px'}}>
           <Tabs

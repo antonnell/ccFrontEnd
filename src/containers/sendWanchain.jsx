@@ -9,6 +9,7 @@ import StepContent from "@material-ui/core/StepContent";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import PageTItle from "../components/pageTitle";
 
 const createReactClass = require("create-react-class");
 let wanEmitter = require("../store/wanStore.js").default.emitter;
@@ -260,6 +261,13 @@ let SendWanchain = createReactClass({
   render() {
     return (
       <Grid container justify="center" alignItems="center" direction="row">
+        <Grid
+          item
+          xs={12}
+          align="left"
+        >
+          <PageTItle theme={this.props.theme} root={'Accounts > Wanchain'} screen={'Send'} />
+        </Grid>
         <Grid item xs={12} sm={12} md={12} lg={9} xl={8} align="center">
           {this.renderStepper()}
         </Grid>

@@ -1458,6 +1458,7 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case "sendERC20":
@@ -1471,6 +1472,7 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case "sendWanchain":
@@ -1482,10 +1484,22 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case 'sendWRC20':
-        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+        return (<SendWRC20
+          user={this.state.user}
+          sendWRC20Symbol={this.state.sendWRC20Symbol}
+          wrc20Tokens={this.state.wrc20Tokens}
+          sendWRC20Contact={this.state.sendWRC20Contact}
+          sendWRC20Account={this.state.sendWRC20Account}
+          wanAddresses={this.state.wanAddresses}
+          size={this.state.size}
+          contacts={this.state.contacts}
+          theme={ this.state.theme }
+          />
+        );
       case "sendAion":
         return (
           <SendAion
@@ -1495,6 +1509,7 @@ class App extends Component {
             aionAddresses={ this.state.aionAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case 'sendBitcoin':
@@ -1506,6 +1521,7 @@ class App extends Component {
             bitcoinAddresses={ this.state.bitcoinAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case 'pooling':
