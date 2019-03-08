@@ -1,15 +1,15 @@
 
 export const colors = {
+  white: "#fff",
+  dodgerBlue: "#3cabff",
   "robin-s-egg": "#6be6fd",
   text: "#29292A",
   dark: "#29292A",
   black: '#000',
-  white: '#fff',
   lightBlue: "#0FCEF3",
   darkBlue: "#2B323C",
   gray: "#ababab",
   darkGray: "#888888",
-  dodgerBlue: "354356",
   orange: '#EF8D24',
   green: '#21F14A',
   red: '#EE144C'
@@ -343,7 +343,18 @@ let customTheme =  {
         MuiFormControlLabel: {
           label: {
             color: colors.text,
-            letterSpacing: '0.5px'
+            letterSpacing: '0.5px',
+            fontSize: '12px'
+          },
+          outlined: {
+            borderWidth: 2,
+          },
+          outlinedSecondary: {
+            borderWidth: 2,
+            color: "white",
+          },
+          sizeSmall: {
+            padding: '10px 20px'
           }
         },
         MuiDialogContent: {

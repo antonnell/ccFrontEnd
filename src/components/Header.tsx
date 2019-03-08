@@ -19,7 +19,6 @@ const styles = (theme: Theme) =>
   createStyles({
     header: {
       marginBottom: theme.spacing.unit * 1.5,
-      borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
       display: "flex"
     },
     spacer: {
