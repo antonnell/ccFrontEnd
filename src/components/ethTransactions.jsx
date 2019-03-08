@@ -374,7 +374,7 @@ const styles = () => ({ });
 
 class EnhancedTable extends React.Component {
   state = {
-    order: "asc",
+    order: "desc",
     orderBy: "timestamp",
     selected: [],
     data: this.props.ethTransactions,

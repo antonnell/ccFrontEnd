@@ -1298,6 +1298,7 @@ class App extends Component {
             <CssBaseline />
             <div
               style={ {
+                minHeight: '100%',
                 display: "flex",
                 padding:
                   this.state.size === "xs" || this.state.size === "sm"

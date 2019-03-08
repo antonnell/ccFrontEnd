@@ -77,7 +77,7 @@ class AppDrawer extends Component {
     const path = currentScreen.split('/')[0];
 
     return (
-      <List style={ { height: "calc(100% - 163px)" } }>
+      <List style={ { height: "calc(100% - 126px)" } }>
         <ListSubheader disableSticky={ true }>ACCOUNTS</ListSubheader>
         <ListItem
           selected={ ['aionAccounts', 'sendAion'].includes(path) }
