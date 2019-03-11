@@ -1,67 +1,59 @@
-import React, { Component } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import ReactGA from "react-ga";
+import React, { Component } from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import ReactGA from 'react-ga';
 
-import TheAppBar from "./containers/applicationBar.jsx";
-import AppDrawer from "./containers/drawer.jsx";
-import AppFooter from "./containers/footer.jsx";
+import TheAppBar from './containers/applicationBar.jsx';
+import AppDrawer from './containers/drawer.jsx';
+import AppFooter from './containers/footer.jsx';
 
-import Welcome from "./containers/welcome.jsx";
-import RegisterAccount from "./containers/registerAccount.jsx";
-import CreateEth from "./containers/createEth.jsx";
-import CreateWan from "./containers/createWan.jsx";
-import CreateAion from "./containers/createAion.jsx";
-import KYC from "./containers/kyc.jsx";
-import ForgotPassword from "./containers/forgotPassword.jsx";
-import ForgotPasswordDone from "./containers/forgotPasswordDone.jsx";
-import ResetPassword from "./containers/resetPassword.jsx";
-import EthAccounts from "./containers/ethAccounts.jsx";
-import WanAccounts from "./containers/wanAccounts.jsx";
-import AionAccounts from "./containers/aionAccounts.jsx";
-// import UpdatePassword from "./containers/updatePassword.jsx";
-// import Manage2FA from "./containers/manage2fa.jsx";
-import Contacts from "./containers/contacts.jsx";
-import SendEthereum from "./containers/sendEthereum.jsx";
-import SendERC20 from "./containers/sendERC20.jsx";
-import SendWanchain from "./containers/sendWanchain.jsx";
-import SendAion from "./containers/sendAion.jsx";
-import SendWRC20 from "./containers/sendWRC20.jsx";
-// import WhitelistMe from "./containers/whitelistMe.jsx";
-// import WhitelistMeDone from "./containers/whitelistMeDone.jsx";
-// import WhitelistCheck from "./containers/whitelistCheck.jsx";
-import SetUsername from "./containers/setUsername.jsx";
-import Settings from "./containers/settings.jsx";
-// import EthTransactions from './containers/ethTransactions.jsx';
-// import WanTransactions from './containers/wanTransactions.jsx';
-// import AionTransactions from './containers/aionTransactions.jsx';
-import Pooling from "./containers/Pooling/index";
+import Welcome from './containers/welcome.jsx';
+import RegisterAccount from './containers/registerAccount.jsx';
+import CreateEth from './containers/createEth.jsx';
+import CreateWan from './containers/createWan.jsx';
+import CreateAion from './containers/createAion.jsx';
+import CreateBitcoin from './containers/createBitcoin.jsx';
+import KYC from './containers/kyc.jsx';
+import ForgotPassword from './containers/forgotPassword.jsx';
+import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
+import EthAccounts from './containers/ethAccounts.jsx';
+import WanAccounts from './containers/wanAccounts.jsx';
+import AionAccounts from './containers/aionAccounts.jsx';
+import BitcoinAccounts from './containers/bitcoinAccounts.jsx';
+import Contacts from './containers/contacts.jsx';
+import SendEthereum from './containers/sendEthereum.jsx';
+import SendERC20 from './containers/sendERC20.jsx';
+import SendWanchain from './containers/sendWanchain.jsx';
+import SendWRC20 from './containers/sendWRC20.jsx';
+import SendAion from './containers/sendAion.jsx';
+import SendBitcoin from './containers/sendBitcoin.jsx';
+import SetUsername from './containers/setUsername.jsx';
+import Settings from './containers/settings.jsx';
+import Pooling from './containers/Pooling/index';
 import ResendConfirmationEmail from './containers/resendConfirmationEmail.jsx';
 
-// import WhitelistMeUnavailable from "./components/whitelistMeUnavailable.jsx";
-import ComingSoon from "./components/comingSoon.jsx";
-import PrivacyPolicy from "./components/privacyPolicy.jsx";
-import CookiePolicy from "./components/cookiePolicy.jsx";
-import TermsAndConditions from "./components/termsAndConditions.jsx";
-import ContactUs from "./components/contactUs.jsx";
-import curveTheme from "./theme";
+import ComingSoon from './components/comingSoon.jsx';
+import PrivacyPolicy from './components/privacyPolicy.jsx';
+import CookiePolicy from './components/cookiePolicy.jsx';
+import TermsAndConditions from './components/termsAndConditions.jsx';
+import ContactUs from './components/contactUs.jsx';
+import curveTheme from './theme';
 
-import { poolingEmitter, poolingDispatcher } from "./store/poolingStore";
-import sha256 from "sha256";
-import crypto from "crypto";
-import PoolCreate from "./containers/PoolCreate/index";
-import Loader from "./components/Loader";
-import Context from "./context/Context";
-import WhitelistCreate from "./containers/WhitelistCreate";
-import AppDialog from "./containers/AppDialog/AppDialog";
-import PoolBrowse from "./containers/PoolBrowse/index";
-import PoolDetails from "./containers/PoolDetails/PoolDetails";
-import AppSnackBar from "./containers/AppSnackBar/AppSnackBar";
-import VerifyAccount from "./containers/VerifyAccount/VerifyAccount";
+import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
+import sha256 from 'sha256';
+import crypto from 'crypto';
+import PoolCreate from './containers/PoolCreate/index';
+import PageLoader from './components/pageLoader';
+import Context from './context/Context';
+import WhitelistCreate from './containers/WhitelistCreate';
+import AppDialog from './containers/AppDialog/AppDialog';
+import PoolBrowse from './containers/PoolBrowse/index';
+import PoolDetails from './containers/PoolDetails/PoolDetails';
+import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
+import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
 import MomentUtils from '@date-io/moment';
-// var bip39 = require("bip39");
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
 let accountDispatcher = require("./store/accountStore.js").default.dispatcher;
@@ -78,15 +70,18 @@ let wanDispatcher = require("./store/wanStore.js").default.dispatcher;
 let aionEmitter = require("./store/aionStore.js").default.emitter;
 let aionDispatcher = require("./store/aionStore.js").default.dispatcher;
 
-let whitelistEmitter = require("./store/whitelistStore.js").default.emitter;
+let bitcoinEmitter = require('./store/bitcoinStore.js').default.emitter;
+let bitcoinDispatcher = require('./store/bitcoinStore.js').default.dispatcher;
+
+let whitelistEmitter = require('./store/whitelistStore.js').default.emitter;
 // let whitelistDispatcher = require("./store/whitelistStore.js").default.poolingDispatcher;
-
-let crowdsaleEmitter = require("./store/crowdsaleStore.js").default.emitter;
-let crowdsaleDispatcher = require("./store/crowdsaleStore.js").default
-  .dispatcher;
-
-let emitter = require("./store/ipStore.js").default.emitter;
-let dispatcher = require("./store/ipStore.js").default.dispatcher;
+//
+// let crowdsaleEmitter = require('./store/crowdsaleStore.js').default.emitter;
+// let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default
+//   .dispatcher;
+//
+// let emitter = require("./store/ipStore.js").default.emitter;
+// let dispatcher = require("./store/ipStore.js").default.dispatcher;
 
 const setInitialUser = () => {
   const userString = sessionStorage.getItem("cc_user");
@@ -106,6 +101,7 @@ class App extends Component {
     ethAddresses: null,
     wanAddresses: null,
     aionAddresses: null,
+    bitcoinAddresses: null,
     contacts: null,
     // whitelistState: whitelistState,
     uriParameters: {},
@@ -114,15 +110,19 @@ class App extends Component {
     rejectionReason: "",
     erc20Tokens: null,
     wrc20Tokens: null,
-    crowdsales: null,
+    // crowdsales: null,
     verificationSearching: false,
     ethTransactions: null,
     wanTransactions: null,
     aionTransactions: null,
+    bitcoinTransactions: null,
     myPools: null,
     currentTheme: setInitialTheme(),
     theme: curveTheme[setInitialTheme()],
-    ethWalletChecked: false
+    ethWalletChecked: false,
+    wanWalletChecked: false,
+    aionWalletChecked: false,
+    bitcoinWalletChecked: false
   };
 
   constructor(props) {
@@ -138,6 +138,7 @@ class App extends Component {
     this.openSendWanchain = this.openSendWanchain.bind(this);
     this.openSendWRC = this.openSendWRC.bind(this);
     this.openSendAion = this.openSendAion.bind(this);
+    this.openSendBitcoin = this.openSendBitcoin.bind(this);
 
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -146,10 +147,9 @@ class App extends Component {
     this.getEthAddressReturned = this.getEthAddressReturned.bind(this);
     this.getWanAddressReturned = this.getWanAddressReturned.bind(this);
     this.getAionAddressReturned = this.getAionAddressReturned.bind(this);
+    this.getBitcoinAddressReturned = this.getBitcoinAddressReturned.bind(this);
     this.getContactsReturned = this.getContactsReturned.bind(this);
     this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
-
-    this.getIpReturned = this.getIpReturned.bind(this);
 
     this.getERC20AddressReturned = this.getERC20AddressReturned.bind(this);
     this.getWRC20AddressReturned = this.getWRC20AddressReturned.bind(this);
@@ -160,10 +160,10 @@ class App extends Component {
       this
     );
 
-    this.getCrowdSalesReturned = this.getCrowdSalesReturned.bind(this);
-    this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(
-      this
-    );
+    // this.getCrowdSalesReturned = this.getCrowdSalesReturned.bind(this);
+    // this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(
+    //   this
+    // );
 
     this.verificationResultReturned = this.verificationResultReturned.bind(
       this
@@ -175,6 +175,12 @@ class App extends Component {
       this
     );
     this.getAionTransactionHistoryReturned = this.getAionTransactionHistoryReturned.bind(
+      this
+    );
+    this.getBitcoinWalletDetailsReturned = this.getBitcoinWalletDetailsReturned.bind(
+      this
+    );
+    this.getBitcoinTransactionHistoryReturned = this.getBitcoinTransactionHistoryReturned.bind(
       this
     );
 
@@ -264,6 +270,44 @@ class App extends Component {
     }
   }
 
+  getBitcoinTransactionHistoryReturned(error, data) {
+    if (error) {
+      return this.setState({ error: error.toString() });
+    }
+
+    if (data.success) {
+      this.setState({ bitcoinTransactions: data.transactions });
+    } else if (data.errorMsg) {
+      this.setState({ error: data.errorMsg });
+    } else {
+      this.setState({ error: data.statusText });
+    }
+  }
+
+  getBitcoinWalletDetailsReturned(error, data, walletId) {
+    if (error) {
+      return this.setState({ error: error.toString() });
+    }
+
+    if (data.success) {
+      let bitcoinAddresses = this.state.bitcoinAddresses
+
+      bitcoinAddresses.map((address) => {
+        if(address.id == walletId) {
+          address.addresses = data.addresses
+        }
+
+        return address
+      })
+
+      this.setState({bitcoinAddresses})
+    } else if (data.errorMsg) {
+      this.setState({ error: data.errorMsg });
+    } else {
+      this.setState({ error: data.statusText });
+    }
+  }
+
   componentWillMount() {
     ReactGA.initialize("UA-106832873-2", { cookieDomain: "auto" });
 
@@ -309,45 +353,51 @@ class App extends Component {
       }
     }
 
-    window.removeEventListener("resize", this.updateWindowDimensions);
-    contactsEmitter.removeAllListeners("Unauthorised");
-    ethEmitter.removeAllListeners("Unauthorised");
-    wanEmitter.removeAllListeners("Unauthorised");
-    aionEmitter.removeAllListeners("Unauthorised");
-    accountEmitter.removeAllListeners("Unauthorised");
-    ethEmitter.removeAllListeners("getEthAddress");
-    wanEmitter.removeAllListeners("getWanAddress");
-    aionEmitter.removeAllListeners("getAionAddress");
-    contactsEmitter.removeAllListeners("getContacts");
-    whitelistEmitter.removeAllListeners("whitelistCheck");
-    ethEmitter.removeAllListeners("getSupportedERC20Tokens");
-    wanEmitter.removeAllListeners("getSupportedWRC20Tokens");
-    crowdsaleEmitter.removeAllListeners("getCrowdSales");
-    crowdsaleEmitter.removeAllListeners("getUserCrowdSaleContributions");
-    accountEmitter.removeAllListeners("verificationResult");
-    ethEmitter.removeAllListeners("getEthTransactionHistory");
-    wanEmitter.removeAllListeners("getWanTransactionHistory");
-    aionEmitter.removeAllListeners("getAionTransactionHistory");
+    window.removeEventListener('resize', this.updateWindowDimensions);
+    contactsEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('Unauthorised');
+    wanEmitter.removeAllListeners('Unauthorised');
+    aionEmitter.removeAllListeners('Unauthorised');
+    bitcoinEmitter.removeAllListeners('Unauthorised');
+    accountEmitter.removeAllListeners('Unauthorised');
+    ethEmitter.removeAllListeners('getEthAddress');
+    wanEmitter.removeAllListeners('getWanAddress');
+    aionEmitter.removeAllListeners('getAionAddress');
+    bitcoinEmitter.removeAllListeners('getBitcoinAddress');
+    contactsEmitter.removeAllListeners('getContacts');
+    whitelistEmitter.removeAllListeners('whitelistCheck');
+    ethEmitter.removeAllListeners('getSupportedERC20Tokens');
+    wanEmitter.removeAllListeners('getSupportedWRC20Tokens');
+    // crowdsaleEmitter.removeAllListeners('getCrowdSales');
+    // crowdsaleEmitter.removeAllListeners('getUserCrowdSaleContributions');
+    accountEmitter.removeAllListeners('verificationResult');
+    ethEmitter.removeAllListeners('getEthTransactionHistory');
+    wanEmitter.removeAllListeners('getWanTransactionHistory');
+    aionEmitter.removeAllListeners('getAionTransactionHistory');
+    bitcoinEmitter.removeAllListeners('getBitcoinTransactionHistory');
+    bitcoinEmitter.removeAllListeners('getBitcoinWalletDetails');
     // TODO: Removed the listener for getEtherPools remover
     // poolingEmitter.removeAllListeners("getEtherPools");
     // TODO: Removed the listener for getAvailableEtherPools remover
     //poolingEmitter.removeAllListeners("getAvailableEtherPools");
-    poolingEmitter.removeAllListeners("getAvailableFundingPools");
+    poolingEmitter.removeAllListeners('getAvailableFundingPools');
 
-    contactsEmitter.on("Unauthorised", this.logUserOut);
-    ethEmitter.on("Unauthorised", this.logUserOut);
-    wanEmitter.on("Unauthorised", this.logUserOut);
-    aionEmitter.on("Unauthorised", this.logUserOut);
-    accountEmitter.on("Unauthorised", this.logUserOut);
-    poolingEmitter.on("Unauthorised", this.logUserOut);
+    contactsEmitter.on('Unauthorised', this.logUserOut);
+    ethEmitter.on('Unauthorised', this.logUserOut);
+    wanEmitter.on('Unauthorised', this.logUserOut);
+    aionEmitter.on('Unauthorised', this.logUserOut);
+    bitcoinEmitter.on('Unauthorised', this.logUserOut);
+    accountEmitter.on('Unauthorised', this.logUserOut);
+    poolingEmitter.on('Unauthorised', this.logUserOut);
 
-    ethEmitter.on("getEthAddress", this.getEthAddressReturned);
-    ethEmitter.on("getERC20Address", this.getERC20AddressReturned);
-    wanEmitter.on("getWanAddress", this.getWanAddressReturned);
-    wanEmitter.on("getWRC20Address", this.getWRC20AddressReturned);
-    aionEmitter.on("getAionAddress", this.getAionAddressReturned);
-    contactsEmitter.on("getContacts", this.getContactsReturned);
-    whitelistEmitter.on("getWhitelistState", this.getWhitelistStateReturned);
+    ethEmitter.on('getEthAddress', this.getEthAddressReturned);
+    ethEmitter.on('getERC20Address', this.getERC20AddressReturned);
+    wanEmitter.on('getWanAddress', this.getWanAddressReturned);
+    wanEmitter.on('getWRC20Address', this.getWRC20AddressReturned);
+    aionEmitter.on('getAionAddress', this.getAionAddressReturned);
+    bitcoinEmitter.on('getBitcoinAddress', this.getBitcoinAddressReturned);
+    contactsEmitter.on('getContacts', this.getContactsReturned);
+    whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
     ethEmitter.on(
       "getSupportedERC20Tokens",
       this.getSupportedERC20TokensReturned
@@ -356,12 +406,12 @@ class App extends Component {
       "getSupportedWRC20Tokens",
       this.getSupportedWRC20TokensReturned
     );
-    crowdsaleEmitter.on("getCrowdSales", this.getCrowdSalesReturned);
-    crowdsaleEmitter.on(
-      "getUserCrowdSaleContributions",
-      this.getUserCrowdSaleContributionsReturned
-    );
-    accountEmitter.on("verificationResult", this.verificationResultReturned);
+    // crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
+    // crowdsaleEmitter.on(
+    //   'getUserCrowdSaleContributions',
+    //   this.getUserCrowdSaleContributionsReturned
+    // );
+    accountEmitter.on('verificationResult', this.verificationResultReturned);
     ethEmitter.on(
       "getEthTransactionHistory",
       this.getEthTransactionHistoryReturned
@@ -374,7 +424,15 @@ class App extends Component {
       "getAionTransactionHistory",
       this.getAionTransactionHistoryReturned
     );
-    poolingEmitter.on("getEtherPools", this.getEtherPoolsReturned);
+    bitcoinEmitter.on(
+      'getBitcoinTransactionHistory',
+      this.getBitcoinTransactionHistoryReturned
+    );
+    bitcoinEmitter.on(
+      'getBitcoinWalletDetails',
+      this.getBitcoinWalletDetailsReturned
+    );
+    poolingEmitter.on('getEtherPools', this.getEtherPoolsReturned);
     poolingEmitter.on(
       "getAvailableFundingPools",
       this.getAvailableFundingPoolsReturned
@@ -387,9 +445,6 @@ class App extends Component {
 
     // const loader = document.getElementById("loader");
     // document.body.removeChild(loader);
-
-    emitter.on("getIp", this.getIpReturned);
-    dispatcher.dispatch({ type: "getIp" });
 
     if (this.state.user) {
       let content = {};
@@ -407,11 +462,11 @@ class App extends Component {
         });
       }
 
-      crowdsaleDispatcher.dispatch({
-        type: "getCrowdSales",
-        content,
-        token: this.state.user.token
-      });
+      // crowdsaleDispatcher.dispatch({
+      //   type: 'getCrowdSales',
+      //   content,
+      //   token: this.state.user.token
+      // });
 
       if (
         this.state.user.verificationResult !== "complete" &&
@@ -432,74 +487,58 @@ class App extends Component {
         token: user.token
       });
 
-      this.constantRefresh(user);
+      // this.constantRefresh(user);
     }
   }
 
-  getIpReturned() {
-    this.setState({ ipLoading: false });
-    emitter.removeAllListeners("getIp");
+  // getCrowdSalesReturned(error, data) {
+  //   if (error) {
+  //     return this.setState({ error: error.toString() });
+  //   }
+  //
+  //   if (data.success) {
+  //     this.setState({ crowdsales: data.crowdSales });
+  //
+  //     data.crowdSales.map(crowdsale => {
+  //       let content = {
+  //         userId: this.state.user.id,
+  //         crowdsaleID: crowdsale.id
+  //       };
+  //       return crowdsaleDispatcher.dispatch({
+  //         type: 'getUserCrowdSaleContributions',
+  //         content,
+  //         token: this.state.user.token
+  //       });
+  //     });
+  //   } else if (data.errorMsg) {
+  //     this.setState({ error: data.errorMsg });
+  //   } else {
+  //     this.setState({ error: data.statusText });
+  //   }
+  // }
 
-    this.setState({ ipValid: true });
-    // if(data == null || data.country == null) {
-    //   this.setState({rejectionReason: 'Could not identify country. Please disable any add blockers then reload the page.'})
-    // } else {
-    //   if(data.country.code != 'US') {
-    //     this.setState({ipValid: true})
-    //   } else {
-    //     this.setState({rejectionReason: 'Whitelisting is not available in your area.'})
-    //   }
-    // }
-  }
-
-  getCrowdSalesReturned(error, data) {
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.setState({ crowdsales: data.crowdSales });
-
-      data.crowdSales.map(crowdsale => {
-        let content = {
-          userId: this.state.user.id,
-          crowdsaleID: crowdsale.id
-        };
-        return crowdsaleDispatcher.dispatch({
-          type: "getUserCrowdSaleContributions",
-          content,
-          token: this.state.user.token
-        });
-      });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  }
-
-  getUserCrowdSaleContributionsReturned(error, data) {
-    this.setState({ investLoading: false });
-    if (error) {
-      return this.setState({ ICOError: error.toString() });
-    }
-
-    if (data.success) {
-      // let crowdsales = this.state.crowdsales;
-      //
-      // crowdsales = this.state.crowdsales.map(crowdsale => {
-      //   if (crowdsale.id === id) {
-      //     crowdsale.totalContribution = data.totalContribution;
-      //   }
-      //
-      //   return crowdsale;
-      // });
-    } else if (data.errorMsg) {
-      this.setState({ ICOError: data.errorMsg });
-    } else {
-      this.setState({ ICOError: data.statusText });
-    }
-  }
+  // getUserCrowdSaleContributionsReturned(error, data) {
+  //   this.setState({ investLoading: false });
+  //   if (error) {
+  //     return this.setState({ ICOError: error.toString() });
+  //   }
+  //
+  //   if (data.success) {
+  //     // let crowdsales = this.state.crowdsales;
+  //     //
+  //     // crowdsales = this.state.crowdsales.map(crowdsale => {
+  //     //   if (crowdsale.id === id) {
+  //     //     crowdsale.totalContribution = data.totalContribution;
+  //     //   }
+  //     //
+  //     //   return crowdsale;
+  //     // });
+  //   } else if (data.errorMsg) {
+  //     this.setState({ ICOError: data.errorMsg });
+  //   } else {
+  //     this.setState({ ICOError: data.statusText });
+  //   }
+  // }
 
   getSupportedERC20TokensReturned(error, data) {
     if (error) {
@@ -529,61 +568,66 @@ class App extends Component {
     }
   }
 
-  constantRefresh() {
-    let content = {};
-
-    setTimeout(() => {
-      if (this.state.user) {
-        this.getUserDetails(this.state.user);
-        crowdsaleDispatcher.dispatch({
-          type: "getCrowdSales",
-          content,
-          token: this.state.user.token
-        });
-
-        this.constantRefresh();
-      }
-    }, 300000);
-  }
+  // constantRefresh() {
+  //   let content = {};
+  //
+  //   setTimeout(() => {
+  //     if (this.state.user) {
+  //       this.getUserDetails(this.state.user);
+  //       crowdsaleDispatcher.dispatch({
+  //         type: 'getCrowdSales',
+  //         content,
+  //         token: this.state.user.token
+  //       });
+  //
+  //       this.constantRefresh();
+  //     }
+  //   }, 300000);
+  // }
 
   getUserDetails = user => {
     if (user) {
       const content = { id: user.id };
-      ethDispatcher.dispatch({
-        type: "getEthAddress",
-        content,
-        token: user.token
-      });
-      wanDispatcher.dispatch({
-        type: "getWanAddress",
-        content,
-        token: user.token
-      });
-      aionDispatcher.dispatch({
-        type: "getAionAddress",
-        content,
-        token: user.token
-      });
-      contactsDispatcher.dispatch({
-        type: "getContacts",
-        content,
-        token: user.token
-      });
-      ethDispatcher.dispatch({
-        type: "getEthTransactionHistory",
-        content,
-        token: user.token
-      });
-      wanDispatcher.dispatch({
-        type: "getWanTransactionHistory",
-        content,
-        token: user.token
-      });
-      aionDispatcher.dispatch({
-        type: "getAionTransactionHistory",
-        content,
-        token: user.token
-      });
+      // ethDispatcher.dispatch({
+      //   type: 'getEthAddress',
+      //   content,
+      //   token: user.token
+      // });
+      // wanDispatcher.dispatch({
+      //   type: 'getWanAddress',
+      //   content,
+      //   token: user.token
+      // });
+      // aionDispatcher.dispatch({
+      //   type: 'getAionAddress',
+      //   content,
+      //   token: user.token
+      // });
+      // bitcoinDispatcher.dispatch({
+      //   type: 'getBitcoinAddress',
+      //   content,
+      //   token: user.token
+      // });
+      // contactsDispatcher.dispatch({
+      //   type: 'getContacts',
+      //   content,
+      //   token: user.token
+      // });
+      // ethDispatcher.dispatch({
+      //   type: 'getEthTransactionHistory',
+      //   content,
+      //   token: user.token
+      // });
+      // wanDispatcher.dispatch({
+      //   type: 'getWanTransactionHistory',
+      //   content,
+      //   token: user.token
+      // });
+      // aionDispatcher.dispatch({
+      //   type: 'getAionTransactionHistory',
+      //   content,
+      //   token: user.token
+      // });
       // TODO: removed the getEtherPools poolingDispatcher
       // poolingDispatcher.dispatch({
       //   type: "getEtherPools",
@@ -657,10 +701,12 @@ class App extends Component {
     }
 
     if (data.success) {
-      if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked) {
-        window.location.hash = "createEth";
+      if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked && window.location.hash == "#ethAccounts") {
+        this.setState({ ethWalletChecked: true })
+        window.location.hash = 'createEth';
+        return;
       }
-      this.setState({ ethAddresses: data.ethAddresses, ethWalletChecked: true });
+      this.setState({ ethAddresses: data.ethAddresses });
       //map through the eth addresses and get their ERC20 addresses.
       data.ethAddresses.map(address => {
         let content = { address: address.address };
@@ -672,28 +718,6 @@ class App extends Component {
         });
       });
 
-      // let ethAddresses = data.ethAddresses.map((add) => {
-      //   add.type = 'Ethereum'
-      //   add.extension = 'Eth'
-      //   return add
-      // })
-      //
-      // let wanAddress = this.state.wanAddresses.map((add) => {
-      //   add.type = 'Wanchain'
-      //   add.extension = 'Wan'
-      //   add.address = add.publicAddress
-      //   return add
-      // })
-      //
-      // let aionAddress = this.state.aionAddresses.map((add) => {
-      //   add.type = 'Aion'
-      //   add.extension = 'Aion'
-      //   return add
-      // })
-      //
-      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
-      //
-      // this.setState({addresses});
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg, ethAddresses: [] });
     } else {
@@ -736,6 +760,12 @@ class App extends Component {
     }
 
     if (data.success) {
+
+      if (data.wanAddresses.length === 0 && !this.state.wanWalletChecked && window.location.hash == "#wanAccounts") {
+        this.setState({ wanWalletChecked: true })
+        window.location.hash = 'createWan';
+        return;
+      }
       this.setState({ wanAddresses: data.wanAddresses });
 
       //map through the eth addresses and get their ERC20 addresses.
@@ -749,28 +779,6 @@ class App extends Component {
         });
       });
 
-      // let ethAddresses = this.state.ethAddresses.map((add) => {
-      //   add.type = 'Ethereum'
-      //   add.extension = 'Eth'
-      //   return add
-      // })
-      //
-      // let wanAddress = data.wanAddresses.map((add) => {
-      //   add.type = 'Wanchain'
-      //   add.extension = 'Wan'
-      //   add.address = add.publicAddress
-      //   return add
-      // })
-      //
-      // let aionAddress = this.state.aionAddresses.map((add) => {
-      //   add.type = 'Aion'
-      //   add.extension = 'Aion'
-      //   return add
-      // })
-      //
-      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
-      //
-      // this.setState({addresses});
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg, wanAddresses: [] });
     } else {
@@ -813,34 +821,49 @@ class App extends Component {
     }
 
     if (data.success) {
+
+      if (data.aionAddresses.length === 0 && !this.state.aionWalletChecked && window.location.hash == "#aionAccounts") {
+        this.setState({ aionWalletChecked: true })
+        window.location.hash = 'createAion';
+        return;
+      }
       this.setState({ aionAddresses: data.aionAddresses });
 
-      // let ethAddresses = this.state.ethAddresses.map((add) => {
-      //   add.type = 'Ethereum'
-      //   add.extension = 'Eth'
-      //   return add
-      // })
-      //
-      // let wanAddress = this.state.wanAddresses.map((add) => {
-      //   add.type = 'Wanchain'
-      //   add.extension = 'Wan'
-      //   add.address = add.publicAddress
-      //   return add
-      // })
-      //
-      // let aionAddress = data.aionAddresses.map((add) => {
-      //   add.type = 'Aion'
-      //   add.extension = 'Aion'
-      //   return add
-      // })
-      //
-      // let addresses = [...ethAddresses, ...wanAddress, ...aionAddress];
-      //
-      // this.setState({addresses});
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg, aionAddresses: [] });
     } else {
       this.setState({ error: data.statusText, aionAddresses: [] });
+    }
+  }
+
+  getBitcoinAddressReturned(error, data) {
+    if (error) {
+      return this.setState({ error: error.toString() });
+    }
+
+    if (data.success) {
+      if (data.wallets.length === 0 && !this.state.bitcoinWalletChecked && window.location.hash == "#bitcoinAccounts") {
+        this.setState({ bitcoinWalletChecked: true })
+        window.location.hash = 'createBitcoin';
+        return;
+      }
+      this.setState({ bitcoinAddresses: data.wallets });
+
+      var user = this.state.user;
+
+      data.wallets.map((wallet) => {
+        let content = { id: wallet.id }
+        bitcoinDispatcher.dispatch({
+          type: 'getBitcoinWalletDetails',
+          content,
+          token: user.token
+        });
+      })
+
+    } else if (data.errorMsg) {
+      this.setState({ error: data.errorMsg, bitcoinAddresses: [] });
+    } else {
+      this.setState({ error: data.statusText, bitcoinAddresses: [] });
     }
   }
 
@@ -859,14 +882,14 @@ class App extends Component {
   }
 
   updateWindowDimensions() {
-    var size = "sm";
+    var size = "xl";
     if (window.innerWidth < 600) {
       size = "xs";
-    } else if (window.innerWidth < 1024) {
+    } else if (window.innerWidth < 960) {
       size = "sm";
-    } else if (window.innerWidth < 1440) {
+    } else if (window.innerWidth < 1280) {
       size = "md";
-    } else {
+    } else  if (window.innerWidth < 1920) {
       size = "lg";
     }
 
@@ -951,6 +974,11 @@ class App extends Component {
     window.location.hash = "sendAion";
   }
 
+  openSendBitcoin(sendBitcoinContact, sendBitcoinAccount) {
+    this.setState({ sendBitcoinContact, sendBitcoinAccount });
+    window.location.hash = 'sendBitcoin';
+  }
+
   changeTheme() {
     let theme = this.state.currentTheme;
 
@@ -992,9 +1020,11 @@ class App extends Component {
         ethAddresses: null,
         wanAddresses: null,
         aionAddresses: null,
+        bitcoinAddresses: null,
         ethTransactions: null,
         wanTransactions: null,
-        aionTransactions: null
+        aionTransactions: null,
+        bitcoinTransactions: null
       });
 
       if (currentScreen !== "registerAccount") {
@@ -1034,7 +1064,7 @@ class App extends Component {
 
     if (this.state.user) {
       var content = {};
-      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "SendWRC20") {
+      if (currentScreen === "wanAccounts" || currentScreen === "sendWanchain" || currentScreen === "sendWRC20") {
         content = { id: this.state.user.id };
         wanDispatcher.dispatch({
           type: "getWanAddress",
@@ -1043,6 +1073,11 @@ class App extends Component {
         });
         wanDispatcher.dispatch({
           type: "getWanTransactionHistory",
+          content,
+          token: this.state.user.token
+        });
+        contactsDispatcher.dispatch({
+          type: 'getContacts',
           content,
           token: this.state.user.token
         });
@@ -1062,6 +1097,11 @@ class App extends Component {
           content,
           token: this.state.user.token
         });
+        contactsDispatcher.dispatch({
+          type: 'getContacts',
+          content,
+          token: this.state.user.token
+        });
       } else if (
         currentScreen === "aionAccounts" ||
         currentScreen === "sendAion"
@@ -1077,14 +1117,71 @@ class App extends Component {
           content,
           token: this.state.user.token
         });
-      } else if (currentScreen === "contacts") {
+        contactsDispatcher.dispatch({
+          type: 'getContacts',
+          content,
+          token: this.state.user.token
+        });
+      } else if (
+        currentScreen === 'bitcoinAccounts' ||
+        currentScreen === 'sendBitcoin'
+      ) {
+        content = { id: this.state.user.id };
+        bitcoinDispatcher.dispatch({
+          type: 'getBitcoinAddress',
+          content,
+          token: this.state.user.token
+        });
+        bitcoinDispatcher.dispatch({
+          type: 'getBitcoinTransactionHistory',
+          content,
+          token: this.state.user.token
+        });
+        contactsDispatcher.dispatch({
+          type: 'getContacts',
+          content,
+          token: this.state.user.token
+        });
+      } else if (currentScreen === 'contacts') {
         content = { id: this.state.user.id };
         contactsDispatcher.dispatch({
           type: "getContacts",
           content,
           token: this.state.user.token
         });
+      } else if (currentScreen === 'browsePools') {
+        content = { id: this.state.user.id };
+        wanDispatcher.dispatch({
+          type: "getWanAddress",
+          content,
+          token: this.state.user.token
+        });
+        ethDispatcher.dispatch({
+          type: "getEthAddress",
+          content,
+          token: this.state.user.token
+        });
       }
+
+      const path = currentScreen.split('/')[0];
+      if (['poolDetails', 'updatePool', 'createPool', 'pooling'].includes(path)) {
+        content = { id: this.state.user.id };
+        if(this.state.ethAddresses == null) {
+          ethDispatcher.dispatch({
+            type: "getEthAddress",
+            content,
+            token: this.state.user.token
+          });
+        }
+        if(this.state.wanAddresses == null) {
+          wanDispatcher.dispatch({
+            type: "getWanAddress",
+            content,
+            token: this.state.user.token
+          });
+        }
+      }
+
 
       if (this.state.erc20Tokens == null || this.state.wrc20Tokens == null) {
         content = {};
@@ -1100,14 +1197,14 @@ class App extends Component {
         });
       }
 
-      if (this.state.crowdsales == null) {
-        content = {};
-        crowdsaleDispatcher.dispatch({
-          type: "getCrowdSales",
-          content,
-          token: this.state.user.token
-        });
-      }
+      // if (this.state.crowdsales == null) {
+      //   content = {};
+      //   crowdsaleDispatcher.dispatch({
+      //     type: 'getCrowdSales',
+      //     content,
+      //     token: this.state.user.token
+      //   });
+      // }
 
       if (
         this.state.user.verificationResult !== "complete" &&
@@ -1140,6 +1237,7 @@ class App extends Component {
         user={ this.state.user }
         size={ this.state.size }
         title={ this.state.title }
+        theme={ this.state.theme }
       />
     );
   }
@@ -1180,6 +1278,19 @@ class App extends Component {
       backgroundImage =
         "radial-gradient(farthest-corner at 20% 20%, #3d424b, 40%, #1a191d)";
     }
+
+    const { currentScreen } = this.state;
+    const path = currentScreen.split('/')[0];
+    if(['welcome', 'resetPassword'].includes(path)) {
+      return (
+        <MuiThemeProvider theme={ createMuiTheme(this.state.theme.mui) }>
+          <CssBaseline />
+          { this.renderScreen() }
+        </MuiThemeProvider>
+      )
+    }
+
+
     return (
       <Context>
         <MuiPickersUtilsProvider utils={ MomentUtils }>
@@ -1187,6 +1298,7 @@ class App extends Component {
             <CssBaseline />
             <div
               style={ {
+                minHeight: '100%',
                 display: "flex",
                 padding:
                   this.state.size === "xs" || this.state.size === "sm"
@@ -1202,15 +1314,26 @@ class App extends Component {
                 justify="space-around"
                 alignItems="flex-start"
                 direction="row"
-                style={ { minHeight: "924px", position: "relative", flex: 1 } }
+                style={ {
+                  minHeight: "924px",
+                  position: "relative",
+                  flex: 1,
+                  marginLeft: ["xs", "sm"].includes(this.state.size) ? "0px" : this.state.size === "md" ? "24px" : "100px",
+                  marginRight: ["xs", "sm"].includes(this.state.size) ? "0px" : '24px'
+                } }
               >
-                <Grid item xs={ 12 } style={ { marginRight: 16, flex: 1, height: "100%" } }>
+                <Grid item xs={ 12 } style={ { flex: 1, height: "100%"  } }>
                   { this.state.user == null ? null : this.renderAppBar() }
-                  { this.renderScreen() }
+                  <div style={ {
+                      paddingLeft: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px",
+                      paddingRight: ["xs", "sm"].includes(this.state.size) ? "24px" : "0px"
+                    } }
+                  >
+                    { this.renderScreen() }
+                  </div>
                 </Grid>
               </Grid>
             </div>
-            { this.renderFooter() }
             <AppDialog />
             <AppSnackBar />
           </MuiThemeProvider>
@@ -1220,24 +1343,27 @@ class App extends Component {
   }
 
   renderScreen() {
-    const { ethAddresses, wanAddresses, currentScreen } = this.state;
-    const path = currentScreen.split("/")[0];
-    const params = currentScreen.split("/")[1] || null;
+    const { ethAddresses, wanAddresses, currentScreen, width } = this.state;
+    const path = currentScreen.split('/')[0];
+    const params = currentScreen.split('/')[1] || null;
+
     switch (path) {
       case "welcome":
-        return <Welcome setUser={ this.setUser } />;
+        return <Welcome setUser={ this.setUser } theme={ this.state.theme } />;
       case "registerAccount":
         return <RegisterAccount setUser={ this.setUser } />;
       case "verifyAccount":
         const { uriParameters: { token, code } } = this.state;
         return <VerifyAccount token={ token } code={ code } />;
-      case "createEth":
-        return <CreateEth user={ this.state.user } />;
-      case "createWan":
-        return <CreateWan user={ this.state.user } />;
-      case "createAion":
-        return <CreateAion user={ this.state.user } />;
-      case "kyc":
+      case 'createEth':
+        return <CreateEth user={ this.state.user } theme={ this.state.theme } />;
+      case 'createWan':
+        return <CreateWan user={ this.state.user } theme={ this.state.theme } />;
+      case 'createAion':
+        return <CreateAion user={ this.state.user } theme={ this.state.theme } />;
+      case 'createBitcoin':
+        return <CreateBitcoin user={ this.state.user } theme={ this.state.theme } />;
+      case 'kyc':
         return <KYC user={ this.state.user } setUser={ this.setUser } />;
       case "setUsername":
         return <SetUsername user={ this.state.user } setUser={ this.setUser } />;
@@ -1246,7 +1372,7 @@ class App extends Component {
       case "forgotPasswordDone":
         return <ForgotPasswordDone />;
       case "resetPassword":
-        return <ResetPassword uriParameters={ this.state.uriParameters } />;
+        return <Welcome setUser={ this.setUser } theme={ this.state.theme } initialScreen='resetPassword' uriParameters={ this.state.uriParameters } />;
       // case 'whitelist':
       //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case "ethAccounts":
@@ -1259,6 +1385,7 @@ class App extends Component {
             openSendERC={ this.openSendERC }
             ethTransactions={ this.state.ethTransactions }
             contacts={ this.state.contacts }
+            size={ this.state.size }
           />
         );
       case "wanAccounts":
@@ -1273,6 +1400,7 @@ class App extends Component {
             size={ this.state.size }
             wanTransactions={ this.state.wanTransactions }
             contacts={ this.state.contacts }
+            width={ width }
           />
         );
       case "aionAccounts":
@@ -1284,9 +1412,22 @@ class App extends Component {
             openSendAion={ this.openSendAion }
             aionTransactions={ this.state.aionTransactions }
             contacts={ this.state.contacts }
+            size={ this.state.size }
           />
         );
-      case "contacts":
+      case 'bitcoinAccounts':
+        return (
+          <BitcoinAccounts
+            theme={ this.state.theme }
+            user={ this.state.user }
+            bitcoinAddresses={ this.state.bitcoinAddresses }
+            openSendBitcoin={ this.openSendBitcoin }
+            bitcoinTransactions={ this.state.bitcoinTransactions }
+            contacts={ this.state.contacts }
+            size={ this.state.size }
+          />
+        );
+      case 'contacts':
         return (
           <Contacts
             theme={ this.state.theme }
@@ -1295,6 +1436,8 @@ class App extends Component {
             openSendEther={ this.openSendEther }
             openSendWanchain={ this.openSendWanchain }
             openSendAion={ this.openSendAion }
+            openSendBitcoin={ this.openSendBitcoin }
+            size={ this.state.size }
           />
         );
       // case 'updatePassword':
@@ -1316,6 +1459,7 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case "sendERC20":
@@ -1329,6 +1473,7 @@ class App extends Component {
             ethAddresses={ this.state.ethAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case "sendWanchain":
@@ -1340,10 +1485,22 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
       case 'sendWRC20':
-        return (<SendWRC20 user={this.state.user} sendWRC20Symbol={this.state.sendWRC20Symbol} wrc20Tokens={this.state.wrc20Tokens} sendWRC20Contact={this.state.sendWRC20Contact} sendWRC20Account={this.state.sendWRC20Account} wanAddresses={this.state.wanAddresses} size={this.state.size} contacts={this.state.contacts}/>)
+        return (<SendWRC20
+          user={this.state.user}
+          sendWRC20Symbol={this.state.sendWRC20Symbol}
+          wrc20Tokens={this.state.wrc20Tokens}
+          sendWRC20Contact={this.state.sendWRC20Contact}
+          sendWRC20Account={this.state.sendWRC20Account}
+          wanAddresses={this.state.wanAddresses}
+          size={this.state.size}
+          contacts={this.state.contacts}
+          theme={ this.state.theme }
+          />
+        );
       case "sendAion":
         return (
           <SendAion
@@ -1353,13 +1510,26 @@ class App extends Component {
             aionAddresses={ this.state.aionAddresses }
             size={ this.state.size }
             contacts={ this.state.contacts }
+            theme={ this.state.theme }
           />
         );
-      // case 'ethTransactions':
-      //   return (<EthTransactions ethAddresses={this.state.ethAddresses} ethTransactions={this.state.ethTransactions} contacts={this.state.contacts} />)
-      case "pooling":
+      case 'sendBitcoin':
+        return (
+          <SendBitcoin
+            user={ this.state.user }
+            sendBitcoinContact={ this.state.sendBitcoinContact }
+            sendBitcoinAccount={ this.state.sendBitcoinAccount }
+            bitcoinAddresses={ this.state.bitcoinAddresses }
+            size={ this.state.size }
+            contacts={ this.state.contacts }
+            theme={ this.state.theme }
+          />
+        );
+      case 'pooling':
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
-          <Pooling user={ this.state.user } /> : <Loader />;
+          <Pooling
+            user={ this.state.user }
+            theme={ this.state.theme } /> : <PageLoader />;
       case "createPool":
       case "updatePool":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
@@ -1369,7 +1539,8 @@ class App extends Component {
             id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "createWhitelist":
       case "updateWhitelist":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
@@ -1379,14 +1550,16 @@ class App extends Component {
             id={ params }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "browsePools":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolBrowse
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "poolDetails":
         return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
           <PoolDetails
@@ -1394,7 +1567,8 @@ class App extends Component {
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
             wanAddresses={ this.state.wanAddresses }
-          /> : <Loader />;
+            theme={ this.state.theme }
+          /> : <PageLoader />;
       case "ico":
         return <ComingSoon />;
       case 'resendConfirmationEmail':

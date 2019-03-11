@@ -231,11 +231,12 @@ class SetupAionPayment extends Component {
               background: "#b5b5b5",
               width: "100%",
               padding: "12px",
-              fontStyle: "italic",
               marginBottom: "12px"
             }}
           >
-            {this.props.disclaimer}
+            <Typography variant='body1' style={{fontStyle: "italic"}}>
+              {this.props.disclaimer}
+            </Typography>
           </div>
           <Typography variant="subtitle1">
             Recipient's Public Address*

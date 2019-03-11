@@ -32,6 +32,7 @@ let WanAccounts = createReactClass({
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
         addressNameValid={this.state.addressNameValid}
+        theme={this.props.theme}
       />
     );
   },
@@ -63,7 +64,7 @@ let WanAccounts = createReactClass({
         token: this.props.user.token
       });
 
-      window.location.hash = "createAion";
+      window.location.hash = "wanAccounts";
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -72,7 +73,7 @@ let WanAccounts = createReactClass({
   },
 
   navigateSkip() {
-    window.location.hash = "createAion";
+    window.location.hash = "wanAccounts";
   },
 
   onCreateKeyDown(event) {

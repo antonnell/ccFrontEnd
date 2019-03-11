@@ -55,6 +55,8 @@ let WanAccounts = createReactClass({
       createOpen: false,
       importOpen: false,
       termsRefundOpen: false,
+      viewOpen: false,
+      tokens: null
     };
   },
   render() {
@@ -83,7 +85,7 @@ let WanAccounts = createReactClass({
         publicAddressErrorMessage={ this.state.publicAddressErrorMessage }
         handleChecked={ this.handleChecked }
         sendWanchainClicked={ this.props.openSendWanchain }
-        sendWRC20={ this.props.openSendWRC }
+        sendWRC20={ this.sendWRC20 }
         validateField={ this.validateField }
         updatePrimaryClicked={ this.updatePrimaryClicked }
         editNameClicked={ this.editNameClicked }
@@ -143,6 +145,11 @@ let WanAccounts = createReactClass({
         importOpen={ this.state.importOpen }
         handleImportClose={ this.handleImportClose }
         refundClicked={ this.refundClicked }
+        width={ this.props.width }
+        viewTokens={ this.viewTokens }
+        viewTokensClose={ this.viewTokensClose }
+        viewOpen={ this.state.viewOpen }
+        tokens={ this.state.tokens }
       />
     );
   },
@@ -165,6 +172,10 @@ let WanAccounts = createReactClass({
     wanEmitter.on('investICO', this.investICOReturned);
     wanEmitter.on('getICOProgress', this.getICOProgressReturned);
     crowdsaleEmitter.on('refund', this.refundReturned);
+  },
+
+  sendWRC20(symbol) {
+    this.props.openSendWRC(symbol, this.state.optionsAccount)
   },
 
   // componentDidMount() {
@@ -361,6 +372,13 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({ ICOError: data.statusText });
     }
+  },
+
+  viewTokens(address) {
+    this.setState({ viewOpen: true, tokens: address.wrc20Tokens });
+  },
+  viewTokensClose() {
+    this.setState({ viewOpen: false });
   },
 
   handleCreateOpen() {

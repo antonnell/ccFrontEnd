@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import classNames from "classnames";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -12,7 +11,6 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -25,6 +23,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import config from "../config";
+import ListItemText from "@material-ui/core/ListItemText";
+import { colors } from '../theme.js';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -87,37 +87,45 @@ function filtering(array, props) {
   });
 }
 
-const rows = [
-  { id: "timestamp", numeric: false, disablePadding: false, label: "Date" },
-  {
-    id: "fromDisplayName",
-    numeric: false,
-    disablePadding: false,
-    label: "From Account"
-  },
-  {
-    id: "toDisplayName",
-    numeric: false,
-    disablePadding: false,
-    label: "To Account"
-  },
-  { id: "value", numeric: true, disablePadding: false, label: "Amount" },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
-  {
-    id: "transactionId",
-    numeric: false,
-    disablePadding: false,
-    label: "Transaction"
-  }
-];
-
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order, orderBy, size } = this.props;
+    let rows = [
+      {
+        id: "timestamp",
+        disablePadding: false,
+        label: "Date"
+      },
+      {
+        id: "transactionId",
+        disablePadding: false,
+        label: "Transaction"
+      },
+      {
+        id: "value",
+        disablePadding: false,
+        label: "Amount"
+      }
+    ];
+
+    if(!['xl', 'lg'].includes(size)) {
+      rows = [
+        {
+          id: "timestamp",
+          disablePadding: false,
+          label: "Date"
+        },
+        {
+          id: "value",
+          disablePadding: false,
+          label: "Amount"
+        }
+      ];
+    }
 
     return (
       <TableHead>
@@ -126,13 +134,12 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={row.id}
-                numeric={row.numeric}
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
                   title="Sort"
-                  placement={row.numeric ? "bottom-end" : "bottom-start"}
+                  placement={"bottom-start"}
                   enterDelay={300}
                 >
                   <TableSortLabel
@@ -140,12 +147,7 @@ class EnhancedTableHead extends React.Component {
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: "17px", fontWeight: "bold" }}
-                    >
-                      {row.label}
-                    </Typography>
+                    {row.label}
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -231,15 +233,26 @@ let EnhancedFilterBar = props => {
             value={selectedAddress}
             onChange={selectAddress}
             disabled={loading}
+            renderValue={value => {
+              return (
+                <Typography variant="body1" noWrap>
+                  {value}
+                </Typography>
+              );
+            }}
           >
             <MenuItem key="a" value="">
-              --
+              <ListItemText
+                primary={"--"}
+              />
             </MenuItem>
             {ethAddresses
               ? ethAddresses.map(address => {
                   return (
                     <MenuItem key={address.name} value={address.name}>
-                      {address.name}
+                      <ListItemText
+                        primary={address.name}
+                      />
                     </MenuItem>
                   );
                 })
@@ -262,9 +275,18 @@ let EnhancedFilterBar = props => {
             value={selectedContact}
             onChange={selectContact}
             disabled={loading}
+            renderValue={value => {
+              return (
+                <Typography variant="body1" noWrap>
+                  {value}
+                </Typography>
+              );
+            }}
           >
             <MenuItem key="b" value="">
-              --
+              <ListItemText
+                primary={"--"}
+              />
             </MenuItem>
             {contacts
               ? contacts.map(contact => {
@@ -273,7 +295,9 @@ let EnhancedFilterBar = props => {
                       key={contact.displayName}
                       value={contact.displayName}
                     >
-                      {contact.displayName}
+                      <ListItemText
+                        primary={contact.displayName}
+                      />
                     </MenuItem>
                   );
                 })
@@ -321,28 +345,18 @@ let EnhancedFilterBar = props => {
 };
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, toggleFilters } = props;
+  const { classes, toggleFilters, theme } = props;
 
   return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0
-      })}
-    >
-      <div className={classes.title}>
-        <Typography
-          variant="body1"
-          style={{ lineHeight: "57px", fontSize: "17px" }}
-          noWrap
-        >
-          Filters
-        </Typography>
+    <Toolbar>
+      <div style={theme.custom.sectionTitle} className={classes.title}>
+        <Typography variant='h2' align='left'>Recent Transactions</Typography>
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
         <Tooltip title="Filter list">
           <IconButton aria-label="Filter list" onClick={toggleFilters}>
-            <FilterListIcon style={{ color: "#b5b5b5" }} />
+            <FilterListIcon style={theme.custom.icon} />
           </IconButton>
         </Tooltip>
       </div>
@@ -356,19 +370,11 @@ EnhancedTableToolbar.propTypes = {
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
-const styles = () => ({
-  root: {
-    margin: "12px"
-  },
-  table: {},
-  tableWrapper: {
-    overflowX: "auto"
-  }
-});
+const styles = () => ({ });
 
 class EnhancedTable extends React.Component {
   state = {
-    order: "asc",
+    order: "desc",
     orderBy: "timestamp",
     selected: [],
     data: this.props.ethTransactions,
@@ -401,7 +407,7 @@ class EnhancedTable extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, theme, size } = this.props;
     const {
       order,
       orderBy,
@@ -411,130 +417,104 @@ class EnhancedTable extends React.Component {
       filtersVisible
     } = this.state;
     const data = this.props.ethTransactions;
-    const emptyRows =
-      rowsPerPage -
-      Math.min(rowsPerPage, data ? data.length : 0 - page * rowsPerPage);
+
+    let divStyle = {
+      display: 'inline-block'
+    }
 
     return (
       <div className={classes.root}>
-        <Typography variant="h5" style={{ marginBottom: "20px" }}>
-          Ethereum Transactions
-        </Typography>
-        <Paper>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            toggleFilters={this.handleToggleFilters}
-          />
-          <EnhancedFilterBar
-            selectedAddress={this.props.selectedAddress}
-            selectedContact={this.props.selectedContact}
-            selectContact={this.props.selectContact}
-            selectAddress={this.props.selectAddress}
-            ethAddresses={this.props.ethAddresses}
-            contacts={this.props.contacts}
-            fromDate={this.props.fromDate}
-            toDate={this.props.toDate}
-            handleChange={this.props.handleChange}
-            visible={filtersVisible}
-          />
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data ? data.length : 0}
-              />
-              <TableBody>
-                {stableSort(
-                  filtering(data, this.props),
-                  getSorting(order, orderBy)
-                )
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    return (
-                      <TableRow hover tabIndex={-1} key={n.transactionId}>
-                        <TableCell>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
-                            {moment(n.timestamp).format("YYYY/MM/DD hh:mm")}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
-                            {n.fromDisplayName}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
-                            {n.toDisplayName}
-                          </Typography>
-                        </TableCell>
-                        <TableCell numeric>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
-                            {n.value + " " +n.currency}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          toggleFilters={this.handleToggleFilters}
+          theme={theme}
+        />
+        <EnhancedFilterBar
+          selectedAddress={this.props.selectedAddress}
+          selectedContact={this.props.selectedContact}
+          selectContact={this.props.selectContact}
+          selectAddress={this.props.selectAddress}
+          ethAddresses={this.props.ethAddresses}
+          contacts={this.props.contacts}
+          fromDate={this.props.fromDate}
+          toDate={this.props.toDate}
+          handleChange={this.props.handleChange}
+          visible={filtersVisible}
+        />
+        <div className={classes.tableWrapper}>
+          <Table className={classes.table} aria-labelledby="tableTitle">
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={this.handleRequestSort}
+              rowCount={data ? data.length : 0}
+              theme={theme}
+              size={size}
+            />
+            <TableBody>
+              {stableSort(
+                filtering(data, this.props),
+                getSorting(order, orderBy)
+              )
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(n => {
+                  return (
+                    <TableRow hover tabIndex={-1} key={n.transactionId}>
+                      <TableCell>
+                        <div style={divStyle}>
+                          <img
+                            alt=""
+                            src={ require('../assets/images/ethereum-logo.png') }
+                            width="22px"
+                            height="30px"
+                            style={{marginRight: '12px'}}
+                          />
+                        </div>
+                        <div style={divStyle}>
+                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.green.red, fontFamily: 'Montserrat-SemiBold' }}>
                             {n.status}
                           </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            style={{ lineHeight: "57px", fontSize: "17px" }}
-                            noWrap
-                          >
-                            <a
-                              href={config.etherscanUrl + n.transactionId}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              View
-                            </a>
+                          <Typography variant="subtitle2">
+                            {moment(n.timestamp).format("YYYY/MM/DD hh:mm")}
                           </Typography>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <TablePagination
-            component="div"
-            count={data ? data.length : 0}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            backIconButtonProps={{
-              "aria-label": "Previous Page"
-            }}
-            nextIconButtonProps={{
-              "aria-label": "Next Page"
-            }}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
-        </Paper>
+                        </div>
+                      </TableCell>
+                      {['xl', 'lg'].includes(size) && (<TableCell>
+                        <a
+                          href={config.bitcoinscanURL + n.transactionId}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{textDecoration: 'none'}}
+                        >
+                          <Typography variant="body1" noWrap style={{ maxWidth: size=='lg'?'530px':'auto' }}>
+                            {n.transactionId}
+                          </Typography>
+                        </a>
+                      </TableCell>)}
+                      <TableCell>
+                        <Typography variant="body1">{n.value + " " +n.currency}</Typography>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </div>
+        <TablePagination
+          component="div"
+          count={data ? data.length : 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "Previous Page"
+          }}
+          nextIconButtonProps={{
+            "aria-label": "Next Page"
+          }}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
       </div>
     );
   }

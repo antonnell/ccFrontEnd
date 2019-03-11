@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import moment from "moment";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import IconButton from "@material-ui/core/IconButton";
 import Popover from "@material-ui/core/Popover";
@@ -28,13 +25,17 @@ import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import EthTransactions from "../containers/ethTransactions";
 import CreateModal from "./createModal";
 import ImportModal from "./importModal";
-import config from "../config";
+import PageTItle from "./pageTitle";
+import TableSortLabel from '@material-ui/core/TableSortLabel'
+import PageLoader from "./pageLoader";
+import SectionLoader from "./sectionLoader";
+import ViewTokensModal from "./viewTokensModal";
 
 function ExpandMoreIcon(props) {
   return (
     <SvgIcon {...props}>
       <path
-        fill="#b5b5b5"
+        fill={props.theme?props.theme.custom.icon.color:'#888888'}
         d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
       />
     </SvgIcon>
@@ -45,32 +46,19 @@ function MoreIcon(props) {
   return (
     <SvgIcon {...props}>
       <path
-        fill="#b5b5b5"
+        fill={props.theme?props.theme.custom.icon.color:'#888888'}
         d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
       />
     </SvgIcon>
   );
 }
 
-function PrimaryIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-    </SvgIcon>
-  );
-}
-
-function SetPrimaryIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
-    </SvgIcon>
-  );
-}
-
 class EthAccounts extends Component {
   renderAddresses() {
-    if (this.props.addresses == null) {
+
+    let { addresses, theme, optionsAccount, loadingAccount, editAccount, cardLoading, exportKeyAccount, privateKeyLoading, sendERC20, size } = this.props
+
+    if (addresses == null) {
       return (
         <Grid
           item
@@ -79,21 +67,12 @@ class EthAccounts extends Component {
           align="left"
           style={{ minHeight: "190px", position: "relative" }}
         >
-          <CircularProgress
-            size={36}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: -12,
-              marginLeft: -12
-            }}
-          />
+          <PageLoader />
         </Grid>
       );
     }
 
-    if (this.props.addresses.length === 0) {
+    if (addresses.length === 0) {
       return (
         <Grid
           item
@@ -102,7 +81,7 @@ class EthAccounts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h5">
+          <Typography variant="h2">
             Oh no, we couldn't find any accounts for you. Why don't you
             create/import one?
           </Typography>
@@ -110,197 +89,73 @@ class EthAccounts extends Component {
       );
     }
 
-    return this.props.addresses.map(address => {
+    let index = -1
+
+    return addresses.map(address => {
       address.editing = false;
       let open = false;
       let anchorEl = null;
       let loading = <div />;
 
-      if (this.props.optionsAccount != null) {
-        if (address.address === this.props.optionsAccount.address) {
+      if (optionsAccount != null) {
+        if (address.address === optionsAccount.address) {
           open = true;
-          anchorEl = this.props.optionsAccount.anchorEl;
+          anchorEl = optionsAccount.anchorEl;
         }
       }
 
-      if (this.props.loadingAccount != null) {
-        if (address.address === this.props.loadingAccount.address) {
+      if (loadingAccount != null) {
+        if (address.address === loadingAccount.address) {
           loading = (
-            <CircularProgress
-              size={36}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: -12,
-                marginLeft: -12
-              }}
-            />
+            <SectionLoader />
           );
         }
       }
 
-      if (this.props.editAccount != null) {
-        if (address.address === this.props.editAccount.address) {
+      if (editAccount != null) {
+        if (address.address === editAccount.address) {
           address.editing = true;
-          if (this.props.cardLoading) {
+          if (cardLoading) {
             loading = (
-              <CircularProgress
-                size={36}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  marginTop: -12,
-                  marginLeft: -12
-                }}
-              />
+              <SectionLoader />
             );
           }
         }
       }
 
-      if (this.props.exportKeyAccount != null) {
-        if (address.address === this.props.exportKeyAccount) {
-          if (this.props.privateKeyLoading) {
+      if (exportKeyAccount != null) {
+        if (address.address === exportKeyAccount) {
+          if (privateKeyLoading) {
             loading = (
-              <CircularProgress
-                size={36}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  marginTop: -12,
-                  marginLeft: -12
-                }}
-              />
+              <SectionLoader />
             );
           }
         }
       }
 
-      let erc20 = (
-        <ExpansionPanel
-          style={{
-            boxShadow: "none",
-            marginLeft: "-24px",
-            marginRight: "-24px"
-          }}
-        >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>ERC20 Tokens</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>Updating ERC20 tokens</ExpansionPanelDetails>
-        </ExpansionPanel>
-      );
-      if (address.erc20Tokens) {
-        erc20 = (
-          <ExpansionPanel
-            style={{
-              boxShadow: "none",
-              marginLeft: "-24px",
-              marginRight: "-24px"
-            }}
-          >
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>ERC20 Tokens</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Divider />
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body1">Symbol</Typography>
-                    </TableCell>
-                    <TableCell numeric>
-                      <Typography variant="body1">Balance</Typography>
-                    </TableCell>
-                    <TableCell numeric>
-                      <Typography variant="body1">Send</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {address.erc20Tokens.map(n => {
-                    return (
-                      <TableRow key={n.symbol}>
-                        <TableCell component="th" scope="row">
-                          <Typography variant="body1">{n.name}</Typography>
-                        </TableCell>
-                        <TableCell numeric>
-                          <Typography variant="body1">
-                            {n.balance + " " + n.symbol}
-                          </Typography>
-                        </TableCell>
-                        <TableCell numeric>
-                          <Button
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                              this.props.sendERC20(n.symbol, address);
-                            }}
-                          >
-                            Send
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        );
-      }
+      index ++
 
       return (
-        <Grid item xs={12} lg={6} align="left" key={address.address}>
-          <Card style={{ margin: "12px" }}>
+        <Grid item xs={12} lg={6} xl={4} key={address.address} style={{ padding: '24px' }}>
+          <Card>
             <CardContent style={{ position: "relative" }}>
               <Grid
                 container
-                justify="flex-start"
                 alignItems="flex-start"
                 direction="row"
-                spacing={0}
+                style= { { marginBottom: '6px' }}
               >
                 <Grid item xs={11} align="left">
                   {address.editing !== true && (
                     <Typography
                       noWrap
                       variant="h3"
-                      style={{ minHeight: "32px", display: "inline-block" }}
                     >
-                      {address.isPrimary === true && (
-                        <Tooltip title="This is your primary Ethereum account">
-                          <PrimaryIcon
-                            style={{
-                              marginTop: "3.5px",
-                              marginRight: "5px",
-                              verticalAlign: "top"
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                      {address.isPrimary === false && (
-                        <Tooltip title="Make this account my primary Ethereum account">
-                          <SetPrimaryIcon
-                            onClick={() => {
-                              this.props.updatePrimaryClicked(address);
-                            }}
-                            style={{
-                              cursor: "pointer",
-                              marginTop: "3.5px",
-                              marginRight: "5px",
-                              verticalAlign: "top"
-                            }}
-                          />
-                        </Tooltip>
-                      )}
                       {address.name}
                     </Typography>
+                  )}
+                  {address.editing !== true && address.isPrimary === true && (
+                    <Typography variant='body1' style={theme.custom.primaryText}>Primary</Typography>
                   )}
                   {address.editing === true && (
                     <TextField
@@ -331,6 +186,13 @@ class EthAccounts extends Component {
                       helperText={this.props.editAddressNameErrorMessage}
                     />
                   )}
+                  <Typography
+                    noWrap
+                    variant="subtitle1"
+                    color="textSecondary"
+                  >
+                    {address.address}
+                  </Typography>
                 </Grid>
                 <Grid item xs={1} align="right">
                   <IconButton
@@ -394,6 +256,15 @@ class EthAccounts extends Component {
                       >
                         <ListItemText primary="View Private Key" />
                       </ListItem>
+                      <ListItem
+                        button
+                        disabled={ !(address.erc20Tokens && address.erc20Tokens.length > 0) }
+                        onClick={( ) => {
+                          this.props.viewTokens(address)
+                        } }
+                      >
+                        <ListItemText primary="View Tokens" />
+                      </ListItem>
                       <Divider />
                       <ListItem
                         button
@@ -406,29 +277,25 @@ class EthAccounts extends Component {
                     </List>
                   </Popover>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    noWrap
-                    variant="subtitle1"
-                    color="textSecondary"
-                    style={{ minHeight: "32px" }}
-                  >
-                    {address.address}
+              </Grid>
+              <Grid
+                container
+                alignItems="flex-end"
+                direction="row"
+              >
+                <Grid item xs={6}  align="left" style={{ marginTop: "6px" }}>
+                  <Typography variant="h4" noWrap>
+                    {address.balance + " Eth"}
+                  </Typography>
+                  <Typography variant="h4" noWrap>
+                    {"$" + address.usdBalance.toFixed(2)}
                   </Typography>
                 </Grid>
-                <Grid item xs={6} style={{ marginTop: "6px" }}>
-                  <Typography variant="h5" noWrap>
-                    {address.balance +
-                      " ETH ($" +
-                      address.usdBalance.toFixed(2) +
-                      ")"}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} align="right">
+                <Grid item xs={6} align="right" style={{ height: "42px" }}>
                   <Button
                     size="small"
-                    variant="text"
-                    style={{ border: "1px solid #ccc" }}
+                    variant="contained"
+                    color="primary"
                     disabled={
                       this.props.loadingAccount ||
                       this.props.cardLoading ||
@@ -438,11 +305,8 @@ class EthAccounts extends Component {
                       this.props.sendEtherClicked(null, address);
                     }}
                   >
-                    Send Ether
+                    Send
                   </Button>
-                </Grid>
-                <Grid item xs={12} align="left">
-                  {erc20}
                 </Grid>
               </Grid>
               {loading}
@@ -453,250 +317,41 @@ class EthAccounts extends Component {
     });
   }
 
-  renderTransactions() {
-    if (this.props.ethTransactions == null) {
-      return (
-        <Grid
-          container
-          justify="flex-start"
-          alignItems="flex-start"
-          direction="row"
-          spacing={0}
-          style={{ padding: "24px" }}
-        >
-          <Grid item xs={12} align="center" style={{ marginBottom: "24px" }}>
-            <Typography variant="h5">Transactions</Typography>
-          </Grid>
-          <CircularProgress
-            size={36}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: -12,
-              marginLeft: -12
-            }}
-          />
-        </Grid>
-      );
-    }
-
-    if (this.props.ethTransactions.length === 0) {
-      return (
-        <Grid
-          item
-          xs={12}
-          xl={12}
-          align="center"
-          style={{ minHeight: "190px", paddingTop: "100px" }}
-        >
-          <Typography variant="h5">
-            We couldn't find any transactions for you.
-          </Typography>
-        </Grid>
-      );
-    }
-
-    let headerStyle = {
-      padding: "3px"
-    };
-    let bodyStyle = {
-      padding: "3px",
-      backgroundColor: "#f5f4f4",
-      minHeight: "40px"
-    };
-
-    return (
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="flex-start"
-        direction="row"
-        spacing={0}
-        style={{ padding: "24px" }}
-      >
-        <Grid item xs={12} align="center" style={{ marginBottom: "24px" }}>
-          <Typography variant="h5">Transactions</Typography>
-        </Grid>
-
-        <Grid item xs={12} align="center">
-          <Grid
-            container
-            justify="flex-start"
-            alignItems="flex-start"
-            direction="row"
-            spacing={0}
-          >
-            <Grid item xs={2} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                Date
-              </Typography>
-            </Grid>
-            <Grid item xs={2} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                From Account
-              </Typography>
-            </Grid>
-            <Grid item xs={2} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                To Account
-              </Typography>
-            </Grid>
-            <Grid item xs={1} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                Amount
-              </Typography>
-            </Grid>
-            <Grid item xs={1} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                Status
-              </Typography>
-            </Grid>
-            <Grid item xs={4} align="left" style={headerStyle}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "17px", fontWeight: "bold" }}
-              >
-                Transaction ID
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {this.props.ethTransactions.map(transaction => {
-          return this.renderTransaction(transaction, bodyStyle);
-        })}
-      </Grid>
-    );
-  }
-
-  renderTransaction = (transaction, bodyStyle) => {
-    return (
-      <Grid item xs={12} align="center">
-        <Grid
-          container
-          justify="flex-start"
-          alignItems="flex-start"
-          direction="row"
-          spacing={0}
-        >
-          <Grid item xs={2} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              {moment(transaction.timestamp).format("YYYY/MM/DD hh:mm")}
-            </Typography>
-          </Grid>
-          <Grid item xs={2} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              {transaction.fromDisplayName}
-            </Typography>
-          </Grid>
-          <Grid item xs={2} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              {transaction.toDisplayName}
-            </Typography>
-          </Grid>
-          <Grid item xs={1} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              {transaction.value} Eth
-            </Typography>
-          </Grid>
-          <Grid item xs={1} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              {transaction.status}
-            </Typography>
-          </Grid>
-          <Grid item xs={4} align="left" style={bodyStyle}>
-            <Typography
-              variant="body1"
-              style={{ lineHeight: "57px", fontSize: "17px" }}
-              noWrap
-            >
-              <a
-                href={config.etherscanUrl + transaction.transactionId}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {transaction.transactionId}
-              </a>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
-  };
-
   render() {
+
+    let { addresses, theme, handleCreateOpen, handleImportOpen } = this.props
+
+    if (addresses === null) {
+      return (
+        <Grid container justify="center" alignItems="flex-start" direction="row">
+          <Grid
+            item
+            xs={12}
+            align="left"
+          >
+            <PageTItle theme={theme} root={'Accounts'} screen={'Ethereum'} />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            xl={12}
+            align="left"
+            style={{ minHeight: "190px", position: "relative" }}
+          >
+            <PageLoader />
+          </Grid>
+        </Grid>
+      );
+    }
+
     return (
-      <Grid container justify="center" direction="row">
+      <Grid container justify="center" alignItems="flex-start" direction="row">
         <Grid
           item
           xs={12}
           align="left"
-          style={{
-            margin: "12px",
-            padding: "24px 0px",
-            borderBottom:
-              "2px solid " + this.props.theme.custom.headingBorder.color,
-            display: "flex"
-          }}
         >
-          <div style={{ flex: 1 }}>
-            <Typography variant="h6">Ethereum Accounts</Typography>
-          </div>
-          <div>
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={this.props.handleCreateOpen}
-            >
-              Create Account
-            </Button>
-            <Button
-              style={{ marginLeft: "12px" }}
-              size="small"
-              variant="contained"
-              color="secondary"
-              onClick={this.props.handleImportOpen}
-            >
-              Import Account
-            </Button>
-          </div>
+          <PageTItle theme={theme} root={'Accounts'} screen={'Ethereum'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -705,16 +360,50 @@ class EthAccounts extends Component {
             alignItems="flex-start"
             direction="row"
             spacing={0}
-            style={{ paddingTop: "24px" }}
+            style={theme.custom.sectionTitle}
+          >
+            <Grid item xs={6} align='left'>
+              <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Accounts</Typography>
+            </Grid>
+            <Grid item xs={6} align='right'>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={handleCreateOpen}
+              >
+                Create
+              </Button>
+              <Button
+                style={{ marginLeft: "12px" }}
+                size="small"
+                variant="contained"
+                color="secondary"
+                onClick={handleImportOpen}
+              >
+                Import
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid
+            container
+            justify="flex-start"
+            alignItems="flex-start"
+            direction="row"
+            style={theme.custom.accountsContainer}
           >
             {this.renderAddresses()}
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <EthTransactions
+            theme={this.props.theme}
             ethAddresses={this.props.addresses}
             ethTransactions={this.props.ethTransactions}
             contacts={this.props.contacts}
+            size={this.props.size}
           />
         </Grid>
         <PrivateKeyModal
@@ -765,13 +454,16 @@ class EthAccounts extends Component {
           handleImport={this.props.createImportClicked}
           error={this.props.error}
         />
+        <ViewTokensModal
+          isOpen={this.props.viewOpen}
+          handleClose={this.props.viewTokensClose}
+          tokens={this.props.tokens}
+          theme={this.props.theme}
+          send={this.props.sendERC20}
+        />
       </Grid>
     );
   }
 }
-
-/*
-{this.renderTransactions()}
-*/
 
 export default EthAccounts;

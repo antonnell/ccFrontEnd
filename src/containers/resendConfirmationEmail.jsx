@@ -39,6 +39,7 @@ let ResendConfirmationEmail = createReactClass({
         loading={this.state.loading}
         snackOpen={this.state.snackOpen}
         handleSnackClose={this.handleSnackClose}
+        theme={this.props.theme}
       />
     );
   },
@@ -77,6 +78,7 @@ let ResendConfirmationEmail = createReactClass({
   submitResendConfirmationEmail() {
     if (this.validateEmail()) {
       this.setState({ loading: true });
+      this.props.startLoading();
       var content = {
         email: this.state.email
       };
@@ -89,12 +91,15 @@ let ResendConfirmationEmail = createReactClass({
 
   resendConfirmationEmailReturned(error, data) {
     this.setState({ loading: false });
+    this.props.stopLoading();
     if (error) {
       return this.setState({ error: error.toString() });
     }
 
     if (data.success) {
-      this.setState({ snackOpen: true, email: "" });
+      this.props.setEmail(this.state.email)
+      this.props.navigate("registrationSuccessful")
+      // this.setState({ snackOpen: true, email: "" });
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {

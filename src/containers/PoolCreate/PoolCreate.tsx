@@ -83,6 +83,7 @@ interface OwnProps {
   wanAddresses: WanAddress[],
   id: number | null;
   user: User;
+  theme: object
 }
 
 interface State {
@@ -186,7 +187,7 @@ class PoolCreate extends React.Component<Props, State> {
   }
 
   render() {
-    const {ethAddresses, wanAddresses, classes, id, user} = this.props;
+    const {ethAddresses, wanAddresses, classes, id, user, theme} = this.props;
     const {
       loading, isSubmitting,
       poolingContract: {
@@ -201,10 +202,10 @@ class PoolCreate extends React.Component<Props, State> {
     } = this.state;
     const status = poolStatus || 0;
     const canSubmit = !isSubmitting && !loading && isNameValid && isSaleAddressValid && isTokenAddressValid && !isBusy;
-    const theme = localStorage.getItem("cc_theme");
+    const themeText = localStorage.getItem("cc_theme");
     return (
       <React.Fragment>
-        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} />
+        <Header title={id ? "Update Pool" : "Create Pool"} headerItems={headerItems.createPool} loading={loading || isSubmitting} theme={theme}/>
         <Grid container justify="space-between" className={classes.containerGrid}>
           <Settings
             loading={loading || isSubmitting}
@@ -266,10 +267,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     !(!canSubmit) ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 className={classes.progressFirst}
@@ -282,10 +283,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     !(!canSubmit || !Boolean(id)) ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 variant="contained"
@@ -300,10 +301,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     status > 0 ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 className={classes.progressMiddle}
@@ -316,10 +317,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     ((status > 0 && status !== 5 && balance > 0) || status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 className={classes.progressMiddle}
@@ -333,10 +334,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     (status === 3 || status === 4 || status === 10 || totalTokensRemaining > 0) ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 className={classes.progressMiddle}
@@ -350,10 +351,10 @@ class PoolCreate extends React.Component<Props, State> {
                 classes={{
                   disabled:
                     (status === 4 || status === 10 || totalTokensReceived > 0) ?
-                      theme === "dark" ?
+                      themeText === "dark" ?
                         classes.disabledProgressDark :
                         undefined :
-                      theme === "dark" ? classes.disabledProgressDarkNext :
+                      themeText === "dark" ? classes.disabledProgressDarkNext :
                         classes.disabledProgressLightNext
                 }}
                 className={classes.progressLast}
@@ -768,5 +769,3 @@ class PoolCreate extends React.Component<Props, State> {
 }
 
 export default withStyles(styles)(withPoolingContext(withWhitelistContext(withDialogContext(withSnackBarContext(PoolCreate))))) as React.ComponentClass<OwnProps>;
-
-

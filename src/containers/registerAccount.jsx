@@ -4,9 +4,6 @@ import RegisterAccountComponent from '../components/registerAccount';
 const createReactClass = require('create-react-class');
 let emitter = require('../store/accountStore.js').default.emitter;
 let dispatcher = require('../store/accountStore.js').default.dispatcher;
-let whitelistEmitter = require('../store/whitelistStore.js').default.emitter;
-var crypto = require('crypto');
-var sha256 = require('sha256');
 
 const email = require('email-validator');
 
@@ -17,19 +14,17 @@ let RegisterAccount = createReactClass({
       error: null,
       username: '',
       usernameError: false,
-      usernameErrorMessage: 'This is your Curve ID',
+      usernameErrorMessage: "",
       emailAddress: '',
       emailAddressError: false,
-      emailAddressErrorMessage:
-        'Your email address that will be associated with you Curve account',
+      emailAddressErrorMessage: "",
       password: '',
       passwordError: false,
-      passwordErrorMessage:
-        'This will be your account password for the Curve wallet',
+      passwordErrorMessage: "",
       confirmPassword: '',
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
-      accepted: true,
+      accepted: false,
       acceptedError: false,
       acceptedErrorMessage: '',
       termsOpen: false,
@@ -39,17 +34,10 @@ let RegisterAccount = createReactClass({
 
   componentWillMount() {
     emitter.on('register', this.registerReturned);
-    whitelistEmitter.on('whitelistCheck', this.whitelistCheckReturned);
-    whitelistEmitter.on('Unauthorised', this.whitelistUnauthorisedReturned);
-    whitelistEmitter.on('whitelistRegister', this.whitelistRegisterReturned);
-    whitelistEmitter.on('123123', this.whitelistUnauthorisedReturned);
   },
 
   componentWillUnmount() {
     emitter.removeAllListeners('register');
-    whitelistEmitter.removeAllListeners('whitelistCheck');
-    whitelistEmitter.removeAllListeners('Unauthorised');
-    whitelistEmitter.removeAllListeners('whitelistRegister');
   },
 
   render() {
@@ -83,12 +71,13 @@ let RegisterAccount = createReactClass({
         handleTermsAccepted={ this.handleTermsAccepted }
         confirmEmail={ this.state.confirmEmail }
         resendConfirmationEmail={ this.resendConfirmationEmail }
+        theme={ this.props.theme }
       />
     );
   },
 
   resendConfirmationEmail() {
-    window.location.hash = 'resendConfirmationEmail';
+    this.props.navigate('resendConfirmationEmail');;
   },
 
   handleChange(event, name) {
@@ -145,13 +134,11 @@ let RegisterAccount = createReactClass({
     var error = false;
     this.setState({
       usernameError: false,
-      usernameErrorMessage: 'This is your curve ID',
+      usernameErrorMessage: "",
       emailAddressError: false,
-      emailAddressErrorMessage:
-        'Your email address that will be associated with you Curve account',
+      emailAddressErrorMessage: "",
       passwordError: false,
-      passwordErrorMessage:
-        'This will be your account password for the Curve wallet',
+      passwordErrorMessage: "",
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
       acceptedError: false,
@@ -216,10 +203,7 @@ let RegisterAccount = createReactClass({
 
     if (!error) {
       this.setState({ loading: true });
-
-      // not called anymore. Check is included in existing registration call
-      // var whitelistContent = { emailAddress: this.state.emailAddress };
-      // whitelistDispatcher.dispatch({type: 'whitelistCheck', content: whitelistContent});
+      this.props.startLoading()
 
       var content = {
         username: this.state.username,
@@ -230,101 +214,18 @@ let RegisterAccount = createReactClass({
     }
   },
 
-  whitelistCheckReturned(error, data) {
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-    if (data.success) {
-      var decodedData = this.decodeWhitelistResponse(data.message);
-
-      if (decodedData) {
-        if (decodedData.user.canWhitelist === true) {
-          var content = {
-            username: this.state.username,
-            emailAddress: this.state.emailAddress,
-            password: this.state.password
-          };
-          dispatcher.dispatch({ type: 'register', content });
-        } else {
-          this.setState({
-            loading: false,
-            emailAddressError: true,
-            emailAddressErrorMessage:
-              'Your email address that will be associated with you Curve account'
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          emailAddressError: true,
-          emailAddressErrorMessage:
-            'Your email address that will be associated with you Curve account'
-        });
-      }
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg, loading: false });
-    } else {
-      this.setState({ error: data.statusText, loading: false });
-    }
-  },
-
-  whitelistUnauthorisedReturned() {
-    this.setState({
-      loading: false,
-      emailAddressError: true,
-      emailAddressErrorMessage:
-        'Your email address that will be associated with you Curve account'
-    });
-  },
-
   registerReturned(error, data) {
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
 
-    if (data.success) {
-      this.setState({ confirmEmail: true, loading: false });
-      // data.user.token = data.token;
-      // data.user.verificationResult = data.verificationResult;
-      // data.user.verificationUrl = data.verificationUrl;
-      // data.user.whitelistStatus = data.WhitelistStatus;
-      // this.props.setUser(data.user);
-
-      // dont call this anymore
-      // var whitelistContent = { emailAddress: data.user.email, password: this.state.password };
-      // whitelistDispatcher.dispatch({type: 'whitelistRegister', content: whitelistContent });
-
-      // window.location.hash = "createEth";
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg, loading: false });
-    } else {
-      this.setState({ error: data.statusText, loading: false });
-    }
-  },
-
-  whitelistRegisterReturned(error, data) {
     this.setState({ loading: false });
+    this.props.stopLoading()
 
     if (error) {
       return this.setState({ error: error.toString() });
     }
 
     if (data.success) {
-      var whitelistState = this.decodeWhitelistResponse(data.message);
-      if (whitelistState) {
-        this.props.setWhitelistState(whitelistState);
-
-        if (
-          whitelistState.user.canWhitelist ===
-          true /*&& whitelistState.user.whitelisted !== true*/
-        ) {
-          window.location.hash = 'createEth';
-        } else {
-          window.location.hash = 'ethAccounts';
-        }
-      } else {
-        this.setState({ error: 'An unexpected error has occurred' });
-      }
+      this.props.setEmail(this.state.emailAddress)
+      this.props.navigate("registrationSuccessful")
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
@@ -332,38 +233,8 @@ let RegisterAccount = createReactClass({
     }
   },
 
-  decodeWhitelistResponse(message) {
-    const mnemonic = message.m.hexDecode();
-    const encrypted = message.e.hexDecode();
-    const signature = message.s;
-
-    const sig = {
-      e: message.e,
-      m: message.m,
-      u: message.u,
-      p: message.p,
-      t: message.t
-    };
-    const seed = JSON.stringify(sig);
-    const compareSignature = sha256(seed);
-
-    if (compareSignature !== signature) {
-      return null;
-    }
-
-    const payload = decrypt(encrypted, mnemonic);
-    var data = null;
-    try {
-      data = JSON.parse(payload);
-    } catch (ex) {
-      return null;
-    }
-
-    return data;
-  },
-
   submitLoginNavigate() {
-    window.location.hash = 'welcome';
+    this.props.navigate("login")
   },
 
   onRegisterKeyDown(event) {
@@ -372,25 +243,5 @@ let RegisterAccount = createReactClass({
     }
   }
 });
-
-function decrypt(text, seed) {
-  var decipher = crypto.createDecipher('aes-256-cbc', seed);
-  var dec = decipher.update(text, 'base64', 'utf8');
-  dec += decipher.final('utf8');
-  return dec;
-}
-
-/* eslint-disable */
-String.prototype.hexDecode = function () {
-  var j;
-  var hexes = this.match(/.{1,4}/g) || [];
-  var back = '';
-  for (j = 0; j < hexes.length; j++) {
-    back += String.fromCharCode(parseInt(hexes[j], 16));
-  }
-
-  return back;
-};
-/* eslint-enable */
 
 export default RegisterAccount;

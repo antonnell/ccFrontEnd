@@ -17,6 +17,7 @@ const styles = (theme: Theme) =>
 
 interface OwnProps {
   user: User;
+  theme: object
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
@@ -25,10 +26,10 @@ interface Props extends OwnProps, WithStyles<typeof styles> {
 class Pooling extends React.Component<Props> {
 
   public render() {
-    const {user, classes} = this.props;
+    const {user, classes, theme} = this.props;
     return (
         <React.Fragment>
-          <Header title="Pooling" headerItems={headerItems.pooling} loading={false}/>
+          <Header title="Pool Management" headerItems={headerItems.pooling} loading={false} theme={theme}/>
           <Grid container direction="row" className={classes.containerGrid} spacing={40}>
               <Pools user={user} />
               <WhiteLists user={user} />

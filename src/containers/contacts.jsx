@@ -22,7 +22,8 @@ let Contacts = createReactClass({
       notes: "",
       notesError: false,
       notesErrorMessage: "",
-      addOpen: false
+      addOpen: false,
+      optionsContact: null
     }
   },
 
@@ -78,6 +79,7 @@ let Contacts = createReactClass({
         updateNavigateClicked={this.updateNavigateClicked}
         sendEtherClicked={this.sendEtherClicked}
         sendAionClicked={this.sendAionClicked}
+        sendBitcoinClicked={this.sendBitcoinClicked}
         sendWanClicked={this.sendWanClicked}
         username={this.state.username}
         usernameError={this.state.usernameError}
@@ -98,8 +100,21 @@ let Contacts = createReactClass({
         handleAddOpen={this.handleAddOpen}
         addOpen={this.state.addOpen}
         handleAddClose={this.handleAddClose}
+        optionsClicked={this.optionsClicked}
+        optionsContact={this.state.optionsContact}
+        optionsClosed={this.optionsClosed}
+        size={this.props.size}
         />
     )
+  },
+
+  optionsClicked(event, optionsContact) {
+    optionsContact.anchorEl = event.currentTarget;
+    this.setState({ optionsContact });
+  },
+
+  optionsClosed() {
+    this.setState({ optionsContact: null });
   },
 
   handleAddOpen() {
@@ -137,6 +152,10 @@ let Contacts = createReactClass({
 
   sendAionClicked(contact) {
     this.props.openSendAion(contact)
+  },
+
+  sendBitcoinClicked(contact) {
+    this.props.openSendBitcoin(contact)
   },
 
   handleChange (event, name) {

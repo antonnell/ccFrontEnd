@@ -24,8 +24,7 @@ const styles = (theme: Theme) =>
       marginTop: theme.spacing.unit * 2.5
     },
     button: {
-      minWidth: 150,
-      color: colors.dark
+      minWidth: 150
     },
     buttonSpacer: {
       margin: theme.spacing.unit
@@ -49,6 +48,7 @@ interface OwnProps {
   user: User;
   ethAddresses: EthAddress[],
   wanAddresses: WanAddress[],
+  theme: object
 }
 
 interface State {
@@ -90,7 +90,8 @@ class PoolDetails extends React.Component<Props, State> {
     const {
       id, classes, ethAddresses, wanAddresses, poolingContext: {
         availablePools, availablePoolsLoading
-      }
+      },
+      theme
     } = this.props;
     const {
       openPledgeDialog, openContributeDialog
@@ -140,15 +141,15 @@ class PoolDetails extends React.Component<Props, State> {
     }
     return (
       <React.Fragment>
-        <Header title="Pool Details" headerItems={headerItems.pooling} loading={availablePoolsLoading} />
+        <Header title="Pool Details" headerItems={headerItems.pooling} loading={availablePoolsLoading} theme={theme} />
         <Grid container direction="row" className={classes.containerGrid} spacing={40}>
           {groups.map((group, i) => <DetailsGroup key={i} title={group.title} items={group.items} />)}
           {!availablePoolsLoading && pool !== null && <Grid item container direction="row" justify="flex-end" xs={12}>
-            <Button variant="outlined" color="secondary" className={classes.button} onClick={this.onBackClick}>Back</Button>
+            <Button variant="text" color="secondary" size="small" className={classes.button} onClick={this.onBackClick}>Back</Button>
             <div className={classes.buttonSpacer} />
-            {pool.status === 1 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
+            {pool.status === 1 && <Button disabled={pool.isBusy} size="small" variant="contained" color="primary" className={classes.button} onClick={this.onContributeClick}>Contribute</Button>}
             <div className={classes.buttonSpacer} />
-            {pool.status === 5 && <Button disabled={pool.isBusy} variant="contained" color="secondary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
+            {pool.status === 5 && <Button disabled={pool.isBusy} size="small" variant="contained" color="primary" className={classes.button} onClick={this.onPledgeClick}>Pledge</Button>}
           </Grid>}
         </Grid>
         <PoolPledgeDialog pool={pool} open={openPledgeDialog} onClose={this.onDialogClose} ethAddresses={ethAddresses} wanAddresses={wanAddresses} />

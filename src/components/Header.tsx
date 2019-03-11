@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import {colors} from "../theme";
 import {HeaderItem} from "../constants/HeaderItems";
@@ -13,14 +12,13 @@ import Popover from "@material-ui/core/Popover";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import PageLoader from './pageLoader';
+import PageTItle from "./pageTitle";
 
 const styles = (theme: Theme) =>
   createStyles({
     header: {
       marginBottom: theme.spacing.unit * 1.5,
-      padding: theme.spacing.unit,
-      borderBottom: ["2px", "solid", colors.dodgerBlue].join(" "),
       display: "flex"
     },
     spacer: {
@@ -39,6 +37,7 @@ interface OwnProps {
   title: string;
   headerItems: HeaderItem
   loading: boolean;
+  theme: object
 }
 
 interface Props extends OwnProps, WithStyles<typeof styles> {
@@ -51,12 +50,12 @@ class Header extends React.Component<Props, State> {
   };
 
   public render() {
-    const {title, classes, headerItems, loading} = this.props;
+    const {title, classes, headerItems, loading, theme} = this.props;
     const {optionsOpen} = this.state;
     return (
       <React.Fragment>
         <Grid container item xs={12} alignItems="center" className={classes.header}>
-          <Typography variant="h5" style={{flexGrow: 1}}>{title}</Typography>
+          <PageTItle theme={theme} root={'Invest > Pooling'} screen={title} />
           {headerItems.buttons.map((button, index) =>
             <Button
               key={index}
@@ -86,7 +85,7 @@ class Header extends React.Component<Props, State> {
           </React.Fragment>
           }
         </Grid>
-        {loading && <LinearProgress className={classes.progress}/>}
+        {loading && <PageLoader />}
       </React.Fragment>
     );
   }

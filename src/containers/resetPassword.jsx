@@ -37,7 +37,6 @@ let ResetPassword = createReactClass({
       <ResetPasswordComponent
         handleChange={this.handleChange}
         submitReset={this.submitReset}
-        submitLoginNavigate={this.submitLoginNavigate}
         onResetKeyDown={this.onResetKeyDown}
         password={this.state.password}
         passwordError={this.state.passwordError}
@@ -100,6 +99,7 @@ let ResetPassword = createReactClass({
 
     if (!error) {
       this.setState({ loading: true });
+      this.props.startLoading();
       var content = {
         token: this.props.uriParameters.token,
         code: this.props.uriParameters.code,
@@ -111,21 +111,18 @@ let ResetPassword = createReactClass({
 
   resetPasswordReturned(error, data) {
     this.setState({ loading: false });
+    this.props.stopLoading();
     if (error) {
       return this.setState({ error: error.toString() });
     }
 
     if (data.success) {
-      window.location.hash = "account"; //or show 'Your password has been updated'
+      this.props.navigate('login');
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
     } else {
       this.setState({ error: data.statusText });
     }
-  },
-
-  submitLoginNavigate() {
-    window.location.hash = "welcome";
   }
 });
 

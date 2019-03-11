@@ -53,7 +53,7 @@ const styles = (theme: Theme) =>
       position: "relative"
     },
     tokenText: {
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
       textTransform: "uppercase",
       marginLeft: theme.spacing.unit
     },
@@ -77,8 +77,7 @@ const styles = (theme: Theme) =>
       transform: "rotate(-130deg) !important",
     },
     button: {
-      minWidth: 100,
-      color: colors.dark
+      minWidth: 100
     },
     buttonWidth: {
       minWidth: 100,
@@ -193,7 +192,7 @@ class PoolCard extends React.Component<Props, State> {
             <Grid item xs={12} container direction="column">
               <Grid container direction="row" alignItems="baseline">
                 <Typography variant="h5">{name}</Typography>
-                <Typography variant="body1" className={classes.tokenText}>{blockchain}</Typography>
+                <Typography variant="h5" className={classes.tokenText}>{blockchain}</Typography>
               </Grid>
               <div style={{minHeight: 36}}><Typography variant="subtitle1" className={classes.authorText}>Owner: <b>{owner}</b></Typography></div>
               {(managedPool || completedPool) && <div style={{minHeight: 36}}>
@@ -257,18 +256,18 @@ class PoolCard extends React.Component<Props, State> {
                 >Distribute</Button>
                 <div className={classes.buttonSpacer} />
               </React.Fragment>}
-              {managedPool && !completedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
-              {status === 1 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
-              {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="secondary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
+              {managedPool && !completedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="primary" className={classes.button} size="small" onClick={this.onUpdateClick}>Update</Button>}
+              {status === 1 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="primary" className={classes.button} size="small" onClick={this.onContributeClick}>Contribute</Button>}
+              {status === 5 && !managedPool && <Button disabled={isBusy || isSubmitting} variant="contained" color="primary" className={classes.button} size="small" onClick={this.onPledgeClick}>Pledge</Button>}
               <div className={classes.buttonSpacer} />
 
               <Button classes={theme === "dark" ? {label: classes.whiteLabel} : {}}
-                      variant="outlined" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
+                      variant="contained" className={classes.button} color="secondary" size="small" onClick={this.handleViewClick}>view</Button>
               <div className={classes.buttonSpacer} />
               {managedPool && poolTransactions && poolTransactions.length > 0 &&
               <React.Fragment>
                 <ExcelFile element={<Button classes={{label: theme === "dark" ? classes.whiteLabel : undefined}}
-                                            variant="outlined" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
+                                            variant="contained" className={classes.button} color="secondary" size="small">Export To Excel</Button>}>
                   <ExcelSheet data={poolTransactions} name="Transactions">
                     <ExcelColumn label="User Name" value="userName" />
                     <ExcelColumn label="Type" value="functionCall" />

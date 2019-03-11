@@ -95,6 +95,7 @@ let AionAccounts = createReactClass({
         handleCreateClose={this.handleCreateClose}
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
+        size={this.props.size}
       />
     );
   },
