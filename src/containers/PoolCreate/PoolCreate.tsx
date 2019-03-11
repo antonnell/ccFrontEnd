@@ -135,7 +135,7 @@ class PoolCreate extends React.Component<Props, State> {
         if (isFundingPool(poolingContract) && poolingContract.ownerAddress) {
           poolingContract.ownerAddress = (poolingContract.blockchain === "WAN" ? wanAddresses.find(v => v.publicAddress === (poolingContract.ownerAddress as unknown as string)) :
             ethAddresses.find(v => v.address === (poolingContract.ownerAddress as unknown as string)));
-          poolingContract.pledgesEndDate = moment.utc(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
+          poolingContract.pledgesEndDate = moment(poolingContract.pledgesEndDate).format("YYYY-MM-DD");
           if (poolingContract.whitelistedUsers === null) {
             poolingContract.whitelistedUsers = [];
           }
@@ -509,7 +509,7 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   handleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => {
-    date.utc();
+    // date.utc();
     this.setState({poolingContract: {...this.state.poolingContract, [fieldName]: date.format("YYYY-MM-DD")}});
   };
 

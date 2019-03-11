@@ -133,7 +133,7 @@ class PoolDetails extends React.Component<Props, State> {
           {title: "Amount Pooled", text: `${this.state.pool !== null?contribution:pool.totalPooled} ${pool.blockchain}`, width: 6},
           {title: "Contributors", text: this.state.pool !== null?contributors:pool.contributorCount || 0, width: 6},
           {title: "Amount Pledged", text: `${this.state.pool !== null?pledged:pool.totalPledged} ${pool.blockchain}`, width: 6,hidden: !pool.isPledgesEnabled},
-          {title: "Pledge End Date", text: `${pool.pledgesEndDate !== null?moment.utc(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
+          {title: "Pledge End Date", text: `${pool.pledgesEndDate !== null?moment(pool.pledgesEndDate).format("YYYY-MM-DD"):""}`, width: 6,hidden: !pool.isPledgesEnabled},
         ]
       });
     } else {

@@ -59,7 +59,7 @@ export const initialPoolingContract: PoolingContract = {
   minContribution: null,
   maxContribution: null,
   isPledgesEnabled: false,
-  pledgesEndDate: moment.utc(new Date()).add(1,'days').format("YYYY-MM-DD"),
+  pledgesEndDate: moment().add(1,'days').format("YYYY-MM-DD"),
   saleAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   tokenAddress: "", // 0xa57e3290d0b7cb2748ed410c19c1d58f7f192bc0
   transactionFee: null,
