@@ -12,7 +12,6 @@ let Profile = createReactClass({
     return {
       error: "",
       loading: false,
-      editEmailOpen: false,
       emailAddress: "",
       emailAddressError: false,
       emailAddressErrorMessage: ""
@@ -40,8 +39,6 @@ let Profile = createReactClass({
         user={this.props.user}
         setUser={this.props.setUser}
         loading={this.state.loading}
-        editEmail={this.editEmail}
-        editEmailOpen={this.state.editEmailOpen}
         handleEmailClose={this.handleEmailClose}
         updateClicked={this.updateClicked}
         onUpdateKeyDown={this.onUpdateKeyDown}
@@ -104,34 +101,9 @@ let Profile = createReactClass({
   },
 
   getUserProfileReturned(error, data) {
-    console.log(error);
-    console.log(data);
-
     let user = this.props.user
     user.profilePhoto = data.user.profilePhoto
     this.props.setUser(user);
-    // if (error) {
-    //   return this.setState({ error: error.toString() });
-    // }
-    //
-    // if (data.success) {
-    //   let user = this.props.user
-    //   user.profilePhoto = data.user.profilePhoto
-    //   this.props.setUser(user);
-    //
-    // } else if (data.errorMsg) {
-    //   this.setState({ error: data.errorMsg, contacts: [] });
-    // } else {
-    //   this.setState({ error: data.statusText, contacts: [] });
-    // }
-  },
-
-  editEmail() {
-    this.setState({ editEmailOpen: true });
-  },
-
-  handleEmailClose() {
-    this.setState({ editEmailOpen: false });
   },
 
   handleChange(event, name) {

@@ -65,8 +65,6 @@ class AionAccounts extends Component {
       );
     }
 
-    let index = -1
-
     return this.props.addresses.map(address => {
       address.editing = false;
       let open = false;
@@ -109,9 +107,7 @@ class AionAccounts extends Component {
         }
       }
 
-      index ++
-
-      let { theme, size } = this.props
+      let { theme } = this.props
 
       return (
         <Grid item xs={12} lg={6} xl={4} key={address.address} style={{ padding: '24px' }}>

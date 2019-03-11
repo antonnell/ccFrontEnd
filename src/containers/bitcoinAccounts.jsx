@@ -316,7 +316,7 @@ let BitcoinAccounts = createReactClass({
 
     //we have the data already. jsut display it somewhere? Popup?
     let addy = this.props.bitcoinAddresses.filter((addy) => {
-      return addy.id == id
+      return addy.id === id
     })
 
     if(addy && addy.length > 0) {

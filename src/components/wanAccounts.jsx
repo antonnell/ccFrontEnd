@@ -13,37 +13,14 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
-import TermsModalComponent from './termsModalICO';
-import TermsModalRefundComponent from './termsModalICORefund';
-import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
 import CreateModal from './createModal';
 import ImportModal from './importModal';
 import PageTItle from './pageTitle';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
 import ViewTokensModal from "./viewTokensModal";
-
-function ExpandMoreIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path
-        fill={props.theme?props.theme.custom.icon.color:'#888888'}
-        d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-      />
-    </SvgIcon>
-  );
-}
 
 function MoreIcon(props) {
   return (
@@ -60,7 +37,7 @@ class WanAccounts extends Component {
 
   renderAddresses() {
 
-    let { addresses, theme, optionsAccount, loadingAccount, editAccount, cardLoading, exportKeyAccount, privateKeyLoading, sendWRC20, size } = this.props
+    let { addresses, theme, optionsAccount, loadingAccount, editAccount, cardLoading, exportKeyAccount, privateKeyLoading } = this.props
 
     if (addresses == null) {
       return (
@@ -92,8 +69,6 @@ class WanAccounts extends Component {
         </Grid>
       );
     }
-
-    let index = -1
 
     return addresses.map(address => {
       address.editing = false;
@@ -136,8 +111,6 @@ class WanAccounts extends Component {
           }
         }
       }
-
-      index ++
 
       return (
         <Grid item xs={12} lg={6} xl={4} key={address.publicAddress} style={{ padding: '24px' }}>
@@ -419,26 +392,11 @@ class WanAccounts extends Component {
           currentAccountKey={ this.props.currentAccountKey }
           copyKey={ this.props.copyKey }
         />
-        <ThankYouICOModal
-          isOpen={ this.props.thanksOpen }
-          handleClose={ this.props.handleThanksClose }
-          investTransacstionID={ this.props.investTransacstionID }
-        />
         <DeleteAccountConfirmation
           isOpen={ this.props.deleteOpen }
           handleClose={ this.props.handleDeleteClose }
           confirmDelete={ this.props.confirmDelete }
           deleteLoading={ this.props.deleteLoading }
-        />
-        <TermsModalComponent
-          isOpen={ this.props.termsOpen }
-          handleClose={ this.props.handleTermsClose }
-          handleTermsAccepted={ this.props.handleTermsAccepted }
-        />
-        <TermsModalRefundComponent
-          isOpen={ this.props.termsRefundOpen }
-          handleClose={ this.props.handleTermsRefundClose }
-          handleTermsAccepted={ this.props.handleTermsRefundAccepted }
         />
         <CreateModal
           isOpen={this.props.createOpen}

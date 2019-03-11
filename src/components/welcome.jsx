@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import PageLoader from "./pageLoader";
-import Snackbar from "./snackbar";
 import WelcomeImage from "../assets/images/welcome.png";
 
 import Login from "../containers/login.jsx";

@@ -3,20 +3,20 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
+import MomentUtils from '@date-io/moment';
+import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
+import Context from './context/Context';
+
+import curveTheme from './theme';
 
 import TheAppBar from './containers/applicationBar.jsx';
 import AppDrawer from './containers/drawer.jsx';
-import AppFooter from './containers/footer.jsx';
 
 import Welcome from './containers/welcome.jsx';
-import RegisterAccount from './containers/registerAccount.jsx';
 import CreateEth from './containers/createEth.jsx';
 import CreateWan from './containers/createWan.jsx';
 import CreateAion from './containers/createAion.jsx';
 import CreateBitcoin from './containers/createBitcoin.jsx';
-import KYC from './containers/kyc.jsx';
-import ForgotPassword from './containers/forgotPassword.jsx';
-import ForgotPasswordDone from './containers/forgotPasswordDone.jsx';
 import EthAccounts from './containers/ethAccounts.jsx';
 import WanAccounts from './containers/wanAccounts.jsx';
 import AionAccounts from './containers/aionAccounts.jsx';
@@ -31,29 +31,17 @@ import SendBitcoin from './containers/sendBitcoin.jsx';
 import SetUsername from './containers/setUsername.jsx';
 import Settings from './containers/settings.jsx';
 import Pooling from './containers/Pooling/index';
-import ResendConfirmationEmail from './containers/resendConfirmationEmail.jsx';
 
-import ComingSoon from './components/comingSoon.jsx';
-import PrivacyPolicy from './components/privacyPolicy.jsx';
-import CookiePolicy from './components/cookiePolicy.jsx';
-import TermsAndConditions from './components/termsAndConditions.jsx';
-import ContactUs from './components/contactUs.jsx';
-import curveTheme from './theme';
-
-import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
-import sha256 from 'sha256';
-import crypto from 'crypto';
 import PoolCreate from './containers/PoolCreate/index';
 import PageLoader from './components/pageLoader';
-import Context from './context/Context';
 import WhitelistCreate from './containers/WhitelistCreate';
 import AppDialog from './containers/AppDialog/AppDialog';
 import PoolBrowse from './containers/PoolBrowse/index';
 import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
 import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
-import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
-import MomentUtils from '@date-io/moment';
+
+import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
 let accountDispatcher = require("./store/accountStore.js").default.dispatcher;
@@ -72,16 +60,6 @@ let aionDispatcher = require("./store/aionStore.js").default.dispatcher;
 
 let bitcoinEmitter = require('./store/bitcoinStore.js').default.emitter;
 let bitcoinDispatcher = require('./store/bitcoinStore.js').default.dispatcher;
-
-let whitelistEmitter = require('./store/whitelistStore.js').default.emitter;
-// let whitelistDispatcher = require("./store/whitelistStore.js").default.poolingDispatcher;
-//
-// let crowdsaleEmitter = require('./store/crowdsaleStore.js').default.emitter;
-// let crowdsaleDispatcher = require('./store/crowdsaleStore.js').default
-//   .dispatcher;
-//
-// let emitter = require("./store/ipStore.js").default.emitter;
-// let dispatcher = require("./store/ipStore.js").default.dispatcher;
 
 const setInitialUser = () => {
   const userString = sessionStorage.getItem("cc_user");
@@ -103,14 +81,12 @@ class App extends Component {
     aionAddresses: null,
     bitcoinAddresses: null,
     contacts: null,
-    // whitelistState: whitelistState,
     uriParameters: {},
     ipValid: false,
     ipLoading: true,
     rejectionReason: "",
     erc20Tokens: null,
     wrc20Tokens: null,
-    // crowdsales: null,
     verificationSearching: false,
     ethTransactions: null,
     wanTransactions: null,
@@ -131,7 +107,6 @@ class App extends Component {
     this.locationHashChanged = this.locationHashChanged.bind(this);
 
     this.setUser = this.setUser.bind(this);
-    this.setWhitelistState = this.setWhitelistState.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
     this.openSendEther = this.openSendEther.bind(this);
     this.openSendERC = this.openSendERC.bind(this);
@@ -149,7 +124,6 @@ class App extends Component {
     this.getAionAddressReturned = this.getAionAddressReturned.bind(this);
     this.getBitcoinAddressReturned = this.getBitcoinAddressReturned.bind(this);
     this.getContactsReturned = this.getContactsReturned.bind(this);
-    this.getWhitelistStateReturned = this.getWhitelistStateReturned.bind(this);
 
     this.getERC20AddressReturned = this.getERC20AddressReturned.bind(this);
     this.getWRC20AddressReturned = this.getWRC20AddressReturned.bind(this);
@@ -159,11 +133,6 @@ class App extends Component {
     this.getSupportedWRC20TokensReturned = this.getSupportedWRC20TokensReturned.bind(
       this
     );
-
-    // this.getCrowdSalesReturned = this.getCrowdSalesReturned.bind(this);
-    // this.getUserCrowdSaleContributionsReturned = this.getUserCrowdSaleContributionsReturned.bind(
-    //   this
-    // );
 
     this.verificationResultReturned = this.verificationResultReturned.bind(
       this
@@ -202,12 +171,10 @@ class App extends Component {
 
       if (
         user.verificationResult !== data.verificationResult ||
-        user.verificationUrl !== data.verificationUrl ||
-        user.whitelistStatus !== data.whitelistStatus
+        user.verificationUrl !== data.verificationUrl
       ) {
         user.verificationResult = data.verificationResult;
         user.verificationUrl = data.verificationUrl;
-        user.whitelistStatus = data.whitelistStatus;
 
         this.setUser(user);
       }
@@ -293,7 +260,7 @@ class App extends Component {
       let bitcoinAddresses = this.state.bitcoinAddresses
 
       bitcoinAddresses.map((address) => {
-        if(address.id == walletId) {
+        if(address.id === walletId) {
           address.addresses = data.addresses
         }
 
@@ -326,26 +293,8 @@ class App extends Component {
     if (
       ![
         "welcome",
-        "registerAccount",
-        "forgotPassword",
-        "forgotPasswordDone",
         "resetPassword",
-        "privacyPolicy",
-        "cookiePolicy",
-        "termsAndConditions",
-        "about",
-        "press",
-        "contactUs",
-        "bugBounty",
-        "blog",
-        "faq",
-        "fees",
-        "add",
-        "added",
-        "addUnavailable",
-        "whitelistStatus",
         "verifyAccount",
-        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (user == null) {
@@ -365,7 +314,6 @@ class App extends Component {
     aionEmitter.removeAllListeners('getAionAddress');
     bitcoinEmitter.removeAllListeners('getBitcoinAddress');
     contactsEmitter.removeAllListeners('getContacts');
-    whitelistEmitter.removeAllListeners('whitelistCheck');
     ethEmitter.removeAllListeners('getSupportedERC20Tokens');
     wanEmitter.removeAllListeners('getSupportedWRC20Tokens');
     // crowdsaleEmitter.removeAllListeners('getCrowdSales');
@@ -397,7 +345,6 @@ class App extends Component {
     aionEmitter.on('getAionAddress', this.getAionAddressReturned);
     bitcoinEmitter.on('getBitcoinAddress', this.getBitcoinAddressReturned);
     contactsEmitter.on('getContacts', this.getContactsReturned);
-    whitelistEmitter.on('getWhitelistState', this.getWhitelistStateReturned);
     ethEmitter.on(
       "getSupportedERC20Tokens",
       this.getSupportedERC20TokensReturned
@@ -406,11 +353,7 @@ class App extends Component {
       "getSupportedWRC20Tokens",
       this.getSupportedWRC20TokensReturned
     );
-    // crowdsaleEmitter.on('getCrowdSales', this.getCrowdSalesReturned);
-    // crowdsaleEmitter.on(
-    //   'getUserCrowdSaleContributions',
-    //   this.getUserCrowdSaleContributionsReturned
-    // );
+
     accountEmitter.on('verificationResult', this.verificationResultReturned);
     ethEmitter.on(
       "getEthTransactionHistory",
@@ -443,9 +386,6 @@ class App extends Component {
     window.onhashchange = this.locationHashChanged;
     this.locationHashChanged();
 
-    // const loader = document.getElementById("loader");
-    // document.body.removeChild(loader);
-
     if (this.state.user) {
       let content = {};
 
@@ -461,12 +401,6 @@ class App extends Component {
           token: this.state.user.token
         });
       }
-
-      // crowdsaleDispatcher.dispatch({
-      //   type: 'getCrowdSales',
-      //   content,
-      //   token: this.state.user.token
-      // });
 
       if (
         this.state.user.verificationResult !== "complete" &&
@@ -486,59 +420,8 @@ class App extends Component {
         content,
         token: user.token
       });
-
-      // this.constantRefresh(user);
     }
   }
-
-  // getCrowdSalesReturned(error, data) {
-  //   if (error) {
-  //     return this.setState({ error: error.toString() });
-  //   }
-  //
-  //   if (data.success) {
-  //     this.setState({ crowdsales: data.crowdSales });
-  //
-  //     data.crowdSales.map(crowdsale => {
-  //       let content = {
-  //         userId: this.state.user.id,
-  //         crowdsaleID: crowdsale.id
-  //       };
-  //       return crowdsaleDispatcher.dispatch({
-  //         type: 'getUserCrowdSaleContributions',
-  //         content,
-  //         token: this.state.user.token
-  //       });
-  //     });
-  //   } else if (data.errorMsg) {
-  //     this.setState({ error: data.errorMsg });
-  //   } else {
-  //     this.setState({ error: data.statusText });
-  //   }
-  // }
-
-  // getUserCrowdSaleContributionsReturned(error, data) {
-  //   this.setState({ investLoading: false });
-  //   if (error) {
-  //     return this.setState({ ICOError: error.toString() });
-  //   }
-  //
-  //   if (data.success) {
-  //     // let crowdsales = this.state.crowdsales;
-  //     //
-  //     // crowdsales = this.state.crowdsales.map(crowdsale => {
-  //     //   if (crowdsale.id === id) {
-  //     //     crowdsale.totalContribution = data.totalContribution;
-  //     //   }
-  //     //
-  //     //   return crowdsale;
-  //     // });
-  //   } else if (data.errorMsg) {
-  //     this.setState({ ICOError: data.errorMsg });
-  //   } else {
-  //     this.setState({ ICOError: data.statusText });
-  //   }
-  // }
 
   getSupportedERC20TokensReturned(error, data) {
     if (error) {
@@ -568,78 +451,10 @@ class App extends Component {
     }
   }
 
-  // constantRefresh() {
-  //   let content = {};
-  //
-  //   setTimeout(() => {
-  //     if (this.state.user) {
-  //       this.getUserDetails(this.state.user);
-  //       crowdsaleDispatcher.dispatch({
-  //         type: 'getCrowdSales',
-  //         content,
-  //         token: this.state.user.token
-  //       });
-  //
-  //       this.constantRefresh();
-  //     }
-  //   }, 300000);
-  // }
-
   getUserDetails = user => {
     if (user) {
       const content = { id: user.id };
-      // ethDispatcher.dispatch({
-      //   type: 'getEthAddress',
-      //   content,
-      //   token: user.token
-      // });
-      // wanDispatcher.dispatch({
-      //   type: 'getWanAddress',
-      //   content,
-      //   token: user.token
-      // });
-      // aionDispatcher.dispatch({
-      //   type: 'getAionAddress',
-      //   content,
-      //   token: user.token
-      // });
-      // bitcoinDispatcher.dispatch({
-      //   type: 'getBitcoinAddress',
-      //   content,
-      //   token: user.token
-      // });
-      // contactsDispatcher.dispatch({
-      //   type: 'getContacts',
-      //   content,
-      //   token: user.token
-      // });
-      // ethDispatcher.dispatch({
-      //   type: 'getEthTransactionHistory',
-      //   content,
-      //   token: user.token
-      // });
-      // wanDispatcher.dispatch({
-      //   type: 'getWanTransactionHistory',
-      //   content,
-      //   token: user.token
-      // });
-      // aionDispatcher.dispatch({
-      //   type: 'getAionTransactionHistory',
-      //   content,
-      //   token: user.token
-      // });
-      // TODO: removed the getEtherPools poolingDispatcher
-      // poolingDispatcher.dispatch({
-      //   type: "getEtherPools",
-      //   content,
-      //   token: user.token
-      // });
-      // TODO: removed the getAvailableEtherPools poolingDispatcher
-      // poolingDispatcher.dispatch({
-      //   type: "getAvailableEtherPools",
-      //   content,
-      //   token: user.token
-      // });
+
       poolingDispatcher.dispatch({
         type: "getAvailableFundingPools",
         content,
@@ -676,32 +491,13 @@ class App extends Component {
     // }
   }
 
-  getWhitelistStateReturned(error, data) {
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      var whitelistState = this.decodeWhitelistResponse(data.message);
-      if (whitelistState) {
-        this.setWhitelistState(whitelistState);
-      } else {
-        this.setState({ error: "An unexpected error has occurred" });
-      }
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  }
-
   getEthAddressReturned(error, data) {
     if (error) {
       return this.setState({ error: error.toString() });
     }
 
     if (data.success) {
-      if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked && window.location.hash == "#ethAccounts") {
+      if (data.ethAddresses.length === 0 && !this.state.ethWalletChecked && window.location.hash === "#ethAccounts") {
         this.setState({ ethWalletChecked: true })
         window.location.hash = 'createEth';
         return;
@@ -761,7 +557,7 @@ class App extends Component {
 
     if (data.success) {
 
-      if (data.wanAddresses.length === 0 && !this.state.wanWalletChecked && window.location.hash == "#wanAccounts") {
+      if (data.wanAddresses.length === 0 && !this.state.wanWalletChecked && window.location.hash === "#wanAccounts") {
         this.setState({ wanWalletChecked: true })
         window.location.hash = 'createWan';
         return;
@@ -822,7 +618,7 @@ class App extends Component {
 
     if (data.success) {
 
-      if (data.aionAddresses.length === 0 && !this.state.aionWalletChecked && window.location.hash == "#aionAccounts") {
+      if (data.aionAddresses.length === 0 && !this.state.aionWalletChecked && window.location.hash === "#aionAccounts") {
         this.setState({ aionWalletChecked: true })
         window.location.hash = 'createAion';
         return;
@@ -842,7 +638,7 @@ class App extends Component {
     }
 
     if (data.success) {
-      if (data.wallets.length === 0 && !this.state.bitcoinWalletChecked && window.location.hash == "#bitcoinAccounts") {
+      if (data.wallets.length === 0 && !this.state.bitcoinWalletChecked && window.location.hash === "#bitcoinAccounts") {
         this.setState({ bitcoinWalletChecked: true })
         window.location.hash = 'createBitcoin';
         return;
@@ -858,6 +654,8 @@ class App extends Component {
           content,
           token: user.token
         });
+
+        return null
       })
 
     } else if (data.errorMsg) {
@@ -915,7 +713,6 @@ class App extends Component {
 
   logUserOut = () => {
     sessionStorage.removeItem("cc_user");
-    sessionStorage.removeItem("cc_whiteliststate");
     window.location.hash = "welcome";
   };
 
@@ -923,30 +720,6 @@ class App extends Component {
     this.setState({ user });
     sessionStorage.setItem("cc_user", JSON.stringify(user));
     this.getUserDetails(user);
-  }
-
-  setWhitelistState(whitelistState) {
-    if (whitelistState != null) {
-      if (whitelistState.jwt) {
-        var user = this.state.user;
-
-        user.whitelistToken = whitelistState.jwt.token;
-        user.whitelistTokenKey = sha256(whitelistState.user.emailAddress);
-        delete whitelistState.jwt;
-
-        this.setState({ user });
-        sessionStorage.setItem("cc_user", JSON.stringify(user));
-      }
-
-      if (whitelistState.activeStep == null) {
-        whitelistState.activeStep = 0;
-        whitelistState.completed = {};
-      }
-    }
-
-    this.setState({ whitelistState });
-    sessionStorage.setItem("cc_whiteliststate", JSON.stringify(whitelistState));
-    // whitelistDispatcher.dispatch({type: 'setWhitelistState', content: whitelistState, token: this.state.user.whitelistToken, tokenKey: this.state.user.whitelistTokenKey });
   }
 
   openSendEther(sendEtherContact, sendEtherAccount) {
@@ -1008,9 +781,8 @@ class App extends Component {
     } else {
       currentScreen = window.location.hash.substring(1);
     }
-    if (["", "welcome", "logOut", "registerAccount"].includes(currentScreen)) {
+    if (["", "welcome", "logOut"].includes(currentScreen)) {
       sessionStorage.removeItem("cc_user");
-      sessionStorage.removeItem("cc_whiteliststate");
 
       this.setState({
         drawerOpen: false,
@@ -1026,35 +798,13 @@ class App extends Component {
         aionTransactions: null,
         bitcoinTransactions: null
       });
-
-      if (currentScreen !== "registerAccount") {
-        this.setState({ currentScreen: "welcome" });
-      }
     }
 
     if (
       ![
         "welcome",
-        "registerAccount",
-        "forgotPassword",
-        "forgotPasswordDone",
         "resetPassword",
-        "privacyPolicy",
-        "cookiePolicy",
-        "termsAndConditions",
-        "about",
-        "press",
-        "contactUs",
-        "bugBounty",
-        "blog",
-        "faq",
-        "fees",
-        "add",
-        "added",
-        "addUnavailable",
-        "whitelistStatus",
         "verifyAccount",
-        'resendConfirmationEmail'
       ].includes(currentScreen)
     ) {
       if (this.state.user == null) {
@@ -1197,15 +947,6 @@ class App extends Component {
         });
       }
 
-      // if (this.state.crowdsales == null) {
-      //   content = {};
-      //   crowdsaleDispatcher.dispatch({
-      //     type: 'getCrowdSales',
-      //     content,
-      //     token: this.state.user.token
-      //   });
-      // }
-
       if (
         this.state.user.verificationResult !== "complete" &&
         this.state.verificationSearching === false
@@ -1258,17 +999,6 @@ class App extends Component {
       );
     }
     return drawer;
-  }
-
-  renderFooter() {
-    return (
-      <AppFooter
-        user={ this.state.user }
-        navClicked={ this.navClicked }
-        ipValid={ this.state.ipValid }
-        theme={ this.state.theme }
-      />
-    );
   }
 
   render() {
@@ -1350,8 +1080,6 @@ class App extends Component {
     switch (path) {
       case "welcome":
         return <Welcome setUser={ this.setUser } theme={ this.state.theme } />;
-      case "registerAccount":
-        return <RegisterAccount setUser={ this.setUser } />;
       case "verifyAccount":
         const { uriParameters: { token, code } } = this.state;
         return <VerifyAccount token={ token } code={ code } />;
@@ -1363,18 +1091,10 @@ class App extends Component {
         return <CreateAion user={ this.state.user } theme={ this.state.theme } />;
       case 'createBitcoin':
         return <CreateBitcoin user={ this.state.user } theme={ this.state.theme } />;
-      case 'kyc':
-        return <KYC user={ this.state.user } setUser={ this.setUser } />;
       case "setUsername":
         return <SetUsername user={ this.state.user } setUser={ this.setUser } />;
-      case "forgotPassword":
-        return <ForgotPassword />;
-      case "forgotPasswordDone":
-        return <ForgotPasswordDone />;
       case "resetPassword":
         return <Welcome setUser={ this.setUser } theme={ this.state.theme } initialScreen='resetPassword' uriParameters={ this.state.uriParameters } />;
-      // case 'whitelist':
-      //   return (<Whitelist whitelistObject={this.state.whitelistState} setWhitelistState={this.setWhitelistState} user={this.state.user} size={this.state.size} ethAddresses={this.state.ethAddresses} wanAddresses={this.state.wanAddresses} />);
       case "ethAccounts":
         return (
           <EthAccounts
@@ -1440,16 +1160,6 @@ class App extends Component {
             size={ this.state.size }
           />
         );
-      // case 'updatePassword':
-      //   return (<UpdatePassword user={this.state.user} />);
-      // case 'manage2FA':
-      //   return (<Manage2FA user={this.state.user} setUser={this.setUser} />);
-      case "privacyPolicy":
-        return <PrivacyPolicy />;
-      case "cookiePolicy":
-        return <CookiePolicy />;
-      case "termsAndConditions":
-        return <TermsAndConditions />;
       case "sendEthereum":
         return (
           <SendEthereum
@@ -1569,10 +1279,6 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
             theme={ this.state.theme }
           /> : <PageLoader />;
-      case "ico":
-        return <ComingSoon />;
-      case 'resendConfirmationEmail':
-        return <ResendConfirmationEmail />;
       case "settings":
         return (
           <Settings
@@ -1581,93 +1287,13 @@ class App extends Component {
             setUser={ this.setUser }
             changeTheme={ this.changeTheme }
           />
-        );
-      case "about":
-        return <ComingSoon />;
-      case "press":
-        return <ComingSoon />;
-      case "contactUs":
-        return <ContactUs />;
-      case "bugBounty":
-        return <ComingSoon />;
-      case "blog":
-        return <ComingSoon />;
-      case "faq":
-        return <ComingSoon />;
-      case "fees":
-        return <ComingSoon />;
-      // case 'add':
-      //   if(!this.state.ipValid) {
-      //     window.location.hash = 'addUnavailable'
-      //     return <div></div>
-      //   }
-      //   return (<WhitelistMe ipLoading={this.state.ipLoading} />);
-      // case 'added':
-      //   return (<WhitelistMeDone />);
-      // case 'addUnavailable':
-      //   if(this.state.ipValid == true) {
-      //     window.location.hash = 'add'
-      //     return <div></div>
-      //   }
-      //   return (<WhitelistMeUnavailable ipLoading={this.state.ipLoading} rejectionReason={this.state.rejectionReason}/>);
-      // case 'whitelistStatus':
-      //   return (<WhitelistCheck />)
+        )
       case "logOut":
         return <Welcome setUser={ this.setUser } />;
       default:
         return <Welcome setUser={ this.setUser } />;
     }
   }
-
-  decodeWhitelistResponse = (message) => {
-    const mnemonic = message.m.hexDecode();
-    const encrypted = message.e.hexDecode();
-    const signature = message.s;
-
-    const sig = {
-      e: message.e,
-      m: message.m,
-      u: message.u,
-      p: message.p,
-      t: message.t
-    };
-    const seed = JSON.stringify(sig);
-    const compareSignature = sha256(seed);
-
-    if (compareSignature !== signature) {
-      return null;
-    }
-
-    const payload = decrypt(encrypted, mnemonic);
-    let data = null;
-    try {
-      data = JSON.parse(payload);
-    } catch (ex) {
-      return null;
-    }
-
-    return data;
-  }
 }
-
-function decrypt(text, seed) {
-  const decipher = crypto.createDecipher("aes-256-cbc", seed);
-  let dec = decipher.update(text, "base64", "utf8");
-  dec += decipher.final("utf8");
-  return dec;
-}
-
-/* eslint-disable */
-String.prototype.hexDecode = function () {
-  let j;
-  const hexes = this.match(/.{1,4}/g) || [];
-  let back = "";
-  for (j = 0; j < hexes.length; j++) {
-    back += String.fromCharCode(parseInt(hexes[j], 16));
-  }
-
-  return back;
-};
-/* eslint-enable */
 
 export default App;

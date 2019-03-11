@@ -46,13 +46,7 @@ class Contacts extends Component {
       );
     }
 
-    let index = -1
-
     return this.props.contacts.map(contact => {
-
-      index ++
-
-      let { theme, size } = this.props
 
       let open = false;
       let anchorEl = null;

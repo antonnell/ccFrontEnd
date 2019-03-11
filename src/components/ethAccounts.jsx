@@ -12,35 +12,15 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import PrivateKeyModal from "./privateKeyModal.jsx";
 import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import EthTransactions from "../containers/ethTransactions";
 import CreateModal from "./createModal";
 import ImportModal from "./importModal";
 import PageTItle from "./pageTitle";
-import TableSortLabel from '@material-ui/core/TableSortLabel'
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
 import ViewTokensModal from "./viewTokensModal";
-
-function ExpandMoreIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path
-        fill={props.theme?props.theme.custom.icon.color:'#888888'}
-        d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-      />
-    </SvgIcon>
-  );
-}
 
 function MoreIcon(props) {
   return (
@@ -56,7 +36,7 @@ function MoreIcon(props) {
 class EthAccounts extends Component {
   renderAddresses() {
 
-    let { addresses, theme, optionsAccount, loadingAccount, editAccount, cardLoading, exportKeyAccount, privateKeyLoading, sendERC20, size } = this.props
+    let { addresses, theme, optionsAccount, loadingAccount, editAccount, cardLoading, exportKeyAccount, privateKeyLoading } = this.props
 
     if (addresses == null) {
       return (
@@ -88,8 +68,6 @@ class EthAccounts extends Component {
         </Grid>
       );
     }
-
-    let index = -1
 
     return addresses.map(address => {
       address.editing = false;
@@ -132,8 +110,6 @@ class EthAccounts extends Component {
           }
         }
       }
-
-      index ++
 
       return (
         <Grid item xs={12} lg={6} xl={4} key={address.address} style={{ padding: '24px' }}>

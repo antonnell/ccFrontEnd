@@ -72,10 +72,6 @@ class ViewTokensModal extends Component {
       fontWeight: '400',
       verticalAlign: 'middle'
     }
-    let subTextStyle = {
-      color: '#666666',
-      marginTop: '-6px'
-    }
     let divStyle = {
       display: 'inline-block',
       verticalAlign: 'middle'

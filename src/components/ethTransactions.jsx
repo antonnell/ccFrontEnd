@@ -487,7 +487,7 @@ class EnhancedTable extends React.Component {
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
                         >
-                          <Typography variant="body1" noWrap style={{ maxWidth: size=='lg'?'530px':'auto' }}>
+                          <Typography variant="body1" noWrap style={{ maxWidth: size==='lg'?'530px':'auto' }}>
                             {n.transactionId}
                           </Typography>
                         </a>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import EditEmailModal from './editEmailModal';
 
 class Profile extends Component {
   render() {
@@ -54,26 +53,9 @@ class Profile extends Component {
           </Typography>
         </Grid>
         <input type="file" id="imgupload" ref="imgupload" style={{display:'none'}} accept="image/x-png,image/jpg,image/jpeg" onChange={(event) => { this.props.onImageChange(event); }} />
-        <EditEmailModal
-          loading={this.props.loading}
-          isOpen={this.props.editEmailOpen}
-          handleClose={this.props.handleEmailClose}
-          handleChange={this.props.handleChange}
-          updateClicked={this.props.updateClicked}
-          onUpdateKeyDown={this.props.onUpdateKeyDown}
-          emailAddress={this.props.emailAddress}
-          emailAddressError={this.props.emailAddressError}
-          emailAddressErrorMessage={this.props.emailAddressErrorMessage}
-          />
       </Grid>
     );
   }
 }
-
-/*
-<Typography variant="h3" style={{fontSize: '16px', cursor: 'pointer', display: 'inline-block', textDecoration: 'underline', marginLeft: '12px'}} onPledgeClick={this.props.editEmail}>
-  Edit
-</Typography>
-*/
 
 export default (Profile);
