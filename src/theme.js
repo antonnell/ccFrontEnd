@@ -389,6 +389,11 @@ let customTheme =  {
           paper: {
             margin: '0px'
           }
+        },
+        MuiPickersToolbar: {
+          toolbar: {
+            padding: 20
+          }
         }
       },
       palette: {
