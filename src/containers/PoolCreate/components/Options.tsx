@@ -42,6 +42,7 @@ class Options extends React.Component<Props> {
     const {
       isPledgesEnabled, pledgesEndDate, handleChange, classes, status, loading, handleDateChange
     } = this.props;
+  console.log(pledgesEndDate);
     return (
       <Grid item xs={12} md={6}>
         <Grid item xs={12} className={classes.title}>
@@ -66,9 +67,9 @@ class Options extends React.Component<Props> {
             <DatePicker
               disabled={status > 0 || loading}
               name="pledgesEndDate"
-              value={new Date(pledgesEndDate)||moment().add(1,'days')}
+              value={moment(pledgesEndDate)||moment.utc().add(1,'days')}
               onChange={handleDateChange("pledgesEndDate")}
-              minDate={status > 0 || loading?null:moment().add(1,'days')}
+              minDate={status > 0 || loading?null:moment.utc().add(1,'days')}
               format="YYYY-MM-DD"
             />
           </Grid>
