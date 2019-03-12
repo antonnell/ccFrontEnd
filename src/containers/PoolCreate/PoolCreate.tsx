@@ -510,7 +510,7 @@ class PoolCreate extends React.Component<Props, State> {
   };
 
   handleDateChange = (fieldName: keyof PoolingContract) => (date: Moment) => {
-    date.utc();
+    // date.utc();
     this.setState({poolingContract: {...this.state.poolingContract, [fieldName]: date.format("YYYY-MM-DD")}});
   };
 
