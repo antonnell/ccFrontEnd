@@ -3,7 +3,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import TermsModalComponent from "./termsModal";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -29,13 +28,7 @@ class RegisterAccount extends Component {
       confirmPassword,
       confirmPasswordError,
       confirmPasswordErrorMessage,
-      accepted,
-      acceptedError,
-      acceptedErrorMessage,
       handleChecked,
-      termsOpen,
-      handleTermsClose,
-      handleTermsAccepted,
       error,
       validateEmail,
       submitRegister,
@@ -121,37 +114,17 @@ class RegisterAccount extends Component {
             onKeyDown={onRegisterKeyDown}
             helperText={confirmPasswordErrorMessage}
           />
-          <FormControl component="accepted" required error={acceptedError}>
-            <FormControlLabel
-              style={{ textAlign: 'justify', marginRight: '0px' }}
-              control={
-                <Checkbox
-                  error={acceptedError}
-                  disabled={loading}
-                  checked={accepted}
-                  onChange={ (event) => { handleChecked(event, 'accepted'); }}
-                  value="accepted"
-                />
-              }
-              label="I agree to Terms & Conditions"
-            />
-            <FormHelperText>{acceptedErrorMessage}</FormHelperText>
-          </FormControl>
           <Button
             variant="contained"
             size="large"
             color="primary"
             onClick={submitRegister}
             disabled={loading}
+            style={{marginTop: '24px'}}
           >
             Register
           </Button>
         </Grid>
-        <TermsModalComponent
-          isOpen={termsOpen}
-          handleClose={handleTermsClose}
-          handleTermsAccepted={handleTermsAccepted}
-        />
         {this.props.error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     );
