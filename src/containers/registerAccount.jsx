@@ -24,10 +24,6 @@ let RegisterAccount = createReactClass({
       confirmPassword: '',
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
-      accepted: false,
-      acceptedError: false,
-      acceptedErrorMessage: '',
-      termsOpen: false,
       confirmEmail: false
     };
   },
@@ -63,12 +59,6 @@ let RegisterAccount = createReactClass({
         error={ this.state.error }
         loading={ this.state.loading }
         handleChecked={ this.handleChecked }
-        accepted={ this.state.accepted }
-        acceptedError={ this.state.acceptedError }
-        acceptedErrorMessage={ this.state.acceptedErrorMessage }
-        termsOpen={ this.state.termsOpen }
-        handleTermsClose={ this.handleTermsClose }
-        handleTermsAccepted={ this.handleTermsAccepted }
         confirmEmail={ this.state.confirmEmail }
         resendConfirmationEmail={ this.resendConfirmationEmail }
         theme={ this.props.theme }
@@ -92,28 +82,6 @@ let RegisterAccount = createReactClass({
     if (event.which === 13) {
       this.submitLogin();
     }
-  },
-
-  handleChecked(event) {
-    if (event.target.checked) {
-      this.setState({ termsOpen: true });
-    } else {
-      this.setState({ accepted: false });
-    }
-
-    // this.setState({
-    //   [name]: event.target.checked,
-    //   [name+'Error']: false,
-    //   [name+'ErrorMessage']: ''
-    // });
-  },
-
-  handleTermsClose() {
-    this.setState({ termsOpen: false });
-  },
-
-  handleTermsAccepted() {
-    this.setState({ termsOpen: false, accepted: true });
   },
 
   validateEmail() {
@@ -141,8 +109,6 @@ let RegisterAccount = createReactClass({
       passwordErrorMessage: "",
       confirmPasswordError: false,
       confirmPasswordErrorMessage: '',
-      acceptedError: false,
-      acceptedErrorMessage: ''
     });
 
     if (this.state.username === '') {
@@ -190,13 +156,6 @@ let RegisterAccount = createReactClass({
       this.setState({
         confirmPasswordError: true,
         confirmPasswordErrorMessage: 'Your passwords to do not match'
-      });
-      error = true;
-    }
-    if (this.state.accepted === false) {
-      this.setState({
-        acceptedError: true,
-        acceptedErrorMessage: 'You need to accept the terms and conditions'
       });
       error = true;
     }
