@@ -42,7 +42,12 @@ class RegisterAccount extends Component {
         container
         justify="space-around"
         direction="row"
-        style={{ marginTop: "200px", position: 'relative' }}
+        style={
+          {
+            marginTop: '50vh',
+            transform: 'translate(0%,-50%)'
+          }
+        }
       >
         <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Register</Typography>
@@ -125,7 +130,6 @@ class RegisterAccount extends Component {
             Register
           </Button>
         </Grid>
-        {this.props.error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     );
   }

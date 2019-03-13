@@ -9,14 +9,19 @@ import Snackbar from './snackbar';
 class AuthComponent extends Component {
 
   render() {
-    const inputStyle = { fontSize: '20px', fontFamily: 'Montserrat-SemiBold', marginLeft: '30px' }
+    const inputStyle = { fontSize: '20px', fontFamily: 'Montserrat-SemiBold', textAlign: 'center' }
 
     return (
       <Grid
         container
         justify="space-around"
         direction="row"
-        style={{ marginTop: "346px", position: 'relative' }}
+        style={
+          {
+            marginTop: '50vh',
+            transform: 'translate(0%,-50%)'
+          }
+        }
       >
         <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Two Factor Authentication Required</Typography>
@@ -68,8 +73,6 @@ class AuthComponent extends Component {
             Submit
           </Button>
         </Grid>
-        {this.props.error && <Snackbar open={true} type={'Error'} message={'Wrong code was entered'} />}
-        {this.props.loading && <PageLoader />}
       </Grid>
     );
   };

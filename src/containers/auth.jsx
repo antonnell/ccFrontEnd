@@ -160,6 +160,9 @@ let Auth = createReactClass({
 
     if (!error) {
       this.setState({ loading: true, error: null });
+      this.props.setError(null)
+      
+      this.props.startLoading()
       var content = this.props.credentials;
       dispatcher.dispatch({ type: "loginOTP", content, authOTP: this.state.code });
     }
@@ -171,6 +174,7 @@ let Auth = createReactClass({
 
     if (error) {
       return this.setState({ error: error.toString() });
+      this.props.setError(error.toString())
     }
 
     if (data.success) {
@@ -191,8 +195,10 @@ let Auth = createReactClass({
       }
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
+      this.props.setError(data.errorMsg)
     } else {
       this.setState({ error: data.statusText });
+      this.props.setError(data.statusText)
     }
   }
 });

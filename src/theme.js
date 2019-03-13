@@ -124,6 +124,8 @@ let customTheme =  {
         },
         MuiListSubheader: {
           root: {
+            fontFamily: 'Montserrat-SemiBold',
+            letterSpacing:  '1px',
             color: colors.white,
             paddingBottom: '12px',
             fontSize: '14px'
@@ -218,7 +220,7 @@ let customTheme =  {
           },
           sizeLarge: {
             fontSize: '16px',
-            padding: '14px 34px',
+            padding: '12px 34px',
             minWidth: '230px'
           },
           sizeSmall: {
@@ -500,7 +502,7 @@ let customTheme =  {
         MozOsxFontSmoothing: "grayscale",
       },
       welcomeContent: {
-        marginTop: '314px',
+        marginTop: 'calc(50vh - 215px)',
         marginBottom: '24px'
       },
       forgotPassword: {
@@ -511,12 +513,12 @@ let customTheme =  {
         marginBottom: '24px'
       },
       resendConfirmationEmail: {
-        fontSize: "15px",
+        fontSize: "13px",
         cursor: "pointer",
         margin: '0 auto',
         marginTop: "60px",
-        width: '300px',
-        color: colors.text
+        color: colors.text,
+        textAlign: "center",
       },
       tickIcon: {
         color: colors.lightBlue,

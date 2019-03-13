@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import PageLoader from "./pageLoader";
-import Snackbar from "./snackbar";
 import WelcomeImage from "../assets/images/welcome.png";
 
 import Login from "../containers/login.jsx";
@@ -16,6 +15,7 @@ import ForgotPasswordDone from '../containers/forgotPasswordDone.jsx';
 import ResetPassword from '../containers/resetPassword.jsx';
 import VerifyAccount from '../containers/VerifyAccount/VerifyAccount';
 import Auth from '../containers/auth';
+import Snackbar from './snackbar';
 
 class Welcome extends Component {
   render() {
@@ -29,7 +29,7 @@ class Welcome extends Component {
       <Grid container style={theme.custom.welcomeBase}>
         {loading && (<PageLoader />)}
         {this.renderBase()}
-        <Grid item xs={12} md={6} style={ { minHeight: '100%' } }>
+        <Grid item xs={12} md={6} style={ { height: '100vh' } }>
           {this.renderScreen()}
         </Grid>
       </Grid>
@@ -37,25 +37,25 @@ class Welcome extends Component {
   }
 
   renderScreen() {
-    let { currentScreen, theme, navigate, setUser, email, setEmail, startLoading, stopLoading, uriParameters, token, code, credentials, setCredentials } = this.props
+    let { currentScreen, theme, navigate, setUser, email, setEmail, startLoading, stopLoading, uriParameters, token, code, credentials, setCredentials, setError } = this.props
 
     switch(currentScreen) {
       case 'login' :
-        return (<Login theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } setCredentials={ setCredentials } />)
+        return (<Login theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } setCredentials={ setCredentials } setError={ setError } />)
       case 'otp' :
-        return (<Auth theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } credentials={ credentials } />)
+        return (<Auth theme={ theme } navigate={ navigate } setUser={ setUser } startLoading={ startLoading } stopLoading={ stopLoading } credentials={ credentials } setError={ setError } />)
       case 'register' :
-        return (<Register theme={ theme } navigate={ navigate } setEmail={ setEmail } startLoading={ startLoading } stopLoading={ stopLoading } />)
+        return (<Register theme={ theme } navigate={ navigate } setEmail={ setEmail } startLoading={ startLoading } stopLoading={ stopLoading } setError={ setError } />)
       case 'registrationSuccessful' :
         return (<RegisterCompleted theme={ theme } email={ email } />)
       case 'resendConfirmationEmail' :
-        return (<ResendConfirmationEmail theme={ theme } navigate={ navigate } setEmail={ setEmail } startLoading={ startLoading } stopLoading={ stopLoading } />)
+        return (<ResendConfirmationEmail theme={ theme } navigate={ navigate } setEmail={ setEmail } startLoading={ startLoading } stopLoading={ stopLoading } setError={ setError } />)
       case 'forgotPassword' :
-        return (<ForgotPassword theme={ theme } navigate={ navigate } startLoading={ startLoading } stopLoading={ stopLoading } />)
+        return (<ForgotPassword theme={ theme } navigate={ navigate } startLoading={ startLoading } stopLoading={ stopLoading } setError={ setError } />)
       case 'forgotPasswordDone' :
         return (<ForgotPasswordDone theme={ theme } navigate={ navigate } />)
       case 'resetPassword' :
-        return (<ResetPassword theme={ theme } navigate={ navigate } startLoading={ startLoading } stopLoading={ stopLoading } uriParameters={ uriParameters } />)
+        return (<ResetPassword theme={ theme } navigate={ navigate } startLoading={ startLoading } stopLoading={ stopLoading } uriParameters={ uriParameters } setError={ setError } />)
       case 'verifyAccount' :
         return (<VerifyAccount theme={ theme } navigate={ navigate } startLoading={ startLoading } stopLoading={ stopLoading } token={ token } code={ code } />)
       default:
@@ -65,14 +65,16 @@ class Welcome extends Component {
   }
 
   renderBase() {
-    let { theme } = this.props
+    let { theme, error } = this.props
 
     return (
-      <Grid item xs={12} md={6} style={ { padding: '80px', backgroundImage: "url(" + WelcomeImage + ")", backgroundSize: 'cover', minHeight: '100%' } }>
+      <Grid item xs={12} md={6} style={ { padding: '80px', backgroundImage: "url(" + WelcomeImage + ")", backgroundSize: 'cover', minHeight: '100%', position: 'relative' } }>
         <Typography style={ theme.custom.welcomeCurve }>Curve</Typography>
 
         {this.renderGenText()}
         {this.renderButton()}
+
+        {error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     )
   }
@@ -81,32 +83,32 @@ class Welcome extends Component {
     let { currentScreen, navigate } = this.props
 
     let button = (
-      <Grid container>
-        <Grid item xs={12} align='left'>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => { navigate('register') } }
-          >
-            Create an account
-          </Button>
-        </Grid>
-      </Grid>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={() => { navigate('register') } }
+      >
+        Create an account
+      </Button>
     )
 
     if(currentScreen !== 'login') {
       button =
-        <Grid container>
-          <Grid item xs={12} align='center'>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => { navigate('login') } }
-            >
-              Login
-            </Button>
-          </Grid>
-        </Grid>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => { navigate('login') } }
+          style={
+            {
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%,-50%)'
+            }
+          }
+        >
+          Login
+        </Button>
     }
 
     return button

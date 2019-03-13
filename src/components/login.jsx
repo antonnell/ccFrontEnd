@@ -40,7 +40,12 @@ class Login extends Component {
         container
         justify="space-around"
         direction="row"
-        style={{ marginTop: "346px", position: 'relative' }}
+        style={
+          {
+            marginTop: '50vh',
+            transform: 'translate(0%,-50%)'
+          }
+        }
       >
         <Grid item xs={8} md={6} align='left'>
           <Typography variant="h5">Login</Typography>
@@ -101,7 +106,6 @@ class Login extends Component {
             Didn't receive confirmation email?
           </Typography>
         </Grid>
-        {this.props.error && <Snackbar open={true} type={'Error'} message={error} />}
       </Grid>
     );
   }

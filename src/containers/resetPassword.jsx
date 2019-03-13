@@ -99,6 +99,8 @@ let ResetPassword = createReactClass({
 
     if (!error) {
       this.setState({ loading: true });
+      this.props.setError(null)
+      
       this.props.startLoading();
       var content = {
         token: this.props.uriParameters.token,
@@ -114,14 +116,17 @@ let ResetPassword = createReactClass({
     this.props.stopLoading();
     if (error) {
       return this.setState({ error: error.toString() });
+      this.props.setError(error.toString())
     }
 
     if (data.success) {
       this.props.navigate('login');
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
+      this.props.setError(data.errorMsg)
     } else {
       this.setState({ error: data.statusText });
+      this.props.setError(data.statusText)
     }
   }
 });
