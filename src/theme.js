@@ -502,7 +502,7 @@ let customTheme =  {
         MozOsxFontSmoothing: "grayscale",
       },
       welcomeContent: {
-        marginTop: 'calc(50vh - 215px)',
+        marginTop: 'calc(50vh - 213px)',
         marginBottom: '24px'
       },
       forgotPassword: {
