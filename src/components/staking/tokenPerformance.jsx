@@ -123,6 +123,7 @@ class TokenPerformance extends Component {
           value={value}
           onChange={onChange}
           input={<BootstrapInput name="age" id="age-customized-native-simple" />}
+          fullWidth={true}
         >
           {options
             ? options.map(option => {

@@ -79,7 +79,7 @@ let ResendConfirmationEmail = createReactClass({
     if (this.validateEmail()) {
       this.setState({ loading: true });
       this.props.setError(null)
-      
+
       this.props.startLoading();
       var content = {
         email: this.state.email
@@ -95,8 +95,8 @@ let ResendConfirmationEmail = createReactClass({
     this.setState({ loading: false });
     this.props.stopLoading();
     if (error) {
-      return this.setState({ error: error.toString() });
       this.props.setError(error.toString())
+      return this.setState({ error: error.toString() });
     }
 
     if (data.success) {

@@ -16,7 +16,7 @@ class Staking extends Component {
 
     let { store } = this.props
 
-    if(!store.tokens || store.tokens.length == 0) {
+    if(!store.tokens || store.tokens.length === 0) {
       return this.renderStartStaking()
     } else {
       return this.renderStaking()
@@ -73,7 +73,21 @@ class Staking extends Component {
   }
 
   renderStaking() {
-    let { theme, handleStake, stakeOpen, handleStakeClose, handleStakeFinish, store, handleCheck } = this.props
+    let {
+      theme,
+      handleStake,
+      stakeOpen,
+      handleStakeClose,
+      handleStakeFinish,
+      store,
+      handleCheck,
+      timeFrameChanged,
+      currencyChanged,
+      optionsClicked,
+      optionsClosed,
+      depositClicked,
+      withdrawClicked,
+    } = this.props
 
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row">
@@ -88,14 +102,22 @@ class Staking extends Component {
           theme={ theme }
           handleStake={ handleStake }
           store={ store }
+          timeFrameChanged={ timeFrameChanged }
+          currencyChanged={ currencyChanged }
         />
         <TokenPerformance
           theme={ theme }
           store={ store }
+          timeFrameChanged={ timeFrameChanged }
+          currencyChanged={ currencyChanged }
         />
         <StakedTokens
           theme={ theme }
           store={ store }
+          optionsClicked={ optionsClicked }
+          optionsClosed={ optionsClosed }
+          depositClicked={ depositClicked }
+          withdrawClicked={ withdrawClicked }
         />
         <RewardsTransactions
           theme={ theme }

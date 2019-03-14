@@ -19,7 +19,7 @@ class AddPopup extends Component {
 
   render() {
 
-    let { theme, handleClose, handleStakeFinish, isOpen } = this.props
+    let { handleClose, handleStakeFinish, isOpen } = this.props
 
     return (
       <Dialog open={isOpen} onClose={handleClose} fullWidth={true} maxWidth={'md'} TransitionComponent={Transition}>
@@ -53,7 +53,7 @@ class AddPopup extends Component {
   renderCard(coin) {
     let { handleCheck } = this.props
     return (
-      <Grid item xs={4} key={coin.name} style={{ padding: '24px' }}>
+      <Grid item xs={12} sm={6} md={4} key={coin.name} style={{ padding: '24px' }}>
         <Card style={{ cursor: 'pointer' }} onClick={()=> { handleCheck(coin); }}>
           <CardContent>
             <Grid

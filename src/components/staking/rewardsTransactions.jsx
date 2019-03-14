@@ -11,18 +11,10 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
-import MenuItem from "@material-ui/core/MenuItem";
 import config from "../../config";
-import ListItemText from "@material-ui/core/ListItemText";
 import { colors } from '../../theme.js';
 
 function desc(a, b, orderBy) {

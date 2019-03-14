@@ -100,7 +100,7 @@ let ResetPassword = createReactClass({
     if (!error) {
       this.setState({ loading: true });
       this.props.setError(null)
-      
+
       this.props.startLoading();
       var content = {
         token: this.props.uriParameters.token,
@@ -115,8 +115,8 @@ let ResetPassword = createReactClass({
     this.setState({ loading: false });
     this.props.stopLoading();
     if (error) {
-      return this.setState({ error: error.toString() });
       this.props.setError(error.toString())
+      return this.setState({ error: error.toString() });      
     }
 
     if (data.success) {

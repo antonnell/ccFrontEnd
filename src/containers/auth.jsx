@@ -161,7 +161,7 @@ let Auth = createReactClass({
     if (!error) {
       this.setState({ loading: true, error: null });
       this.props.setError(null)
-      
+
       this.props.startLoading()
       var content = this.props.credentials;
       dispatcher.dispatch({ type: "loginOTP", content, authOTP: this.state.code });
@@ -173,8 +173,8 @@ let Auth = createReactClass({
     this.props.stopLoading()
 
     if (error) {
-      return this.setState({ error: error.toString() });
       this.props.setError(error.toString())
+      return this.setState({ error: error.toString() });
     }
 
     if (data.success) {

@@ -23,6 +23,9 @@ class LineGraph extends Component {
     }
 
     const chartOptions = {
+      animation: {
+        duration: 0
+      },
       elements: { point: { radius: 0 } },
       maintainAspectRatio: false,
       scales: {

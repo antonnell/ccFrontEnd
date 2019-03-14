@@ -7,6 +7,10 @@ import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from  '@material-ui/core/SvgIcon';
 import { colors } from '../../theme';
 import IconButton from '@material-ui/core/IconButton';
+import Popover from "@material-ui/core/Popover";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 function MoreIcon(props) {
   return (
@@ -47,9 +51,7 @@ class StakedTokens extends Component {
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Grid item xs={12} align='left' style={{
-              maxWidth: 'calc(100vw - 387px)'
-            }}>
+          <Grid item xs={12} align='left'>
             <Grid
               container
               justify="flex-start"
@@ -78,7 +80,8 @@ class StakedTokens extends Component {
   }
 
   renderToken(token) {
-    const { theme, optionsClicked } = this.props
+    const { theme, optionsClicked, optionsClosed, depositClicked, withdrawClicked } = this.props
+
     return (
       <Grid item xs={12} sm={6} lg={4} xl={3} key={token.name} style={{ padding: '24px' }}>
         <Card>
@@ -108,11 +111,45 @@ class StakedTokens extends Component {
                   buttonRef={ node => {
                     this.anchorEl = node;
                   } }
-                  onClick={ optionsClicked }
-                  disabled={ false }
+                  onClick={(event) => {
+                    optionsClicked(event, token)
+                  }}
                 >
                   <MoreIcon theme={theme}/>
                 </IconButton>
+                <Popover
+                  open={token.optionsOpen}
+                  anchorEl={token.anchorEl}
+                  anchorPosition={{ top: 200, left: 400 }}
+                  onClose={ optionsClosed }
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left"
+                  }}
+                >
+                  <List component="nav">
+                    <ListItem
+                      button
+                      onClick={() => {
+                        depositClicked(token);
+                      }}
+                    >
+                      <ListItemText primary="Deposit" />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        withdrawClicked(token);
+                      }}
+                    >
+                      <ListItemText primary="Widthdraw" />
+                    </ListItem>
+                  </List>
+                </Popover>
               </Grid>
               <Grid item xs={8} style={theme.custom.tokenInfo}>
                 <Typography nowrap variant='body1' style={theme.custom.tokenPair}>
@@ -127,12 +164,12 @@ class StakedTokens extends Component {
               </Grid>
               <Grid item xs={4} align='right' style={{alignSelf: 'flex-end'}}>
                 <div style={ {
-                      background: colors.lightBlue,
-                      maxWidth: '70px',
-                      textAlign: 'center',
-                      padding: '6px',
-                      borderRadius: '4px'
-                    } }>
+                  background: colors.lightBlue,
+                  maxWidth: '70px',
+                  textAlign: 'center',
+                  padding: '6px',
+                  borderRadius: '4px'
+                } }>
                   <Typography variant='body1' style={theme.custom.tokenValue}>{token.age}</Typography>
                   <Typography variant='body1' style={{fontSize: '10px'}}>age</Typography>
                 </div>

@@ -1049,7 +1049,7 @@ class App extends Component {
                 style={ {
                   minHeight: "924px",
                   position: "relative",
-                  flex: 1,
+                  width: ["xs", "sm"].includes(this.state.size) ? '100vw' : this.state.size === "md" ? 'calc(100vw - 325px)' : 'calc(100vw - 402px)',
                   marginLeft: ["xs", "sm"].includes(this.state.size) ? "0px" : this.state.size === "md" ? "24px" : "100px",
                   marginRight: ["xs", "sm"].includes(this.state.size) ? "0px" : '24px'
                 } }

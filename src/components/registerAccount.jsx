@@ -3,11 +3,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Snackbar from './snackbar';
 
 class RegisterAccount extends Component {
 
@@ -28,8 +23,6 @@ class RegisterAccount extends Component {
       confirmPassword,
       confirmPasswordError,
       confirmPasswordErrorMessage,
-      handleChecked,
-      error,
       validateEmail,
       submitRegister,
       theme
