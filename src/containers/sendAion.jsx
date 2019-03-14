@@ -641,7 +641,7 @@ let SendAion = createReactClass({
     if (value == null) {
       this.setState({
         contactError: true,
-        contactErrorMessage: "Beneficiary is requred"
+        contactErrorMessage: "Beneficiary is required"
       });
       return false;
     }
@@ -661,7 +661,7 @@ let SendAion = createReactClass({
     if (value == null || value === "") {
       this.setState({
         publicAddressError: true,
-        publicAddressErrorMessage: "Public address is requred"
+        publicAddressErrorMessage: "Public address is required"
       });
       return false;
     } else {
@@ -680,7 +680,7 @@ let SendAion = createReactClass({
     if (value === "" || value === "0") {
       this.setState({
         amountError: true,
-        amountErrorMessage: "Amount is requred"
+        amountErrorMessage: "Amount is required"
       });
       return false;
     } else if (!this.isNumeric(value)) {
@@ -712,7 +712,7 @@ let SendAion = createReactClass({
     }
 
     if (value === "") {
-      this.setState({ gweiError: true, gweiErrorMessage: "Gas is requred" });
+      this.setState({ gweiError: true, gweiErrorMessage: "Gas is required" });
       return false;
     } else if (!this.isNumeric(value)) {
       this.setState({ gweiError: true, gweiErrorMessage: "Invalid gas" });

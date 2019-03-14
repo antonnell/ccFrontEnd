@@ -9,7 +9,8 @@ let Welcome = createReactClass({
       currentScreen: this.props.initialScreen!=null?this.props.initialScreen:'login', // login, register, otp, registrationSuccessful, resendConfirmation, forgotPassword, verifyAccount
       email: "",
       loading: false,
-      credentials: null
+      credentials: null,
+      error: null
     };
   },
 
@@ -30,8 +31,15 @@ let Welcome = createReactClass({
         code={ this.props.code }
         setCredentials={ this.setCredentials }
         credentials={ this.state.credentials }
+        setError={ this.setError }
+        error={ this.state.error }
       />
     )
+  },
+
+  setError(error) {
+    console.log(error)
+    this.setState({ error })
   },
 
   setCredentials(credentials) {

@@ -11,7 +11,7 @@ const styles = {};
 class Enable2FA extends Component {
 
   render() {
-    const inputStyle = { fontSize: '20px', fontFamily: 'Montserrat-SemiBold', marginLeft: '30px' }
+    const inputStyle = { fontSize: '20px', fontFamily: 'Montserrat-SemiBold', textAlign: 'center' }
 
     return (
       <Grid container justify="flex-start" alignItems="flex-start" style={{marginTop: '24px'}}>

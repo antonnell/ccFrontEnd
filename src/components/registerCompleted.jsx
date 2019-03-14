@@ -31,7 +31,12 @@ class RegisterCompleted extends Component {
         container
         justify="space-around"
         direction="row"
-        style={{ marginTop: "25%", position: 'relative' }}
+        style={          
+          {
+            marginTop: '50vh',
+            transform: 'translate(0%,-50%)'
+          }
+        }
       >
         <Grid item xs={8} md={6} align='left'>
           <div style={{display: 'inline-block'}}>
