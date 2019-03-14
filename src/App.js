@@ -41,6 +41,8 @@ import PoolDetails from './containers/PoolDetails/PoolDetails';
 import AppSnackBar from './containers/AppSnackBar/AppSnackBar';
 import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
 
+import Staking from './containers/staking';
+
 import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
@@ -1002,7 +1004,7 @@ class App extends Component {
   }
 
   render() {
-    let background = "#fff";
+    let background = "#f9f7f9";
     let backgroundImage = null;
     if (this.state.currentTheme === "dark") {
       backgroundImage =
@@ -1279,6 +1281,12 @@ class App extends Component {
             wanAddresses={ this.state.wanAddresses }
             theme={ this.state.theme }
           /> : <PageLoader />;
+        case "staking":
+          return (
+            <Staking
+              theme={ this.state.theme }
+            />
+          )
       case "settings":
         return (
           <Settings

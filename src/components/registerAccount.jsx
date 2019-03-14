@@ -121,7 +121,7 @@ class RegisterAccount extends Component {
             onKeyDown={onRegisterKeyDown}
             helperText={confirmPasswordErrorMessage}
           />
-          <FormControl component="accepted" required error={acceptedError} 
+          <FormControl component="accepted" required error={acceptedError}
             fullWidth={true}>
             <FormControlLabel
               style={{ textAlign: 'justify', marginRight: '0px' }}

@@ -4,6 +4,8 @@ import bip39 from "bip39";
 
 const crypto = require("crypto");
 
+var QRCode = require("qrcode");
+
 const createReactClass = require("create-react-class");
 const isEthereumAddress = require("is-ethereum-address");
 
@@ -38,7 +40,11 @@ let EthAccounts = createReactClass({
       createOpen: false,
       importOpen: false,
       viewOpen: false,
-      tokens: null
+      tokens: null,
+      publicKey: null,
+      viewPublicKeyOpen: false,
+      qrLoading: false,
+      accountName: null
     };
   },
   render() {
@@ -104,6 +110,12 @@ let EthAccounts = createReactClass({
         viewTokensClose={ this.viewTokensClose }
         viewOpen={ this.state.viewOpen }
         tokens={ this.state.tokens }
+        viewPublicKey={this.viewPublicKey}
+        viewPublicKeyClosed={this.viewPublicKeyClosed}
+        viewPublicKeyOpen={this.state.viewPublicKeyOpen}
+        publicKey={this.state.publicKey}
+        qrLoading={this.state.qrLoading}
+        accountName={this.state.accountName}
       />
     );
   },
@@ -257,6 +269,24 @@ let EthAccounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
+  },
+
+  viewPublicKey(address) {
+    this.setState({ viewPublicKeyOpen: true, publicKey: address.address, qrLoading: true, accountName: address.name });
+    let that = this
+
+    setTimeout(() => {
+      var canvas = document.getElementById("canvas");
+      if(canvas)
+        QRCode.toCanvas(canvas, address.address, { width: 400 }, function(error) {
+          if (error) console.error(error);
+          that.setState({ qrLoading: false })
+        });
+    }, 1000)
+  },
+
+  viewPublicKeyClosed() {
+    this.setState({ viewPublicKeyOpen: false, publicKey: null, accountName: null });
   },
 
   viewTokens(address) {

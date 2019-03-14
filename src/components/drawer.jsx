@@ -127,6 +127,15 @@ class AppDrawer extends Component {
         >
           <ListItemText primary="Pooling" />
         </ListItem>
+        <ListItem
+          selected={ ['staking'].includes(path) }
+          button
+          onClick={ event => {
+            navClicked(event, 'staking');
+          } }
+        >
+          <ListItemText primary="Staking" />
+        </ListItem>
 
         <Divider />
         <ListSubheader disableSticky={ true }>PROFILE</ListSubheader>

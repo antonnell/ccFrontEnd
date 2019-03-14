@@ -21,6 +21,7 @@ import PageTItle from "./pageTitle";
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
 import ViewTokensModal from "./viewTokensModal";
+import ReceiveModal from "./receiveModal";
 
 function MoreIcon(props) {
   return (
@@ -283,6 +284,22 @@ class EthAccounts extends Component {
                   >
                     Send
                   </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '12px' }}
+                    disabled={
+                      this.props.loadingAccount ||
+                      this.props.cardLoading ||
+                      this.props.privateKeyLoading
+                    }
+                    onClick={() => {
+                      this.props.viewPublicKey(address);
+                    }}
+                  >
+                    Receive
+                  </Button>
                 </Grid>
               </Grid>
               {loading}
@@ -436,6 +453,14 @@ class EthAccounts extends Component {
           tokens={this.props.tokens}
           theme={this.props.theme}
           send={this.props.sendERC20}
+        />
+        <ReceiveModal
+          publicKey={this.props.publicKey}
+          viewPublicKeyOpen={this.props.viewPublicKeyOpen}
+          viewPublicKeyClosed={this.props.viewPublicKeyClosed}
+          copyKey={this.props.copyKey}
+          qrLoading={this.props.qrLoading}
+          accountName={this.props.accountName}
         />
       </Grid>
     );

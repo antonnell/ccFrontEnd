@@ -20,6 +20,7 @@ import ImportModal from "./importModal";
 import PageTItle from "./pageTitle";
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
+import ReceiveModal from "./receiveModal";
 
 function MoreIcon(props) {
   return (
@@ -272,22 +273,22 @@ class AionAccounts extends Component {
                   >
                     Send
                   </Button>
-                  {/*<Button
+                  <Button
                     size="small"
                     variant="contained"
                     color="secondary"
-                    style={{marginLeft: '12px'}}
+                    style={{ marginLeft: '12px' }}
                     disabled={
                       this.props.loadingAccount ||
                       this.props.cardLoading ||
                       this.props.privateKeyLoading
                     }
                     onClick={() => {
-                      this.props.sendAionClicked(null, address);
+                      this.props.viewPublicKey(address);
                     }}
                   >
                     Receive
-                  </Button>*/}
+                  </Button>
                 </Grid>
               </Grid>
               {loading}
@@ -434,6 +435,14 @@ class AionAccounts extends Component {
           validateField={this.props.validateField}
           handleImport={this.props.createImportClicked}
           error={this.props.error}
+        />
+        <ReceiveModal
+          publicKey={this.props.publicKey}
+          viewPublicKeyOpen={this.props.viewPublicKeyOpen}
+          viewPublicKeyClosed={this.props.viewPublicKeyClosed}
+          copyKey={this.props.copyKey}
+          qrLoading={this.props.qrLoading}
+          accountName={this.props.accountName}
         />
       </Grid>
     );

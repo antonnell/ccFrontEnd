@@ -19,7 +19,7 @@ class CreateModal extends Component {
 
   render() {
     return (
-      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} fullWidth={true} maxWidth={'md'} TransitionComponent={Transition}>
+      <Dialog open={this.props.isOpen} onClose={this.props.handleClose} fullWidth={true} maxWidth={'sm'} TransitionComponent={Transition}>
         <DialogContent>
           <Grid container justify="flex-start" alignItems="flex-start" direction="row" spacing={0} style={{padding: '24px'}}>
             <Grid item xs={12} align='left'>

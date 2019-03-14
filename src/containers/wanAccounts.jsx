@@ -5,6 +5,8 @@ import { withWanContext } from '../context/WanContext';
 
 const crypto = require('crypto');
 
+var QRCode = require("qrcode");
+
 const createReactClass = require('create-react-class');
 
 let wanEmitter = require('../store/wanStore.js').default.emitter;
@@ -56,7 +58,11 @@ let WanAccounts = createReactClass({
       importOpen: false,
       termsRefundOpen: false,
       viewOpen: false,
-      tokens: null
+      tokens: null,
+      publicKey: null,
+      viewPublicKeyOpen: false,
+      qrLoading: false,
+      accountName: null
     };
   },
   render() {
@@ -150,6 +156,12 @@ let WanAccounts = createReactClass({
         viewTokensClose={ this.viewTokensClose }
         viewOpen={ this.state.viewOpen }
         tokens={ this.state.tokens }
+        viewPublicKey={this.viewPublicKey}
+        viewPublicKeyClosed={this.viewPublicKeyClosed}
+        viewPublicKeyOpen={this.state.viewPublicKeyOpen}
+        publicKey={this.state.publicKey}
+        qrLoading={this.state.qrLoading}
+        accountName={this.state.accountName}
       />
     );
   },
@@ -372,6 +384,24 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({ ICOError: data.statusText });
     }
+  },
+
+  viewPublicKey(address) {
+    this.setState({ viewPublicKeyOpen: true, publicKey: address.publicAddress, qrLoading: true, accountName: address.name });
+    let that = this
+
+    setTimeout(() => {
+      var canvas = document.getElementById("canvas");
+      if(canvas)
+        QRCode.toCanvas(canvas, address.publicAddress, { width: 400 }, function(error) {
+          if (error) console.error(error);
+          that.setState({ qrLoading: false })
+        });
+    }, 1000)
+  },
+
+  viewPublicKeyClosed() {
+    this.setState({ viewPublicKeyOpen: false, publicKey: null, accountName: null });
   },
 
   viewTokens(address) {

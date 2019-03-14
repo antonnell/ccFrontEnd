@@ -21,6 +21,7 @@ import PageTItle from './pageTitle';
 import ViewAddressModal from "./viewAddressModal";
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
+import ReceiveModal from "./receiveModal";
 
 function MoreIcon(props) {
   return (
@@ -275,6 +276,24 @@ class BitcoinAccounts extends Component {
                   >
                     Send
                   </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '12px' }}
+                    disabled={
+                      this.props.loadingAccount ||
+                      this.props.cardLoading ||
+                      this.props.privateKeyLoading ||
+                      !address.addresses ||
+                      address.addresses.length <= 0
+                    }
+                    onClick={() => {
+                      this.props.viewPublicKey(address);
+                    }}
+                  >
+                    Receive
+                  </Button>
                 </Grid>
               </Grid>
               {loading}
@@ -431,6 +450,14 @@ class BitcoinAccounts extends Component {
           viewAddress={this.props.viewAddress}
           onCardClicked={this.props.copyViewKey}
           theme={this.props.theme}
+        />
+        <ReceiveModal
+          publicKey={this.props.publicKey}
+          viewPublicKeyOpen={this.props.viewPublicKeyOpen}
+          viewPublicKeyClosed={this.props.viewPublicKeyClosed}
+          copyKey={this.props.copyKey}
+          qrLoading={this.props.qrLoading}
+          accountName={this.props.accountName}
         />
       </Grid>
     );

@@ -4,6 +4,8 @@ import bip39 from "bip39";
 
 const crypto = require("crypto");
 
+var QRCode = require("qrcode");
+
 const createReactClass = require("create-react-class");
 
 let aionEmitter = require("../store/aionStore.js").default.emitter;
@@ -35,7 +37,11 @@ let AionAccounts = createReactClass({
       loadingAccount: null,
       deleteOpen: false,
       createOpen: false,
-      importOpen: false
+      importOpen: false,
+      publicKey: null,
+      viewPublicKeyOpen: false,
+      qrLoading: false,
+      accountName: null
     };
   },
   render() {
@@ -96,6 +102,12 @@ let AionAccounts = createReactClass({
         importOpen={this.state.importOpen}
         handleImportClose={this.handleImportClose}
         size={this.props.size}
+        viewPublicKey={this.viewPublicKey}
+        viewPublicKeyClosed={this.viewPublicKeyClosed}
+        viewPublicKeyOpen={this.state.viewPublicKeyOpen}
+        publicKey={this.state.publicKey}
+        qrLoading={this.state.qrLoading}
+        accountName={this.state.accountName}
       />
     );
   },
@@ -245,6 +257,24 @@ let AionAccounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
+  },
+
+  viewPublicKey(address) {
+    this.setState({ viewPublicKeyOpen: true, publicKey: address.address, qrLoading: true, accountName: address.name });
+    let that = this
+
+    setTimeout(() => {
+      var canvas = document.getElementById("canvas");
+      if(canvas)
+        QRCode.toCanvas(canvas, address.address, { width: 400 }, function(error) {
+          if (error) console.error(error);
+          that.setState({ qrLoading: false })
+        });
+    }, 1000)
+  },
+
+  viewPublicKeyClosed() {
+    this.setState({ viewPublicKeyOpen: false, publicKey: null, accountName: null });
   },
 
   handleCreateOpen() {

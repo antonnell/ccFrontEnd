@@ -516,6 +516,22 @@ let customTheme =  {
       tickIcon: {
         color: colors.lightBlue,
         fontSize: '60px'
+      },
+      inline: {
+        display: 'inline-block',
+        verticalAlign: 'middle'
+      },
+      positive: {
+        color: colors.green
+      },
+      tokenInfo: {
+        paddingTop: '24px'
+      },
+      tokenPair: {
+        padding: '8px 0px'
+      },
+      tokenValue: {
+        fontFamily: 'Montserrat-SemiBold'
       }
     }
   }

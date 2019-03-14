@@ -97,7 +97,7 @@ class Welcome extends Component {
       button =
         <Grid container>
           <Grid item xs={12} align='center'>
-            <Button
+            <Button 
               variant="contained"
               size="large"
               onClick={() => { navigate('login') } }

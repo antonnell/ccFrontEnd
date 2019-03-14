@@ -4,6 +4,8 @@ import bip39 from "bip39";
 
 const crypto = require("crypto");
 
+var QRCode = require("qrcode");
+
 const createReactClass = require("create-react-class");
 
 let bitcoinEmitter = require("../store/bitcoinStore.js").default.emitter;
@@ -38,7 +40,11 @@ let BitcoinAccounts = createReactClass({
       createOpen: false,
       importOpen: false,
       viewAddress: null,
-      viewOpen: false
+      viewOpen: false,
+      publicKey: null,
+      viewPublicKeyOpen: false,
+      qrLoading: false,
+      accountName: null
     };
   },
   render() {
@@ -106,6 +112,12 @@ let BitcoinAccounts = createReactClass({
         handleViewClose={this.handleViewClose}
         copyViewKey={this.copyViewKey}
         size={this.props.size}
+        viewPublicKey={this.viewPublicKey}
+        viewPublicKeyClosed={this.viewPublicKeyClosed}
+        viewPublicKeyOpen={this.state.viewPublicKeyOpen}
+        publicKey={this.state.publicKey}
+        qrLoading={this.state.qrLoading}
+        accountName={this.state.accountName}
       />
     );
   },
@@ -263,6 +275,24 @@ let BitcoinAccounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
+  },
+
+  viewPublicKey(address) {
+    this.setState({ viewPublicKeyOpen: true, publicKey: address.addresses[address.addresses.length-1].address, qrLoading: true, accountName: address.displayName });
+    let that = this
+
+    setTimeout(() => {
+      var canvas = document.getElementById("canvas");
+      if(canvas)
+        QRCode.toCanvas(canvas, address.addresses[address.addresses.length-1].address, { width: 400 }, function(error) {
+          if (error) console.error(error);
+          that.setState({ qrLoading: false })
+        });
+    }, 1000)
+  },
+
+  viewPublicKeyClosed() {
+    this.setState({ viewPublicKeyOpen: false, publicKey: null, accountName: null });
   },
 
   handleCreateOpen() {
