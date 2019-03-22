@@ -482,7 +482,7 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       {['xl', 'lg'].includes(size) && (<TableCell>
                         <a
-                          href={config.bitcoinscanURL + n.transactionId}
+                          href={config.etherscanUrl + n.transactionId}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
