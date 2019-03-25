@@ -89,13 +89,13 @@ class ViewAddressModal extends Component {
 
     return(
       <Grid item xs={12} align='left'>
-        <Card style={{marginTop:'16px', borderRadius: '3px'}} onClick={(event) => {this.props.onCardClicked(address.address) }}>
+        <Card style={{marginTop:'16px', borderRadius: '3px'}}>
           <Grid container justify="center" alignItems="center" direction="row">
             <Grid item xs={2} align='left' style={bodyStyle}>
               <div style={divStyle}>
                 <img
                   alt=""
-                  src={ require('../assets/images/bitcoin-logo.png') }
+                  src={ require('../assets/images/Bitcoin-logo.png') }
                   width="30px"
                   height="30px"
                   style={{marginRight: '12px'}}

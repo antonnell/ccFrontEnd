@@ -114,7 +114,7 @@ let Login = createReactClass({
       if (data.user.username === data.user.email) {
         window.location.hash = "setUsername";
       } else {
-        window.location.hash = "wanAccounts";
+        window.location.hash = "accounts";
       }
     } else if (data.requires2fa) {
       this.props.setCredentials({

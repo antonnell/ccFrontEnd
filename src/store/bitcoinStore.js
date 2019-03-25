@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import config from "../config";
+import async from "async";
 
 var crypto = require('crypto');
 var bip39 = require('bip39');
@@ -15,6 +16,15 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
+    //INITIAL STORE DATA
+
+    // let dummyAccounts = [{"type":"bitcoin","id":4,"displayName":"OK?","balance":0.18652264,"unconfirmedBalance":0.0,"finalBalance":0.18652264,"isPrimary":true,"usdBalance":741.0544487200000000},{"type":"bitcoin","id":8,"displayName":"This is my second account","balance":0.003,"unconfirmedBalance":0.0,"finalBalance":0.003,"isPrimary":false,"usdBalance":11.91900000000}]
+
+    this.store = {
+      accounts: null,
+      accountsCombined: null
+    }
+
     dispatcher.register(
       function (payload) {
         switch (payload.type) {
@@ -52,10 +62,70 @@ class Store {
     );
   }
 
+  //GETTER AND SETTER FOR CURRENT STORE DATA
+  getStore(index) {
+    return(this.store[index]);
+  };
+
+  setStore(obj) {
+    this.store = {...this.store, ...obj}
+    return emitter.emit('StoreUpdated');
+  };
+
   getBitcoinAddress = function (payload) {
     var url = 'bitcoin/getUserBtcWallets/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('accountsUpdated')
+        return
+      }
+
+      if(data && data.success) {
+        this.setStore({accounts: data.wallets})
+
+        let accountsCombined = data.wallets.reduce((total, currentVal) => {
+
+          total.balance = total.balance + currentVal.balance
+          total.usdBalance = total.usdBalance + currentVal.usdBalance
+
+          return total
+        }, {
+          balance: 0,
+          usdBalance: 0,
+          type: 'Bitcoin',
+          name: 'Bitcoin',
+          symbol: 'BTC'
+        })
+
+        this.setStore({accountsCombined: [accountsCombined]})
+
+        //trigger get for all Bitcoin Wallet Details
+        async.map(data.wallets, (wallet, callback) => {
+          payload.content.id = wallet.id
+          this.getBitcoinWalletDetails(payload, callback)
+        }, (err, detailsData) => {
+
+          let walletsNew = data.wallets.map((wallet) => {
+            detailsData.map((walletDetails) => {
+              if(walletDetails.id === wallet.id) {
+                wallet.addresses = walletDetails.addresses
+              }
+            })
+            return wallet
+          })
+
+          this.setStore({accounts: walletsNew})
+
+          emitter.emit('accountsUpdated');
+        })
+
+      } else {
+        emitter.emit('error', data.errorMsg)
+        emitter.emit('accountsUpdated')
+      }
+    });
   };
 
   createBitcoinAddress = function (payload) {
@@ -63,33 +133,40 @@ class Store {
     var postJson = {
       username: payload.content.username,
       isPrimary: payload.content.isPrimary,
-      displayName: payload.content.displayName
+      displayName: payload.content.name
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      this.getBitcoinAddress(payload)
+    });
   };
 
   importBitcoinAddress = function (payload) {
     var url = 'bitcoin/importWallet';
     var postJson = {
-      displayName: payload.content.displayName,
+      displayName: payload.content.name,
       isPrimary: payload.content.isPrimary,
       privateKey: payload.content.privateKey,
-      phrase: payload.content.mnemonic
+      phrase: payload.content.mnemonicPhrase
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      this.getBitcoinAddress(payload)
+    });
   };
 
   updateBitcoinAddress = function (payload) {
     var url = 'bitcoin/updateWallet';
     var postJson = {
-      displayName: payload.content.displayName,
+      displayName: payload.content.name,
       isPrimary: payload.content.isPrimary,
       walletId: payload.content.id
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getBitcoinAddress(payload)
+    });
   };
 
   deleteBitcoinAddress = function (payload) {
@@ -98,14 +175,17 @@ class Store {
       walletId: payload.content.id
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getBitcoinAddress(payload)
+    });
   };
 
   sendBitcoin = function (payload) {
     var url = 'bitcoin/send';
     var postJson = {
-      walletId: payload.content.walletId,
-      value: payload.content.value,
+      walletId: payload.content.fromAddress,
+      value: payload.content.amount,
       useNewChangeAddress: payload.content.useNewChangeAddress
     };
     if (payload.content.recipientAddress != null) {
@@ -118,7 +198,13 @@ class Store {
       postJson.contactUserName = payload.content.contactUserName;
     }
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+      emitter.emit('sendReturned', err, data);
+    });
   };
 
   exportBitcoinKey = function (payload) {
@@ -128,22 +214,27 @@ class Store {
       mnemonic: payload.content.mnemonic
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
+    });
   };
 
-  getBitcoinWalletDetails  = function  (payload) {
+  getBitcoinWalletDetails  = function  (payload, callback) {
     var url = 'bitcoin/getWalletDetails/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload, payload.content.id);
+    this.callApi(url, 'GET', null, payload, callback);
   };
 
   getBitcoinTransactionHistory = function (payload) {
     var url = 'bitcoin/getTransactionHistory/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload, payload.content.id);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      this.setStore({ transactions: data.transactions })
+      emitter.emit('transactionsUpdated');
+    }, payload.content.id);
   };
 
-  callApi = function (url, method, postData, payload, extraData) {
+  callApi = function (url, method, postData, payload, callback) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = '';
@@ -200,10 +291,13 @@ class Store {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res, extraData);
+        // emitter.emit(payload.type, null, res, extraData);
+        callback(null, res)
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null, extraData);
+        console.log(error)
+        // emitter.emit(payload.type, error, null, extraData);
+        callback(error, null)
       });
   };
 }

@@ -16,20 +16,9 @@ import Divider from '@material-ui/core/Divider';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
-import TermsModalComponent from './termsModalICO';
-import TermsModalRefundComponent from './termsModalICORefund';
-import ThankYouICOModal from './thankYouICO';
 import WanTransactions from '../containers/wanTransactions';
-import CreateModal from './createModal';
-import ImportModal from './importModal';
 import PageTItle from './pageTitle';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
 import ViewTokensModal from "./viewTokensModal";
@@ -311,7 +300,7 @@ class WanAccounts extends Component {
                       this.props.sendWanchainClicked(null, address);
                     } }
                   >
-                    Send
+                    Transact
                   </Button>
                 </Grid>
               </Grid>
@@ -335,7 +324,7 @@ class WanAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTItle theme={theme} root={'Accounts'} screen={'Wanchain'} />
+            <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Wanchain'} />
           </Grid>
           <Grid
             item
@@ -357,7 +346,7 @@ class WanAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={theme} root={'Accounts'} screen={'Wanchain'} />
+          <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Wanchain'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -409,7 +398,6 @@ class WanAccounts extends Component {
             wanAddresses={ this.props.addresses }
             wanTransactions={ this.props.wanTransactions }
             contacts={ this.props.contacts }
-            width={ this.props.width }
             size={this.props.size}
           />
         </Grid>
@@ -419,62 +407,11 @@ class WanAccounts extends Component {
           currentAccountKey={ this.props.currentAccountKey }
           copyKey={ this.props.copyKey }
         />
-        <ThankYouICOModal
-          isOpen={ this.props.thanksOpen }
-          handleClose={ this.props.handleThanksClose }
-          investTransacstionID={ this.props.investTransacstionID }
-        />
         <DeleteAccountConfirmation
           isOpen={ this.props.deleteOpen }
           handleClose={ this.props.handleDeleteClose }
           confirmDelete={ this.props.confirmDelete }
           deleteLoading={ this.props.deleteLoading }
-        />
-        <TermsModalComponent
-          isOpen={ this.props.termsOpen }
-          handleClose={ this.props.handleTermsClose }
-          handleTermsAccepted={ this.props.handleTermsAccepted }
-        />
-        <TermsModalRefundComponent
-          isOpen={ this.props.termsRefundOpen }
-          handleClose={ this.props.handleTermsRefundClose }
-          handleTermsAccepted={ this.props.handleTermsRefundAccepted }
-        />
-        <CreateModal
-          isOpen={this.props.createOpen}
-          handleClose={this.props.handleCreateClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleCreate={this.props.createImportClicked}
-          error={this.props.error}
-        />
-        <ImportModal
-          isOpen={this.props.importOpen}
-          handleClose={this.props.handleImportClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          publicAddress={this.props.publicAddress}
-          publicAddressError={this.props.publicAddressError}
-          publicAddressErrorMessage={this.props.publicAddressErrorMessage}
-          privateKey={this.props.privateKey}
-          privateKeyError={this.props.privateKeyError}
-          privateKeyErrorMessage={this.props.privateKeyErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleImport={this.props.createImportClicked}
-          error={this.props.error}
         />
         <ViewTokensModal
           isOpen={this.props.viewOpen}

@@ -23,8 +23,6 @@ import TableRow from "@material-ui/core/TableRow";
 import PrivateKeyModal from "./privateKeyModal.jsx";
 import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import EthTransactions from "../containers/ethTransactions";
-import CreateModal from "./createModal";
-import ImportModal from "./importModal";
 import PageTItle from "./pageTitle";
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import PageLoader from "./pageLoader";
@@ -305,7 +303,7 @@ class EthAccounts extends Component {
                       this.props.sendEtherClicked(null, address);
                     }}
                   >
-                    Send
+                    Transact
                   </Button>
                 </Grid>
               </Grid>
@@ -329,7 +327,7 @@ class EthAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTItle theme={theme} root={'Accounts'} screen={'Ethereum'} />
+            <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Ethereum'} />
           </Grid>
           <Grid
             item
@@ -351,7 +349,7 @@ class EthAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={theme} root={'Accounts'} screen={'Ethereum'} />
+          <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Ethereum'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -417,42 +415,6 @@ class EthAccounts extends Component {
           handleClose={this.props.handleDeleteClose}
           confirmDelete={this.props.confirmDelete}
           deleteLoading={this.props.deleteLoading}
-        />
-        <CreateModal
-          isOpen={this.props.createOpen}
-          handleClose={this.props.handleCreateClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleCreate={this.props.createImportClicked}
-          error={this.props.error}
-        />
-        <ImportModal
-          isOpen={this.props.importOpen}
-          handleClose={this.props.handleImportClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          publicAddress={this.props.publicAddress}
-          publicAddressError={this.props.publicAddressError}
-          publicAddressErrorMessage={this.props.publicAddressErrorMessage}
-          privateKey={this.props.privateKey}
-          privateKeyError={this.props.privateKeyError}
-          privateKeyErrorMessage={this.props.privateKeyErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleImport={this.props.createImportClicked}
-          error={this.props.error}
         />
         <ViewTokensModal
           isOpen={this.props.viewOpen}

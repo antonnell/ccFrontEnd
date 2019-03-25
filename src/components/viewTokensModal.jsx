@@ -102,9 +102,11 @@ class ViewTokensModal extends Component {
                 size="medium"
                 variant="contained"
                 color="primary"
-                onClick={ () => {
-                  this.props.send(token.symbol);
-                } }
+                onClick={() => { this.props.transactClicked({
+                  name: token.name,
+                  symbol: token.symbol,
+                  type: this.props.tokenType
+                }, null, { address: this.props.account }) }}
               >
                 Send
               </Button>

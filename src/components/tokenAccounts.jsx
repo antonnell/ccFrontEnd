@@ -1,25 +1,30 @@
 import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import SvgIcon from "@material-ui/core/SvgIcon";
-import IconButton from "@material-ui/core/IconButton";
-import Popover from "@material-ui/core/Popover";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import PrivateKeyModal from "./privateKeyModal.jsx";
-import DeleteAccountConfirmation from "./deleteAccountConfirmation";
-import AionTransactions from "../containers/aionTransactions";
-import PageTItle from "./pageTitle";
+import {
+  Grid,
+  Typography,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  SvgIcon,
+  IconButton,
+  Popover,
+  ListItem,
+  List,
+  ListItemText,
+  Divider
+} from "@material-ui/core";
+import PageTitle from "./pageTitle";
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
+import TokenTransactions from "../containers/tokenTransactions";
+import PrivateKeyModal from "./privateKeyModal.jsx";
+import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import CreateModal from './createModal';
 import ImportModal from './importModal';
+import ViewAddressModal from "./viewAddressModal";
+import ViewTokensModal from "./viewTokensModal";
+import Snackbar from './snackbar';
 
 function MoreIcon(props) {
   return (
@@ -32,9 +37,35 @@ function MoreIcon(props) {
   );
 }
 
-class AionAccounts extends Component {
+class TokenAccounts extends Component {
   renderAddresses() {
-    if (this.props.addresses === null) {
+    let {
+      accounts,
+      theme,
+      size,
+      token,
+      optionsAccount,
+      loadingAccount,
+      editAccount,
+      exportKeyAccount,
+      cardLoading,
+      transactClicked,
+      optionsClicked,
+      optionsClosed,
+      editNameClicked,
+      editAddressName,
+      editAddressNameError,
+      editAddressNameErrorMessage,
+      updatePrimaryClicked,
+      exportKeyClicked,
+      deleteClicked,
+      handleChange,
+      onEditAddressNameKeyDown,
+      handleViewTokens,
+      viewBitcoinKeysClicked,
+    } = this.props
+
+    if (!accounts) {
       return (
         <Grid
           item
@@ -48,7 +79,7 @@ class AionAccounts extends Component {
       );
     }
 
-    if (this.props.addresses.length === 0) {
+    if (accounts.length === 0) {
       return (
         <Grid
           item
@@ -65,33 +96,38 @@ class AionAccounts extends Component {
       );
     }
 
-    let index = -1
-
-    return this.props.addresses.map(address => {
-      address.editing = false;
+    return accounts.map(account => {
+      if(!account.address) {
+        account.address = account.publicAddress
+      }
+      if(!account.name) {
+        account.name = account.displayName
+      }
+      account.type = token
+      account.editing = false;
       let open = false;
       let anchorEl = null;
       let loading = <div />;
 
-      if (this.props.optionsAccount != null) {
-        if (address.address === this.props.optionsAccount.address) {
+      if (optionsAccount != null) {
+        if ((optionsAccount.address && account.address === optionsAccount.address) || (optionsAccount.id && account.id === optionsAccount.id)) {
           open = true;
-          anchorEl = this.props.optionsAccount.anchorEl;
+          anchorEl = optionsAccount.anchorEl;
         }
       }
 
-      if (this.props.loadingAccount != null) {
-        if (address.address === this.props.loadingAccount.address) {
+      if (loadingAccount != null) {
+        if ((loadingAccount.address && account.address === loadingAccount.address) || (loadingAccount.id && account.id === loadingAccount.id)) {
           loading = (
             <SectionLoader />
           );
         }
       }
 
-      if (this.props.editAccount != null) {
-        if (address.address === this.props.editAccount.address) {
-          address.editing = true;
-          if (this.props.cardLoading) {
+      if (editAccount != null) {
+        if ((editAccount.address && account.address === editAccount.address) || (editAccount.id && account.id === editAccount.id)) {
+          account.editing = true;
+          if (cardLoading) {
             loading = (
               <SectionLoader />
             );
@@ -99,22 +135,18 @@ class AionAccounts extends Component {
         }
       }
 
-      if (this.props.exportKeyAccount != null) {
-        if (address.address === this.props.exportKeyAccount) {
-          if (this.props.privateKeyLoading) {
+      if (exportKeyAccount != null) {
+        if ((account.address && account.address === exportKeyAccount) || (account.id && account.id === exportKeyAccount)) {
+          if (cardLoading) {
             loading = (
               <SectionLoader />
             );
           }
         }
       }
-
-      index ++
-
-      let { theme, size } = this.props
 
       return (
-        <Grid item xs={12} lg={6} xl={4} key={address.address} style={{ padding: '24px' }}>
+        <Grid item xs={12} lg={6} xl={4} key={account.address != null ? account.address : account.id} style={{ padding: '24px' }}>
           <Card>
             <CardContent style={{ position: "relative" }}>
               <Grid
@@ -124,18 +156,18 @@ class AionAccounts extends Component {
                 style= { { marginBottom: '6px' }}
               >
                 <Grid item xs={11} align="left">
-                  {address.editing !== true && (
+                  {account.editing !== true && (
                     <Typography
                       noWrap
                       variant="h3"
                     >
-                      {address.name}
+                      {account.name}
                     </Typography>
                   )}
-                  {address.editing !== true && address.isPrimary === true && (
+                  {account.editing !== true && account.isPrimary === true && (
                     <Typography variant='body1' style={theme.custom.primaryText}>Primary</Typography>
                   )}
-                  {address.editing === true && (
+                  {account.editing === true && (
                     <TextField
                       autoFocus={true}
                       style={{
@@ -146,22 +178,17 @@ class AionAccounts extends Component {
                       fullWidth={true}
                       required
                       color="textSecondary"
-                      error={this.props.editAddressNameError}
-                      disabled={
-                        this.props.loadingAccount ||
-                        this.props.cardLoading ||
-                        this.props.privateKeyLoading
-                      }
+                      error={ editAddressNameError }
+                      disabled={ cardLoading }
                       id="editAddressName"
-                      value={this.props.editAddressName}
-                      onChange={event => {
-                        this.props.handleChange(event, "editAddressName");
-                      }}
+                      value={ editAddressName }
+                      name="editAddressName"
+                      onChange={ handleChange }
                       margin="normal"
                       onKeyDown={event => {
-                        this.props.onEditAddressNameKeyDown(event, address);
+                        onEditAddressNameKeyDown(event, account);
                       }}
-                      helperText={this.props.editAddressNameErrorMessage}
+                      helperText={editAddressNameErrorMessage}
                     />
                   )}
                   <Typography
@@ -169,7 +196,7 @@ class AionAccounts extends Component {
                     variant="subtitle1"
                     color="textSecondary"
                   >
-                    {address.address}
+                    {account.address}
                   </Typography>
                 </Grid>
                 <Grid item xs={1} align="right">
@@ -185,13 +212,9 @@ class AionAccounts extends Component {
                       this.anchorEl = node;
                     }}
                     onClick={e => {
-                      this.props.optionsClicked(e, address);
+                      optionsClicked(e, account);
                     }}
-                    disabled={
-                      this.props.loadingAccount ||
-                      this.props.cardLoading ||
-                      this.props.privateKeyLoading
-                    }
+                    disabled={ cardLoading }
                   >
                     <MoreIcon theme={theme} />
                   </IconButton>
@@ -199,7 +222,7 @@ class AionAccounts extends Component {
                     open={open}
                     anchorEl={anchorEl}
                     anchorPosition={{ top: 200, left: 400 }}
-                    onClose={this.props.optionsClosed}
+                    onClose={optionsClosed}
                     anchorOrigin={{
                       vertical: "top",
                       horizontal: "left"
@@ -210,10 +233,30 @@ class AionAccounts extends Component {
                     }}
                   >
                     <List component="nav">
+                      {
+                        ["Ethereum", "Wanchain", "ERC20", "WRC20"].includes(token) && (<ListItem
+                          button
+                          disabled={ !(account.tokens && account.tokens.length > 0) }
+                          onClick={( ) => {
+                            handleViewTokens(account)
+                          } }
+                        >
+                          <ListItemText primary="View Tokens" />
+                        </ListItem>)
+                      }
+                      { token === "Bitcoin" && (<ListItem
+                          button
+                          onClick={() => {
+                            viewBitcoinKeysClicked(account.id);
+                          }}
+                        >
+                          <ListItemText primary="View Addresses" />
+                        </ListItem>)
+                      }
                       <ListItem
                         button
                         onClick={() => {
-                          this.props.editNameClicked(address);
+                          editNameClicked(account);
                         }}
                       >
                         <ListItemText primary="Update Name" />
@@ -221,7 +264,7 @@ class AionAccounts extends Component {
                       <ListItem
                         button
                         onClick={() => {
-                          this.props.updatePrimaryClicked(address);
+                          updatePrimaryClicked(account);
                         }}
                       >
                         <ListItemText primary="Set Primary" />
@@ -229,7 +272,7 @@ class AionAccounts extends Component {
                       <ListItem
                         button
                         onClick={() => {
-                          this.props.exportAionKeyClicked(address.address);
+                          exportKeyClicked(account.address, account.id);
                         }}
                       >
                         <ListItemText primary="View Private Key" />
@@ -238,7 +281,7 @@ class AionAccounts extends Component {
                       <ListItem
                         button
                         onClick={() => {
-                          this.props.deleteKeyClicked(address.address);
+                          deleteClicked(account.address, account.id);
                         }}
                       >
                         <ListItemText primary="Delete" />
@@ -254,10 +297,10 @@ class AionAccounts extends Component {
               >
                 <Grid item xs={6}  align="left" style={{ marginTop: "6px" }}>
                   <Typography variant="h4" noWrap>
-                    {address.balance + " Aion"}
+                    {account.balance + " " + token}
                   </Typography>
                   <Typography variant="h4" noWrap>
-                    {"$" + address.usdBalance.toFixed(2)}
+                    {"$" + account.usdBalance.toFixed(2)}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} align="right" style={{ height: "42px" }}>
@@ -265,14 +308,13 @@ class AionAccounts extends Component {
                     size="small"
                     variant="contained"
                     color="primary"
-                    disabled={
-                      this.props.loadingAccount ||
-                      this.props.cardLoading ||
-                      this.props.privateKeyLoading
-                    }
-                    onClick={() => {
-                      this.props.sendAionClicked(null, address);
-                    }}
+                    disabled={ cardLoading }
+                    onClick={() => { transactClicked({
+                      address: account.address,
+                      name: token,
+                      symbol: token,
+                      type: token
+                    }, null, account) }}
                   >
                     Transact
                   </Button>
@@ -288,9 +330,25 @@ class AionAccounts extends Component {
 
   render() {
 
-    let { addresses, theme, handleCreateOpen, handleImportOpen } = this.props
+    let {
+      accounts,
+      theme,
+      handleCreateOpen,
+      handleImportOpen,
+      token,
+      transactions,
+      loading,
+      error,
+      keyOpen,
+      handleKeyClose,
+      currentAccountKey,
+      currentAccountPhrase,
+      copyKey,
+      copyPhrase,
+      viewTokensAccount
+    } = this.props
 
-    if (addresses === null) {
+    if (accounts === null) {
       return (
         <Grid container justify="center" alignItems="flex-start" direction="row">
           <Grid
@@ -298,7 +356,7 @@ class AionAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTItle theme={this.props.theme} root={'Dashboard > Accounts'} screen={'Aion'} />
+            <PageTitle theme={theme} root={'Dashboard > Accounts'} screen={token} />
           </Grid>
           <Grid
             item
@@ -320,7 +378,7 @@ class AionAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Aion'} />
+          <PageTitle theme={theme} root={'Dashboard > Accounts'} screen={token} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -339,7 +397,7 @@ class AionAccounts extends Component {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={handleCreateOpen}
+                onClick={() => { handleCreateOpen(token) }}
               >
                 Create
               </Button>
@@ -348,7 +406,7 @@ class AionAccounts extends Component {
                 size="small"
                 variant="contained"
                 color="secondary"
-                onClick={handleImportOpen}
+                onClick={() => { handleImportOpen(token) }}
               >
                 Import
               </Button>
@@ -367,30 +425,54 @@ class AionAccounts extends Component {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <AionTransactions
+          <TokenTransactions
             theme={this.props.theme}
-            aionAddresses={this.props.addresses}
-            aionTransactions={this.props.aionTransactions}
+            accounts={this.props.accounts}
+            transactions={transactions}
             contacts={this.props.contacts}
             size={this.props.size}
+            token={ this.props.token }
           />
         </Grid>
         <DeleteAccountConfirmation
           isOpen={this.props.deleteOpen}
           handleClose={this.props.handleDeleteClose}
           confirmDelete={this.props.confirmDelete}
-          deleteLoading={this.props.deleteLoading}
+          deleteLoading={this.props.cardLoading}
         />
         <PrivateKeyModal
-          isOpen={this.props.keyOpen}
-          handleClose={this.props.handleKeyClose}
-          currentAccountKey={this.props.currentAccountKey}
-          copyKey={this.props.copyKey}
+          isOpen={ keyOpen }
+          handleClose={ handleKeyClose }
+          currentAccountKey={ currentAccountKey }
+          currentAccountPhrase={ currentAccountPhrase }
+          copyKey={ copyKey }
+          copyPhrase={ copyPhrase }
         />
+        <ViewAddressModal
+          isOpen={this.props.viewOpen}
+          handleClose={this.props.handleViewClose}
+          viewAddress={this.props.viewAddress}
+          theme={this.props.theme}
+        />
+        <ViewTokensModal
+          isOpen={this.props.viewTokensOpen}
+          handleClose={this.props.viewTokensClose}
+          tokens={this.props.viewTokens}
+          theme={this.props.theme}
+          transactClicked={this.props.transactClicked}
+          tokenType={'ERC20'}
+          account={ viewTokensAccount }
+        />
+        { loading && this.renderLoader() }
+        { error && <Snackbar open={true} type={'Error'} message={error} /> }
         { this.props.createOpen && this.renderCreateModal() }
         { this.props.importOpen && this.renderImportModal() }
       </Grid>
     );
+  }
+
+  renderLoader() {
+    return <PageLoader />
   }
 
   renderCreateModal() {
@@ -478,4 +560,4 @@ class AionAccounts extends Component {
   }
 }
 
-export default AionAccounts;
+export default TokenAccounts;

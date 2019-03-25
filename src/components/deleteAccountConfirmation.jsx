@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import SectionLoader from "./sectionLoader";
 
 class DeleteAccountConfirmation extends Component {
 
@@ -17,7 +17,7 @@ class DeleteAccountConfirmation extends Component {
           <DialogContentText id="alert-dialog-description" style={{ color: '#333'}}>
             Are you sure you would like to delete this account from your profile?
           </DialogContentText>
-          {this.props.deleteLoading && <CircularProgress size={36} style={{position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}}/>}
+          {this.props.deleteLoading && <SectionLoader />}
         </DialogContent>
         <DialogActions>
           <Button style={{border: '1px solid #ccc'}} onClick={this.props.handleClose} color="primary" disabled={this.props.deleteLoading} >

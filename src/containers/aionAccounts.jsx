@@ -8,11 +8,11 @@ const createReactClass = require("create-react-class");
 
 let aionEmitter = require("../store/aionStore.js").default.emitter;
 let aionDispatcher = require("../store/aionStore.js").default.dispatcher;
+let aionStore = require("../store/aionStore.js").default.store;
 
 let AionAccounts = createReactClass({
   getInitialState() {
     return {
-      createLoading: false,
       error: null,
       addressName: "",
       addressNameError: false,
@@ -34,8 +34,8 @@ let AionAccounts = createReactClass({
       optionsAccount: null,
       loadingAccount: null,
       deleteOpen: false,
-      createOpen: false,
-      importOpen: false
+      accounts: aionStore.getStore('accounts'),
+      transactions: aionStore.getStore('transactions')
     };
   },
   render() {
@@ -44,14 +44,11 @@ let AionAccounts = createReactClass({
         theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
-        onCreateImportKeyDown={this.onCreateImportKeyDown}
-        createImportClicked={this.createImportClicked}
         exportAionKeyClicked={this.exportAionKeyClicked}
-        createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
-        addresses={this.props.aionAddresses}
+        addresses={this.state.accounts}
         addressName={this.state.addressName}
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
@@ -87,119 +84,36 @@ let AionAccounts = createReactClass({
         confirmDelete={this.confirmDelete}
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
-        aionTransactions={this.props.aionTransactions}
+        aionTransactions={this.state.transactions}
         contacts={this.props.contacts}
-        handleCreateOpen={this.handleCreateOpen}
-        handleImportOpen={this.handleImportOpen}
-        createOpen={this.state.createOpen}
-        handleCreateClose={this.handleCreateClose}
-        importOpen={this.state.importOpen}
-        handleImportClose={this.handleImportClose}
         size={this.props.size}
       />
     );
   },
 
   componentWillMount() {
-    aionEmitter.removeAllListeners("createAionAddress");
-    aionEmitter.removeAllListeners("importAionAddress");
-    aionEmitter.removeAllListeners("updateAionAddress");
     aionEmitter.removeAllListeners("exportAionKey");
     aionEmitter.removeAllListeners("deleteAionAddress");
+    aionEmitter.removeAllListeners("transactionsUpdated");
 
-    aionEmitter.on("createAionAddress", this.createAionAddressReturned);
-    aionEmitter.on("importAionAddress", this.importAionAddressReturned);
-    aionEmitter.on("updateAionAddress", this.updateAionAddressReturned);
     aionEmitter.on("exportAionKey", this.exportAionKeyReturned);
     aionEmitter.on("deleteAionAddress", this.deleteAionAddressReturned);
+    aionEmitter.on("transactionsUpdated", this.transactionsUpdated);
   },
 
-  resetInputs() {
-    this.setState({
-      addressName: "",
-      addressNameError: false,
-      primary: false,
-      primaryError: false,
-      privateKey: "",
-      privateKeyError: false,
-      publicAddress: "",
-      publicAddressError: false
+  componentDidMount() {
+    const { user } = this.props;
+    const content = { id: user.id };
+
+    aionDispatcher.dispatch({
+      type: 'getAionTransactionHistory',
+      content,
+      token: user.token
     });
   },
 
-  createAionAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      aionDispatcher.dispatch({
-        type: "getAionAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ createOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  importAionAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      aionDispatcher.dispatch({
-        type: "getAionAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ createOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  updateAionAddressReturned(error, data) {
-    this.setState({
-      cardLoading: false,
-      editAccount: null,
-      editAddressName: "",
-      editAddressNameError: false,
-      editAddressNameErrorMessage: "",
-      loadingAccount: null
-    });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      var content = { id: this.props.user.id };
-      aionDispatcher.dispatch({
-        type: "getAionAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      //show sncakbar?
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
+  transactionsUpdated() {
+    this.setState({ transactions: aionStore.getStore('transactions') })
   },
 
   exportAionKeyReturned(error, data) {

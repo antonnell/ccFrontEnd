@@ -27,29 +27,29 @@ class Store {
     dispatcher.register(
       function (payload) {
         switch (payload.type) {
-          case 'getAionAddress':
-            this.getAionAddress(payload);
+          case 'getTezosAddress':
+            this.getTezosAddress(payload);
             break;
-          case 'createAionAddress':
-            this.createAionAddress(payload);
+          case 'createTezosAddress':
+            this.createTezosAddress(payload);
             break;
-          case 'importAionAddress':
-            this.importAionAddress(payload);
+          case 'importTezosAddress':
+            this.importTezosAddress(payload);
             break;
-          case 'updateAionAddress':
-            this.updateAionAddress(payload);
+          case 'updateTezosAddress':
+            this.updateTezosAddress(payload);
             break;
-          case 'deleteAionAddress':
-            this.deleteAionAddress(payload);
+          case 'deleteTezosAddress':
+            this.deleteTezosAddress(payload);
             break;
-          case 'sendAion':
-            this.sendAion(payload);
+          case 'sendTezos':
+            this.sendTezos(payload);
             break;
-          case 'exportAionKey':
-            this.exportAionKey(payload);
+          case 'exportTezosKey':
+            this.exportTezosKey(payload);
             break;
-          case 'getAionTransactionHistory':
-            this.getAionTransactionHistory(payload);
+          case 'getTezosTransactionHistory':
+            this.getTezosTransactionHistory(payload);
             break;
           default: {
           }
@@ -68,8 +68,8 @@ class Store {
     return emitter.emit('StoreUpdated');
   };
 
-  getAionAddress = function (payload) {
-    var url = 'aion/getUserAddresses/' + payload.content.id;
+  getTezosAddress = function (payload) {
+    var url = 'tezos/getUserAddresses/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload, (err, data) => {
       if(err) {
@@ -79,9 +79,9 @@ class Store {
       }
 
       if(data && data.success) {
-        this.setStore({accounts: data.aionAddresses})
+        this.setStore({accounts: data.tezosAddresses})
 
-        let accountsCombined = data.aionAddresses.reduce((total, currentVal) => {
+        let accountsCombined = data.tezosAddresses.reduce((total, currentVal) => {
 
           total.balance = total.balance + currentVal.balance
           total.usdBalance = total.usdBalance + currentVal.usdBalance
@@ -90,9 +90,9 @@ class Store {
         }, {
           balance: 0,
           usdBalance: 0,
-          type: 'Aion',
-          name: 'Aion',
-          symbol: 'Aion'
+          type: 'Tezos',
+          name: 'Tezos',
+          symbol: 'Tezos'
         })
 
         this.setStore({accountsCombined: [accountsCombined]})
@@ -100,13 +100,13 @@ class Store {
         emitter.emit('accountsUpdated');
       } else {
         emitter.emit('error', data.errorMsg)
-        emitter.emit('accountsUpdated')
+        emitter.emit('accountsUpdated')        
       }
     });
   };
 
-  createAionAddress = function (payload) {
-    var url = 'aion/createAddress';
+  createTezosAddress = function (payload) {
+    var url = 'tezos/createAddress';
     var postJson = {
       username: payload.content.username,
       isPrimary: payload.content.isPrimary,
@@ -114,12 +114,12 @@ class Store {
     };
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
-      this.getAionAddress(payload)
+      this.getTezosAddress(payload)
     });
   };
 
-  importAionAddress = function (payload) {
-    var url = 'aion/importAddress';
+  importTezosAddress = function (payload) {
+    var url = 'tezos/importAddress';
     var postJson = {
       name: payload.content.name,
       isPrimary: payload.content.isPrimary,
@@ -128,12 +128,12 @@ class Store {
     };
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
-      this.getAionAddress(payload)
+      this.getTezosAddress(payload)
     });
   };
 
-  updateAionAddress = function (payload) {
-    var url = 'aion/updateAddress';
+  updateTezosAddress = function (payload) {
+    var url = 'tezos/updateAddress';
     var postJson = {
       name: payload.content.name,
       isPrimary: payload.content.isPrimary,
@@ -142,24 +142,24 @@ class Store {
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       payload.content.id = payload.content.userId
-      this.getAionAddress(payload)
+      this.getTezosAddress(payload)
     });
   };
 
-  deleteAionAddress = function (payload) {
-    var url = 'aion/deleteAddress';
+  deleteTezosAddress = function (payload) {
+    var url = 'tezos/deleteAddress';
     var postJson = {
       address: payload.content.address
     };
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       payload.content.id = payload.content.userId
-      this.getAionAddress(payload)
+      this.getTezosAddress(payload)
     });
   };
 
-  sendAion = function (payload) {
-    var url = 'aion/sendAion';
+  sendTezos = function (payload) {
+    var url = 'tezos/sendTezos';
     var postJson = {
       fromAddress: payload.content.fromAddress,
       amount: payload.content.amount,
@@ -181,8 +181,8 @@ class Store {
     });
   };
 
-  exportAionKey = function (payload) {
-    var url = 'aion/exportAddress';
+  exportTezosKey = function (payload) {
+    var url = 'tezos/exportAddress';
     var postJson = {
       address: payload.content.address,
       mnemonic: payload.content.mnemonic
@@ -193,8 +193,8 @@ class Store {
     });
   };
 
-  getAionTransactionHistory = function (payload) {
-    var url = 'aion/getTransactionHistory/' + payload.content.id;
+  getTezosTransactionHistory = function (payload) {
+    var url = 'tezos/getTransactionHistory/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload, (err, data) => {
       if(data) {

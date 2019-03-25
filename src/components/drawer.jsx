@@ -73,51 +73,21 @@ class AppDrawer extends Component {
   }
 
   renderList() {
-    let { currentScreen, navClicked, theme } = this.props
+    let { currentScreen, navClicked, theme, logUserOut } = this.props
     const path = currentScreen.split('/')[0];
 
     return (
-      <List style={ { height: "calc(100% - 126px)" } }>
-        <ListSubheader disableSticky={ true }>ACCOUNTS</ListSubheader>
+      <List style={ { height: "calc(100% - 173px)" } }>
+        <ListSubheader disableSticky={ true }>MENU</ListSubheader>
         <ListItem
-          selected={ ['aionAccounts', 'sendAion'].includes(path) }
+          selected={ ['accounts', 'aionAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts'].includes(path) }
           button
           onClick={ event => {
-            navClicked(event, 'aionAccounts');
+            navClicked(event, 'accounts');
           } }
         >
-          <ListItemText primary="Aion" />
+          <ListItemText primary="Accounts" />
         </ListItem>
-        <ListItem
-          selected={ ['bitcoinAccounts', 'sendBitcoin'].includes(path) }
-          button
-          onClick={ event => {
-            navClicked(event, 'bitcoinAccounts');
-          } }
-        >
-          <ListItemText primary="Bitcoin" />
-        </ListItem>
-        <ListItem
-          selected={ ['ethAccounts', 'sendEthereum', 'sendERC20'].includes(path) }
-          button
-          onClick={ event => {
-            navClicked(event, 'ethAccounts');
-          } }
-        >
-          <ListItemText primary="Ethereum" />
-        </ListItem>
-        <ListItem
-          selected={ ['wanAccounts', 'sendWanchain', 'sendWRC20'].includes(path) }
-          button
-          onClick={ event => {
-            navClicked(event, 'wanAccounts');
-          } }
-        >
-          <ListItemText primary="Wanchain" />
-        </ListItem>
-
-        <Divider />
-        <ListSubheader disableSticky={ true }>INVEST</ListSubheader>
         <ListItem
           selected={ ['browsePools', 'poolDetails', 'createPool', 'updatePool', 'pooling'].includes(path) }
           button
@@ -152,7 +122,7 @@ class AppDrawer extends Component {
         <ListItem
           button
           onClick={ event => {
-            navClicked(event, 'logOut');
+            logUserOut();
           } }
           style={theme.custom.logout}
         >

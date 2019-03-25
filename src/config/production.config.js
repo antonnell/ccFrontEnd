@@ -5,7 +5,8 @@ const config = {
   etherscanUrl : "https://etherscan.io/tx/",
   wanscanURL: "https://explorer.cryptocurve.xyz/tx/",
   aionscanURL: "https://mainnet.aion.network/#/transaction/",
-  bitcoinscanURL: "https://www.blockchain.com/btc/tx/"
+  bitcoinscanURL: "https://www.blockchain.com/btc/tx/",
+  tezosscanURL: "https://tzscan.io/"
 };
 
 export default config;

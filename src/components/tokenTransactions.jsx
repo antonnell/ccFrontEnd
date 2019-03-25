@@ -195,7 +195,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedFilterBar = props => {
   const {
-    aionAddresses,
+    accounts,
     selectedAddress,
     selectedAddressError,
     selectedAddressErrorMessage,
@@ -246,8 +246,8 @@ let EnhancedFilterBar = props => {
                 primary={"--"}
               />
             </MenuItem>
-            {aionAddresses
-              ? aionAddresses.map(address => {
+            {accounts
+              ? accounts.map(address => {
                   return (
                     <MenuItem key={address.name} value={address.name}>
                       <ListItemText
@@ -377,7 +377,7 @@ class EnhancedTable extends React.Component {
     order: "desc",
     orderBy: "timestamp",
     selected: [],
-    data: this.props.aionTransactions,
+    data: this.props.transactions,
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false
@@ -407,7 +407,7 @@ class EnhancedTable extends React.Component {
   };
 
   render() {
-    const { classes, theme, size } = this.props;
+    const { classes, theme, size, token } = this.props;
     const {
       order,
       orderBy,
@@ -416,7 +416,7 @@ class EnhancedTable extends React.Component {
       page,
       filtersVisible
     } = this.state;
-    const data = this.props.aionTransactions;
+    const data = this.props.transactions;
 
     let divStyle = {
       display: 'inline-block'
@@ -434,7 +434,7 @@ class EnhancedTable extends React.Component {
           selectedContact={this.props.selectedContact}
           selectContact={this.props.selectContact}
           selectAddress={this.props.selectAddress}
-          aionAddresses={this.props.aionAddresses}
+          accounts={this.props.accounts}
           contacts={this.props.contacts}
           fromDate={this.props.fromDate}
           toDate={this.props.toDate}
@@ -459,13 +459,35 @@ class EnhancedTable extends React.Component {
               )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
+
+                  let url = ''
+                  switch (token) {
+                    case 'Aion':
+                      url = config.aionscanURL + n.transactionId;
+                      break;
+                    case 'Bitcoin':
+                      url = config.bitcoinscanURL + n.transactionId;
+                      break;
+                    case 'Ethereum':
+                    case 'ERC20':
+                      url = config.etherscanUrl + n.transactionId;
+                      break;
+                    case 'Tezos':
+                      url = config.tezosscanURL + n.transactionId;
+                      break;
+                    case 'Wanchain':
+                    case 'WRC20':
+                      url = config.wanscanURL + n.transactionId;
+                      break;
+                  }
+                  
                   return (
                     <TableRow hover tabIndex={-1} key={n.transactionId}>
                       <TableCell>
                         <div style={divStyle}>
                           <img
                             alt=""
-                            src={ require('../assets/images/aion-logo.png') }
+                            src={ require('../assets/images/'+token+'-logo.png') }
                             width="30px"
                             height="30px"
                             style={{marginRight: '12px'}}
@@ -482,7 +504,7 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       {['xl', 'lg'].includes(size) && (<TableCell>
                         <a
-                          href={config.aionscanURL + n.transactionId}
+                          href={url}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
