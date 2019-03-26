@@ -30,7 +30,7 @@ class AppDrawer extends Component {
         open={ open }
         onClose={ closeDrawer }
       >
-        <ScrollArea horizontal={false} >
+        <ScrollArea horizontal={false} style={{ height: '100%' }} >
           { this.renderGridList() }
         </ScrollArea>
       </Drawer>

@@ -449,7 +449,8 @@ let customTheme =  {
       drawer: {
         background: colors.darkBlue,
         flex: '1',
-        minWidth: '260px'
+        minWidth: '260px',
+        height: '100%'
       },
       headingBorder: {
         color: colors.darkBlue

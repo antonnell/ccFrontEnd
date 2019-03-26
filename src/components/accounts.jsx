@@ -36,7 +36,7 @@ class Accounts extends Component {
     }
 
     return this.props.accounts.map((account) => {
-      if(account.balance > 0) {
+      if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain"].includes(account.name) || account.balance > 0) {
         return (
           <Grid item xs={12} sm={6} lg={4} xl={3} key={account.name} style={{ padding: '24px' }}>
             <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked }/>
