@@ -10,11 +10,11 @@ const createReactClass = require("create-react-class");
 
 let bitcoinEmitter = require("../store/bitcoinStore.js").default.emitter;
 let bitcoinDispatcher = require("../store/bitcoinStore.js").default.dispatcher;
+let bitcoinStore = require("../store/bitcoinStore.js").default.store;
 
 let BitcoinAccounts = createReactClass({
   getInitialState() {
     return {
-      createLoading: false,
       error: null,
       addressName: "",
       addressNameError: false,
@@ -37,14 +37,14 @@ let BitcoinAccounts = createReactClass({
       optionsAccount: null,
       loadingAccount: null,
       deleteOpen: false,
-      createOpen: false,
-      importOpen: false,
       viewAddress: null,
       viewOpen: false,
       publicKey: null,
       viewPublicKeyOpen: false,
       qrLoading: false,
-      accountName: null
+      accountName: null,
+      accounts:  bitcoinStore.getStore('accounts'),
+      transactions: bitcoinStore.getStore('transactions')
     };
   },
   render() {
@@ -53,15 +53,12 @@ let BitcoinAccounts = createReactClass({
         theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
-        onCreateImportKeyDown={this.onCreateImportKeyDown}
-        createImportClicked={this.createImportClicked}
         exportBitcoinKeyClicked={this.exportBitcoinKeyClicked}
         viewBitcoinKeysClicked={this.viewBitcoinKeysClicked}
-        createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
-        addresses={this.props.bitcoinAddresses}
+        addresses={this.state.accounts}
         addressName={this.state.addressName}
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
@@ -99,14 +96,8 @@ let BitcoinAccounts = createReactClass({
         confirmDelete={this.confirmDelete}
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
-        bitcoinTransactions={this.props.bitcoinTransactions}
+        bitcoinTransactions={this.state.transactions}
         contacts={this.props.contacts}
-        handleCreateOpen={this.handleCreateOpen}
-        handleImportOpen={this.handleImportOpen}
-        createOpen={this.state.createOpen}
-        handleCreateClose={this.handleCreateClose}
-        importOpen={this.state.importOpen}
-        handleImportClose={this.handleImportClose}
         viewAddress={this.state.viewAddress}
         viewOpen={this.state.viewOpen}
         handleViewClose={this.handleViewClose}

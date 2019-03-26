@@ -11,11 +11,14 @@ let Emitter = require('events').EventEmitter;
 let dispatcher = new Dispatcher();
 let emitter = new Emitter();
 
-
 let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
+
+    this.store = {
+      contacts: null
+    }
 
     dispatcher.register(
       function (payload) {
@@ -36,10 +39,33 @@ class Store {
     );
   }
 
+  //GETTER AND SETTER FOR CURRENT STORE DATA
+  getStore(index) {
+    return(this.store[index]);
+  };
+
+  setStore(obj) {
+    this.store = {...this.store, ...obj}
+    return emitter.emit('StoreUpdated');
+  };
+
   getContacts = function (payload) {
     var url = 'contacts/getUserContacts/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+
+      if(data && data.success) {
+        this.setStore({contacts: data.contacts})
+
+        emitter.emit('contactsUpdated');
+      } else {
+        emitter.emit('error', data.errorMsg)
+      }
+    });
   };
 
   addContact = function (payload) {
@@ -51,7 +77,23 @@ class Store {
       ownerUsername: payload.content.ownerUsername
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+
+      if(data.success) {
+        payload.content.id = payload.content.userId
+        this.getContacts(payload)
+
+        emitter.emit('addContactReturned');
+      } else {
+        emitter.emit('addContactReturned');
+        emitter.emit('error', data.errorMsg.toString())
+      }
+
+    });
   };
 
   updateContact = function (payload) {
@@ -63,10 +105,13 @@ class Store {
       ownerUsername: payload.content.ownerUsername
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getContacts(payload)
+    });
   };
 
-  callApi = function (url, method, postData, payload) {
+  callApi = function (url, method, postData, payload, callback) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = '';
@@ -123,10 +168,10 @@ class Store {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res);
+        callback(null, res)
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null);
+        callback(error, null)
       });
   };
 }

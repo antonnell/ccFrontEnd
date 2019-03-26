@@ -15,8 +15,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import DeleteAccountConfirmation from './deleteAccountConfirmation';
 import WanTransactions from '../containers/wanTransactions';
-import CreateModal from './createModal';
-import ImportModal from './importModal';
 import PageTItle from './pageTitle';
 import PageLoader from "./pageLoader";
 import SectionLoader from "./sectionLoader";
@@ -285,7 +283,7 @@ class WanAccounts extends Component {
                       this.props.sendWanchainClicked(null, address);
                     } }
                   >
-                    Send
+                    Transact
                   </Button>
                   <Button
                     size="small"
@@ -325,7 +323,7 @@ class WanAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTItle theme={theme} root={'Accounts'} screen={'Wanchain'} />
+            <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Wanchain'} />
           </Grid>
           <Grid
             item
@@ -347,7 +345,7 @@ class WanAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={theme} root={'Accounts'} screen={'Wanchain'} />
+          <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Wanchain'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -399,7 +397,6 @@ class WanAccounts extends Component {
             wanAddresses={ this.props.addresses }
             wanTransactions={ this.props.wanTransactions }
             contacts={ this.props.contacts }
-            width={ this.props.width }
             size={this.props.size}
           />
         </Grid>

@@ -1,14 +1,14 @@
 import React from "react";
-import AionTransactionsComponent from "../components/aionTransactions";
+import TokenTransactionsComponent from "../components/tokenTransactions";
 
 const createReactClass = require("create-react-class");
 
-let AionTransactions = createReactClass({
+let TokenTransactions = createReactClass({
   getInitialState() {
     return {
       loading: false,
       error: null,
-      aionTransactions: this.props.aionTransactions,
+      transactions: this.props.transactions,
       selectedAddress: "",
       selectedAddressError: false,
       selectedAddressErrorMessage: "",
@@ -21,12 +21,12 @@ let AionTransactions = createReactClass({
   },
   render() {
     return (
-      <AionTransactionsComponent
+      <TokenTransactionsComponent
         handleChange={this.handleChange}
         loading={this.state.loading}
         error={this.state.error}
-        aionAddresses={this.props.aionAddresses}
-        aionTransactions={this.props.aionTransactions}
+        accounts={this.props.accounts}
+        transactions={this.props.transactions}
         selectedAddress={this.state.selectedAddress}
         selectedAddressError={this.state.selectedAddressError}
         selectedAddressErrorMessage={this.state.selectedAddressErrorMessage}
@@ -40,6 +40,7 @@ let AionTransactions = createReactClass({
         selectAddress={this.selectAddress}
         theme={this.props.theme}
         size={this.props.size}
+        token={this.props.token}
       />
     );
   },
@@ -61,4 +62,4 @@ let AionTransactions = createReactClass({
   }
 });
 
-export default AionTransactions;
+export default TokenTransactions;

@@ -15,8 +15,6 @@ import Divider from "@material-ui/core/Divider";
 import PrivateKeyModal from "./privateKeyModal.jsx";
 import DeleteAccountConfirmation from "./deleteAccountConfirmation";
 import BitcoinTransactions from "../containers/bitcoinTransactions";
-import CreateModal from "./createModal";
-import ImportModal from "./importModal";
 import PageTItle from './pageTitle';
 import ViewAddressModal from "./viewAddressModal";
 import PageLoader from "./pageLoader";
@@ -274,7 +272,7 @@ class BitcoinAccounts extends Component {
                       this.props.sendBitcoinClicked(null, address);
                     }}
                   >
-                    Send
+                    Transact
                   </Button>
                   <Button
                     size="small"
@@ -316,7 +314,7 @@ class BitcoinAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTItle theme={theme} root={'Accounts'} screen={'Bitcoin'} />
+            <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Bitcoin'} />
           </Grid>
           <Grid
             item
@@ -338,7 +336,7 @@ class BitcoinAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={theme} root={'Accounts'} screen={'Bitcoin'} />
+          <PageTItle theme={theme} root={'Dashboard > Accounts'} screen={'Bitcoin'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -406,43 +404,6 @@ class BitcoinAccounts extends Component {
           copyKey={this.props.copyKey}
           currentAccountPhrase={this.props.currentAccountPhrase}
           copyPhrase={this.props.copyPhrase}
-        />
-        <CreateModal
-          isOpen={this.props.createOpen}
-          handleClose={this.props.handleCreateClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleCreate={this.props.createImportClicked}
-          error={this.props.error}
-        />
-        <ImportModal
-          isOpen={this.props.importOpen}
-          handleClose={this.props.handleImportClose}
-          handleDone={this.props.createImportClicked}
-          createLoading={this.props.createLoading}
-          addressName={this.props.addressName}
-          addressNameError={this.props.addressNameError}
-          addressNameErrorMessage={this.props.addressNameErrorMessage}
-          mnemonicPhrase={this.props.mnemonicPhrase}
-          mnemonicPhraseError={this.props.mnemonicPhraseError}
-          mnemonicPhraseErrorMessage={this.props.mnemonicPhraseErrorMessage}
-          privateKey={this.props.privateKey}
-          privateKeyError={this.props.privateKeyError}
-          privateKeyErrorMessage={this.props.privateKeyErrorMessage}
-          primary={this.props.primary}
-          handleChange={this.props.handleChange}
-          handleChecked={this.props.handleChecked}
-          validateField={this.props.validateField}
-          handleImport={this.props.createImportClicked}
-          error={this.props.error}
-          type={'bitcoin'}
         />
         <ViewAddressModal
           isOpen={this.props.viewOpen}

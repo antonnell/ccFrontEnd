@@ -1,18 +1,16 @@
 import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import {
+  Grid,
+  Typography,
+  Button,
+  Tooltip,
+  Card,
+  CardContent
+} from "@material-ui/core";
 import AddModal from "./createContactModal";
 import PageTItle from "./pageTitle";
 import PageLoader from "./pageLoader";
-
-import Popover from '@material-ui/core/Popover';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Snackbar from './snackbar';
 
 class Contacts extends Component {
   renderContacts() {
@@ -46,17 +44,9 @@ class Contacts extends Component {
       );
     }
 
+    let { theme, size } = this.props
+
     return this.props.contacts.map(contact => {
-
-      let open = false;
-      let anchorEl = null;
-
-      if (this.props.optionsContact != null) {
-        if (contact.displayName === this.props.optionsContact.displayName) {
-          open = true;
-          anchorEl = this.props.optionsContact.anchorEl;
-        }
-      }
 
       return (
         <Grid item xs={12} lg={6} xl={4} key={contact.userName} style={{ padding: '24px' }}>
@@ -84,76 +74,12 @@ class Contacts extends Component {
                     size="small"
                     variant="contained"
                     color="primary"
-                    buttonRef={node => {
-                      this.anchorEl = node;
-                    }}
                     onClick={e => {
-                      this.props.optionsClicked(e, contact);
+                      this.props.transactClicked(null, contact.userName);
                     }}
                   >
-                    Send
+                    Transact
                   </Button>
-                  <Popover
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorPosition={{ top: 200, left: 400 }}
-                    onClose={this.props.optionsClosed}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left"
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left"
-                    }}
-                  >
-                    <List component="nav" style={{ background: "#0FCEF3" }}>
-                      <ListItem
-                        disabled={
-                          contact.primaryAionAddress === "No primary aion address set"
-                        }
-                        button
-                        onClick={() => {
-                          this.props.sendAionClicked(contact);
-                        }}
-                      >
-                        <ListItemText primary="Send Aion" />
-                      </ListItem>
-                      <ListItem
-                        disabled={
-                          contact.hasBitcoinWallet !== true
-                        }
-                        button
-                        onClick={() => {
-                          this.props.sendBitcoinClicked(contact);
-                        }}
-                      >
-                        <ListItemText primary="Send Bitcoin" />
-                      </ListItem>
-                      <ListItem
-                        disabled={
-                          contact.primaryEthAddress === "No primary eth address set"
-                        }
-                        button
-                        onClick={() => {
-                          this.props.sendEtherClicked(contact);
-                        }}
-                      >
-                        <ListItemText primary="Send Ether" />
-                      </ListItem>
-                      <ListItem
-                        disabled={
-                          contact.primaryWanAddress === "No primary wan address set"
-                        }
-                        button
-                        onClick={() => {
-                          this.props.sendWanClicked(contact);
-                        }}
-                      >
-                        <ListItemText primary="Send Wan" />
-                      </ListItem>
-                    </List>
-                  </Popover>
                 </Grid>
                 <Grid item xs={12} align="left">
                   <Typography
@@ -165,12 +91,13 @@ class Contacts extends Component {
               </Grid>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> 
       );
     });
   }
 
   render() {
+    let { error } = this.props
     return (
       <Grid
         container
@@ -222,6 +149,7 @@ class Contacts extends Component {
             {this.renderContacts()}
           </Grid>
         </Grid>
+        { error && <Snackbar open={true} type={'Error'} message={error} /> }
         <AddModal
           isOpen={this.props.addOpen}
           handleClose={this.props.handleAddClose}

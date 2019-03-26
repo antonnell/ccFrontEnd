@@ -144,27 +144,44 @@ let customTheme =  {
             marginBottom: '42px'
           }
         },
+        MuiStepConnector: {
+          lineVertical: {
+            minHeight: '50px',
+          },
+          vertical: {
+            padding: '0px'
+          }
+        },
+        MuiStepContent: {
+          root: {
+            marginTop: '0px'
+          }
+        },
         MuiStepIcon: {
           root: {
-            color: colors.darkGray,
-            '&-active': {
-              color: colors.darkBlue
-            }
+            color: colors.darkGray
           },
           active: {
-            color: colors.darkBlue+" !important"
+            color: colors.darkGray+"!important",
+            fontSize: '34px',
+            marginLeft: '-5px'
           },
           completed: {
-            color: colors.darkBlue+" !important"
           },
           text: {
-            fill: colors.white
+            fill: colors.darkGray
           }
         },
         MuiStepLabel: {
           label: {
-            color: '#000',
-            letterSpacing: '0.5px'
+            color: colors.white,
+            letterSpacing: '0.5px',
+            fontSize: '14px',
+            marginLeft: '12px'
+          },
+          active: {
+            marginLeft: '7px',
+            color: colors.white+' !important'
           }
         },
         MuiInput: {
@@ -432,7 +449,8 @@ let customTheme =  {
       drawer: {
         background: colors.darkBlue,
         flex: '1',
-        minWidth: '260px'
+        minWidth: '260px',
+        height: '100%'
       },
       headingBorder: {
         color: colors.darkBlue

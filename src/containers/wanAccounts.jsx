@@ -11,14 +11,11 @@ const createReactClass = require('create-react-class');
 
 let wanEmitter = require('../store/wanStore.js').default.emitter;
 let wanDispatcher = require('../store/wanStore.js').default.dispatcher;
-
-let crowdsaleEmitter = require('../store/crowdsaleStore.js').default.emitter;
-let crowdsaleDispatcher = require('../store/crowdsaleStore.js').default.dispatcher;
+let wanStore = require('../store/wanStore.js').default.store;
 
 let WanAccounts = createReactClass({
   getInitialState() {
     return {
-      createLoading: false,
       error: null,
       addressName: '',
       addressNameError: false,
@@ -46,23 +43,14 @@ let WanAccounts = createReactClass({
       investmentAmountError: false,
       investmentAmountErrorMessage: '',
       deleteOpen: false,
-      ICOError: '',
-      ICOSuccess: '',
-      investLoading: false,
-      termsOpen: false,
-      thanksOpen: false,
-      investTransacstionID: '',
-      minContribution: 25,
-      crowdasleProgress: null,
-      createOpen: false,
-      importOpen: false,
-      termsRefundOpen: false,
       viewOpen: false,
       tokens: null,
       publicKey: null,
       viewPublicKeyOpen: false,
       qrLoading: false,
-      accountName: null
+      accountName: null,
+      accounts: wanStore.getStore('accounts'),
+      transactions: wanStore.getStore('transactions')
     };
   },
   render() {
@@ -71,14 +59,11 @@ let WanAccounts = createReactClass({
         theme={ this.props.theme }
         handleChange={ this.handleChange }
         handleTabChange={ this.handleTabChange }
-        onCreateImportKeyDown={ this.onCreateImportKeyDown }
-        createImportClicked={ this.createImportClicked }
         exportWanchainKeyClicked={ this.exportWanchainKeyClicked }
-        createLoading={ this.state.createLoading }
         cardLoading={ this.state.cardLoading }
         privateKeyLoading={ this.state.privateKeyLoading }
         error={ this.state.error }
-        addresses={ this.props.wanAddresses }
+        addresses={ this.state.accounts }
         addressName={ this.state.addressName }
         addressNameError={ this.state.addressNameError }
         addressNameErrorMessage={ this.state.addressNameErrorMessage }
@@ -115,43 +100,10 @@ let WanAccounts = createReactClass({
         confirmDelete={ this.confirmDelete }
         handleDeleteClose={ this.handleDeleteClose }
         deleteLoading={ this.state.deleteLoading }
-        selectedAddress={ this.state.selectedAddress }
-        selectedAddressError={ this.state.selectedAddressError }
-        selectedAddressErrorMessage={ this.state.selectedAddressErrorMessage }
-        selectAddress={ this.selectAddress }
-        investmentAmount={ this.state.investmentAmount }
-        investmentAmountError={ this.state.investmentAmountError }
-        investmentAmountErrorMessage={ this.state.investmentAmountErrorMessage }
-        investClicked={ this.investClicked }
         user={ this.props.user }
-        whitelistState={ this.props.whitelistState }
-        investmentAmountKeyDown={ this.investmentAmountKeyDown }
-        crowdsales={ this.props.crowdsales }
-        termsOpen={ this.state.termsOpen }
-        termsRefundOpen={ this.state.termsRefundOpen }
-        handleTermsClose={ this.handleTermsClose }
-        handleTermsRefundClose={ this.handleTermsRefundClose }
-        handleTermsAccepted={ this.handleTermsAccepted }
-        handleTermsRefundAccepted={ this.handleTermsRefundAccepted }
-        ICOError={ this.state.ICOError }
-        ICOSuccess={ this.state.ICOSuccess }
-        investLoading={ this.state.investLoading }
         size={ this.props.size }
-        thanksOpen={ this.state.thanksOpen }
-        investTransacstionID={ this.state.investTransacstionID }
-        handleThanksClose={ this.handleThanksClose }
-        minContribution={ this.state.minContribution }
-        crowdasleProgress={ this.state.crowdasleProgress }
-        wanTransactions={ this.props.wanTransactions }
+        wanTransactions={ this.state.transactions }
         contacts={ this.props.contacts }
-        handleCreateOpen={ this.handleCreateOpen }
-        handleImportOpen={ this.handleImportOpen }
-        createOpen={ this.state.createOpen }
-        handleCreateClose={ this.handleCreateClose }
-        importOpen={ this.state.importOpen }
-        handleImportClose={ this.handleImportClose }
-        refundClicked={ this.refundClicked }
-        width={ this.props.width }
         viewTokens={ this.viewTokens }
         viewTokensClose={ this.viewTokensClose }
         viewOpen={ this.state.viewOpen }
@@ -167,120 +119,32 @@ let WanAccounts = createReactClass({
   },
 
   componentWillMount() {
-    wanEmitter.removeAllListeners('createWanAddress');
-    wanEmitter.removeAllListeners('importWanAddress');
-    wanEmitter.removeAllListeners('updateWanAddress');
     wanEmitter.removeAllListeners('exportWanchainKey');
     wanEmitter.removeAllListeners('deleteWanAddress');
-    wanEmitter.removeAllListeners('investICO');
-    wanEmitter.removeAllListeners('getICOProgress');
-    crowdsaleEmitter.removeAllListeners('refund');
+    wanEmitter.removeAllListeners("transactionsUpdated");
 
-    wanEmitter.on('createWanAddress', this.createWanAddressReturned);
-    wanEmitter.on('importWanAddress', this.importWanAddressReturned);
-    wanEmitter.on('updateWanAddress', this.updateWanAddressReturned);
     wanEmitter.on('exportWanchainKey', this.exportWanchainKeyReturned);
     wanEmitter.on('deleteWanAddress', this.deleteWanAddressReturned);
-    wanEmitter.on('investICO', this.investICOReturned);
-    wanEmitter.on('getICOProgress', this.getICOProgressReturned);
-    crowdsaleEmitter.on('refund', this.refundReturned);
+    wanEmitter.on("transactionsUpdated", this.transactionsUpdated);
+  },
+
+  componentDidMount() {
+    const { user } = this.props;
+    const content = { id: user.id };
+
+    wanDispatcher.dispatch({
+      type: 'getWanTransactionHistory',
+      content,
+      token: user.token
+    });
+  },
+
+  transactionsUpdated() {
+    this.setState({ transactions: wanStore.getStore('transactions') })
   },
 
   sendWRC20(symbol) {
     this.props.openSendWRC(symbol, this.state.optionsAccount)
-  },
-
-  // componentDidMount() {
-  //   let content = {}
-  //   wanDispatcher.dispatch({type: 'getICOProgress', content, token: this.props.user.token });
-  // },
-
-  resetInputs() {
-    this.setState({
-      addressName: '',
-      addressNameError: false,
-      primary: false,
-      primaryError: false,
-      privateKey: '',
-      privateKeyError: false,
-      publicAddress: '',
-      publicAddressError: false
-    });
-  },
-
-  createWanAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      wanDispatcher.dispatch({
-        type: 'getWanAddress',
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ createOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  importWanAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      wanDispatcher.dispatch({
-        type: 'getWanAddress',
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ importOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  updateWanAddressReturned(error, data) {
-    this.setState({
-      cardLoading: false,
-      editAccount: null,
-      editAddressName: '',
-      editAddressNameError: false,
-      editAddressNameErrorMessage: '',
-      loadingAccount: null
-    });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      var content = { id: this.props.user.id };
-      wanDispatcher.dispatch({
-        type: 'getWanAddress',
-        content,
-        token: this.props.user.token
-      });
-
-      //show sncakbar?
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
   },
 
   exportWanchainKeyReturned(error, data) {
@@ -326,82 +190,6 @@ let WanAccounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
-  },
-
-  investICOReturned(error, data) {
-    this.setState({ investLoading: false });
-    if (error) {
-      return this.setState({ ICOError: error.toString() });
-    }
-
-    if (data.success) {
-      this.setState({
-        thanksOpen: true,
-        investTransacstionID: data.transactionId,
-        ICOSuccess: 'Your ICO contribution was successfully processed.'
-      });
-    } else if (data.errorMsg) {
-      this.setState({ ICOError: data.errorMsg });
-    } else {
-      this.setState({ ICOError: data.statusText });
-    }
-  },
-
-  refundClicked(icoContractId) {
-    this.setState({ icoContractId: icoContractId, termsRefundOpen: true })
-  },
-
-  refundReturned(error, data) {
-    this.setState({ investLoading: false });
-    if (error) {
-      return this.setState({ ICOError: error.toString() });
-    }
-
-    if (data.success) {
-      this.setState({
-        thanksOpen: true,
-        investTransacstionID: data.transactionId,
-        ICOSuccess: 'Your ICO refund was successfully submitted.'
-      });
-
-    } else if (data.errorMsg) {
-      this.setState({ ICOError: data.errorMsg });
-    } else {
-      this.setState({ ICOError: data.statusText })
-    }
-  },
-
-  getICOProgressReturned(error, data) {
-    this.setState({ investLoading: false });
-    if (error) {
-      return this.setState({ ICOError: error.toString() });
-    }
-
-    if (data) {
-      this.setState({ crowdasleProgress: data });
-    } else if (data.errorMsg) {
-      this.setState({ ICOError: data.errorMsg });
-    } else {
-      this.setState({ ICOError: data.statusText });
-    }
-  },
-
-  viewPublicKey(address) {
-    this.setState({ viewPublicKeyOpen: true, publicKey: address.publicAddress, qrLoading: true, accountName: address.name });
-    let that = this
-
-    setTimeout(() => {
-      var canvas = document.getElementById("canvas");
-      if(canvas)
-        QRCode.toCanvas(canvas, address.publicAddress, { width: 400 }, function(error) {
-          if (error) console.error(error);
-          that.setState({ qrLoading: false })
-        });
-    }, 1000)
-  },
-
-  viewPublicKeyClosed() {
-    this.setState({ viewPublicKeyOpen: false, publicKey: null, accountName: null });
   },
 
   viewTokens(address) {
@@ -457,102 +245,6 @@ let WanAccounts = createReactClass({
       content,
       token: this.props.user.token
     });
-  },
-
-  investClicked(icoContractAddress) {
-    this.setState({
-      investmentAmountError: false,
-      investmentAmountErrorMessage: '',
-      selectedAddressError: false,
-      selectedAddressErrorMessage: ''
-    });
-
-    let currentCrowdsale = this.props.crowdsales.filter(crowdsale => {
-      return crowdsale.contractAddress === icoContractAddress;
-    });
-    if (currentCrowdsale.length > 0) {
-      currentCrowdsale = currentCrowdsale[0];
-      let error = false;
-
-      if (
-        this.state.investmentAmount === '' ||
-        this.state.investmentAmount === 0
-      ) {
-        this.setState({
-          investmentAmountError: true,
-          investmentAmountErrorMessage: 'Invalid investment amount'
-        });
-        error = true;
-      }
-      if (
-        currentCrowdsale.userCap !== 0 &&
-        this.state.investmentAmount >
-        currentCrowdsale.userCap / 1000000000000000000
-      ) {
-        this.setState({
-          investmentAmountError: true,
-          investmentAmountErrorMessage:
-            'Investment amount is greater than maximum contribution cap'
-        });
-        error = true;
-      }
-      if (this.state.investmentAmount < this.state.minContribution) {
-        this.setState({
-          investmentAmountError: true,
-          investmentAmountErrorMessage:
-            'Investment amount is less than minimum contribution cap'
-        });
-        error = true;
-      }
-
-      if (
-        this.state.selectedAddress === '' ||
-        this.state.selectedAddress == null ||
-        this.state.selectedAddress === 'none'
-      ) {
-        this.setState({
-          selectedAddressError: true,
-          selectedAddressErrorMessage: 'Please select an address'
-        });
-        error = true;
-      }
-
-      if (error === false) {
-        this.setState({ icoContractAddress, termsOpen: true });
-      }
-    } else {
-      this.setState({ ICOError: 'An error occurred' });
-    }
-  },
-
-  handleTermsClose() {
-    this.setState({ termsOpen: false });
-  },
-
-  handleTermsRefundClose() {
-    this.setState({ termsRefundOpen: false });
-  },
-
-  handleTermsAccepted() {
-    this.setState({ termsOpen: false, investLoading: true });
-
-    var content = {
-      fromAddress: this.state.selectedAddress,
-      amount: this.state.investmentAmount,
-      gwei: 300,
-      toAddress: this.state.icoContractAddress
-    };
-    wanDispatcher.dispatch({
-      type: 'investICO',
-      content,
-      token: this.props.user.token
-    });
-  },
-
-  handleTermsRefundAccepted() {
-    this.setState({ termsRefundOpen: false, investLoading: true });
-    const content = { saleId: this.state.icoContractId, tokenCount: this.state.investmentAmount, address: this.state.selectedAddress };
-    crowdsaleDispatcher.dispatch({ type: 'refund', content, token: this.props.user.token });
   },
 
   onCreateImportKeyDown(event) {

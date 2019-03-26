@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import config from "../config";
+import async from "async";
 
 var crypto = require('crypto');
 var bip39 = require('bip39');
@@ -15,6 +16,15 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
+    //INITIAL STORE DATA
+    // let dummyAccounts =  [{"type":"ethereum","id":26,"address":"0x3f7A04F39238acA1DD60eb39732FF21839fD2066","name":"Anton's account","isPrimary":true,"balance":0.66053638511,"usdBalance":90.71739013405557305880000000},{"type":"ethereum","id":17,"address":"0xDEAc5e7FaafD92E0220B5E2bEc7d546eFfa221cF","name":"My named address 1","isPrimary":false,"balance":0.31738883,"usdBalance":43.589856614040356400000000},{"type":"ethereum","id":25,"address":"0x2922D8061642787BBdf6098F52c8593e8cCb2c71","name":"Main Address","isPrimary":false,"balance":0.90591501589,"usdBalance":124.41743979191451402120000000},{"type":"ethereum","id":53,"address":"0xB7D0fB518a5b7bf8dc7ea19A715E8FD8BD983e27","name":"Abacus Test","isPrimary":false,"balance":0.701103095809436072,"usdBalance":96.28878060388299312126108576}]
+
+    this.store = {
+      accounts: null,
+      accountsCombined: null,
+      erc20Accounts: null,
+      erc20AccountsCombined: null
+    }
 
     dispatcher.register(
       function (payload) {
@@ -22,7 +32,6 @@ class Store {
           case 'getEthAddress':
             this.getEthAddress(payload);
             break;
-          case 'createEthAddressWhitelist':
           case 'createEthAddress':
             this.createEthAddress(payload);
             break;
@@ -63,10 +72,102 @@ class Store {
     );
   }
 
+  //GETTER AND SETTER FOR CURRENT STORE DATA
+  getStore(index) {
+    return(this.store[index]);
+  };
+
+  setStore(obj) {
+    this.store = {...this.store, ...obj}
+    return emitter.emit('StoreUpdated');
+  };
+
   getEthAddress = function (payload) {
     var url = 'ethereum/getUserAddresses/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('accountsUpdated')
+        return
+      }
+
+      if(data && data.success) {
+        this.setStore({accounts: data.ethAddresses})
+
+        let accountsCombined = data.ethAddresses.reduce((total, currentVal) => {
+
+          total.balance = total.balance + currentVal.balance
+          total.usdBalance = total.usdBalance + currentVal.usdBalance
+
+          return total
+        }, {
+          balance: 0,
+          usdBalance: 0,
+          type: 'Ethereum',
+          name: 'Ethereum',
+          symbol: 'Eth'
+        })
+
+        this.setStore({accountsCombined: [accountsCombined]})
+
+        //trigger get for all ERC20 addresses
+        async.map(data.ethAddresses, (account, callback) => {
+          payload.content.address = account.address
+          this.getERC20Address(payload, callback)
+        }, (err, erc20data) => {
+
+          let accountsNew = data.ethAddresses.map((address) => {
+            erc20data.map((accountTokens) => {
+              if(accountTokens.payloadAddress === address.address) {
+                address.tokens = accountTokens.tokens
+              }
+            })
+            return address
+          })
+
+          this.setStore({accounts: accountsNew})
+
+          emitter.emit('accountsUpdated');
+          emitter.emit('appAccountsUpdated');
+
+          let totals = []
+
+          //itterate through the responses.
+          for(var i = 0; i < erc20data.length; i++) {
+
+            //itterate through each of the sub sections
+            for(var j = 0; j < erc20data[i].tokens.length; j++) {
+
+              if(i == 0) {
+                totals.push({
+                  balance: erc20data[i].tokens[j].balance,
+                  usdBalance: 0,
+                  type: 'ERC20',
+                  name: erc20data[i].tokens[j].name,
+                  symbol: erc20data[i].tokens[j].symbol,
+                  address: erc20data[i].tokens[j].address
+                })
+              } else {
+
+                //itterate through totals to add balance
+                for(var k = 0; k < totals.length; k++) {
+                  if(totals[k].address == erc20data[i].tokens[j].address) {
+                    totals[k].balance = totals[k].balance + erc20data[i].tokens[j].balance
+                  }
+                }
+              }
+            }
+          }
+
+          this.setStore({ erc20AccountsCombined: totals })
+          emitter.emit('erc20AccountsUpdated');
+        })
+      } else {
+        emitter.emit('error', data.errorMsg)
+        emitter.emit('accountsUpdated')
+      }
+    });
   };
 
   createEthAddress = function (payload) {
@@ -76,7 +177,9 @@ class Store {
       isPrimary: payload.content.isPrimary
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      this.getEthAddress(payload)
+    });
   };
 
   importEthAddress = function (payload) {
@@ -88,7 +191,9 @@ class Store {
       privateKey: payload.content.privateKey
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      this.getEthAddress(payload)
+    });
   };
 
   updateEthAddress = function (payload) {
@@ -99,16 +204,22 @@ class Store {
       address: payload.content.address
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getEthAddress(payload)
+    });
   };
 
   deleteEthAddress = function (payload) {
     var url = 'ethereum/deleteAddress';
     var postJson = {
-      address: payload.content.publicAddress
+      address: payload.content.address
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getEthAddress(payload)
+    });
   };
 
   sendEther = function (payload) {
@@ -125,7 +236,13 @@ class Store {
       postJson.contactUsername = payload.content.contactUserName;
     }
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+      emitter.emit('sendReturned', err, data);
+    });
   };
 
   createPoolingContract = function (payload) {
@@ -135,7 +252,9 @@ class Store {
       name: payload.content.name
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
+    });
   };
 
   exportEthereumKey = function (payload) {
@@ -145,13 +264,18 @@ class Store {
       mnemonic: payload.content.mnemonic
     };
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
+    });
   };
 
-  getERC20Address = function (payload) {
-    var url = 'ethereum/getErc20Balances/' + payload.content.address;
-
-    this.callApi(url, 'GET', null, payload, payload.content.address);
+  getERC20Address = function (payload, callback) {
+    const addy = payload.content.address
+    var url = 'ethereum/getErc20Balances/' + addy;
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      data.payloadAddress = addy
+      callback(err, data)
+    });
   };
 
   sendERC20 = function (payload) {
@@ -169,7 +293,13 @@ class Store {
       postJson.contactUsername = payload.content.contactUserName;
     }
 
-    this.callApi(url, 'POST', postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+      emitter.emit('sendReturned', err, data);
+    });
   };
 
   getSupportedERC20Tokens = function (payload) {
@@ -181,10 +311,14 @@ class Store {
   getEthTransactionHistory = function (payload) {
     var url = 'ethereum/getTransactionHistory/' + payload.content.id;
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+
+      this.setStore({ transactions: data.transactions });
+      emitter.emit('transactionsUpdated');
+    });
   };
 
-  callApi = function (url, method, postData, payload, customEmit) {
+  callApi = function (url, method, postData, payload, callback) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = '';
@@ -241,10 +375,12 @@ class Store {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res, customEmit);
+        callback(null, res)
+        // emitter.emit(payload.type, null, res);
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null, customEmit);
+        callback(error, null)
+        // emitter.emit(payload.type, error, null);
       });
   };
 }

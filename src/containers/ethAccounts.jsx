@@ -11,11 +11,11 @@ const isEthereumAddress = require("is-ethereum-address");
 
 let ethEmitter = require("../store/ethStore.js").default.emitter;
 let ethDispatcher = require("../store/ethStore.js").default.dispatcher;
+let ethStore = require("../store/ethStore.js").default.store;
 
 let EthAccounts = createReactClass({
   getInitialState() {
     return {
-      createLoading: false,
       error: null,
       addressName: "",
       addressNameError: false,
@@ -37,10 +37,10 @@ let EthAccounts = createReactClass({
       optionsAccount: null,
       loadingAccount: null,
       deleteOpen: false,
-      createOpen: false,
-      importOpen: false,
       viewOpen: false,
       tokens: null,
+      accounts:  ethStore.getStore('accounts'),
+      transactions: ethStore.getStore('transactions'),
       publicKey: null,
       viewPublicKeyOpen: false,
       qrLoading: false,
@@ -53,14 +53,11 @@ let EthAccounts = createReactClass({
         theme={this.props.theme}
         handleChange={this.handleChange}
         handleTabChange={this.handleTabChange}
-        onCreateImportKeyDown={this.onCreateImportKeyDown}
-        createImportClicked={this.createImportClicked}
         exportEthereumKeyClicked={this.exportEthereumKeyClicked}
-        createLoading={this.state.createLoading}
         cardLoading={this.state.cardLoading}
         privateKeyLoading={this.state.privateKeyLoading}
         error={this.state.error}
-        addresses={this.props.ethAddresses}
+        addresses={this.state.accounts}
         addressName={this.state.addressName}
         addressNameError={this.state.addressNameError}
         addressNameErrorMessage={this.state.addressNameErrorMessage}
@@ -97,14 +94,8 @@ let EthAccounts = createReactClass({
         confirmDelete={this.confirmDelete}
         handleDeleteClose={this.handleDeleteClose}
         deleteLoading={this.state.deleteLoading}
-        ethTransactions={this.props.ethTransactions}
+        ethTransactions={this.state.transactions}
         contacts={this.props.contacts}
-        handleCreateOpen={this.handleCreateOpen}
-        handleImportOpen={this.handleImportOpen}
-        createOpen={this.state.createOpen}
-        handleCreateClose={this.handleCreateClose}
-        importOpen={this.state.importOpen}
-        handleImportClose={this.handleImportClose}
         size={this.props.size}
         viewTokens={ this.viewTokens }
         viewTokensClose={ this.viewTokensClose }
@@ -121,109 +112,32 @@ let EthAccounts = createReactClass({
   },
 
   componentWillMount() {
-    ethEmitter.removeAllListeners("createEthAddress");
-    ethEmitter.removeAllListeners("importEthAddress");
-    ethEmitter.removeAllListeners("updateEthAddress");
     ethEmitter.removeAllListeners("exportEthereumKey");
     ethEmitter.removeAllListeners("deleteEthAddress");
+    ethEmitter.removeAllListeners("transactionsUpdated");
 
-    ethEmitter.on("createEthAddress", this.createEthAddressReturned);
-    ethEmitter.on("importEthAddress", this.importEthAddressReturned);
-    ethEmitter.on("updateEthAddress", this.updateEthAddressReturned);
     ethEmitter.on("exportEthereumKey", this.exportEthereumKeyReturned);
     ethEmitter.on("deleteEthAddress", this.deleteEthAddressReturned);
+    ethEmitter.on("transactionsUpdated", this.transactionsUpdated);
+  },
+
+  componentDidMount() {
+    const { user } = this.props;
+    const content = { id: user.id };
+
+    ethDispatcher.dispatch({
+      type: 'getEthTransactionHistory',
+      content,
+      token: user.token
+    });
+  },
+
+  transactionsUpdated() {
+    this.setState({ transactions: ethStore.getStore('transactions') })
   },
 
   sendERC20(symbol) {
     this.props.openSendERC(symbol, this.state.optionsAccount)
-  },
-
-  resetInputs() {
-    this.setState({
-      addressName: "",
-      addressNameError: false,
-      primary: false,
-      primaryError: false,
-      privateKey: "",
-      privateKeyError: false,
-      publicAddress: "",
-      publicAddressError: false
-    });
-  },
-
-  createEthAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      ethDispatcher.dispatch({
-        type: "getEthAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ createOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  importEthAddressReturned(error, data) {
-    this.setState({ createLoading: false });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      this.resetInputs();
-      var content = { id: this.props.user.id };
-      ethDispatcher.dispatch({
-        type: "getEthAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      this.setState({ createOpen: false });
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
-  },
-
-  updateEthAddressReturned(error, data) {
-    this.setState({
-      cardLoading: false,
-      editAccount: null,
-      editAddressName: "",
-      editAddressNameError: false,
-      editAddressNameErrorMessage: "",
-      loadingAccount: null
-    });
-    if (error) {
-      return this.setState({ error: error.toString() });
-    }
-
-    if (data.success) {
-      var content = { id: this.props.user.id };
-      ethDispatcher.dispatch({
-        type: "getEthAddress",
-        content,
-        token: this.props.user.token
-      });
-
-      //show sncakbar?
-    } else if (data.errorMsg) {
-      this.setState({ error: data.errorMsg });
-    } else {
-      this.setState({ error: data.statusText });
-    }
   },
 
   exportEthereumKeyReturned(error, data) {

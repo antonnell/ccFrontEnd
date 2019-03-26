@@ -285,7 +285,7 @@ class EnhancedTable extends React.Component {
                         <div style={divStyle}>
                           <img
                             alt=""
-                            src={ require('../../assets/images/wanchain-logo.png') }
+                            src={ require('../../assets/images/Wanchain-logo.png') }
                             width="30px"
                             height="30px"
                             style={{marginRight: '12px'}}
