@@ -65,7 +65,7 @@ let Staking = createReactClass({
     }).map((coin) => {
 
       let theToken = tokens.filter((token) => {
-        return token.uuid == coin.uuid
+        return token.uuid === coin.uuid
       })
 
       if(theToken.length > 0) {
