@@ -92,12 +92,12 @@ class EnhancedTableHead extends React.Component {
         label: "Date"
       },
       {
-        id: "transactionId",
+        id: "transactionID",
         disablePadding: false,
         label: "Transaction"
       },
       {
-        id: "value",
+        id: "amount",
         disablePadding: false,
         label: "Amount"
       }
@@ -111,7 +111,7 @@ class EnhancedTableHead extends React.Component {
           label: "Date"
         },
         {
-          id: "value",
+          id: "amount",
           disablePadding: false,
           label: "Amount"
         }
@@ -212,7 +212,7 @@ class EnhancedTable extends React.Component {
     order: "desc",
     orderBy: "timestamp",
     selected: [],
-    data: this.props.wanTransactions,
+    history: [],
     page: 0,
     rowsPerPage: 5
   };
@@ -237,7 +237,12 @@ class EnhancedTable extends React.Component {
   };
 
   render() {
-    const { classes, theme, size } = this.props;
+    const {
+      classes,
+      theme,
+      size,
+      history,
+    } = this.props;
     const {
       order,
       orderBy,
@@ -245,7 +250,6 @@ class EnhancedTable extends React.Component {
       rowsPerPage,
       page
     } = this.state;
-    const data = this.props.wanTransactions;
 
     let divStyle = {
       display: 'inline-block'
@@ -268,52 +272,39 @@ class EnhancedTable extends React.Component {
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
-              rowCount={data ? data.length : 0}
+              rowCount={history ? history.length : 0}
               theme={theme}
               size={size}
             />
           <TableBody>
               {stableSort(
-                filtering(data, this.props),
+                filtering(history, this.props),
                 getSorting(order, orderBy)
               )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
+                .map(record => {
                   return (
-                    <TableRow hover tabIndex={-1} key={n.transactionId}>
+                    <TableRow hover tabIndex={-1} key={record.transactionID}>
                       <TableCell>
                         <div style={divStyle}>
-                          <img
-                            alt=""
-                            src={ require('../../assets/images/Wanchain-logo.png') }
-                            width="30px"
-                            height="30px"
-                            style={{marginRight: '12px'}}
-                          />
-                        </div>
-                        <div style={divStyle}>
-                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.green.red, fontFamily: 'Montserrat-SemiBold' }}>
-                            {n.status}
+                          <Typography variant="body1" style={{ fontFamily: 'Montserrat-SemiBold' }}>
+                            {record.currency}
                           </Typography>
                           <Typography variant="subtitle2">
-                            {moment(n.timestamp).format("YYYY/MM/DD hh:mm")}
+                            {moment(record.timestamp).format("YYYY/MM/DD hh:mm")}
                           </Typography>
                         </div>
                       </TableCell>
                       {['xl', 'lg'].includes(size) && (<TableCell>
-                        <a
-                          href={config.bitcoinscanURL + n.transactionId}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{textDecoration: 'none'}}
-                        >
-                          <Typography variant="body1" noWrap style={{ maxWidth: size==='lg'?'530px':'auto' }}>
-                            {n.transactionId}
-                          </Typography>
-                        </a>
+                        <Typography variant="body1" noWrap style={{ maxWidth: size==='lg'?'530px':'auto' }}>
+                          {record.transactionID}
+                        </Typography>
                       </TableCell>)}
                       <TableCell>
-                        <Typography variant="body1">{n.value + " " +n.currency}</Typography>
+                        <Typography variant="body1">{record.amount + " " +record.currency}</Typography>
+                        <Typography variant="subtitle2" style={{ color: record.stakingTransactionStatus==='processed'?colors.green:record.stakingTransactionStatus==='unprocessed'?colors.orange:colors.red,  }}>
+                          {record.type}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   );
@@ -323,7 +314,7 @@ class EnhancedTable extends React.Component {
         </div>
         <TablePagination
           component="div"
-          count={data ? data.length : 0}
+          count={history ? history.length : 0}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

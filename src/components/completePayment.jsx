@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Grid,
-  Button,
   Typography,
   SvgIcon,
 } from "@material-ui/core";
@@ -72,7 +71,8 @@ class CompletePayment extends Component {
       case 'WRC20':
         url = config.wanscanURL + transactionID;
         break;
-
+      default:
+        break;
     }
 
     return (

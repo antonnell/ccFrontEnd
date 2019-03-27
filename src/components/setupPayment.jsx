@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import {
   Grid,
-  Button,
   Typography,
   ListItemText,
-  ListItemSecondaryAction,
-  TextField,
   Select,
   MenuItem,
-  Tabs,
-  Tab,
   FormControl,
   FormHelperText,
   Input,
@@ -57,8 +52,6 @@ class SetupPayment extends Component {
       gasValue,
       gasError,
       gasErrorMessage,
-
-      publicKey,
 
       onSelectChange,
       onChange,
@@ -108,7 +101,7 @@ class SetupPayment extends Component {
           let selected = null
           let val = ''
           selected = options && options.length > 0 && options.filter((option) => {
-            return option.value == value
+            return option.value === value
           })[0]
           if(selected) {
             val = selected.description + (selected.balance ? (' ('+selected.balance.toFixed(4)+' '+selected.symbol+')') : '')

@@ -12,6 +12,8 @@ import InputBase from '@material-ui/core/InputBase';
 
 import LineGraph from './lineGraph';
 
+let store = require('../../store/stakingStore.js').default.store;
+
 function MoreIcon(props) {
   return (
     <SvgIcon {...props}>
@@ -33,12 +35,11 @@ class StakingPerformance extends Component {
       optionsClicked,
       timeFrameChanged,
       currencyChanged,
-      store
+      userStakes
     } = this.props
 
-    const timeFrameOptions = store.timeFrameOptions
-
-    const currencyOptions = store.currencyOptions
+    const timeFrameOptions = store.getStore("timeFrameOptions")
+    const currencyOptions = store.getStore("currencyOptions")
 
     const stakeHead = {
       paddingRight: '24px'
@@ -139,12 +140,12 @@ class StakingPerformance extends Component {
                       direction="row"
                     >
                       <Grid item xs={4} md={3} lg={2}>
-                        {this.renderSelect(timeFrameOptions, store.timeFrame, timeFrameChanged)}
+                        {this.renderSelect(timeFrameOptions, store.getStore("timeFrame"), timeFrameChanged)}
                       </Grid>
                       <Grid item xs={1}>
                       </Grid>
                       <Grid item xs={4} md={3} lg={2}>
-                        {this.renderSelect(currencyOptions, store.currency, currencyChanged)}
+                        {this.renderSelect(currencyOptions, store.getStore("currency"), currencyChanged)}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -181,7 +182,8 @@ class StakingPerformance extends Component {
   }
 
   renderChart() {
-    let { data, labels } = this.props.store
+    let data = store.getStore("data")
+    let labels = store.getStore("labels")
 
     return <LineGraph labels={ labels } data={ data } height={ 400 } hideY={ false } thickness={ 5 } marginTop={ 24 }/>
   }

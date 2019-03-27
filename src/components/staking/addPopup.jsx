@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Dialog from '@material-ui/core/Dialog';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Checkbox from '@material-ui/core/Checkbox';
-import Slide from '@material-ui/core/Slide';
+
+import {
+  Grid,
+  DialogActions,
+  DialogContent,
+  Dialog,
+  Avatar,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Checkbox,
+  Slide,
+  FormControl,
+  Input,
+  FormHelperText,
+  Select,
+  MenuItem,
+  ListItemText
+} from '@material-ui/core';
+
+import SectionLoader from '../sectionLoader';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -19,64 +30,128 @@ class AddPopup extends Component {
 
   render() {
 
-    let { handleClose, handleStakeFinish, isOpen } = this.props
+    let {
+      handleClose,
+      handleStakeFinish,
+      handleSelectChange,
+      onChange,
+      loading,
+      isOpen,
+
+      tokenOptions,
+      tokenValue,
+      tokenError,
+      tokenErrorMessage,
+      accountOptions,
+      accountValue,
+      accountError,
+      accountErrorMessage,
+      amountValue,
+      amountError,
+      amountErrorMessage,
+    } = this.props
 
     return (
+
       <Dialog open={isOpen} onClose={handleClose} fullWidth={true} maxWidth={'md'} TransitionComponent={Transition}>
-        <DialogContent>
-          <Grid
-            container
-            justify="flex-start"
-            alignItems="flex-start"
-            direction="row"
-          >
-            {this.renderCards()}
+        {loading?<SectionLoader />:''}
+
+        <Grid container style={{ overflowY: 'hidden' }}>
+          <Grid item xs={3}>
+            <Grid container directtion='column' justify='space-around' style={{ alignContent: 'center', height: '100%', background:'#2B323C', minHeight: '525px' }}>
+              <Grid item>
+              </Grid>
+            </Grid>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button variant='contained' onClick={handleStakeFinish} color="primary" autoFocus>
-            Finish
-          </Button>
-        </DialogActions>
+          <Grid item xs={9} >
+            <Grid container direction='column' justify='space-between' alignItems="flex-start" style={{ height: '100%' }}>
+              <Grid item style={{ width: '100%', padding: '24px' }}>
+                <Typography variant="h3">
+                  Add Stake
+                </Typography>
+              </Grid>
+              <Grid item style={{ width: '100%' }}>
+                <Grid container justify="space-around" alignItems="flex-start" direction="row" style={{ width: '100%' }} >
+                  <Grid item xs={11} align="left">
+                    { this.renderSelect("Select The Token", tokenValue, tokenOptions, tokenError, tokenErrorMessage, handleSelectChange, loading, 'token') }
+                  </Grid>
+                  <Grid item xs={11} align="left" style={{ marginTop: '60px' }} >
+                    { this.renderSelect("Select Your Account", accountValue, accountOptions, accountError, accountErrorMessage, handleSelectChange, loading, 'account') }
+                  </Grid>
+                  <Grid item xs={11} align="left" style={{ marginTop: '60px' }} >
+                    { this.renderImput("Stake Deposit Amount", amountValue, amountError, amountErrorMessage, onChange, loading, 'amount') }
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item align="right" style={{ width: '100%', padding: '24px' }}>
+                <Button variant='contained' size='large' onClick={handleStakeFinish} color="secondary" autoFocus>
+                  Finish
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Dialog>
     )
   }
 
-  renderCards() {
-    let { coins } = this.props.store
-
-    return coins.map((coin) => {
-      return this.renderCard(coin)
-    })
+  renderImput(label, value, error, errorMessage, onChange, disabled, name) {
+    return (<FormControl error={error} fullWidth={true} >
+      <Typography variant="body1" style={{
+          fontSize: '12px',
+          fontFamily: "Montserrat-SemiBold"
+        }}>
+        {label}
+      </Typography>
+      <Input name={name} value={value} onChange={onChange} disabled={disabled} />
+      {error === true ? (
+        <FormHelperText>{errorMessage}</FormHelperText>
+      ) : null}
+    </FormControl>)
   }
 
-  renderCard(coin) {
-    let { handleCheck } = this.props
-    return (
-      <Grid item xs={12} sm={6} md={4} key={coin.name} style={{ padding: '24px' }}>
-        <Card style={{ cursor: 'pointer' }} onClick={()=> { handleCheck(coin); }}>
-          <CardContent>
-            <Grid
-              container
-              justify="flex-start"
-              alignItems="center"
-              direction="row">
-              <Grid item xs={3} align='left'>
-                <Avatar>{coin.name.charAt(0)}</Avatar>
-              </Grid>
-              <Grid item xs={6} align='left'>
-                <Typography variant="h3" nowrap>
-                  {coin.name}
-                </Typography>
-              </Grid>
-              <Grid item xs={3} align='right'>
-                <Checkbox checked={coin.checked} />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-    )
+  renderSelect(label, value, options, error, errorMessage, onChange, disabled, name) {
+    return (<FormControl error={error} fullWidth={true} >
+      <Typography variant="body1" style={{
+          fontSize: '12px',
+          fontFamily: "Montserrat-SemiBold"
+        }}>
+        {label}
+      </Typography>
+      <Select name={name} value={value} onChange={onChange} disabled={disabled} renderValue={value => {
+
+          let selected = null
+          let val = ''
+          selected = options && options.length > 0 && options.filter((option) => {
+            return option.value === value
+          })[0]
+          if(selected) {
+            val = selected.description + (selected.balance ? (' ('+selected.balance.toFixed(4)+' '+selected.symbol+')') : '')
+          }
+
+          return (
+            <Typography variant="body1" noWrap>{ val }</Typography>
+          );
+        }}
+      >
+        {options
+          ? options.map(option => {
+              if(!option) {
+                return null
+              }
+              
+              return (
+                <MenuItem key={option.value} value={option.value}>
+                  <ListItemText primary={option.description + (option.balance ? (' ('+option.balance.toFixed(4)+' '+option.symbol+')') : '')} />
+                </MenuItem>
+              );
+            })
+          : ""}
+      </Select>
+      {error === true ? (
+        <FormHelperText>{errorMessage}</FormHelperText>
+      ) : null}
+    </FormControl>)
   }
 }
 

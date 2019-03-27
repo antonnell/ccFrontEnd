@@ -479,8 +479,10 @@ class EnhancedTable extends React.Component {
                     case 'WRC20':
                       url = config.wanscanURL + n.transactionId;
                       break;
+                    default:
+                      break;
                   }
-                  
+
                   return (
                     <TableRow hover tabIndex={-1} key={n.transactionId}>
                       <TableCell>
@@ -494,7 +496,7 @@ class EnhancedTable extends React.Component {
                           />
                         </div>
                         <div style={divStyle}>
-                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.green.red, fontFamily: 'Montserrat-SemiBold' }}>
+                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.red, fontFamily: 'Montserrat-SemiBold' }}>
                             {n.status}
                           </Typography>
                           <Typography variant="subtitle2">
@@ -509,7 +511,7 @@ class EnhancedTable extends React.Component {
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
                         >
-                          <Typography variant="body1" noWrap style={{ maxWidth: size=='lg'?'530px':'auto' }}>
+                          <Typography variant="body1" noWrap style={{ maxWidth: size==='lg'?'530px':'auto' }}>
                             {n.transactionId}
                           </Typography>
                         </a>

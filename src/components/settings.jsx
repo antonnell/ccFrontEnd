@@ -7,7 +7,6 @@ import Manage2FA from '../containers/manage2fa.jsx';
 import KYC from '../containers/kyc.jsx';
 import UpdatePassword from '../containers/updatePassword.jsx';
 import Profile from '../containers/profile.jsx';
-import ThemePicker from '../containers/themePicker.jsx';
 import PageTItle from "./pageTitle";
 
 
@@ -38,12 +37,6 @@ class Settings extends Component {
     )
   };
 
-  renderTheme = ()=> {
-    return (
-      <ThemePicker />
-    )
-  };
-
   render() {
     return (
       <Grid container justify="center" alignItems="flex-start" direction="row">
@@ -63,11 +56,6 @@ class Settings extends Component {
             <Tab label="Profile" />
             <Tab label="Security" />
           </Tabs>
-          {/*<IconButton
-            color="primary"
-            onClick={() => { this.props.changeTheme() }}>
-            <ThemeIcon />
-          </IconButton>*/}
         </Grid>
         <Grid item xs={12} align='left' style={{margin: '12px'}}>
           {
@@ -83,13 +71,6 @@ class Settings extends Component {
             <Grid container>
               <Grid item xs={12} md={6}>{this.render2FA()}</Grid>
               <Grid item xs={12} md={6}>{this.renderUpdatePassword()}</Grid>
-            </Grid>
-            :null
-          }
-          {
-            this.props.tabValue===2?
-            <Grid container>
-              <Grid item xs={12} md={6}>{this.renderTheme()}</Grid>
             </Grid>
             :null
           }

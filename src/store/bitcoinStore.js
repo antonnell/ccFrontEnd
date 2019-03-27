@@ -286,17 +286,14 @@ class Store {
         if (res.ok) {
           return res;
         } else {
-          throw Error(res.statusText);
+          callback(res.statusText)
         }
       })
       .then(res => res.json())
       .then(res => {
-        // emitter.emit(payload.type, null, res, extraData);
         callback(null, res)
       })
       .catch(error => {
-        console.log(error)
-        // emitter.emit(payload.type, error, null, extraData);
         callback(error, null)
       });
   };

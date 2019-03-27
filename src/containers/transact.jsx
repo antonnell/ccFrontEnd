@@ -9,14 +9,8 @@ import {
   StepLabel,
   StepContent,
   Grid,
-  Card,
-  CardContent,
   Slide,
   Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  Typography,
   Tab,
   Tabs,
   Button
@@ -24,7 +18,7 @@ import {
 import SectionLoader from '../components/sectionLoader';
 
 const createReactClass = require("create-react-class");
-const isEthereumAddress = require("is-ethereum-address");
+// const isEthereumAddress = require("is-ethereum-address");
 var QRCode = require("qrcode");
 
 let ethEmitter = require("../store/ethStore.js").default.emitter;
@@ -97,6 +91,8 @@ let Transact = createReactClass({
             return account.isPrimary === true
           })[0].publicAddress
         break;
+        default:
+          break;
       }
     }
 
@@ -197,8 +193,6 @@ let Transact = createReactClass({
       ethAccounts,
       wanAccounts,
       tezosAccounts,
-      erc20Accounts,
-      wrc20Accounts,
       aionLoading,
       bitcoinLoading,
       ethLoading,
@@ -498,7 +492,7 @@ let Transact = createReactClass({
   },
 
   renderGraphic() {
-    return <img src={require('../assets/images/Receive-Illustration.svg')} width='100%' height='100%' />
+    return <img alt='Receive' src={require('../assets/images/Receive-Illustration.svg')} width='100%' height='100%' />
   },
 
   renderLeft() {
@@ -509,6 +503,8 @@ let Transact = createReactClass({
       case "confirm":
       case "results":
         return this.renderStepper()
+      default:
+        break;
     }
   },
 
@@ -576,7 +572,9 @@ let Transact = createReactClass({
             Send another payment
           </Button>
         )
-      }
+      default:
+        break;
+    }
   },
 
   render() {
@@ -652,7 +650,7 @@ let Transact = createReactClass({
         })
 
         let theToken = this.state.tokens.filter((token) => {
-          return token.value == event.target.value
+          return token.value === event.target.value
         })
 
         if(theToken && theToken.length > 0) {
@@ -689,20 +687,24 @@ let Transact = createReactClass({
       case 'own':
         this.setState({ ownValue: event.target.value })
         break;
+      default:
+        break
     }
   },
 
   onChange(event) {
     switch (event.target.name) {
-    case 'public':
-      this.setState({ publicValue: event.target.value })
-      break;
-    case 'amount':
-      this.setState({ amountValue: event.target.value })
-      break;
-    case 'gas':
-      this.setState({ gasValue: event.target.value })
-      break;
+      case 'public':
+        this.setState({ publicValue: event.target.value })
+        break;
+      case 'amount':
+        this.setState({ amountValue: event.target.value })
+        break;
+      case 'gas':
+        this.setState({ gasValue: event.target.value })
+        break;
+      default:
+        break
     }
   },
 
@@ -739,7 +741,7 @@ let Transact = createReactClass({
       ownValue,
     } = this.state
 
-    const content = {
+    let content = {
       fromAddress: accountValue,
       amount: amountValue,
       gwei: gasValue,
@@ -887,7 +889,6 @@ let Transact = createReactClass({
       typeValue,
       contactValue,
       ownValue,
-      publicValue,
       amountValue,
       gasValue,
       aionAccounts,

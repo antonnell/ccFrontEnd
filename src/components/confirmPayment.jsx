@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Grid,
-  Button,
   Typography
 } from '@material-ui/core';
 
@@ -82,7 +81,7 @@ class ConfirmPayment extends Component {
             </Typography>
             <Typography variant="h5" noWrap style={{ fontSize:  '20px', marginTop: '4px' }}>
               { accountOptions.filter((option) => {
-                return accountValue == option.value
+                return accountValue === option.value
               })[0].description }
             </Typography>
           </Grid>

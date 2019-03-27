@@ -16,9 +16,8 @@ class Accounts extends Component {
       loading,
       stakeClicked,
       transactClicked,
-      createLoading,
-      importLoading,
       user,
+      stakeableCurrencies
     } = this.props
 
     if(!accounts) {
@@ -39,7 +38,7 @@ class Accounts extends Component {
       if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain"].includes(account.name) || account.balance > 0) {
         return (
           <Grid item xs={12} sm={6} lg={4} xl={3} key={account.name} style={{ padding: '24px' }}>
-            <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked }/>
+            <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } stakeableCurrencies={ stakeableCurrencies } />
           </Grid>
         )
       } else {
@@ -55,10 +54,8 @@ class Accounts extends Component {
       handleCreateOpen,
       handleImportOpen,
       loading,
-      transactOpen,
       createOpen,
       importOpen,
-      tokens,
       error
     } = this.props
 
@@ -69,7 +66,7 @@ class Accounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Dashboard'} screen={'Accounts'} />
+          <PageTitle theme={theme} root={'Accounts'} screen={'Dashboard'} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid

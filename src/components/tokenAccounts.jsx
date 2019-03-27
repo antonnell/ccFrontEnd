@@ -42,7 +42,6 @@ class TokenAccounts extends Component {
     let {
       accounts,
       theme,
-      size,
       token,
       optionsAccount,
       loadingAccount,
@@ -356,7 +355,7 @@ class TokenAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTitle theme={theme} root={'Dashboard > Accounts'} screen={token} />
+            <PageTitle theme={theme} root={'Accounts'} screen={token} />
           </Grid>
           <Grid
             item
@@ -378,7 +377,7 @@ class TokenAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Dashboard > Accounts'} screen={token} />
+          <PageTitle theme={theme} root={'Accounts'} screen={token} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid

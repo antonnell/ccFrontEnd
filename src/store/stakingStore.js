@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import config from "../config";
+import async from "async";
 
 var crypto = require('crypto');
 var bip39 = require('bip39');
@@ -18,6 +19,27 @@ class Store {
     dispatcher.register(
       function (payload) {
         switch (payload.type) {
+          case 'getStakeableCurrencies':
+            this.getStakeableCurrencies(payload);
+            break;
+          case 'getStakingNodes':
+            this.getStakingNodes(payload);
+            break;
+          case 'getUserStakes':
+            this.getUserStakes(payload);
+            break;
+          case 'getRewardHistory':
+            this.getRewardHistory(payload);
+            break;
+          case 'getTransactionHistory':
+            this.getTransactionHistory(payload);
+            break;
+          case 'addStake':
+            this.addStake(payload);
+            break;
+          case 'withdrawStake':
+            this.withdrawStake(payload);
+            break;
           default: {
 
           }
@@ -51,7 +73,13 @@ class Store {
         { uuid: 'Neo', name: 'Neo', checked: false },
         { uuid: 'PivX', name: 'PivX', checked: false }
       ],
-      tokens: []
+      tokens: [],
+
+      stakeableCurrencies: [],
+      stakingNodes: [],
+      userStakes: null,
+      rewardHistory: [],
+      transactionHistory: []
     }
   }
 
@@ -62,10 +90,136 @@ class Store {
 
   setStore(obj) {
     this.store = {...this.store, ...obj}
-    return emitter.emit('StoreUpdated');
   }
 
-  callApi = function (url, method, postData, payload) {
+  getStakeableCurrencies(payload) {
+    var url = 'staking/getStakeableCurrencies';
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit(payload.type, err, data);
+        return
+      }
+
+      this.setStore({ stakeableCurrencies: data.currencies })
+
+      emitter.emit(payload.type, err, data);
+    });
+  }
+
+  getStakingNodes(payload) {
+    var url = 'staking/getStakingNodes';
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit(payload.type, err, data);
+        return
+      }
+
+      this.setStore({ stakingNodes: data.stakingNodes })
+
+      emitter.emit(payload.type, err, data);
+    });
+  }
+
+  getUserStakes(payload) {
+    var url = 'staking/getUserStakes/'+payload.content.userId;
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      console.log(data)
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('stakesUpdated')
+        return
+      }
+
+      this.setStore({ userStakes: data.stakes })
+
+      async.parallel([
+        (callback) => { this.getRewardHistory(payload, callback) },
+        (callback) => { this.getTransactionHistory(payload, callback) }
+      ], (err, subData) => {
+        if(err) {
+          emitter.emit('error', err)
+          emitter.emit('stakesUpdated')
+          return
+        }
+
+        this.setStore({ rewardHistory: subData[0].rewards, transactionHistory: subData[1].transactions })
+
+        emitter.emit('stakesUpdated')
+      })
+
+    });
+  }
+
+  getRewardHistory(payload, callback) {
+    var url = 'staking/getRewardHistory/'+payload.content.userId;
+
+    this.callApi(url, 'GET', null, payload, callback);
+  }
+
+  getTransactionHistory(payload, callback) {
+    var url = 'staking/getTransactionHistory/'+payload.content.userId;
+
+    this.callApi(url, 'GET', null, payload, callback);
+  }
+
+  addStake(payload) {
+    var url = 'staking/addStake';
+    var postJson = {
+      userId: payload.content.userId,
+      fromAddress: payload.content.fromAddress,
+      nodeId: payload.content.nodeId,
+      amount: payload.content.amount,
+      currency: payload.content.currency
+    };
+
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('stakesUpdated')
+        return
+      }
+
+      if(data && data.success) {
+        this.getUserStakes(payload)
+      } else {
+        emitter.emit('error', data.errorMsg)
+        emitter.emit('stakesUpdated')
+      }
+    });
+  }
+
+  withdrawStake(payload) {
+    var url = 'staking/withdrawStake';
+    var postJson = {
+      userId: payload.content.userId,
+      toAddress: payload.content.toAddress,
+      nodeId: payload.content.nodeId,
+      amount: payload.content.amount
+    };
+
+    console.log(postJson)
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('stakesUpdated')
+        return
+      }
+      if(data && data.success) {
+        this.getUserStakes(payload)
+      } else {
+        emitter.emit('error', data.errorMsg)
+        emitter.emit('stakesUpdated')
+      }
+    });
+  }
+
+
+  callApi = function (url, method, postData, payload, callback) {
     //get X-curve-OTP from sessionStorage
     var userString = sessionStorage.getItem('cc_user');
     var authOTP = '';
@@ -122,10 +276,10 @@ class Store {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res);
+        callback(null, res)
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null);
+        callback(error, null)
       });
   };
 }

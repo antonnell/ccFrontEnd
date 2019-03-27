@@ -40,7 +40,7 @@ let contactsDispatcher = require("./store/contactsStore.js").default.dispatcher;
 let contactsStore = require("./store/contactsStore.js").default.store;
 
 let ethEmitter = require("./store/ethStore.js").default.emitter;
-let ethDispatcher = require("./store/ethStore.js").default.dispatcher; 
+let ethDispatcher = require("./store/ethStore.js").default.dispatcher;
 let ethStore = require("./store/ethStore.js").default.store;
 
 let wanEmitter = require("./store/wanStore.js").default.emitter;
@@ -48,11 +48,19 @@ let wanDispatcher = require("./store/wanStore.js").default.dispatcher;
 let wanStore = require("./store/wanStore.js").default.store;
 
 let aionEmitter = require("./store/aionStore.js").default.emitter;
+let aionDispatcher = require('./store/aionStore.js').default.dispatcher;
 let aionStore = require("./store/aionStore.js").default.store;
+
 let tezosEmitter = require("./store/tezosStore.js").default.emitter;
+let tezosDispatcher = require('./store/tezosStore.js').default.dispatcher;
 let tezosStore = require("./store/tezosStore.js").default.store;
+
 let bitcoinEmitter = require('./store/bitcoinStore.js').default.emitter;
+let bitcoinDispatcher = require('./store/bitcoinStore.js').default.dispatcher;
 let bitcoinStore = require("./store/bitcoinStore.js").default.store;
+
+let stakingDispatcher = require("./store/stakingStore.js").default.dispatcher;
+let stakingStore = require("./store/stakingStore.js").default.store;
 
 const setInitialUser = () => {
   const userString = sessionStorage.getItem("cc_user");
@@ -78,7 +86,9 @@ class App extends Component {
     transactOpen: false,
     transactCurrency: null,
     transactContact: null,
-    transactAccount: null
+    transactAccount: null,
+    stakeOpen: false,
+    stakingCurrency: null,
   };
 
   constructor(props) {
@@ -96,6 +106,8 @@ class App extends Component {
 
     this.transactClicked = this.transactClicked.bind(this);
     this.transactClosed = this.transactClosed.bind(this);
+    this.stakeClicked = this.stakeClicked.bind(this);
+    this.addStakeClosed = this.addStakeClosed.bind(this);
 
     this.contactsRefreshed = this.contactsRefreshed.bind(this);
     this.ethAccountsRefreshed = this.ethAccountsRefreshed.bind(this);
@@ -187,7 +199,6 @@ class App extends Component {
     tezosEmitter.removeAllListeners('Unauthorised');
     bitcoinEmitter.removeAllListeners('Unauthorised');
     accountEmitter.removeAllListeners('Unauthorised');
-    contactsEmitter.removeAllListeners('getContacts');
     accountEmitter.removeAllListeners('verificationResult');
     poolingEmitter.removeAllListeners('getAvailableFundingPools');
 
@@ -329,6 +340,13 @@ class App extends Component {
       wrc20Accounts: null,
       wrc20AccountsCombined: null
     })
+    stakingStore.setStore({
+      stakeableCurrencies: [],
+      stakingNodes: [],
+      userStakes: null,
+      rewardHistory: [],
+      transactionHistory: []
+    })
   }
 
   setUser(user) {
@@ -393,35 +411,30 @@ class App extends Component {
       var content = {};
       const path = currentScreen.split('/')[0];
 
-      if (['accounts', 'aionAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts'].includes(path) ) {
+      if (['accounts', 'aionAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts', 'staking'].includes(path) ) {
         content = { id: this.state.user.id };
         contactsDispatcher.dispatch({
           type: "getContacts",
           content,
           token: this.state.user.token
         });
+
+        stakingDispatcher.dispatch({
+          type: 'getStakeableCurrencies',
+          content,
+          token: this.state.user.token
+        });
+
+        this.getAllAccounts()
       } else if (path === 'contacts') {
         content = { id: this.state.user.id };
-
         contactsDispatcher.dispatch({
           type: "getContacts",
           content,
           token: this.state.user.token
         });
-        if(this.state.ethAddresses == null) {
-          ethDispatcher.dispatch({
-            type: "getEthAddress",
-            content,
-            token: this.state.user.token
-          });
-        }
-        if(this.state.wanAddresses == null) {
-          wanDispatcher.dispatch({
-            type: "getWanAddress",
-            content,
-            token: this.state.user.token
-          });
-        }
+
+        this.getAllAccounts()
       } else if (['poolDetails', 'updatePool', 'createPool', 'pooling', 'browsePools'].includes(path)) {
         content = { id: this.state.user.id };
 
@@ -455,6 +468,37 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname + window.location.hash);
 
     this.setState({ currentScreen, uriParameters });
+  }
+
+  getAllAccounts() {
+    const { user } = this.state;
+    const content = { id: user.id };
+
+    aionDispatcher.dispatch({
+      type: 'getAionAddress',
+      content,
+      token: user.token
+    });
+    bitcoinDispatcher.dispatch({
+      type: 'getBitcoinAddress',
+      content,
+      token: user.token
+    });
+    ethDispatcher.dispatch({
+      type: 'getEthAddress',
+      content,
+      token: user.token
+    });
+    tezosDispatcher.dispatch({
+      type: 'getTezosAddress',
+      content,
+      token: user.token
+    });
+    wanDispatcher.dispatch({
+      type: 'getWanAddress',
+      content,
+      token: user.token
+    });
   }
 
   renderAppBar() {
@@ -516,7 +560,12 @@ class App extends Component {
   }
 
   stakeClicked(account) {
+    this.setState({ stakingCurrency: account.symbol, stakeOpen: true })
+    window.location.hash = "staking"
+  }
 
+  addStakeClosed() {
+    this.setState({ stakingCurrency: null, stakeOpen: false })
   }
 
   render() {
@@ -592,7 +641,7 @@ class App extends Component {
   }
 
   renderScreen() {
-    const { ethAddresses, wanAddresses, currentScreen, width } = this.state;
+    const { ethAddresses, wanAddresses, currentScreen } = this.state;
     const path = currentScreen.split('/')[0];
     const params = currentScreen.split('/')[1] || null;
 
@@ -675,7 +724,12 @@ class App extends Component {
         case "staking":
           return (
             <Staking
+              size={ this.state.size }
               theme={ this.state.theme }
+              user={ this.state.user }
+              stakeOpen={ this.state.stakeOpen }
+              stakingCurrency={ this.state.stakingCurrency }
+              addStakeClosed={ this.addStakeClosed }
             />
         );
       case "settings":

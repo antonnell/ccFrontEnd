@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 
-import { Typography, Button, Card, CardContent, CardActionArea, CardActions, CardMedia, Avatar } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CardActionArea,
+} from "@material-ui/core";
 
 class Account extends Component {
   render() {
-    let { theme, account, cardClicked, transactClicked, stakeClicked } = this.props
+    let {
+      account,
+      cardClicked,
+      transactClicked,
+      stakeClicked,
+      stakeableCurrencies
+    } = this.props
 
     let logo = 'footer'
     if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {
@@ -16,6 +28,13 @@ class Account extends Component {
       logo = "Wanchain"
     }
 
+    let stakeable = stakeableCurrencies ? stakeableCurrencies.filter((currency) => {
+      return currency.currency === account.symbol
+    }) : []
+
+    let stakeableBoolean = stakeable.length > 0
+
+    console.log(account)
     return (
 
       <Card>
@@ -54,9 +73,9 @@ class Account extends Component {
         <CardContent style={{ position: "relative" }}>
           <Grid container style={{marginTop: '12px'}}>
             <Grid item xs={6} align='left'>
-              <Button size="small" variant="contained" color="secondary" onClick={() => { stakeClicked(account.type, account) }}>
+              { stakeableBoolean && <Button size="small" variant="contained" color="secondary" onClick={() => { stakeClicked(account) }}>
                 Stake
-              </Button>
+              </Button>}
             </Grid>
             <Grid item xs={6} align='right'>
               <Button size="small" variant="contained" color="primary" onClick={() => { transactClicked(account) }}>

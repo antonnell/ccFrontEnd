@@ -55,7 +55,7 @@ class Header extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <Grid container item xs={12} alignItems="center" className={classes.header}>
-          <PageTItle theme={theme} root={'Invest > Pooling'} screen={title} />
+          <PageTItle theme={theme} root={'Pooling'} screen={title} />
           {headerItems.buttons.map((button, index) =>
             <Button
               key={index}

@@ -136,20 +136,20 @@ class Store {
             //itterate through each of the sub sections
             for(var j = 0; j < wrc20data[i].tokens.length; j++) {
 
-              if(i == 0) {
+              if(i === 0) {
                 totals.push({
                   balance: wrc20data[i].tokens[j].balance,
                   usdBalance: 0,
                   type: 'WRC20',
                   name: wrc20data[i].tokens[j].name,
                   symbol: wrc20data[i].tokens[j].symbol,
-                  address: wrc20data[i].tokens[j].publicAddress
+                  address: wrc20data[i].tokens[j].address
                 })
               } else {
 
                 //itterate through totals to add balance
                 for(var k = 0; k < totals.length; k++) {
-                  if(totals[k].address == wrc20data[i].tokens[j].publicAddress) {
+                  if(totals[k].address === wrc20data[i].tokens[j].publicAddress) {
                     totals[k].balance = totals[k].balance + wrc20data[i].tokens[j].balance
                   }
                 }

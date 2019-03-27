@@ -1,19 +1,12 @@
 import React, { Component } from "react";
 import {
   Grid,
-  Button,
   Typography,
-  ListItemText,
-  ListItemSecondaryAction,
-  TextField,
   Select,
   MenuItem,
-  Tabs,
-  Tab,
   FormControl,
   FormHelperText,
-  InputAdornment,
-  InputLabel
+  ListItemText
 } from "@material-ui/core";
 
 class ReceivePayment extends Component {
@@ -95,7 +88,7 @@ class ReceivePayment extends Component {
           let selected = null
           let val = ''
           selected = options && options.length > 0 && options.filter((option) => {
-            return option.value == value
+            return option.value === value
           })[0]
           if(selected) {
             val = selected.description

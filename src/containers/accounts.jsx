@@ -26,6 +26,8 @@ let tezosEmitter = require("../store/tezosStore.js").default.emitter;
 let tezosDispatcher = require("../store/tezosStore.js").default.dispatcher;
 let tezosStore = require("../store/tezosStore.js").default.store;
 
+let stakingEmitter = require("../store/stakingStore.js").default.emitter;
+let stakingStore = require("../store/stakingStore.js").default.store;
 
 let Accounts = createReactClass({
 
@@ -72,6 +74,8 @@ let Accounts = createReactClass({
           token: user.token
         });
         break
+      default:
+        break
     }
 
     return {
@@ -98,6 +102,8 @@ let Accounts = createReactClass({
       aionTransactions: aionStore.getStore('transactions'),
       bitcoinTransactions: bitcoinStore.getStore('transactions'),
       tezosTransactions: tezosStore.getStore('transactions'),
+
+      stakeableCurrencies: stakingStore.getStore('stakeableCurrencies'),
 
       ethLoading: true,
       wanLoading: true,
@@ -137,7 +143,7 @@ let Accounts = createReactClass({
 
   componentWillReceiveProps(props) {
 
-    if(this.props.token != props.token) {
+    if(this.props.token !== props.token) {
       const { user } = this.props;
       const content = { id: user.id };
 
@@ -178,6 +184,8 @@ let Accounts = createReactClass({
             content,
             token: user.token
           });
+          break
+        default:
           break
       }
     }
@@ -227,9 +235,7 @@ let Accounts = createReactClass({
       bitcoinAccounts,
       tezosAccounts,
       ethAccounts,
-      erc20Accounts,
       wanAccounts,
-      wrc20Accounts,
       aionTransactions,
       bitcoinTransactions,
       tezosTransactions,
@@ -251,7 +257,8 @@ let Accounts = createReactClass({
       viewAddress,
       viewTokens,
       viewTokensOpen,
-      viewTokensAccount
+      viewTokensAccount,
+      stakeableCurrencies,
     } = this.state
 
     let {
@@ -286,6 +293,8 @@ let Accounts = createReactClass({
       case "Wanchain":
         accounts = wanAccounts
         transactions = wanTransactions
+        break;
+      default:
         break;
     }
 
@@ -360,6 +369,7 @@ let Accounts = createReactClass({
         viewTokensOpen={ viewTokensOpen }
         viewTokens={ viewTokens }
         viewTokensAccount={ viewTokensAccount }
+        stakeableCurrencies={ stakeableCurrencies }
       />
     );
   },
@@ -405,7 +415,8 @@ let Accounts = createReactClass({
       privateKeyErrorMessage,
       mnemonicPhrase,
       mnemonicPhraseError,
-      mnemonicPhraseErrorMessage
+      mnemonicPhraseErrorMessage,
+      stakeableCurrencies,
     } = this.state
 
     let accounts = [
@@ -455,6 +466,7 @@ let Accounts = createReactClass({
         mnemonicPhrase={ mnemonicPhrase }
         mnemonicPhraseError={ mnemonicPhraseError }
         mnemonicPhraseErrorMessage={ mnemonicPhraseErrorMessage }
+        stakeableCurrencies={ stakeableCurrencies }
       />
     );
   },
@@ -507,7 +519,7 @@ let Accounts = createReactClass({
     wanEmitter.on("error", this.showError);
     wanEmitter.on("exportWanchainKey", this.exportKeyReturned);
 
-    this.getAllAccounts()
+    stakingEmitter.on("getStakeableCurrencies", this.getStakeableCurrenciesReturned)
   },
 
   showError(error) {
@@ -541,6 +553,11 @@ let Accounts = createReactClass({
     } else {
       this.setState({ error: data.statusText });
     }
+  },
+
+  getStakeableCurrenciesReturned() {
+    let stakeableCurrencies = stakingStore.getStore('stakeableCurrencies')
+    this.setState({ stakeableCurrencies })
   },
 
   aionTransactionsUpdated() {
@@ -642,37 +659,6 @@ let Accounts = createReactClass({
     })
   },
 
-  getAllAccounts() {
-    const { user } = this.props;
-    const content = { id: user.id };
-
-    aionDispatcher.dispatch({
-      type: 'getAionAddress',
-      content,
-      token: user.token
-    });
-    bitcoinDispatcher.dispatch({
-      type: 'getBitcoinAddress',
-      content,
-      token: user.token
-    });
-    ethDispatcher.dispatch({
-      type: 'getEthAddress',
-      content,
-      token: user.token
-    });
-    tezosDispatcher.dispatch({
-      type: 'getTezosAddress',
-      content,
-      token: user.token
-    });
-    wanDispatcher.dispatch({
-      type: 'getWanAddress',
-      content,
-      token: user.token
-    });
-  },
-
   handleCreateOpen(tokenValue) {
     this.setState({ createOpen: true, tokenValue })
   },
@@ -694,6 +680,8 @@ let Accounts = createReactClass({
       case 'token':
         this.setState({ tokenValue: event.target.value })
         break;
+      default:
+        break;
     }
   },
 
@@ -713,6 +701,8 @@ let Accounts = createReactClass({
         break;
       case 'editAddressName':
         this.setState({ editAddressName: event.target.value })
+        break;
+      default:
         break;
     }
   },
@@ -806,6 +796,8 @@ let Accounts = createReactClass({
             content,
             token: user.token
           });
+          break;
+        default:
           break;
       }
 
@@ -932,6 +924,8 @@ let Accounts = createReactClass({
             token: user.token
           });
           break;
+        default:
+          break;
       }
 
       this.handleImportClose()
@@ -1007,6 +1001,8 @@ let Accounts = createReactClass({
           token: this.props.user.token
         });
         break;
+      default:
+        break;
     }
   },
 
@@ -1060,6 +1056,8 @@ let Accounts = createReactClass({
           token: this.props.user.token
         });
         break;
+      default:
+        break;
     }
   },
 
@@ -1112,6 +1110,8 @@ let Accounts = createReactClass({
           content,
           token: this.props.user.token
         });
+        break;
+      default:
         break;
     }
   },
@@ -1170,6 +1170,8 @@ let Accounts = createReactClass({
           token: this.props.user.token
         });
         break;
+      default:
+        break;
     }
   },
 
@@ -1226,7 +1228,7 @@ let Accounts = createReactClass({
   viewBitcoinKeysClicked(id) {
     //we have the data already. just display it somewhere? Popup?
     let addy = this.state.bitcoinAccounts.filter((addy) => {
-      return addy.id == id
+      return addy.id === id
     })
 
     if(addy && addy.length > 0) {

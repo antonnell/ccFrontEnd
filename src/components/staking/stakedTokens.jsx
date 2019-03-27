@@ -71,19 +71,26 @@ class StakedTokens extends Component {
   }
 
   renderTokens() {
-    let { tokens } = this.props.store
+    let { userStakes } = this.props
 
-    return tokens.map(token => {
-      return this.renderToken(token)
+    return userStakes.map(stake => {
+      return this.renderToken(stake)
     })
 
   }
 
   renderToken(token) {
-    const { theme, optionsClicked, optionsClosed, depositClicked, withdrawClicked } = this.props
+    const { theme, optionsClicked, optionsClosed, depositClicked, withdrawClicked, optionsToken } = this.props
+
+    let optionsOpen = false
+    let anchorEl = null
+    if( optionsToken && token.currency === optionsToken.currency ) {
+      optionsOpen = true
+      anchorEl = optionsToken.anchorEl
+    }
 
     return (
-      <Grid item xs={12} sm={6} lg={4} xl={3} key={token.name} style={{ padding: '24px' }}>
+      <Grid item xs={12} sm={6} lg={4} xl={3} key={token.currency} style={{ padding: '24px' }}>
         <Card>
           <CardContent>
             <Grid
@@ -92,11 +99,11 @@ class StakedTokens extends Component {
               alignItems="center"
               direction="row">
               <Grid item xs={3} align='left'>
-                <Avatar>{token.name.charAt(0)}</Avatar>
+                <Avatar>{token.currency.charAt(0)}</Avatar>
               </Grid>
               <Grid item xs={6} align='left'>
                 <Typography variant="h3" nowrap>
-                  {token.name}
+                  {token.currency}
                 </Typography>
               </Grid>
               <Grid item xs={3} align='right'>
@@ -118,8 +125,8 @@ class StakedTokens extends Component {
                   <MoreIcon theme={theme}/>
                 </IconButton>
                 <Popover
-                  open={token.optionsOpen}
-                  anchorEl={token.anchorEl}
+                  open={optionsOpen}
+                  anchorEl={anchorEl}
                   anchorPosition={{ top: 200, left: 400 }}
                   onClose={ optionsClosed }
                   anchorOrigin={{
@@ -159,7 +166,7 @@ class StakedTokens extends Component {
                   <span style={theme.custom.tokenValue}>{token.rewardsToday} | </span> Rewards Today
                 </Typography>
                   <Typography nowrap variant='body1' style={theme.custom.tokenPair}>
-                  <span style={theme.custom.tokenValue}>{token.totalStaked} | </span> Total Staked
+                  <span style={theme.custom.tokenValue}>{token.totalStake} | </span> Total Staked
                 </Typography>
               </Grid>
               <Grid item xs={4} align='right' style={{alignSelf: 'flex-end'}}>

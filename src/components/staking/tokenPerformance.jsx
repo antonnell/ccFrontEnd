@@ -7,6 +7,8 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 
+let store = require('../../store/stakingStore.js').default.store;
+
 class TokenPerformance extends Component {
 
   render() {
@@ -14,13 +16,12 @@ class TokenPerformance extends Component {
     let {
       theme,
       timeFrameChanged,
-      currencyChanged,
-      store
+      currencyChanged
     } = this.props
 
-    const timeFrameOptions = store.timeFrameOptions
+    const timeFrameOptions = store.getStore("timeFrameOptions")
 
-    const currencyOptions = store.currencyOptions
+    const currencyOptions = store.getStore("currencyOptions")
 
     return (
       <Grid
@@ -46,12 +47,12 @@ class TokenPerformance extends Component {
               direction="row"
             >
               <Grid item xs={4} md={3} lg={2}>
-                {this.renderSelect(timeFrameOptions, store.timeFrame, timeFrameChanged)}
+                {this.renderSelect(timeFrameOptions, store.getStore("timeFrame"), timeFrameChanged)}
               </Grid>
               <Grid item xs={1}>
               </Grid>
               <Grid item xs={4} md={3} lg={2}>
-                {this.renderSelect(currencyOptions, store.currency, currencyChanged)}
+                {this.renderSelect(currencyOptions, store.getStore("currency"), currencyChanged)}
               </Grid>
             </Grid>
           </Grid>
@@ -69,8 +70,8 @@ class TokenPerformance extends Component {
               direction="row"
               style={theme.custom.accountsContainer}
             >
-              { this.renderTokenPerformanceCard() }
-              { this.renderTokenPerformanceCard() }
+              { this.renderTokenPerformanceCard("Staking Balance", "1352.51", "+56.20", "+2.7%") }
+              { this.renderTokenPerformanceCard("Staking Rewards", "545.37", "+207.89", "+8.6%") }
             </Grid>
           </Grid>
         </Grid>
@@ -78,7 +79,7 @@ class TokenPerformance extends Component {
     );
   }
 
-  renderTokenPerformanceCard() {
+  renderTokenPerformanceCard(title, amount, change, changePercent) {
     const { theme } = this.props
     return (
       <Grid item xs={12} lg={6} key={Math.random()} style={{ padding: '24px' }}>
@@ -91,13 +92,13 @@ class TokenPerformance extends Component {
             <Grid item xs={4} alignItems='center'>
               <div style={{padding: '20%'}}>
                 <Typography variant="h4" nowrap>
-                  Staking Balance
+                  {title}
                 </Typography>
                 <Typography variant="h4" noWrap>
-                  1352.51
+                  {amount}
                 </Typography>
                 <Typography variant="subtitle2" noWrap>
-                  +56.20 <span style={theme.custom.positive}>+2.7%</span>
+                  {change} <span style={theme.custom.positive}>{changePercent}</span>
                 </Typography>
               </div>
             </Grid>
@@ -111,7 +112,8 @@ class TokenPerformance extends Component {
   }
 
   renderChart() {
-    let { data, labels } = this.props.store
+    let data = store.getStore("data")
+    let labels = store.getStore("labels")
 
     return <LineGraph labels={ labels } data={ data } height={ 200 } hideY={ true } padding={ 50 } thickness={ 3 } marginTop={ 0 } />
   }

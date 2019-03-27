@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import {
   Dialog,
-  DialogActions,
-  DialogContent,
   Button,
   Typography,
   Grid,
-  TextField,
   FormControl,
   Select,
   MenuItem,
   ListItemText,
   FormHelperText,
-  FormControlLabel,
   Slide,
   Input,
 } from '@material-ui/core';
@@ -43,7 +39,6 @@ class ImportModal extends Component {
       mnemonicPhraseError,
       mnemonicPhraseErrorMessage,
       handleChange,
-      onCreateImportKeyDown,
       error,
       handleImport,
       tokenValue,
@@ -134,7 +129,7 @@ class ImportModal extends Component {
           let selected = null
           let val = ''
           selected = options && options.length > 0 && options.filter((option) => {
-            return option.value == value
+            return option.value === value
           })[0]
           if(selected) {
             val = selected.description

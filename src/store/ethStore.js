@@ -139,7 +139,7 @@ class Store {
             //itterate through each of the sub sections
             for(var j = 0; j < erc20data[i].tokens.length; j++) {
 
-              if(i == 0) {
+              if(i === 0) {
                 totals.push({
                   balance: erc20data[i].tokens[j].balance,
                   usdBalance: 0,
@@ -152,7 +152,7 @@ class Store {
 
                 //itterate through totals to add balance
                 for(var k = 0; k < totals.length; k++) {
-                  if(totals[k].address == erc20data[i].tokens[j].address) {
+                  if(totals[k].address === erc20data[i].tokens[j].address) {
                     totals[k].balance = totals[k].balance + erc20data[i].tokens[j].balance
                   }
                 }
