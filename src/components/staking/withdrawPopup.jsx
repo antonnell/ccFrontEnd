@@ -2,15 +2,9 @@ import React, { Component } from 'react';
 
 import {
   Grid,
-  DialogActions,
-  DialogContent,
   Dialog,
-  Avatar,
   Button,
   Typography,
-  Card,
-  CardContent,
-  Checkbox,
   Slide,
   FormControl,
   Input,
@@ -139,7 +133,7 @@ class AddPopup extends Component {
               if(!option) {
                 return null
               }
-              
+
               return (
                 <MenuItem key={option.value} value={option.value}>
                   <ListItemText primary={option.description + (option.balance ? (' ('+option.balance.toFixed(4)+' '+option.symbol+')') : '')} />

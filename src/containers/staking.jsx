@@ -209,7 +209,6 @@ let Staking = createReactClass({
         currencyChanged={ this.currencyChanged }
         optionsClicked={ this.optionsClicked }
         optionsClosed={ this.optionsClosed }
-        optionsClicked={ this.optionsClicked }
         depositClicked={ this.depositClicked }
         withdrawClicked={ this.withdrawClicked }
         handleSelectChange={ this.handleSelectChange }
@@ -294,7 +293,7 @@ let Staking = createReactClass({
         accountValue: "",
         tokenValue: "",
         amountValue: ""
-      })        
+      })
     }
   },
 
@@ -427,8 +426,7 @@ let Staking = createReactClass({
 
     let {
       tezosAccounts,
-      ethAccounts,
-      wanAccounts
+      ethAccounts
     } = this.state
 
     switch (event.target.name) {
@@ -456,11 +454,8 @@ let Staking = createReactClass({
         })
         // this.setState({ accountOptions })
         return accountOptions
-        break;
       default:
         if(ethAccounts) {
-          let found = false
-
           let accountOptions = ethAccounts.map((account) => {
 
             if(!account.tokens) {

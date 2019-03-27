@@ -35,7 +35,6 @@ class StakingPerformance extends Component {
       optionsClicked,
       timeFrameChanged,
       currencyChanged,
-      userStakes
     } = this.props
 
     const timeFrameOptions = store.getStore("timeFrameOptions")

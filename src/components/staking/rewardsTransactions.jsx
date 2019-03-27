@@ -14,7 +14,6 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import Grid from "@material-ui/core/Grid";
-import config from "../../config";
 import { colors } from '../../theme.js';
 
 function desc(a, b, orderBy) {
