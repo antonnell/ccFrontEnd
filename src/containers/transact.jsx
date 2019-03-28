@@ -71,31 +71,31 @@ let Transact = createReactClass({
     if(this.props.transactCurrency && !this.props.transactAccount) {
       switch(this.props.transactCurrency.type) {
         case "Aion" :
-          accountValue = aionAccounts.filter((account) => {
+          accountValue = aionAccounts && aionAccounts.length ? aionAccounts.filter((account) => {
             return account.isPrimary === true
-          })[0].address
+          })[0].address : ""
         break;
         case "Bitcoin" :
-          accountValue = bitcoinAccounts.filter((account) => {
+          accountValue = bitcoinAccounts && bitcoinAccounts.length ? bitcoinAccounts.filter((account) => {
             return account.isPrimary === true
-          })[0].id
+          })[0].id : ""
         break;
         case "ERC20" :
         case "Ethereum" :
-          accountValue = ethAccounts.filter((account) => {
+          accountValue = ethAccounts && ethAccounts.length ? ethAccounts.filter((account) => {
             return account.isPrimary === true
-          })[0].address
+          })[0].address : ""
         break;
         case "Tezos" :
-          accountValue = tezosAccounts.filter((account) => {
+          accountValue = tezosAccounts && tezosAccounts.length ? tezosAccounts.filter((account) => {
             return account.isPrimary === true
-          })[0].address
+          })[0].address : ""
         break;
         case "WRC20" :
         case "Wanchain" :
-          accountValue = wanAccounts.filter((account) => {
+          accountValue = wanAccounts && wanAccounts.length ? wanAccounts.filter((account) => {
             return account.isPrimary === true
-          })[0].publicAddress
+          })[0].publicAddress : ""
         break;
       }
     }
