@@ -419,7 +419,8 @@ class EnhancedTable extends React.Component {
     const data = this.props.transactions;
 
     let divStyle = {
-      display: 'inline-block'
+      display: 'inline-block',
+      minWidth: '42px'
     }
 
     return (
@@ -480,7 +481,7 @@ class EnhancedTable extends React.Component {
                       url = config.wanscanURL + n.transactionId;
                       break;
                   }
-                  
+
                   return (
                     <TableRow hover tabIndex={-1} key={n.transactionId}>
                       <TableCell>
@@ -488,7 +489,6 @@ class EnhancedTable extends React.Component {
                           <img
                             alt=""
                             src={ require('../assets/images/'+token+'-logo.png') }
-                            width="30px"
                             height="30px"
                             style={{marginRight: '12px'}}
                           />

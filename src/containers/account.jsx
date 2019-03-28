@@ -22,6 +22,7 @@ let Account = createReactClass({
         cardClicked={this.cardClicked}
         transactClicked={this.props.transactClicked}
         stakeClicked={this.props.stakeClicked}
+        viewMode={this.props.viewMode}
       />
     );
   },

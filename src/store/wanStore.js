@@ -143,7 +143,7 @@ class Store {
                   type: 'WRC20',
                   name: wrc20data[i].tokens[j].name,
                   symbol: wrc20data[i].tokens[j].symbol,
-                  address: wrc20data[i].tokens[j].publicAddress
+                  address: wrc20data[i].tokens[j].address
                 })
               } else {
 
