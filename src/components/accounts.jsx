@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Button,
+  IconButton,
+  SvgIcon,
+  Card
+ } from "@material-ui/core";
 
 import Snackbar from './snackbar';
 import PageTitle from "./pageTitle";
@@ -7,6 +14,31 @@ import Account from '../containers/account';
 import PageLoader from './pageLoader';
 import CreateModal from './createModal';
 import ImportModal from './importModal';
+
+import { colors } from '../theme.js'
+
+function ListIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path
+        fill={props.color}
+        d="M9,5V9H21V5M9,19H21V15H9M9,14H21V10H9M4,9H8V5H4M4,19H8V15H4M4,14H8V10H4V14Z"
+      />
+    </SvgIcon>
+  );
+}
+function GridIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path
+        fill={props.color}
+        d="M3,11H11V3H3M3,21H11V13H3M13,21H21V13H13M13,3V11H21V3"
+      />
+    </SvgIcon>
+  );
+}
+
+
 
 class Accounts extends Component {
   renderAccounts() {
@@ -18,6 +50,7 @@ class Accounts extends Component {
       transactClicked,
       user,
       stakeableCurrencies
+      viewMode,
     } = this.props
 
     if(!accounts) {
@@ -36,11 +69,19 @@ class Accounts extends Component {
 
     return this.props.accounts.map((account) => {
       if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain"].includes(account.name) || account.balance > 0) {
-        return (
-          <Grid item xs={12} sm={6} lg={4} xl={3} key={account.name} style={{ padding: '24px' }}>
-            <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } stakeableCurrencies={ stakeableCurrencies } />
-          </Grid>
-        )
+        if(viewMode === 'List') {
+          return (
+            <Grid item xs={12} key={account.name} style={{ padding: '0px 24px' }}>
+              <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } viewMode={ viewMode } stakeableCurrencies={ stakeableCurrencies }/>
+            </Grid>
+          )
+        } else {
+          return (
+            <Grid item xs={12} sm={6} lg={4} xl={3} key={account.name} style={{ padding: '24px' }}>
+              <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } viewMode={ viewMode } stakeableCurrencies={ stakeableCurrencies }/>
+            </Grid>
+          )
+        }
       } else {
         return null
       }
@@ -57,6 +98,10 @@ class Accounts extends Component {
       createOpen,
       importOpen,
       error
+      tokens,
+      error,
+      toggleViewClicked,
+      viewMode
     } = this.props
 
     return (
@@ -78,7 +123,21 @@ class Accounts extends Component {
             style={theme.custom.sectionTitle}
           >
             <Grid item xs={6} align='left'>
-              <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Accounts</Typography>
+              <div style={theme.custom.inline}>
+                <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Accounts</Typography>
+              </div>
+              <div style={{ marginLeft: '-15px' }}>
+                <IconButton
+                  color="primary"
+                  aria-label="Switch View"
+                  onClick={e => {
+                    toggleViewClicked();
+                  }}
+                >
+                  <GridIcon theme={theme} color={viewMode==='Grid'?colors.lightBlue:colors.darkGray} />
+                  <ListIcon theme={theme} color={viewMode==='List'?colors.lightBlue:colors.darkGray} />
+                </IconButton>
+              </div>
             </Grid>
             <Grid item xs={6} align='right'>
               <Button
@@ -109,6 +168,7 @@ class Accounts extends Component {
             direction="row"
             style={theme.custom.accountsContainer}
           >
+            { viewMode === 'List' && this.renderHeader()}
             {this.renderAccounts()}
           </Grid>
         </Grid>
@@ -118,6 +178,40 @@ class Accounts extends Component {
         { importOpen && this.renderImportModal() }
       </Grid>
     );
+  }
+
+  renderHeader() {
+    let headerStyle = {
+      padding: '17px 24px',
+      backgroundColor: '#2f3031'
+    }
+    let textStyle = {
+      color: '#ffffff',
+      fontSize: '14px',
+      fontWeight: '600'
+    }
+
+    return (<Grid item xs={12} align='left' style={{ padding: '0px 24px' }}>
+      <Card style={{borderRadius: '3px'}}>
+        <Grid container>
+          <Grid item xs={6} align='left' style={headerStyle}>
+            <Typography variant="body1" style={textStyle}>
+              Token
+            </Typography>
+          </Grid>
+          <Grid item xs={3} align='right' style={headerStyle}>
+            <Typography variant="body1" style={textStyle}>
+              Balance
+            </Typography>
+          </Grid>
+          <Grid item xs={3} align='right' style={headerStyle}>
+            <Typography variant="body1" style={textStyle}>
+              Actions
+            </Typography>
+          </Grid>
+        </Grid>
+      </Card>
+    </Grid>)
   }
 
   renderLoader() {

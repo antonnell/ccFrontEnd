@@ -17,6 +17,7 @@ let Account = createReactClass({
         transactClicked={ this.props.transactClicked }
         stakeClicked={ this.props.stakeClicked }
         stakeableCurrencies={ this.props.stakeableCurrencies }
+        viewMode={ this.props.viewMode }
       />
     );
   },

@@ -126,6 +126,7 @@ class EnhancedTableHead extends React.Component {
         }
       ];
     }
+
     return (
       <TableHead>
         <TableRow>
@@ -135,7 +136,6 @@ class EnhancedTableHead extends React.Component {
                 key={row.id}
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
-
               >
                 <Tooltip
                   title="Sort"
@@ -195,7 +195,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedFilterBar = props => {
   const {
-    accounts,
+    bitcoinAddresses,
     selectedAddress,
     selectedAddressError,
     selectedAddressErrorMessage,
@@ -228,36 +228,36 @@ let EnhancedFilterBar = props => {
           style={{ paddingBottom: "13px", paddingTop: "12px" }}
         >
           <InputLabel shrink={true}>Address</InputLabel>
-          <Select
-            fullWidth={true}
-            value={selectedAddress}
-            onChange={selectAddress}
-            disabled={loading}
-            renderValue={value => {
-              return (
-                <Typography variant="body1" noWrap>
-                  {value}
-                </Typography>
-              );
-            }}
-          >
-            <MenuItem key="a" value="">
-              <ListItemText
-                primary={"--"}
-              />
-            </MenuItem>
-            {accounts
-              ? accounts.map(address => {
-                  return (
-                    <MenuItem key={address.name} value={address.name}>
-                      <ListItemText
-                        primary={address.name}
-                      />
-                    </MenuItem>
-                  );
-                })
-              : ""}
-          </Select>
+            <Select
+              fullWidth={true}
+              value={selectedAddress}
+              onChange={selectAddress}
+              disabled={loading}
+              renderValue={value => {
+                return (
+                  <Typography variant="body1" noWrap>
+                    {value}
+                  </Typography>
+                );
+              }}
+            >
+              <MenuItem key="a" value="">
+                <ListItemText
+                  primary={"--"}
+                />
+              </MenuItem>
+              {bitcoinAddresses
+                ? bitcoinAddresses.map(address => {
+                    return (
+                      <MenuItem key={address.displayName} value={address.displayName}>
+                        <ListItemText
+                          primary={address.displayName}
+                        />
+                      </MenuItem>
+                    );
+                  })
+                : ""}
+            </Select>
           {selectedAddressError === true ? (
             <FormHelperText>{selectedAddressErrorMessage}</FormHelperText>
           ) : null}
@@ -348,7 +348,7 @@ let EnhancedTableToolbar = props => {
   const { classes, toggleFilters, theme } = props;
 
   return (
-    <Toolbar>
+    <Toolbar >
       <div style={theme.custom.sectionTitle} className={classes.title}>
         <Typography variant='h2' align='left'>Recent Transactions</Typography>
       </div>
@@ -377,7 +377,7 @@ class EnhancedTable extends React.Component {
     order: "desc",
     orderBy: "timestamp",
     selected: [],
-    data: this.props.transactions,
+    data: this.props.bitcoinTransactions,
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false
@@ -407,7 +407,7 @@ class EnhancedTable extends React.Component {
   };
 
   render() {
-    const { classes, theme, size, token } = this.props;
+    const { classes, theme, size } = this.props;
     const {
       order,
       orderBy,
@@ -416,11 +416,10 @@ class EnhancedTable extends React.Component {
       page,
       filtersVisible
     } = this.state;
-    const data = this.props.transactions;
+    const data = this.props.bitcoinTransactions;
 
     let divStyle = {
-      display: 'inline-block',
-      minWidth: '42px'
+      display: 'inline-block'
     }
 
     return (
@@ -435,7 +434,7 @@ class EnhancedTable extends React.Component {
           selectedContact={this.props.selectedContact}
           selectContact={this.props.selectContact}
           selectAddress={this.props.selectAddress}
-          accounts={this.props.accounts}
+          bitcoinAddresses={this.props.bitcoinAddresses}
           contacts={this.props.contacts}
           fromDate={this.props.fromDate}
           toDate={this.props.toDate}
@@ -460,43 +459,20 @@ class EnhancedTable extends React.Component {
               )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
-
-                  let url = ''
-                  switch (token) {
-                    case 'Aion':
-                      url = config.aionscanURL + n.transactionId;
-                      break;
-                    case 'Bitcoin':
-                      url = config.bitcoinscanURL + n.transactionId;
-                      break;
-                    case 'Ethereum':
-                    case 'ERC20':
-                      url = config.etherscanUrl + n.transactionId;
-                      break;
-                    case 'Tezos':
-                      url = config.tezosscanURL + n.transactionId;
-                      break;
-                    case 'Wanchain':
-                    case 'WRC20':
-                      url = config.wanscanURL + n.transactionId;
-                      break;
-                    default:
-                      break;
-                  }
-
                   return (
                     <TableRow hover tabIndex={-1} key={n.transactionId}>
                       <TableCell>
                         <div style={divStyle}>
                           <img
                             alt=""
-                            src={ require('../assets/images/'+token+'-logo.png') }
+                            src={ require('../assets/images/Bitcoin-logo.png') }
+                            width="30px"
                             height="30px"
                             style={{marginRight: '12px'}}
                           />
                         </div>
                         <div style={divStyle}>
-                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.red, fontFamily: 'Montserrat-SemiBold' }}>
+                          <Typography variant="body1" style={{ color: n.status==='Success'?colors.green:n.status==='Pending'?colors.orange:colors.green.red, fontFamily: 'Montserrat-SemiBold' }}>
                             {n.status}
                           </Typography>
                           <Typography variant="subtitle2">
@@ -506,12 +482,12 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       {['xl', 'lg'].includes(size) && (<TableCell>
                         <a
-                          href={url}
+                          href={config.bitcoinscanURL + n.transactionId}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{textDecoration: 'none'}}
                         >
-                          <Typography variant="body1" noWrap style={{ maxWidth: size==='lg'?'530px':'auto' }}>
+                          <Typography variant="body1" noWrap style={{ maxWidth: size=='lg'?'530px':'auto' }}>
                             {n.transactionId}
                           </Typography>
                         </a>

@@ -11,13 +11,84 @@ import {
 
 class Account extends Component {
   render() {
-    let {
-      account,
-      cardClicked,
-      transactClicked,
-      stakeClicked,
-      stakeableCurrencies
-    } = this.props
+    if(this.props.viewMode === 'List') {
+      return this.renderList()
+    } else {
+      return this.renderGrid()
+    }
+  }
+
+  renderList() {
+    let { theme, account, cardClicked, transactClicked, stakeClicked } = this.props
+
+    let logo = 'footer'
+    if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {
+      logo = account.type
+    } else if (account.type === 'ERC20') {
+      logo = 'Ethereum'
+    } else if (account.type === 'WRC20') {
+      logo = "Wanchain"
+    }
+
+    let bodyStyle = {
+      padding: '12px 12px 12px 24px',
+    }
+    let textStyle = {
+      color: '#2f3031',
+      fontSize: '14px',
+      fontWeight: '400'
+    }
+    let iconStyle = {
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      minWidth: '42px'
+    }
+    let nameStyle = {
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      width: 'calc( 100% - 42px)'
+    }
+
+    return(
+      <Grid item xs={12} align='left'>
+        <Card style={{marginTop:'16px', borderRadius: '3px', cursor: 'pointer'}} onClick={cardClicked}>
+          <Grid container justify="center" alignItems="center" direction="row">
+            <Grid item xs={6} align='left' style={bodyStyle}>
+              <div style={iconStyle}>
+                <img
+                  alt=""
+                  src={ require('../assets/images/'+logo+'-logo.png') }
+                  height="30px"
+                  style={{marginRight: '12px'}}
+                />
+              </div>
+              <div style={nameStyle}>
+                <Typography variant="h3" noWrap style={{ width: '100%' }}>
+                  {account.name}
+                </Typography>
+              </div>
+            </Grid>
+            <Grid item xs={3} align='right' style={bodyStyle}>
+              <Typography variant="body1" noWrap style={textStyle}>
+                {account.balance.toFixed(4) + ' ' + account.symbol}
+              </Typography>
+              <Typography variant="subtitle2" noWrap>
+                {"$" + account.usdBalance.toFixed(2)}
+              </Typography>
+            </Grid>
+            <Grid item xs={3} align='right' style={bodyStyle}>
+              <Button size="small" variant="outlined" color="primary" onClick={() => { transactClicked(account) }}>
+                Transact
+              </Button>
+            </Grid>
+          </Grid>
+        </Card>
+      </Grid>
+    )
+  }
+
+  renderGrid() {
+    let { theme, account, cardClicked, transactClicked, stakeClicked } = this.props
 
     let logo = 'footer'
     if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {
@@ -34,7 +105,6 @@ class Account extends Component {
 
     let stakeableBoolean = stakeable.length > 0
 
-    console.log(account)
     return (
 
       <Card>

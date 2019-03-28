@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CssBaseline, Grid } from '@material-ui/core';
+import { CssBaseline, Grid, Typography } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
 import MomentUtils from '@date-io/moment';
@@ -31,6 +31,7 @@ import VerifyAccount from './containers/VerifyAccount/VerifyAccount';
 import Staking from './containers/staking';
 
 import { poolingEmitter, poolingDispatcher } from './store/poolingStore';
+import PoolNoWallet from "./components/PoolNoWallet";
 
 let accountEmitter = require("./store/accountStore.js").default.emitter;
 let accountDispatcher = require("./store/accountStore.js").default.dispatcher;
@@ -678,13 +679,17 @@ class App extends Component {
           />
         );
       case 'pooling':
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses !== undefined && wanAddresses !== undefined ) ?
+          (ethAddresses.length === 0 && wanAddresses.length === 0)?
+            <PoolNoWallet />:
           <Pooling
             user={ this.state.user }
             theme={ this.state.theme } /> : <PageLoader />;
       case "createPool":
       case "updatePool":
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses !== undefined && wanAddresses !== undefined ) ?
+          (ethAddresses.length === 0 && wanAddresses.length === 0)?
+            <PoolNoWallet />:
           <PoolCreate
             // theme={this.state.theme}
             user={ this.state.user }
@@ -695,7 +700,9 @@ class App extends Component {
           /> : <PageLoader />;
       case "createWhitelist":
       case "updateWhitelist":
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses !== undefined && wanAddresses !== undefined ) ?
+          (ethAddresses.length === 0 && wanAddresses.length === 0)?
+            <PoolNoWallet />:
           <WhitelistCreate
             // theme={this.state.theme}
             // user={this.state.user}
@@ -705,7 +712,9 @@ class App extends Component {
             theme={ this.state.theme }
           /> : <PageLoader />;
       case "browsePools":
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses !== undefined && wanAddresses !== undefined ) ?
+          (ethAddresses.length === 0 && wanAddresses.length === 0)?
+          <PoolNoWallet />:
           <PoolBrowse
             user={ this.state.user }
             ethAddresses={ this.state.ethAddresses }
@@ -713,7 +722,9 @@ class App extends Component {
             theme={ this.state.theme }
           /> : <PageLoader />;
       case "poolDetails":
-        return (ethAddresses && ethAddresses.length && wanAddresses && wanAddresses.length) ?
+        return (ethAddresses !== undefined && wanAddresses !== undefined ) ?
+          (ethAddresses.length === 0 && wanAddresses.length === 0)?
+            <PoolNoWallet />:
           <PoolDetails
             id={ params }
             user={ this.state.user }

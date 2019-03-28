@@ -137,7 +137,8 @@ let Accounts = createReactClass({
       viewAddress: null,
       viewTokensOpen: false,
       viewTokens: null,
-      viewTokensAccount: null
+      viewTokensAccount: null,
+      viewMode: 'Grid',
     };
   },
 
@@ -417,6 +418,7 @@ let Accounts = createReactClass({
       mnemonicPhraseError,
       mnemonicPhraseErrorMessage,
       stakeableCurrencies,
+      viewMode,
     } = this.state
 
     let accounts = [
@@ -467,6 +469,8 @@ let Accounts = createReactClass({
         mnemonicPhraseError={ mnemonicPhraseError }
         mnemonicPhraseErrorMessage={ mnemonicPhraseErrorMessage }
         stakeableCurrencies={ stakeableCurrencies }
+        toggleViewClicked={ this.toggleViewClicked }
+        viewMode={ viewMode }
       />
     );
   },
@@ -1251,6 +1255,11 @@ let Accounts = createReactClass({
   viewTokensClose() {
     this.setState({ viewTokensOpen: false });
   },
+
+  toggleViewClicked() {
+    this.setState({ viewMode: this.state.viewMode === 'Grid' ? 'List' : 'Grid'})
+  },
+
 });
 
 function decrypt(text, seed) {
