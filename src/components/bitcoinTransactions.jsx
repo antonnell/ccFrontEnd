@@ -465,7 +465,7 @@ class EnhancedTable extends React.Component {
                         <div style={divStyle}>
                           <img
                             alt=""
-                            src={ require('../assets/images/bitcoin-logo.png') }
+                            src={ require('../assets/images/Bitcoin-logo.png') }
                             width="30px"
                             height="30px"
                             style={{marginRight: '12px'}}
