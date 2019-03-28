@@ -273,6 +273,11 @@ class Store {
     const addy = payload.content.address
     var url = 'ethereum/getErc20Balances/' + addy;
     this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        callback(err, data)
+        return
+      }
       data.payloadAddress = addy
       callback(err, data)
     });
