@@ -89,7 +89,7 @@ class TokenPerformance extends Component {
             justify="flex-start"
             alignItems="center"
             direction="row">
-            <Grid item xs={4} alignItems='center'>
+            <Grid item xs={4}>
               <div style={{padding: '20%'}}>
                 <Typography variant="h4" nowrap>
                   {title}
@@ -130,7 +130,7 @@ class TokenPerformance extends Component {
           {options
             ? options.map(option => {
               return (
-                <option value={option.value}>{option.description}</option>
+                <option key={option.value} value={option.value}>{option.description}</option>
               )
             }) : ""}
         </NativeSelect>

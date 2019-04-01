@@ -128,7 +128,6 @@ class Store {
     var url = 'staking/getUserStakes/'+payload.content.userId;
 
     this.callApi(url, 'GET', null, payload, (err, data) => {
-      console.log(data)
       if(err) {
         emitter.emit('error', err)
         emitter.emit('stakesUpdated')
@@ -202,7 +201,6 @@ class Store {
       amount: payload.content.amount
     };
 
-    console.log(postJson)
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       if(err) {
         emitter.emit('error', err)

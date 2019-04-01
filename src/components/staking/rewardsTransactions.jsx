@@ -283,7 +283,7 @@ class EnhancedTable extends React.Component {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(record => {
                   return (
-                    <TableRow hover tabIndex={-1} key={record.transactionID}>
+                    <TableRow hover tabIndex={-1} key={record.transactionID+record.timestamp}>
                       <TableCell>
                         <div style={divStyle}>
                           <Typography variant="body1" style={{ fontFamily: 'Montserrat-SemiBold' }}>
@@ -300,9 +300,9 @@ class EnhancedTable extends React.Component {
                         </Typography>
                       </TableCell>)}
                       <TableCell>
-                        <Typography variant="body1">{record.amount + " " +record.currency}</Typography>
-                        <Typography variant="subtitle2" style={{ color: record.stakingTransactionStatus==='processed'?colors.green:record.stakingTransactionStatus==='unprocessed'?colors.orange:colors.red,  }}>
-                          {record.type}
+                        <Typography variant="body1">{(record.type==='stake'?"+":record.type==='withdraw'?"-":"+") + (record.amount ? record.amount : record.reward) + " " +record.currency}</Typography>
+                        <Typography variant="subtitle2" style={{ color: record.type==='stake'?colors.orange:record.type==='withdraw'?colors.red:colors.green,  }}>
+                          {record.type ? record.type : 'reward'}
                         </Typography>
                       </TableCell>
                     </TableRow>

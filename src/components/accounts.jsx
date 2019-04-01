@@ -49,7 +49,7 @@ class Accounts extends Component {
       stakeClicked,
       transactClicked,
       user,
-      stakeableCurrencies
+      stakeableCurrencies,
       viewMode,
     } = this.props
 
@@ -97,7 +97,6 @@ class Accounts extends Component {
       loading,
       createOpen,
       importOpen,
-      error
       tokens,
       error,
       toggleViewClicked,

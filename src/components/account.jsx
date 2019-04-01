@@ -88,7 +88,7 @@ class Account extends Component {
   }
 
   renderGrid() {
-    let { theme, account, cardClicked, transactClicked, stakeClicked } = this.props
+    let { theme, account, cardClicked, transactClicked, stakeClicked, stakeableCurrencies } = this.props
 
     let logo = 'footer'
     if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {

@@ -172,7 +172,7 @@ class StakingPerformance extends Component {
           {options
             ? options.map(option => {
               return (
-                <option value={option.value}>{option.description}</option>
+                <option key={option.value} value={option.value}>{option.description}</option>
               )
             }) : ""}
         </NativeSelect>
