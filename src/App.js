@@ -104,6 +104,9 @@ class App extends Component {
     this.verificationResultReturned = this.verificationResultReturned.bind(this);
     this.getEtherPoolsReturned = this.getEtherPoolsReturned.bind(this);
     this.getAvailableFundingPoolsReturned = this.getAvailableFundingPoolsReturned.bind(this);
+
+    this.getSupportedWRC20TokensReturned = this.getSupportedWRC20TokensReturned.bind(this);
+    this.getSupportedERC20TokensReturned = this.getSupportedERC20TokensReturned.bind(this);
   }
 
   contactsRefreshed() {
@@ -212,6 +215,9 @@ class App extends Component {
     poolingEmitter.on('getEtherPools', this.getEtherPoolsReturned);
     poolingEmitter.on( "getAvailableFundingPools", this.getAvailableFundingPoolsReturned);
 
+    ethEmitter.on('getSupportedERC20Tokens', this.getSupportedERC20TokensReturned)
+    wanEmitter.on('getSupportedWRC20Tokens', this.getSupportedWRC20TokensReturned)
+
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
 
@@ -236,6 +242,14 @@ class App extends Component {
         token: user.token
       });
     }
+  }
+
+  getSupportedERC20TokensReturned() {
+    this.setState({ supportedERC20Tokens: ethStore.getStore('supportedERC20Tokens') })
+  }
+
+  getSupportedWRC20TokensReturned() {
+    this.setState({ supportedWRC20Tokens: wanStore.getStore('supportedWRC20Tokens') })
   }
 
   getUserDetails = user => {
@@ -405,6 +419,21 @@ class App extends Component {
           content,
           token: this.state.user.token
         });
+
+        if(['accounts', 'ethAccounts', 'wanAccounts'].includes(path)) {
+          ethDispatcher.dispatch({
+            type: "getSupportedERC20Tokens",
+            content: {},
+            token: this.state.user.token
+          });
+
+          wanDispatcher.dispatch({
+            type: "getSupportedWRC20Tokens",
+            content: {},
+            token: this.state.user.token
+          });
+        }
+        
       } else if (path === 'contacts') {
         content = { id: this.state.user.id };
 
@@ -510,7 +539,7 @@ class App extends Component {
   }
 
   renderTransact() {
-    const { transactOpen, transactCurrency, transactContact, transactAccount, theme, user } = this.state
+    const { transactOpen, transactCurrency, transactContact, transactAccount, theme, user, supportedERC20Tokens, supportedWRC20Tokens } = this.state
 
     return <Transact
       user={ user }
@@ -520,6 +549,8 @@ class App extends Component {
       transactCurrency={ transactCurrency }
       transactContact={ transactContact }
       transactAccount={ transactAccount }
+      supportedERC20Tokens={ supportedERC20Tokens }
+      supportedWRC20Tokens={ supportedWRC20Tokens }
     />
   }
 
