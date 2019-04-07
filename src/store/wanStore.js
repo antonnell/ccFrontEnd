@@ -119,6 +119,7 @@ class Store {
               if(accountTokens.payloadAddress === address.publicAddress) {
                 address.tokens = accountTokens.tokens
               }
+              return true
             })
             return address
           })

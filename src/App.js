@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CssBaseline, Grid, Typography } from "@material-ui/core";
+import { CssBaseline, Grid } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import ReactGA from 'react-ga';
 import MomentUtils from '@date-io/moment';

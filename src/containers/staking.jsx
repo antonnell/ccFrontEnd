@@ -107,7 +107,7 @@ let Staking = createReactClass({
     });
 
     dispatcher.dispatch({
-      type: 'getUserStakes',
+      type: 'getUserStakingSummaries',
       content,
       token: user.token
     });
@@ -444,15 +444,17 @@ let Staking = createReactClass({
   processAccountOptions(tokenValue, tezosAccounts, ethAccounts) {
     let accountOptions = []
     switch (tokenValue) {
-      case 'Tezos':
-        accountOptions = tezosAccounts.map((account) => {
+      case 'XTZ':
+        accountOptions = tezosAccounts.filter((account) => {
+          return account.delegatable === true
+        }).map((account) => {
           return {
             value: account.address,
             description: account.name,
-            balance: account.balance
+            balance: account.balance,
+            symbol: 'XTZ'
           }
         })
-        // this.setState({ accountOptions })
         return accountOptions
       default:
         if(ethAccounts) {
@@ -477,7 +479,6 @@ let Staking = createReactClass({
 
           const flattenedArray = [].concat(...accountOptions);
 
-          // this.setState({ accountOptions: flattenedArray })
           return flattenedArray
         }
         break;

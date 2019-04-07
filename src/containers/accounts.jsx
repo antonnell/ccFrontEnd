@@ -139,6 +139,16 @@ let Accounts = createReactClass({
       viewTokens: null,
       viewTokensAccount: null,
       viewMode: 'Grid',
+      accountTypes: [
+        { value: 'Staking', description: 'Staking' },
+        { value: 'Transaction', description: 'Transaction' },
+      ],
+      accountTypeValue: null,
+      accountTypeError: false,
+      accountTypeErrorMessage: '',
+      managerAddressValue: '',
+      managerAddressError: false,
+      managerAddressErrorMessage: ''
     };
   },
 
@@ -260,6 +270,13 @@ let Accounts = createReactClass({
       viewTokensOpen,
       viewTokensAccount,
       stakeableCurrencies,
+      accountTypeValue,
+      accountTypeError,
+      accountTypeErrorMessage,
+      accountTypes,
+      managerAddressValue,
+      managerAddressError,
+      managerAddressErrorMessage
     } = this.state
 
     let {
@@ -273,6 +290,7 @@ let Accounts = createReactClass({
 
     let accounts = null
     let transactions = null
+    let managerAddressOptions = []
 
     switch(token) {
       case "Aion":
@@ -290,6 +308,12 @@ let Accounts = createReactClass({
       case "Tezos":
         accounts = tezosAccounts
         transactions = tezosTransactions
+        managerAddressOptions = tezosAccounts ? tezosAccounts.map((acc) => {
+          return {
+            description: acc.name,
+            value: acc.address
+          }
+        }) : []
         break;
       case "Wanchain":
         accounts = wanAccounts
@@ -371,6 +395,14 @@ let Accounts = createReactClass({
         viewTokens={ viewTokens }
         viewTokensAccount={ viewTokensAccount }
         stakeableCurrencies={ stakeableCurrencies }
+        accountTypeValue={ accountTypeValue }
+        accountTypeError={ accountTypeError }
+        accountTypeErrorMessage={ accountTypeErrorMessage }
+        accountTypes={ accountTypes }
+        managerAddressValue={ managerAddressValue }
+        managerAddressError={ managerAddressError }
+        managerAddressErrorMessage={ managerAddressErrorMessage }
+        managerAddressOptions={ managerAddressOptions }
       />
     );
   },
@@ -386,6 +418,7 @@ let Accounts = createReactClass({
     } = this.props
 
     let {
+      tezosAccounts,
       error,
       ethAccountsCombined,
       wanAccountsCombined,
@@ -419,6 +452,13 @@ let Accounts = createReactClass({
       mnemonicPhraseErrorMessage,
       stakeableCurrencies,
       viewMode,
+      accountTypeValue,
+      accountTypeError,
+      accountTypeErrorMessage,
+      accountTypes,
+      managerAddressValue,
+      managerAddressError,
+      managerAddressErrorMessage
     } = this.state
 
     let accounts = [
@@ -430,6 +470,14 @@ let Accounts = createReactClass({
       ...(wanAccountsCombined != null ? wanAccountsCombined : []),
       ...(wrc20AccountsCombined != null ? wrc20AccountsCombined : [])
     ]
+
+
+    let managerAddressOptions = tezosAccounts ? tezosAccounts.map((acc) => {
+      return {
+        description: acc.name,
+        value: acc.address
+      }
+    }) : []
 
     return (
       <AccountsComponent
@@ -471,6 +519,14 @@ let Accounts = createReactClass({
         stakeableCurrencies={ stakeableCurrencies }
         toggleViewClicked={ this.toggleViewClicked }
         viewMode={ viewMode }
+        accountTypeValue={ accountTypeValue }
+        accountTypeError={ accountTypeError }
+        accountTypeErrorMessage={ accountTypeErrorMessage }
+        accountTypes={ accountTypes }
+        managerAddressValue={ managerAddressValue }
+        managerAddressError={ managerAddressError }
+        managerAddressErrorMessage={ managerAddressErrorMessage }
+        managerAddressOptions={ managerAddressOptions }
       />
     );
   },
@@ -684,6 +740,12 @@ let Accounts = createReactClass({
       case 'token':
         this.setState({ tokenValue: event.target.value })
         break;
+      case 'accountType':
+        this.setState({ accountTypeValue: event.target.value })
+        break;
+      case 'managerAddress':
+        this.setState({ managerAddressValue: event.target.value })
+        break;
       default:
         break;
     }
@@ -726,7 +788,9 @@ let Accounts = createReactClass({
 
     const {
       addressName,
-      tokenValue
+      tokenValue,
+      managerAddressValue,
+      accountTypeValue
     } = this.state
 
     let error = false
@@ -741,6 +805,18 @@ let Accounts = createReactClass({
       error = true
     }
 
+    if(tokenValue === 'Tezos') {
+      if(accountTypeValue === null || accountTypeValue === "") {
+        this.setState({ accountTypeError: true, accountTypeErrorMessage: 'Account Type is required' })
+        error = true
+      } else {
+        if(managerAddressValue === null || managerAddressValue === "") {
+          this.setState({ managerAddressError: true, managerAddressErrorMessage: 'Manager Address is required' })
+          error = true
+        }
+      }
+    }
+
     return !error
   },
 
@@ -749,7 +825,9 @@ let Accounts = createReactClass({
 
       const {
         addressName,
-        tokenValue
+        tokenValue,
+        accountTypeValue,
+        managerAddressValue
       } = this.state
 
       const { user } = this.props
@@ -787,6 +865,12 @@ let Accounts = createReactClass({
           break;
         case 'Tezos':
           this.setState({ tezosLoading: true })
+
+          content.accountType = accountTypeValue
+          if(accountTypeValue === 'Staking') {
+            content.managerAddress = managerAddressValue
+          }
+
           tezosDispatcher.dispatch({
             type: "createTezosAddress",
             content,

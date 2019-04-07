@@ -97,7 +97,6 @@ class Accounts extends Component {
       loading,
       createOpen,
       importOpen,
-      tokens,
       error,
       toggleViewClicked,
       viewMode
@@ -198,12 +197,12 @@ class Accounts extends Component {
               Token
             </Typography>
           </Grid>
-          <Grid item xs={3} align='right' style={headerStyle}>
+          <Grid item xs={2} align='right' style={headerStyle}>
             <Typography variant="body1" style={textStyle}>
               Balance
             </Typography>
           </Grid>
-          <Grid item xs={3} align='right' style={headerStyle}>
+          <Grid item xs={4} align='right' style={headerStyle}>
             <Typography variant="body1" style={textStyle}>
               Actions
             </Typography>
@@ -231,7 +230,15 @@ class Accounts extends Component {
       error,
       tokens,
       tokenValue,
-      handleCreate
+      handleCreate,
+      accountTypeValue,
+      accountTypeError,
+      accountTypeErrorMessage,
+      accountTypes,
+      managerAddressValue,
+      managerAddressError,
+      managerAddressErrorMessage,
+      managerAddressOptions,
     } = this.props
 
     return <CreateModal
@@ -247,6 +254,14 @@ class Accounts extends Component {
       handleSelectChange={ handleSelectChange }
       error={ error }
       handleCreate={ handleCreate }
+      accountTypeValue={ accountTypeValue }
+      accountTypeError={ accountTypeError }
+      accountTypeErrorMessage={ accountTypeErrorMessage }
+      accountTypeOptions={ accountTypes }
+      managerAddressValue={ managerAddressValue }
+      managerAddressError={ managerAddressError }
+      managerAddressErrorMessage={ managerAddressErrorMessage }
+      managerAddressOptions={ managerAddressOptions }
     />
   }
 

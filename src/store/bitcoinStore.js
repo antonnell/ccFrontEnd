@@ -112,6 +112,7 @@ class Store {
               if(walletDetails.id === wallet.id) {
                 wallet.addresses = walletDetails.addresses
               }
+              return true
             })
             return wallet
           })

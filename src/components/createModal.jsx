@@ -37,6 +37,14 @@ class CreateModal extends Component {
       tokenError,
       tokenErrorMessage,
       handleSelectChange,
+      accountTypeValue,
+      accountTypeError,
+      accountTypeErrorMessage,
+      accountTypeOptions,
+      managerAddressValue,
+      managerAddressError,
+      managerAddressErrorMessage,
+      managerAddressOptions,
     } = this.props
 
     return (
@@ -62,6 +70,16 @@ class CreateModal extends Component {
               <Grid item xs={11}>
                 { this.renderSelect("Select The Token", tokenValue, tokenOptions, tokenError, tokenErrorMessage, handleSelectChange, createLoading, 'token') }
               </Grid>
+              { tokenValue === 'Tezos' && (
+                <Grid item xs={11}>
+                  { this.renderSelect("Select Account Type", accountTypeValue, accountTypeOptions, accountTypeError, accountTypeErrorMessage, handleSelectChange, createLoading, 'accountType') }
+                </Grid>)
+              }
+              { tokenValue === 'Tezos' && accountTypeValue === 'Staking' && (
+                <Grid item xs={11}>
+                  { this.renderSelect("Select Manager Address", managerAddressValue, managerAddressOptions, managerAddressError, managerAddressErrorMessage, handleSelectChange, createLoading, 'managerAddress') }
+                </Grid>)
+              }
               <Grid item xs={11}>
                 { this.renderImput("Account Name", addressName, addressNameError, addressNameErrorMessage, handleChange, createLoading, 'addressName') }
               </Grid>

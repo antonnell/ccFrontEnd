@@ -191,7 +191,7 @@ let Auth = createReactClass({
       if (data.user.username === data.user.email) {
         window.location.hash = "setUsername";
       } else {
-        window.location.hash = "wanAccounts";
+        window.location.hash = "accounts";
       }
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });

@@ -177,7 +177,7 @@ class StakedTokens extends Component {
                   padding: '6px',
                   borderRadius: '4px'
                 } }>
-                  <Typography variant='body1' style={theme.custom.tokenValue}>{token.age}</Typography>
+                  <Typography variant='body1' style={theme.custom.tokenValue}>{token.age + ' Days'}</Typography>
                   <Typography variant='body1' style={{fontSize: '10px'}}>age</Typography>
                 </div>
               </Grid>

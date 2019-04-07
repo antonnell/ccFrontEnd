@@ -28,6 +28,9 @@ class Store {
           case 'getUserStakes':
             this.getUserStakes(payload);
             break;
+          case 'getUserStakingSummaries':
+            this.getUserStakingSummaries(payload);
+            break;
           case 'getRewardHistory':
             this.getRewardHistory(payload);
             break;
@@ -154,6 +157,36 @@ class Store {
     });
   }
 
+  getUserStakingSummaries(payload) {
+    var url = 'staking/getUserStakingSummaries/'+payload.content.userId;
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit('stakesUpdated')
+        return
+      }
+
+      this.setStore({ userStakes: data.stakes })
+
+      async.parallel([
+        (callback) => { this.getRewardHistory(payload, callback) },
+        (callback) => { this.getTransactionHistory(payload, callback) }
+      ], (err, subData) => {
+        if(err) {
+          emitter.emit('error', err)
+          emitter.emit('stakesUpdated')
+          return
+        }
+
+        this.setStore({ rewardHistory: subData[0].rewards, transactionHistory: subData[1].transactions })
+
+        emitter.emit('stakesUpdated')
+      })
+
+    });
+  }
+
   getRewardHistory(payload, callback) {
     var url = 'staking/getRewardHistory/'+payload.content.userId;
 
@@ -184,7 +217,7 @@ class Store {
       }
 
       if(data && data.success) {
-        this.getUserStakes(payload)
+        this.getUserStakingSummaries(payload)
       } else {
         emitter.emit('error', data.errorMsg)
         emitter.emit('stakesUpdated')
@@ -208,7 +241,7 @@ class Store {
         return
       }
       if(data && data.success) {
-        this.getUserStakes(payload)
+        this.getUserStakingSummaries(payload)
       } else {
         emitter.emit('error', data.errorMsg)
         emitter.emit('stakesUpdated')

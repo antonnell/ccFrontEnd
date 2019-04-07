@@ -21,6 +21,8 @@ class Store {
 
     this.store = {
       accounts: null,
+      stakingAccounts: null,
+      transactAccounts: null,
       accountsCombined: null
     }
 
@@ -79,7 +81,7 @@ class Store {
       }
 
       if(data && data.success) {
-        this.setStore({accounts: data.tezosAddresses})
+        this.setStore({ accounts: [...data.tezosAddresses, ...data.tezosOriginatedAddresses], transactAccounts: data.tezosAddresses, stakingAccounts: data.tezosOriginatedAddresses })
 
         let accountsCombined = data.tezosAddresses.reduce((total, currentVal) => {
 
@@ -92,7 +94,7 @@ class Store {
           usdBalance: 0,
           type: 'Tezos',
           name: 'Tezos',
-          symbol: 'Tezos'
+          symbol: 'XTZ'
         })
 
         this.setStore({accountsCombined: [accountsCombined]})
@@ -100,7 +102,7 @@ class Store {
         emitter.emit('accountsUpdated');
       } else {
         emitter.emit('error', data.errorMsg)
-        emitter.emit('accountsUpdated')        
+        emitter.emit('accountsUpdated')
       }
     });
   };
@@ -112,6 +114,15 @@ class Store {
       isPrimary: payload.content.isPrimary,
       name: payload.content.name
     };
+
+    if(payload.content.accountType === 'Staking') {
+      url = 'tezos/createStakingAccount'
+
+      postJson.managerAddress = payload.content.managerAddress
+      postJson.displayName = payload.content.name
+      postJson.delegateAddress = payload.content.delegateAddress
+      postJson.amount = payload.amount
+    }
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       this.getTezosAddress(payload)
