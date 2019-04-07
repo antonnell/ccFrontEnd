@@ -112,7 +112,7 @@ class Accounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Dashboard'} screen={'Accounts'} />
+          <PageTitle theme={theme} root={null} screen={{display: 'Accounts', location: 'accounts'}} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
