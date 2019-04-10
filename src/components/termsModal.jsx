@@ -20,7 +20,7 @@ class TermsModal extends Component {
       <Dialog open={this.props.isOpen} title="Terms & Conditions" onClose={this.props.handleClose} fullWidth={true} maxWidth={'lg'} TransitionComponent={Transition}>
         <DialogTitle id="alert-dialog-title">
           <Typography variant='h6' align='center'>
-            CURVE ACCOUNT TERMS & CONDITIONS
+            CRYPTOCURVE ACCOUNT TERMS & CONDITIONS
           </Typography>
         </DialogTitle>
         <DialogContent>

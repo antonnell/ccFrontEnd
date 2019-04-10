@@ -69,7 +69,7 @@ class Welcome extends Component {
 
     return (
       <Grid item xs={12} md={6} style={ { padding: '80px', backgroundImage: "url(" + WelcomeImage + ")", backgroundSize: 'cover', minHeight: '100%', position: 'relative' } }>
-        <Typography style={ theme.custom.welcomeCurve }>Curve</Typography>
+        <Typography style={ theme.custom.welcomeCurve }>CryptoCurve</Typography>
 
         {this.renderGenText()}
         {this.renderButton()}

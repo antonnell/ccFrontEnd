@@ -43,6 +43,12 @@ class Store {
           case 'withdrawStake':
             this.withdrawStake(payload);
             break;
+          case 'getAllStakingPerformance':
+            this.getAllStakingPerformance(payload);
+            break;
+          case 'getStakingPerformance':
+            this.getStakingPerformance(payload);
+            break;
           default: {
 
           }
@@ -52,37 +58,13 @@ class Store {
 
     //INITIAL STORE DATA
     this.store = {
-      timeFrameOptions: [
-        { value: '1 Year', description: '1 Year' },
-        { value: '6 Months', description: '6 Months' },
-        { value: '3 Months', description: '3 Months' },
-        { value: '1 Month', description: '1 Month' },
-        { value: '1 Week', description: '1 Week' },
-        { value: '1 Day', description: '1 Day' }
-      ],
-      currencyOptions: [
-        { value: 'USD', description: 'USD' },
-        { value: 'BTC', description: 'BTC' },
-        { value: 'ETH', description: 'ETH' }
-      ],
-      timeFrame: '1 Year',
-      currency: 'USD',
-      data: Array(30).fill().map(() => Math.random()*100),
-      labels: Array(30).fill().map((_, i) => i),
-      coins: [
-        { uuid: 'Cosmos', name: 'Cosmos', checked: false },
-        { uuid: 'Fantom', name: 'Fantom', checked: false },
-        { uuid: 'Fusion', name: 'Fusion', checked: false },
-        { uuid: 'Neo', name: 'Neo', checked: false },
-        { uuid: 'PivX', name: 'PivX', checked: false }
-      ],
-      tokens: [],
-
       stakeableCurrencies: [],
       stakingNodes: [],
       userStakes: null,
       rewardHistory: [],
-      transactionHistory: []
+      transactionHistory: [],
+      allStakingPerformance: null,
+      stakingPerformance: null
     }
   }
 
@@ -246,6 +228,64 @@ class Store {
         emitter.emit('error', data.errorMsg)
         emitter.emit('stakesUpdated')
       }
+    });
+  }
+
+  getAllStakingPerformance(payload) {
+    var url = 'staking/getUserStakingPerformance/'+payload.content.userId+'/ALL/USD/'+payload.content.period;
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit(payload.type, err, data);
+        return
+      }
+
+      if(data) {
+        let allStakingPerformance = {
+          currency: data.currency,
+          totalRewards: data.totalRewards,
+          totalRewardsDailyChange: data.totalRewardsDailyChange,
+          totalStake: data.totalStake,
+          totalStakeDailyChange: data.totalStakeDailyChange,
+          stakePoints: data.stakePoints
+        }
+
+        this.setStore({ allStakingPerformance })
+      } else {
+        emitter.emit('error', data.errorMsg)
+      }
+
+      emitter.emit(payload.type, err, data);
+    });
+  }
+
+  getStakingPerformance(payload) {
+    var url = 'staking/getUserStakingPerformance/'+payload.content.userId+'/'+payload.content.currency+'/'+payload.content.displayCurrency+'/'+payload.content.period;
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        emitter.emit(payload.type, err, data);
+        return
+      }
+
+      if(data && data.success) {
+        let stakingPerformance = {
+          currency: data.currency,
+          totalRewards: data.totalRewards,
+          totalRewardsDailyChange: data.totalRewardsDailyChange,
+          totalStake: data.totalStake,
+          totalStakeDailyChange: data.totalStakeDailyChange,
+          stakePoints: data.stakePoints
+        }
+
+        this.setStore({ stakingPerformance })
+      } else {
+        emitter.emit('error', data.errorMsg)
+      }
+
+      emitter.emit(payload.type, err, data);
     });
   }
 

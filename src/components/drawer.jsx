@@ -46,6 +46,7 @@ class AppDrawer extends Component {
     if (theme.name === 'dark') {
       return (<Card style={ { padding: '24px', marginBottom: '8px' } }>
         <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
+          <Typography variant="h1" style={ { paddingBottom: 16 } }>CryptoCurve</Typography>
           <div style={ { width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("' + user.profilePhoto + '")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' } }>
           </div>
           <Typography variant="h1" style={ { paddingTop: 16 } }>{ user.username }</Typography>
@@ -55,6 +56,7 @@ class AppDrawer extends Component {
       return (
         <div style={ { padding: '24px', marginBottom: '8px' } }>
           <Grid container justify="center" alignItems="center" style={ { paddingTop: 24 } } direction="column">
+            <Typography variant="h1" style={ { paddingBottom: 16 } }>CryptoCurve</Typography>
             <div style={ { width: '50px', height: '50px', borderRadius: '25px', background: '#dedede', position: 'relative', backgroundImage: 'url("' + user.profilePhoto + '")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' } }>
             </div>
             <Typography variant="h1" style={ { paddingTop: 16 } }>{ user.username }</Typography>

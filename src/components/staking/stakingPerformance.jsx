@@ -9,21 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import NativeSelect from "@material-ui/core/NativeSelect";
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
+import SectionLoader from "../sectionLoader";
 
 import LineGraph from './lineGraph';
-
-let store = require('../../store/stakingStore.js').default.store;
-
-function MoreIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path
-        fill={props.theme?props.theme.custom.icon.color:'#888888'}
-        d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
-      />
-    </SvgIcon>
-  );
-}
 
 class StakingPerformance extends Component {
 
@@ -34,11 +22,11 @@ class StakingPerformance extends Component {
       handleStake,
       optionsClicked,
       timeFrameChanged,
-      currencyChanged,
+      allStakingPerformance,
+      timeFrameOptions,
+      timeFrameValue,
+      allStakeLoading
     } = this.props
-
-    const timeFrameOptions = store.getStore("timeFrameOptions")
-    const currencyOptions = store.getStore("currencyOptions")
 
     const stakeHead = {
       paddingRight: '24px'
@@ -69,22 +57,6 @@ class StakingPerformance extends Component {
             >
               Stake
             </Button>
-            <IconButton
-              style={ {
-                verticalAlign: "top",
-                marginRight: "-20px",
-                marginTop: "-4px"
-              } }
-              color="primary"
-              aria-label="More"
-              buttonRef={ node => {
-                this.anchorEl = node;
-              } }
-              onClick={ optionsClicked }
-              disabled={ false }
-            >
-              <MoreIcon theme={theme}/>
-            </IconButton>
           </Grid>
         </Grid>
         <Grid
@@ -93,7 +65,8 @@ class StakingPerformance extends Component {
           alignItems="flex-start"
         >
           <Grid item xs={12}>
-            <Card>
+            <Card style={{ position: 'relative' }}>
+              {allStakeLoading && <SectionLoader /> }
               <CardContent>
                 <Grid
                   container
@@ -109,10 +82,10 @@ class StakingPerformance extends Component {
                     </div>
                     <div style={theme.custom.inline}>
                       <Typography variant="h4" noWrap>
-                        $12 500.67
+                        {allStakingPerformance ? ('$' + allStakingPerformance.totalStake.toFixed(4)) : 'N/A'}
                       </Typography>
-                      <Typography variant="subtitle2" noWrap>
-                        +1 865.21 <span style={theme.custom.positive}>+1.5%</span>
+                      <Typography variant="subtitle2" noWrap style={theme.custom.positive}>
+                        {allStakingPerformance ? ('+' + allStakingPerformance.totalStakeDailyChange.toFixed(4)) : 'N/A'}
                       </Typography>
                     </div>
                   </Grid>
@@ -124,10 +97,10 @@ class StakingPerformance extends Component {
                     </div>
                     <div style={theme.custom.inline}>
                       <Typography variant="h4" noWrap>
-                        $12 500.67
+                        {allStakingPerformance ? ('$' + allStakingPerformance.totalRewards.toFixed(4)) : 'N/A'}
                       </Typography>
-                      <Typography variant="subtitle2" noWrap>
-                        +1 865.21 <span style={theme.custom.positive}>+1.5%</span>
+                      <Typography variant="subtitle2" noWrap style={theme.custom.positive}>
+                        {allStakingPerformance ? ('+' + allStakingPerformance.totalRewardsDailyChange.toFixed(4)) : 'N/A'}
                       </Typography>
                     </div>
                   </Grid>
@@ -139,12 +112,7 @@ class StakingPerformance extends Component {
                       direction="row"
                     >
                       <Grid item xs={4} md={3} lg={2}>
-                        {this.renderSelect(timeFrameOptions, store.getStore("timeFrame"), timeFrameChanged)}
-                      </Grid>
-                      <Grid item xs={1}>
-                      </Grid>
-                      <Grid item xs={4} md={3} lg={2}>
-                        {this.renderSelect(currencyOptions, store.getStore("currency"), currencyChanged)}
+                        {this.renderSelect(timeFrameOptions, timeFrameValue, timeFrameChanged)}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -181,8 +149,14 @@ class StakingPerformance extends Component {
   }
 
   renderChart() {
-    let data = store.getStore("data")
-    let labels = store.getStore("labels")
+    let { allStakingPerformance } = this.props
+
+    let data = []
+    let labels = []
+    if(allStakingPerformance && allStakingPerformance.stakePoints) {
+      data = allStakingPerformance.stakePoints.map((point) => { return point.value })
+      labels = allStakingPerformance.stakePoints.map((point) => { return point.timestamp })
+    }
 
     return <LineGraph labels={ labels } data={ data } height={ 400 } hideY={ false } thickness={ 5 } marginTop={ 24 }/>
   }

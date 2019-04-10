@@ -166,7 +166,8 @@ let Transact = createReactClass({
       ownValue: null,
       publicValue: '',
       amountValue: '',
-      gasValue: (this.props.transactCurrency && this.props.transactCurrency.name === 'Aion') ? '200' : '2'
+      gasValue: (this.props.transactCurrency && this.props.transactCurrency.name === 'Wanchain') ? '200' : '2',
+      chain: null
     };
   },
 
@@ -423,7 +424,7 @@ let Transact = createReactClass({
             theme={ theme }
             error={ this.state.error }
             transactionID={ this.state.transactionID }
-            tokenValue={ this.state.tokenValue }
+            chain={ this.state.chain }
           />
         );
       default:
@@ -726,7 +727,7 @@ let Transact = createReactClass({
   },
 
   callSend() {
-    let { user } = this.props
+    let { user, supportedERC20Tokens, supportedWRC20Tokens } = this.props
 
     let {
       ethAccounts,
@@ -770,6 +771,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Aion'})
         break
       case 'Bitcoin':
         bitcoinDispatcher.dispatch({
@@ -777,6 +779,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Bitcoin'})
         break
       case 'Ethereum':
         ethDispatcher.dispatch({
@@ -784,6 +787,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Ethereum'})
         break
       case 'ERC20':
         ethDispatcher.dispatch({
@@ -791,6 +795,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Ethereum'})
         break
       case 'Tezos':
         tezosDispatcher.dispatch({
@@ -798,6 +803,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Tezos'})
         break
       case 'Wanchain':
         wanDispatcher.dispatch({
@@ -805,6 +811,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Wanchain'})
         break
       case 'WRC20':
         wanDispatcher.dispatch({
@@ -812,6 +819,7 @@ let Transact = createReactClass({
           content,
           token: user.token
         });
+        this.setState({chain: 'Wanchain'})
         break
       default:
 
@@ -820,6 +828,16 @@ let Transact = createReactClass({
         })
 
         if(acc.length > 0) {
+
+          let arr = supportedERC20Tokens.filter((token) => {
+            return token.name === tokenValue
+          })
+          if(arr.length > 0) {
+            content.tokenAddress = arr[0].contractAddress
+          }
+
+          this.setState({ chain: 'Ethereum'})
+
           ethDispatcher.dispatch({
             type: 'sendERC20',
             content,
@@ -833,6 +851,17 @@ let Transact = createReactClass({
         })
 
         if(acc.length > 0) {
+
+          let arr = supportedWRC20Tokens.filter((token) => {
+            return token.name === tokenValue
+          })
+
+          if(arr.length > 0) {
+            content.tokenAddress = arr[0].contractAddress
+          }
+
+          this.setState({ chain: 'Wanchain'})
+
           wanDispatcher.dispatch({
             type: 'sendWRC20',
             content,
@@ -851,13 +880,16 @@ let Transact = createReactClass({
         loading: false,
         currentScreen: "results",
         activeStep: 2,
-        transactionID: data.transactionId
+        transactionID: data.transactionId,
+        error: null
       });
     } else {
       this.setState({
         loading: false,
         currentScreen: "results",
-        error: data.errorMsg
+        activeStep: 2,
+        error: data.errorMsg,
+        transactionID: null
       });
     }
   },
@@ -950,7 +982,7 @@ let Transact = createReactClass({
         error = true
       }
 
-      if(tokenValue === 'Aion' && gasValue < 200) {
+      if(tokenValue === 'Wanchain' && gasValue < 200) {
         this.setState({ gasError: true, gasErrorMessage: 'Minimum Gas amount is 200' })
         error = true
       }

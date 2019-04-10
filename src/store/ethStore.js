@@ -23,7 +23,8 @@ class Store {
       accounts: null,
       accountsCombined: null,
       erc20Accounts: null,
-      erc20AccountsCombined: null
+      erc20AccountsCombined: null,
+      supportedERC20Tokens: null,
     }
 
     dispatcher.register(
@@ -311,7 +312,11 @@ class Store {
   getSupportedERC20Tokens = function (payload) {
     var url = 'ethereum/getSupportedErc20Tokens';
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+
+      this.setStore({ supportedERC20Tokens: data.tokens });
+      emitter.emit('getSupportedERC20Tokens');
+    });
   };
 
   getEthTransactionHistory = function (payload) {

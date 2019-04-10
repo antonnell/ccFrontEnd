@@ -23,7 +23,8 @@ class Store {
       accounts: null,
       accountsCombined: null,
       wrc20Accounts: null,
-      wrc20AccountsCombined: null
+      wrc20AccountsCombined: null,
+      supportedWRC20Tokens: null
     }
 
     dispatcher.register(
@@ -297,7 +298,11 @@ class Store {
   getSupportedWRC20Tokens = function (payload) {
     var url = 'wanchain/getSupportedWrc20Tokens';
 
-    this.callApi(url, 'GET', null, payload);
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+
+      this.setStore({ supportedWRC20Tokens: data.tokens });
+      emitter.emit('getSupportedWRC20Tokens');
+    });
   };
 
   getWanTransactionHistory = function (payload) {

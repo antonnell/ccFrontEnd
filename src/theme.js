@@ -472,7 +472,8 @@ let customTheme =  {
         display: "flex"
       },
       pageTitleRoot: {
-        color: colors.lightBlue
+        color: colors.lightBlue,
+        cursor: 'pointer'
       },
       sectionTitle: {
         marginTop: '60px',

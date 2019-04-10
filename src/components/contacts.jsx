@@ -110,7 +110,7 @@ class Contacts extends Component {
           xs={12}
           align="left"
         >
-          <PageTItle theme={ theme } root={'Profile'} screen={'Contacts'} />
+          <PageTItle theme={this.props.theme} root={null} screen={{display: 'Contacts', location: 'contacts'}} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid

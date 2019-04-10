@@ -50,10 +50,10 @@ class CompletePayment extends Component {
   }
 
   renderSuccess() {
-    let { theme, tokenValue, transactionID } = this.props
+    let { theme, chain, transactionID } = this.props
 
     let url = ''
-    switch (tokenValue) {
+    switch (chain) {
       case 'Aion':
         url = config.aionscanURL + transactionID;
         break;
@@ -61,14 +61,12 @@ class CompletePayment extends Component {
         url = config.bitcoinscanURL + transactionID;
         break;
       case 'Ethereum':
-      case 'ERC20':
         url = config.etherscanUrl + transactionID;
         break;
       case 'Tezos':
         url = config.tezosscanURL + transactionID;
         break;
       case 'Wanchain':
-      case 'WRC20':
         url = config.wanscanURL + transactionID;
         break;
       default:

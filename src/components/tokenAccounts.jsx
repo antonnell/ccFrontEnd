@@ -369,7 +369,7 @@ class TokenAccounts extends Component {
             xs={12}
             align="left"
           >
-            <PageTitle theme={theme} root={'Accounts'} screen={token} />
+            <PageTitle theme={theme} root={{display: 'Accounts', location: 'accounts'}} screen={{display: token, location: token}} />
           </Grid>
           <Grid
             item
@@ -391,7 +391,7 @@ class TokenAccounts extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Accounts'} screen={token} />
+          <PageTitle theme={theme} root={{display: 'Accounts', location: 'accounts'}} screen={{display: token, location: token}} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid

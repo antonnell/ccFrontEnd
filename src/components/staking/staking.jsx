@@ -42,7 +42,7 @@ class Staking extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Staking'} screen={'Dashboard'} />
+          <PageTitle theme={theme} root={null} screen={{display: 'Staking', location: 'staking'}} />
         </Grid>
       </Grid>
     )
@@ -79,7 +79,7 @@ class Staking extends Component {
           xs={6}
           align="left"
         >
-          <PageTitle theme={theme} root={'Staking'} screen={'Dashboard'} />
+          <PageTitle theme={theme} root={null} screen={{display: 'Staking', location: 'staking'}} />
         </Grid>
         <Grid
           item
@@ -167,6 +167,17 @@ class Staking extends Component {
       size,
       error,
       optionsToken,
+      allStakingPerformance,
+      timeFrameValue,
+      currencyValue,
+      currencyOptions,
+      timeFrameOptions,
+      allStakeLoading,
+      tokenStakeLoading,
+      stakingPerformance,
+      tokenTimeFrameValue,
+      tokenTimeFrameChanged,
+      tokenTimeFrameOptions,
     } = this.props
 
     return (
@@ -178,19 +189,28 @@ class Staking extends Component {
           xs={12}
           align="left"
         >
-          <PageTitle theme={theme} root={'Staking'} screen={'Dashboard'} />
+          <PageTitle theme={theme} root={null} screen={{display: 'Staking', location: 'staking'}} />
         </Grid>
         <StakingPerformance
           theme={ theme }
           handleStake={ handleStake }
-          timeFrameChanged={ timeFrameChanged }
-          currencyChanged={ currencyChanged }
           userStakes={ userStakes }
+          allStakingPerformance={ allStakingPerformance }
+          allStakeLoading={ allStakeLoading }
+          timeFrameChanged={ timeFrameChanged }
+          timeFrameOptions={ timeFrameOptions }
+          timeFrameValue={ timeFrameValue }
         />
         <TokenPerformance
           theme={ theme }
-          timeFrameChanged={ timeFrameChanged }
+          tokenStakeLoading={ tokenStakeLoading }
+          stakingPerformance={ stakingPerformance }
+          timeFrameChanged={ tokenTimeFrameChanged }
+          timeFrameOptions={ tokenTimeFrameOptions }
+          timeFrameValue={ tokenTimeFrameValue }
           currencyChanged={ currencyChanged }
+          currencyOptions={ currencyOptions }
+          currencyValue={ currencyValue }
         />
         <StakedTokens
           theme={ theme }

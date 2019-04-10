@@ -25,6 +25,8 @@ let Staking = createReactClass({
     let stakeableCurrencies = store.getStore('stakeableCurrencies')
     let rewardHistory = store.getStore('rewardHistory')
     let transactionHistory = store.getStore('transactionHistory')
+    let allStakingPerformance = store.getStore('allStakingPerformance')
+    let stakingPerformance = store.getStore('stakingPerformance')
 
     let tokenOptions = []
     if(stakeableCurrencies) {
@@ -78,6 +80,26 @@ let Staking = createReactClass({
       amountError: null,
       amountErrorMessage: '',
 
+      allStakingPerformance: null,
+      stakingPerformance: null,
+      currencyValue: 'USD',
+      timeFrameValue: 'month',
+
+      timeFrameOptions: [
+        { value: 'year', description: '1 Year' },
+        { value: 'month', description: '1 Month' }
+      ],
+
+      tokenTimeFrameValue: 'month',
+
+      tokenTimeFrameOptions: [
+        { value: 'year', description: '1 Year' },
+        { value: 'month', description: '1 Month' }
+      ],
+      currencyOptions: [ ],
+
+      allStakeLoading: true,
+      tokenStakeLoading: true,
     };
   },
 
@@ -85,6 +107,8 @@ let Staking = createReactClass({
     emitter.on("stakesUpdated", this.stakesUpdated)
     emitter.on("getStakeableCurrencies", this.getStakeableCurrenciesReturned)
     emitter.on("getStakingNodes", this.getStakingNodesReturned)
+    emitter.on('getAllStakingPerformance', this.getAllStakingPerformanceReturned)
+    emitter.on('getStakingPerformance', this.getStakingPerformanceRetuned)
 
     ethEmitter.on('accountsUpdated', this.ethAccountsRefreshed)
     tezosEmitter.on('accountsUpdated', this.tezosAccountsRefreshed)
@@ -111,12 +135,20 @@ let Staking = createReactClass({
       content,
       token: user.token
     });
+
+    content.period = 'month'
+    dispatcher.dispatch({
+      type: 'getAllStakingPerformance',
+      content,
+      token: user.token
+    });
   },
 
   componentWillUnmount() {
     emitter.removeAllListeners("stakesUpdated");
     emitter.removeAllListeners("getStakeableCurrencies");
     emitter.removeAllListeners("getStakingNodes");
+    emitter.removeAllListeners("getAllStakingPerformance");
   },
 
   showError(error) {
@@ -141,8 +173,36 @@ let Staking = createReactClass({
       rewardHistory: store.getStore('rewardHistory'),
       transactionHistory: store.getStore('transactionHistory'),
       history: [...store.getStore('rewardHistory'), ...store.getStore('transactionHistory')],
-      loading: false
+      loading: false,
+      currencyOptions: store.getStore('userStakes').map((stake) => {
+        return  { value: stake.currency, description: stake.currency }
+      }),
+      currencyValue: store.getStore('userStakes')[0].currency,
+      tokenStakeLoading: true
     })
+
+    let { user } = this.props
+
+    const content = {
+      userId: user.id,
+      period: this.state.tokenTimeFrameValue,
+      currency: store.getStore('userStakes')[0].currency,
+      displayCurrency: 'USD'
+    }
+
+    dispatcher.dispatch({
+      type: 'getStakingPerformance',
+      content,
+      token: user.token
+    });
+  },
+
+  getAllStakingPerformanceReturned() {
+    this.setState({ allStakingPerformance: store.getStore('allStakingPerformance'), allStakeLoading: false })
+  },
+
+  getStakingPerformanceRetuned() {
+    this.setState({ stakingPerformance: store.getStore('stakingPerformance'), tokenStakeLoading: false })
   },
 
   getStakeableCurrenciesReturned() {
@@ -196,6 +256,16 @@ let Staking = createReactClass({
       history,
       error,
       optionsToken,
+      allStakingPerformance,
+      currencyValue,
+      timeFrameValue,
+      tokenTimeFrameValue,
+      currencyOptions,
+      timeFrameOptions,
+      tokenTimeFrameOptions,
+      allStakeLoading,
+      tokenStakeLoading,
+      stakingPerformance,
     } = this.state
 
     return (
@@ -206,6 +276,7 @@ let Staking = createReactClass({
         handleWithdrawClose={ this.handleWithdrawClose }
         handleWithdrawFinish={ this.handleWithdrawFinish }
         timeFrameChanged={ this.timeFrameChanged }
+        tokenTimeFrameChanged={ this.tokenTimeFrameChanged }
         currencyChanged={ this.currencyChanged }
         optionsClicked={ this.optionsClicked }
         optionsClosed={ this.optionsClosed }
@@ -219,6 +290,7 @@ let Staking = createReactClass({
 
         error={ error }
         loading={ loading || ethLoading || tezosLoading || wanLoading }
+        allStakeLoading={ allStakeLoading }
 
         stakeOpen={ stakeOpen }
         withdrawOpen={ withdrawOpen }
@@ -245,6 +317,17 @@ let Staking = createReactClass({
         amountErrorMessage={ amountErrorMessage }
 
         optionsToken={ optionsToken }
+
+        allStakingPerformance={ allStakingPerformance }
+        currencyValue={ currencyValue }
+        timeFrameValue={ timeFrameValue }
+        tokenTimeFrameValue={ tokenTimeFrameValue }
+        currencyOptions={ currencyOptions }
+        timeFrameOptions={ timeFrameOptions }
+        tokenTimeFrameOptions={ tokenTimeFrameOptions }
+
+        tokenStakeLoading={ tokenStakeLoading }
+        stakingPerformance={ stakingPerformance }
       />
     );
   },
@@ -388,11 +471,58 @@ let Staking = createReactClass({
   },
 
   timeFrameChanged(event) {
-    store.setStore( { timeFrame: event.target.value, data: Array(30).fill().map(() => Math.random()*100) } )
+    this.setState( { timeFrameValue: event.target.value, allStakeLoading: true } )
+
+    let { user } = this.props
+
+    const content = {
+      userId: user.id,
+      period: event.target.value
+    }
+
+    dispatcher.dispatch({
+      type: 'getAllStakingPerformance',
+      content,
+      token: user.token
+    });
+  },
+
+  tokenTimeFrameChanged(event) {
+    this.setState( { tokenTimeFrameValue: event.target.value, tokenStakeLoading: true } )
+
+    let { user } = this.props
+
+    const content = {
+      userId: user.id,
+      period: event.target.value,
+      currency: this.state.currencyValue,
+      displayCurrency: 'USD'
+    }
+
+    dispatcher.dispatch({
+      type: 'getStakingPerformance',
+      content,
+      token: user.token
+    });
   },
 
   currencyChanged(event) {
-    store.setStore( { currency: event.target.value, data: Array(30).fill().map(() => Math.random()*100) } )
+    this.setState( { currencyValue: event.target.value, tokenStakeLoading: true } )
+
+    let { user } = this.props
+
+    const content = {
+      userId: user.id,
+      period: this.state.timeFrameValue,
+      currency: event.target.value,
+      displayCurrency: 'USD'
+    }
+
+    dispatcher.dispatch({
+      type: 'getStakingPerformance',
+      content,
+      token: user.token
+    });
   },
 
   optionsClicked(event, optionsToken) {
