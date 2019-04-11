@@ -20,7 +20,6 @@ class TokenPerformance extends Component {
       currencyChanged,
       currencyOptions,
       currencyValue,
-      stakingPerformance,
     } = this.props
 
     return (

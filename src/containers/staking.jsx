@@ -80,8 +80,8 @@ let Staking = createReactClass({
       amountError: null,
       amountErrorMessage: '',
 
-      allStakingPerformance: null,
-      stakingPerformance: null,
+      allStakingPerformance,
+      stakingPerformance,
       currencyValue: 'USD',
       timeFrameValue: 'month',
 
