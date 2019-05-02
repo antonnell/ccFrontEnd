@@ -13,7 +13,8 @@ import Contacts from './containers/contacts.jsx';
 import SetUsername from './containers/setUsername.jsx';
 import Settings from './containers/settings.jsx';
 import Pooling from './containers/Pooling/index';
-import Transact from './containers/transact';
+import Transact from './containers/transact'; 
+import TokenSwap from './containers/tokenSwap.jsx';
 
 import curveTheme from './theme';
 
@@ -433,7 +434,7 @@ class App extends Component {
             token: this.state.user.token
           });
         }
-        
+
       } else if (path === 'contacts') {
         content = { id: this.state.user.id };
 
@@ -673,6 +674,13 @@ class App extends Component {
             contacts={ this.state.contacts }
             transactClicked={ this.transactClicked }
             size={ this.state.size }
+          />
+        );
+      case 'tokenSwap':
+        return (
+          <TokenSwap
+            theme={ this.state.theme }
+            user={ this.state.user }
           />
         );
       case 'pooling':
