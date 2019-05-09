@@ -149,22 +149,27 @@ class Store {
         return
       }
 
-      this.setStore({ userStakes: data.stakes })
+      if(data && data.success) {
+        this.setStore({ userStakes: data.stakes })
 
-      async.parallel([
-        (callback) => { this.getRewardHistory(payload, callback) },
-        (callback) => { this.getTransactionHistory(payload, callback) }
-      ], (err, subData) => {
-        if(err) {
-          emitter.emit('error', err)
+        async.parallel([
+          (callback) => { this.getRewardHistory(payload, callback) },
+          (callback) => { this.getTransactionHistory(payload, callback) }
+        ], (err, subData) => {
+          if(err) {
+            emitter.emit('error', err)
+            emitter.emit('stakesUpdated')
+            return
+          }
+
+          this.setStore({ rewardHistory: subData[0].rewards, transactionHistory: subData[1].transactions })
+
           emitter.emit('stakesUpdated')
-          return
-        }
-
-        this.setStore({ rewardHistory: subData[0].rewards, transactionHistory: subData[1].transactions })
-
+        })
+      } else {
+        this.setStore({ userStakes: [], rewardHistory: [], transactionHistory: [] })
         emitter.emit('stakesUpdated')
-      })
+      }
 
     });
   }

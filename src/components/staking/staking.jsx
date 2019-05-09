@@ -68,6 +68,13 @@ class Staking extends Component {
       amountValue,
       amountError,
       amountErrorMessage,
+      delegateOptions,
+      delegateValue,
+      delegateError,
+      delegateErrorMessage,
+      ownDelegateValue,
+      ownDelegateError,
+      ownDelegateErrorMessage,
       loading,
     } = this.props
 
@@ -127,6 +134,15 @@ class Staking extends Component {
           amountValue={ amountValue }
           amountError={ amountError }
           amountErrorMessage={ amountErrorMessage }
+
+          delegateValue={ delegateValue }
+          delegateError={ delegateError }
+          delegateErrorMessage={ delegateErrorMessage }
+
+          delegateOptions={ delegateOptions }
+          ownDelegateValue={ ownDelegateValue }
+          ownDelegateError={ ownDelegateError }
+          ownDelegateErrorMessage={ ownDelegateErrorMessage }
         />
       </Grid>
     )
@@ -161,6 +177,13 @@ class Staking extends Component {
       amountValue,
       amountError,
       amountErrorMessage,
+      delegateOptions,
+      delegateValue,
+      delegateError,
+      delegateErrorMessage,
+      ownDelegateValue,
+      ownDelegateError,
+      ownDelegateErrorMessage,
       loading,
       userStakes,
       history,
@@ -247,6 +270,15 @@ class Staking extends Component {
           amountValue={ amountValue }
           amountError={ amountError }
           amountErrorMessage={ amountErrorMessage }
+
+          delegateOptions={ delegateOptions }
+          delegateValue={ delegateValue }
+          delegateError={ delegateError }
+          delegateErrorMessage={ delegateErrorMessage }
+
+          ownDelegateValue={ ownDelegateValue }
+          ownDelegateError={ ownDelegateError }
+          ownDelegateErrorMessage={ ownDelegateErrorMessage }
         />
       <WithdrawPopup
           theme={ theme }

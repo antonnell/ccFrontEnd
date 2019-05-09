@@ -53,6 +53,9 @@ class Store {
           case 'getTezosTransactionHistory':
             this.getTezosTransactionHistory(payload);
             break;
+          case 'setDelegate':
+            this.setDelegate(payload)
+            break;
           default: {
           }
         }
@@ -212,6 +215,18 @@ class Store {
         this.setStore({ transactions: data.transactions });
         emitter.emit('transactionsUpdated');
       }
+    });
+  };
+
+  setDelegate = function (payload) {
+    var url = 'tezos/setDelegate';
+    var postJson = {
+      address: payload.content.address,
+      delegateAddress: payload.content.delegateAddress
+    };
+
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
     });
   };
 

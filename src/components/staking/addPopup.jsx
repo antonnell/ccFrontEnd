@@ -43,6 +43,13 @@ class AddPopup extends Component {
       amountValue,
       amountError,
       amountErrorMessage,
+      delegateOptions,
+      delegateValue,
+      delegateError,
+      delegateErrorMessage,
+      ownDelegateValue,
+      ownDelegateError,
+      ownDelegateErrorMessage,
     } = this.props
 
     return (
@@ -75,6 +82,26 @@ class AddPopup extends Component {
                   <Grid item xs={11} align="left" style={{ marginTop: '60px' }} >
                     { this.renderImput("Stake Deposit Amount", amountValue, amountError, amountErrorMessage, onChange, loading, 'amount') }
                   </Grid>
+                  { tokenValue === 'XTZ' &&
+                    <Grid item xs={11} align="left" style={{ marginTop: '60px' }} >
+                      { this.renderSelect("Select Delegate Account", delegateValue, delegateOptions, delegateError, delegateErrorMessage, handleSelectChange, loading, 'delegate') }
+                    </Grid>
+                  }
+                  { tokenValue === 'XTZ' &&
+                    <Grid item xs={11} align="left" style={{ marginTop: '20px' }} >
+                      <Typography variant="body1" style={{
+                          fontSize: '12px',
+                          fontFamily: "Montserrat-SemiBold"
+                        }}>
+                        or
+                      </Typography>
+                    </Grid>
+                  }
+                  { tokenValue === 'XTZ' &&
+                    <Grid item xs={11} align="left" style={{ marginTop: '20px' }} >
+                      { this.renderImput("Own Delegate Account", ownDelegateValue, ownDelegateError, ownDelegateErrorMessage, onChange, loading, 'delegate') }
+                    </Grid>
+                  }
                 </Grid>
               </Grid>
               <Grid item align="right" style={{ width: '100%', padding: '24px' }}>

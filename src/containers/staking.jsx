@@ -13,6 +13,7 @@ let ethStore = require('../store/ethStore.js').default.store;
 let ethEmitter = require('../store/ethStore.js').default.emitter;
 let tezosStore = require('../store/tezosStore.js').default.store;
 let tezosEmitter = require('../store/tezosStore.js').default.emitter;
+let tezosDispatcher = require('../store/tezosStore.js').default.dispatcher;
 let wanStore = require('../store/wanStore.js').default.store;
 let wanEmitter = require('../store/wanStore.js').default.emitter;
 
@@ -100,6 +101,11 @@ let Staking = createReactClass({
 
       allStakeLoading: true,
       tokenStakeLoading: true,
+
+      delegateValue: '',
+      delegateError: false,
+      delegateErrorMessage: '',
+      delegateOptions: [],
     };
   },
 
@@ -113,6 +119,8 @@ let Staking = createReactClass({
     ethEmitter.on('accountsUpdated', this.ethAccountsRefreshed)
     tezosEmitter.on('accountsUpdated', this.tezosAccountsRefreshed)
     wanEmitter.on('accountsUpdated', this.wanAccountsRefreshed)
+
+    tezosEmitter.on('setDelegate', this.setDelegateReturned)
 
     emitter.on('error', this.showError)
     aionEmitter.on('error', this.showError)
@@ -149,6 +157,7 @@ let Staking = createReactClass({
     emitter.removeAllListeners("getStakeableCurrencies");
     emitter.removeAllListeners("getStakingNodes");
     emitter.removeAllListeners("getAllStakingPerformance");
+    tezosEmitter.removeAllListeners("setDelegate");
   },
 
   showError(error) {
@@ -168,18 +177,50 @@ let Staking = createReactClass({
   },
 
   stakesUpdated() {
+    const userStakes = store.getStore('userStakes')
+
     this.setState({
-      userStakes: store.getStore('userStakes'),
+      userStakes: userStakes,
       rewardHistory: store.getStore('rewardHistory'),
       transactionHistory: store.getStore('transactionHistory'),
       history: [...store.getStore('rewardHistory'), ...store.getStore('transactionHistory')],
       loading: false,
-      currencyOptions: store.getStore('userStakes').map((stake) => {
+      currencyOptions: (userStakes&&userStakes.length > 0) ? userStakes.map((stake) => {
         return  { value: stake.currency, description: stake.currency }
-      }),
-      currencyValue: store.getStore('userStakes')[0].currency,
+      }) : [],
+      currencyValue: (userStakes&&userStakes.length > 0) ? userStakes[0].currency : '',
       tokenStakeLoading: true
     })
+
+
+    if(userStakes && userStakes.length > 0) {
+      let { user } = this.props
+
+      const content = {
+        userId: user.id,
+        period: this.state.tokenTimeFrameValue,
+        currency: userStakes[0].currency,
+        displayCurrency: 'USD'
+      }
+
+      dispatcher.dispatch({
+        type: 'getStakingPerformance',
+        content,
+        token: user.token
+      });
+    }
+  },
+
+  getAllStakingPerformanceReturned() {
+    this.setState({ allStakingPerformance: store.getStore('allStakingPerformance'), allStakeLoading: false })
+  },
+
+  getStakingPerformanceRetuned() {
+    this.setState({ stakingPerformance: store.getStore('stakingPerformance'), tokenStakeLoading: false })
+  },
+
+  setDelegateReturned() {
+    this.setState({ loading: false, accountValue: '', tokenValue: '', amount: '', delegateValue: '', ownDelegateValue: '' })
 
     let { user } = this.props
 
@@ -195,14 +236,6 @@ let Staking = createReactClass({
       content,
       token: user.token
     });
-  },
-
-  getAllStakingPerformanceReturned() {
-    this.setState({ allStakingPerformance: store.getStore('allStakingPerformance'), allStakeLoading: false })
-  },
-
-  getStakingPerformanceRetuned() {
-    this.setState({ stakingPerformance: store.getStore('stakingPerformance'), tokenStakeLoading: false })
   },
 
   getStakeableCurrenciesReturned() {
@@ -266,6 +299,13 @@ let Staking = createReactClass({
       allStakeLoading,
       tokenStakeLoading,
       stakingPerformance,
+      delegateOptions,
+      delegateValue,
+      delegateError,
+      delegateErrorMessage,
+      ownDelegateValue,
+      ownDelegateError,
+      ownDelegateErrorMessage,
     } = this.state
 
     return (
@@ -315,6 +355,15 @@ let Staking = createReactClass({
         amountValue={ amountValue }
         amountError={ amountError }
         amountErrorMessage={ amountErrorMessage }
+
+        delegateOptions={ delegateOptions }
+        delegateValue={ delegateValue }
+        delegateError={ delegateError }
+        delegateErrorMessage={ delegateErrorMessage }
+
+        ownDelegateValue={ ownDelegateValue }
+        ownDelegateError={ ownDelegateError }
+        ownDelegateErrorMessage={ ownDelegateErrorMessage }
 
         optionsToken={ optionsToken }
 
@@ -389,24 +438,55 @@ let Staking = createReactClass({
         accountValue,
         tokenValue,
         amountValue,
-        stakingNodes
+        stakingNodes,
+        delegateValue,
+        ownDelegateValue
       } = this.state
 
       let { user } = this.props
+      let content = {}
 
-      let content = {
-        userId: user.id,
-        fromAddress: accountValue,
-        nodeId: stakingNodes.filter((node) => { return node.currency === tokenValue }).map((node) => { return node.id })[0],
-        amount: amountValue,
-        currency: tokenValue
+      if(tokenValue === "XTZ") {
+        content = {
+          userId: user.id,
+          fromAddress: accountValue,
+          nodeId: (delegateValue!=null&&delegateValue!='')?delegateValue:ownDelegateValue,
+          amount: amountValue,
+          currency: tokenValue
+        }
+
+        console.log(content)
+
+        dispatcher.dispatch({
+          type: 'addStake',
+          content,
+          token: user.token
+        });
+        // content = {
+        //   address: accountValue,
+        //   delegateAddress: (delegateValue!=null&&delegateValue!='')?delegateValue:ownDelegateValue,
+        // }
+        //
+        // tezosDispatcher.dispatch({
+        //   type: 'setDelegate',
+        //   content,
+        //   token: user.token
+        // });
+      } else {
+        content = {
+          userId: user.id,
+          fromAddress: accountValue,
+          nodeId: stakingNodes.filter((node) => { return node.currency === tokenValue }).map((node) => { return node.id })[0],
+          amount: amountValue,
+          currency: tokenValue
+        }
+
+        dispatcher.dispatch({
+          type: 'addStake',
+          content,
+          token: user.token
+        });
       }
-
-      dispatcher.dispatch({
-        type: 'addStake',
-        content,
-        token: user.token
-      });
 
       this.setState({
         accountValue: "",
@@ -447,7 +527,9 @@ let Staking = createReactClass({
     let {
       accountValue,
       tokenValue,
-      amountValue
+      amountValue,
+      delegateValue,
+      ownDelegateValue
     } = this.state
 
     let error = false
@@ -465,6 +547,14 @@ let Staking = createReactClass({
     if(!amountValue || amountValue === "") {
       this.setState({ amountError: true, amountErrorMessage: "Stake Amount is required"})
       error = true
+    }
+
+    //validate stake amount
+
+    if(tokenValue === 'XTZ') {
+      if((!delegateValue || delegateValue === "") && (!ownDelegateValue || delegateValue === "")) {
+        this.setState({ delegateError: true, ownDelegateError: true, delegateErrorMessage: "Delegate or Own Delegate is required" })
+      }
     }
 
     return !error
@@ -556,15 +646,31 @@ let Staking = createReactClass({
 
     let {
       tezosAccounts,
-      ethAccounts
+      ethAccounts,
+      stakingNodes,
     } = this.state
 
     switch (event.target.name) {
       case 'token':
-        this.setState({ tokenValue: event.target.value, accountValue: null, accountOptions: this.processAccountOptions(event.target.value, tezosAccounts, ethAccounts) })
+
+        let delegateOptions = []
+
+        if(stakingNodes) {
+          delegateOptions = stakingNodes.filter((node) => {
+            return node.currency === event.target.value
+          })
+          .map((node) => {
+            return { value: node.id, description: 'Cryptocurve Node'}
+          })
+        }
+
+        this.setState({ tokenValue: event.target.value, accountValue: null, accountOptions: this.processAccountOptions(event.target.value, tezosAccounts, ethAccounts), delegateOptions })
         break;
       case 'account':
         this.setState({ accountValue: event.target.value })
+        break;
+      case 'delegate':
+        this.setState({ delegateValue: event.target.value })
         break;
       default:
         break
@@ -576,7 +682,7 @@ let Staking = createReactClass({
     switch (tokenValue) {
       case 'XTZ':
         accountOptions = tezosAccounts.filter((account) => {
-          return account.delegatable === true
+          return account.delegatable === false
         }).map((account) => {
           return {
             value: account.address,
