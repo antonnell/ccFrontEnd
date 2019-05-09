@@ -182,6 +182,8 @@ let TokenSwap = createReactClass({
         })
         this.setState({ wanAccountValue: event.target.value, curveBalance: balance })
         break;
+      default:
+
     }
   },
 
@@ -190,6 +192,8 @@ let TokenSwap = createReactClass({
       case 'amount':
         this.setState({ amountValue: event.target.value })
         break;
+      default:
+        
     }
   },
 

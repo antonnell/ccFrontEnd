@@ -4,13 +4,11 @@ import {
   Button,
   Typography,
   Grid,
-  TextField,
   FormControl,
   Select,
   MenuItem,
   ListItemText,
   FormHelperText,
-  FormControlLabel,
   Input,
   InputAdornment
 } from '@material-ui/core';
@@ -112,7 +110,7 @@ class TokenSwap extends Component {
           let selected = null
           let val = ''
           selected = options && options.length > 0 && options.filter((option) => {
-            return option.value == value
+            return option.value === value
           })[0]
           if(selected) {
             val = selected.description

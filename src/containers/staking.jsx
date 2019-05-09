@@ -13,7 +13,7 @@ let ethStore = require('../store/ethStore.js').default.store;
 let ethEmitter = require('../store/ethStore.js').default.emitter;
 let tezosStore = require('../store/tezosStore.js').default.store;
 let tezosEmitter = require('../store/tezosStore.js').default.emitter;
-let tezosDispatcher = require('../store/tezosStore.js').default.dispatcher;
+// let tezosDispatcher = require('../store/tezosStore.js').default.dispatcher;
 let wanStore = require('../store/wanStore.js').default.store;
 let wanEmitter = require('../store/wanStore.js').default.emitter;
 
@@ -450,7 +450,7 @@ let Staking = createReactClass({
         content = {
           userId: user.id,
           fromAddress: accountValue,
-          nodeId: (delegateValue!=null&&delegateValue!='')?delegateValue:ownDelegateValue,
+          nodeId: (delegateValue&&delegateValue!=="")?delegateValue:ownDelegateValue,
           amount: amountValue,
           currency: tokenValue
         }
