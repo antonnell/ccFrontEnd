@@ -87,7 +87,7 @@ class AddPopup extends Component {
                       { this.renderSelect("Select Delegate Account", delegateValue, delegateOptions, delegateError, delegateErrorMessage, handleSelectChange, loading, 'delegate') }
                     </Grid>
                   }
-                  { tokenValue === 'XTZ' &&
+                  { /* tokenValue === 'XTZ' &&
                     <Grid item xs={11} align="left" style={{ marginTop: '20px' }} >
                       <Typography variant="body1" style={{
                           fontSize: '12px',
@@ -95,12 +95,12 @@ class AddPopup extends Component {
                         }}>
                         or
                       </Typography>
-                    </Grid>
+                    </Grid> */
                   }
-                  { tokenValue === 'XTZ' &&
+                  { /*tokenValue === 'XTZ' &&
                     <Grid item xs={11} align="left" style={{ marginTop: '20px' }} >
                       { this.renderImput("Own Delegate Account", ownDelegateValue, ownDelegateError, ownDelegateErrorMessage, onChange, loading, 'delegate') }
-                    </Grid>
+                    </Grid> */
                   }
                 </Grid>
               </Grid>

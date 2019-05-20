@@ -167,6 +167,7 @@ class TokenAccounts extends Component {
                     <Typography
                       noWrap
                       variant="h3"
+                      style={{ maxWidth: 'calc(100% - 70px)' }}
                     >
                       {account.name}
                     </Typography>
