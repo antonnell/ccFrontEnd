@@ -67,17 +67,18 @@ class Accounts extends Component {
       </Grid>)
     }
 
-    return this.props.accounts.map((account) => {
+    console.log(accounts)
+    return accounts.map((account) => {
       if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain"].includes(account.name) || account.balance > 0) {
         if(viewMode === 'List') {
           return (
-            <Grid item xs={12} key={account.name} style={{ padding: '0px 24px' }}>
+            <Grid item xs={12} key={account.type+'_'+account.name} style={{ padding: '0px 24px' }}>
               <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } viewMode={ viewMode } stakeableCurrencies={ stakeableCurrencies }/>
             </Grid>
           )
         } else {
           return (
-            <Grid item xs={12} sm={6} lg={4} xl={3} key={account.name} style={{ padding: '24px' }}>
+            <Grid item xs={12} sm={6} lg={4} xl={3} key={account.type+'_'+account.name} style={{ padding: '24px' }}>
               <Account user={ user } account={ account } theme={ theme } stakeClicked={ stakeClicked } transactClicked={ transactClicked } viewMode={ viewMode } stakeableCurrencies={ stakeableCurrencies }/>
             </Grid>
           )

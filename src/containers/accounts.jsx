@@ -471,6 +471,7 @@ let Accounts = createReactClass({
       ...(wrc20AccountsCombined != null ? wrc20AccountsCombined : [])
     ]
 
+    console.log(erc20AccountsCombined)
 
     let managerAddressOptions = tezosAccounts ? tezosAccounts.map((acc) => {
       return {

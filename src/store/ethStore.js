@@ -66,6 +66,9 @@ class Store {
           case 'getEthTransactionHistory':
             this.getEthTransactionHistory(payload);
             break;
+          case 'convertCurve':
+            this.convertCurve(payload);
+            break;
           default: {
           }
         }
@@ -326,6 +329,17 @@ class Store {
 
       this.setStore({ transactions: data.transactions });
       emitter.emit('transactionsUpdated');
+    });
+  };
+
+  convertCurve = function (payload) {
+    var url = 'ethereum/convertCurve';
+    var postJson = payload.content
+
+    console.log(postJson)
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
+      this.getEthAddress(payload)
     });
   };
 

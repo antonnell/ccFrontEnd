@@ -10,7 +10,9 @@ import {
   ListItemText,
   FormHelperText,
   Input,
-  InputAdornment
+  InputAdornment,
+  Tabs,
+  Tab
 } from '@material-ui/core';
 import PageLoader from './pageLoader';
 import Snackbar from './snackbar';
@@ -21,6 +23,42 @@ class TokenSwap extends Component {
       error,
       message,
       theme,
+      loading,
+      tabValue,
+      handleTabChange
+    } = this.props
+    return (
+      <Grid container justify="flex-start" alignItems="flex-start" direction="row">
+        <Grid
+          item
+          xs={12}
+          align="left"
+        >
+          <PageTitle theme={theme} root={null} screen={{display: 'Token Swap', location: 'tokenSwap'}} />
+        </Grid>
+        <Grid item xs={12} align='left' style={{paddingTop: '35px'}}>
+          <Tabs
+            value={ tabValue }
+            onChange={ handleTabChange }
+            indicatorColor="primary"
+            textColor="primary" >
+            <Tab label="ERC20 -> WRC20" />
+            <Tab label="WRC20 -> ERC20" />
+          </Tabs>
+        </Grid>
+        { tabValue === 0 && this.renderERCtoWRC() }
+        { tabValue === 1 && this.renderWRCtoERC() }
+        { loading && this.renderLoader() }
+        { error && this.renderSnackBar('Error', error) }
+        { message && this.renderSnackBar('Information', message) }
+      </Grid>
+    );
+  }
+
+  renderERCtoWRC() {
+    const {
+      theme,
+      loading,
       wanAccountValue,
       wanAccountOptions,
       wanAccountError,
@@ -34,19 +72,75 @@ class TokenSwap extends Component {
       amountErrorMessage,
       handleSelectChange,
       handleChange,
+      ethCurveBalance,
+      swapTokens
+    } = this.props
+
+    return (
+      <React.Fragment>
+        <Grid item xs={12} align="left">
+          <Grid
+            container
+            justify="flex-start"
+            alignItems="flex-start"
+            direction="row"
+            spacing={0}
+            style={theme.custom.sectionTitle}
+          >
+            <Grid item xs={12} align='left'>
+              <div style={theme.custom.inline}>
+                <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Curve ERC20 to WRC20</Typography>
+              </div>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} align="left">
+          { this.renderSelect("Select Your Ethereum Account", ethAccountValue, ethAccountOptions, ethAccountError, ethAccountErrorMessage, handleSelectChange, loading, 'ethAccount') }
+          { ethAccountValue && <Typography>
+            Curve Balance: {ethCurveBalance} CURV
+          </Typography>}
+        </Grid>
+        <Grid item xs={12} align="left">
+          { this.renderImput("Swap Amount", amountValue, amountError, amountErrorMessage, handleChange, loading, 'amount', 'CURV') }
+        </Grid>
+        <Grid item xs={12} align="left">
+          { this.renderSelect("Select Your Wanchain Account", wanAccountValue, wanAccountOptions, wanAccountError, wanAccountErrorMessage, handleSelectChange, loading, 'wanAccount') }
+          { ethAccountValue && <Typography>
+            This account will receive the WRC20 CURV
+          </Typography>}
+        </Grid>
+        <Grid item xs={12} align='left' style={{ marginTop: '24px' }}>
+          <Button disabled={loading} variant='contained' size='small' onClick={swapTokens} color="primary" autoFocus>
+            Swap
+          </Button>
+        </Grid>
+      </React.Fragment>
+    )
+  }
+
+  renderWRCtoERC() {
+    const {
+      theme,
       loading,
+      wanAccountValue,
+      wanAccountOptions,
+      wanAccountError,
+      wanAccountErrorMessage,
+      ethAccountValue,
+      ethAccountOptions,
+      ethAccountError,
+      ethAccountErrorMessage,
+      amountValue,
+      amountError,
+      amountErrorMessage,
+      handleSelectChange,
+      handleChange,
       curveBalance,
       swapTokens
     } = this.props
+
     return (
-      <Grid container justify="flex-start" alignItems="flex-start" direction="row">
-        <Grid
-          item
-          xs={12}
-          align="left"
-        >
-          <PageTitle theme={theme} root={null} screen={{display: 'Token Swap', location: 'tokenSwap'}} />
-        </Grid>
+      <React.Fragment>
         <Grid item xs={12} align="left">
           <Grid
             container
@@ -82,11 +176,8 @@ class TokenSwap extends Component {
             Swap
           </Button>
         </Grid>
-        { loading && this.renderLoader() }
-        { error && this.renderSnackBar('Error', error) }
-        { message && this.renderSnackBar('Information', message) }
-      </Grid>
-    );
+      </React.Fragment>
+    )
   }
 
   renderSnackBar(type, message) {
@@ -124,7 +215,7 @@ class TokenSwap extends Component {
         {options
           ? options.map(option => {
               return (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem key={option.value+'_'+option.description} value={option.value}>
                   <ListItemText primary={option.description} />
                 </MenuItem>
               );

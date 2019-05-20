@@ -31,7 +31,9 @@ let TokenSwap = createReactClass({
       amountValue: '',
       amountError: false,
       amountErrorMessage: '',
-      curveBalance: null
+      curveBalance: null,
+      ethCurveBalance: null,
+      tabValue: 0
     }
   },
 
@@ -53,7 +55,9 @@ let TokenSwap = createReactClass({
       amountError,
       amountErrorMessage,
       curveBalance,
+      ethCurveBalance,
       message,
+      tabValue,
     } = this.state
 
     const {
@@ -66,6 +70,7 @@ let TokenSwap = createReactClass({
         handleSelectChange={ this.handleSelectChange }
         handleChange={ this.handleChange }
         swapTokens={ this.swapTokens }
+        handleTabChange={ this.handleTabChange }
 
         theme={ theme }
         user={ user }
@@ -85,6 +90,8 @@ let TokenSwap = createReactClass({
         amountError={ amountError }
         amountErrorMessage={ amountErrorMessage }
         curveBalance={ curveBalance }
+        ethCurveBalance={ ethCurveBalance }
+        tabValue={ tabValue }
       />
     )
   },
@@ -103,9 +110,6 @@ let TokenSwap = createReactClass({
   },
 
   convertCurveReturned(err, data) {
-    console.log(err)
-    console.log(data)
-
     if(data.success) {
       this.setState({ message: 'Transaction successfully submitted', ethAccountValue: '', wanAccountValue: '', amountValue: '' })
     } else {
@@ -166,12 +170,22 @@ let TokenSwap = createReactClass({
   },
 
   handleSelectChange(event) {
+    let balance = 0
     switch (event.target.name) {
       case 'ethAccount':
-        this.setState({ ethAccountValue: event.target.value })
+        balance = this.state.ethAccounts.filter((acc) => {
+          return acc.address === event.target.value
+        }).map((acc) => {
+          return acc.tokens.filter((tok) => {
+            return tok.symbol === 'CURV'
+          }).map((tok) => {
+            return tok.balance
+          })
+        })
+        this.setState({ ethAccountValue: event.target.value, ethCurveBalance: balance })
         break;
       case 'wanAccount':
-        const balance = this.state.wanAccounts.filter((acc) => {
+        balance = this.state.wanAccounts.filter((acc) => {
           return acc.publicAddress === event.target.value
         }).map((acc) => {
           return acc.tokens.filter((tok) => {
@@ -193,7 +207,7 @@ let TokenSwap = createReactClass({
         this.setState({ amountValue: event.target.value })
         break;
       default:
-        
+
     }
   },
 
@@ -204,7 +218,8 @@ let TokenSwap = createReactClass({
       wanAccountValue,
       ethAccountValue,
       amountValue,
-      curveBalance
+      curveBalance,
+      ethCurveBalance
     } = this.state
 
     let error = false
@@ -224,42 +239,82 @@ let TokenSwap = createReactClass({
       error = true
     }
 
-    if(parseFloat(amountValue) > parseFloat(curveBalance)) {
-      this.setState({ amountError: true, amountErrorMessage: 'Amount > Current Balance' })
-      error = true
+    if(this.state.tabValue === 0) {
+      if(parseFloat(amountValue) > parseFloat(ethCurveBalance)) {
+        this.setState({ amountError: true, amountErrorMessage: 'Amount > Current Balance' })
+        error = true
+      }
+    } else {
+      if(parseFloat(amountValue) > parseFloat(curveBalance)) {
+        this.setState({ amountError: true, amountErrorMessage: 'Amount > Current Balance' })
+        error = true
+      }
     }
 
     return !error
   },
 
+  swapWRCtoERC() {
+    this.setState({ wanLoading: true })
+
+    const { user } = this.props
+    const {
+      wanAccountValue,
+      ethAccountValue,
+      amountValue
+    } = this.state
+
+    const content = {
+      wanAddress: wanAccountValue,
+      ethAddress: ethAccountValue,
+      amount: amountValue,
+      id: user.id
+    };
+
+    wanDispatcher.dispatch({
+      type: "convertCurve",
+      content,
+      token: user.token
+    });
+  },
+
+  swapERCtoWRC() {
+    this.setState({ ethLoading: true })
+
+    const { user } = this.props
+    const {
+      wanAccountValue,
+      ethAccountValue,
+      amountValue
+    } = this.state
+
+    const content = {
+      wanAddress: wanAccountValue,
+      ethAddress: ethAccountValue,
+      amount: amountValue,
+      id: user.id
+    };
+
+    ethDispatcher.dispatch({
+      type: "convertCurve",
+      content,
+      token: user.token
+    });
+  },
+
   swapTokens() {
-
     if (this.validateSwap()) {
-      this.setState({ wanLoading: true })
-
-
-      const { user } = this.props
-
-      const {
-        wanAccountValue,
-        ethAccountValue,
-        amountValue
-      } = this.state
-
-      const content = {
-        wanAddress: wanAccountValue,
-        ethAddress: ethAccountValue,
-        amount: amountValue,
-        id: user.id
-      };
-
-      wanDispatcher.dispatch({
-        type: "convertCurve",
-        content,
-        token: user.token
-      });
+      if(this.state.tabValue === 0) {
+        this.swapERCtoWRC()
+      } else {
+        this.swapWRCtoERC()
+      }
     }
-  }
+  },
+
+  handleTabChange(event, tabValue) {
+    this.setState({ tabValue });
+  },
 
 })
 
