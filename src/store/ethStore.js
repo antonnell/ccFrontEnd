@@ -16,9 +16,6 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
-    //INITIAL STORE DATA
-    // let dummyAccounts =  [{"type":"ethereum","id":26,"address":"0x3f7A04F39238acA1DD60eb39732FF21839fD2066","name":"Anton's account","isPrimary":true,"balance":0.66053638511,"usdBalance":90.71739013405557305880000000},{"type":"ethereum","id":17,"address":"0xDEAc5e7FaafD92E0220B5E2bEc7d546eFfa221cF","name":"My named address 1","isPrimary":false,"balance":0.31738883,"usdBalance":43.589856614040356400000000},{"type":"ethereum","id":25,"address":"0x2922D8061642787BBdf6098F52c8593e8cCb2c71","name":"Main Address","isPrimary":false,"balance":0.90591501589,"usdBalance":124.41743979191451402120000000},{"type":"ethereum","id":53,"address":"0xB7D0fB518a5b7bf8dc7ea19A715E8FD8BD983e27","name":"Abacus Test","isPrimary":false,"balance":0.701103095809436072,"usdBalance":96.28878060388299312126108576}]
-
     this.store = {
       accounts: null,
       accountsCombined: null,

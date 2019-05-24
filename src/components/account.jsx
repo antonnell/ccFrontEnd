@@ -22,12 +22,14 @@ class Account extends Component {
     let { account, cardClicked, transactClicked, stakeClicked, stakeableCurrencies } = this.props
 
     let logo = 'footer'
-    if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {
+    if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos", "Binance"].includes(account.type)) {
       logo = account.type
     } else if (account.type === 'ERC20') {
       logo = 'Ethereum'
     } else if (account.type === 'WRC20') {
       logo = "Wanchain"
+    } else if (account.type === 'BEP2') {
+      logo = 'Binance'
     }
 
     let bodyStyle = {
@@ -101,12 +103,14 @@ class Account extends Component {
     let { account, cardClicked, transactClicked, stakeClicked, stakeableCurrencies } = this.props
 
     let logo = 'footer'
-    if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos"].includes(account.type)) {
+    if(["Aion", "Bitcoin", "Ethereum", "Wanchain", "Tezos", "Binance"].includes(account.type)) {
       logo = account.type
     } else if (account.type === 'ERC20') {
       logo = 'Ethereum'
     } else if (account.type === 'WRC20') {
       logo = "Wanchain"
+    } else if (account.type === 'BEP2') {
+      logo = 'Binance'
     }
 
     let stakeable = stakeableCurrencies ? stakeableCurrencies.filter((currency) => {

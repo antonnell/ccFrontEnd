@@ -29,6 +29,10 @@ let Account = createReactClass({
       case 'Aion':
         screen = 'aionAccounts'
         break
+      case 'Binance':
+      case 'BEP2':
+        screen = 'binanceAccounts'
+        break
       case 'Bitcoin':
         screen = 'bitcoinAccounts'
         break

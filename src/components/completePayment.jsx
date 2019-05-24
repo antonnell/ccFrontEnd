@@ -57,6 +57,9 @@ class CompletePayment extends Component {
       case 'Aion':
         url = config.aionscanURL + transactionID;
         break;
+      case 'Binance':
+        url = config.binancescanURL + transactionID;
+        break;
       case 'Bitcoin':
         url = config.bitcoinscanURL + transactionID;
         break;

@@ -103,8 +103,10 @@ let TokenSwap = createReactClass({
 
     wanEmitter.removeAllListeners("transactionsUpdated");
     wanEmitter.removeAllListeners("convertCurve");
+    ethEmitter.removeAllListeners("convertCurve");
     wanEmitter.on('accountsUpdated', this.wanAccountsRefreshed);
     wanEmitter.on('convertCurve', this.convertCurveReturned)
+    ethEmitter.on('convertCurve', this.convertCurveReturned)
 
     this.getAllAccounts()
   },

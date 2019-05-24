@@ -41,6 +41,10 @@ let tezosEmitter = require('../store/tezosStore.js').default.emitter;
 let tezosDispatcher = require('../store/tezosStore.js').default.dispatcher;
 let tezosStore = require('../store/tezosStore.js').default.store;
 
+let binanceEmitter = require('../store/binanceStore.js').default.emitter;
+let binanceDispatcher = require('../store/binanceStore.js').default.dispatcher;
+let binanceStore = require('../store/binanceStore.js').default.store;
+
 let contactsStore = require("../store/contactsStore.js").default.store;
 
 
@@ -56,9 +60,11 @@ let Transact = createReactClass({
     let ethAccounts = ethStore.getStore('accounts')
     let tezosAccounts = tezosStore.getStore('accounts')
     let wanAccounts = wanStore.getStore('accounts')
+    let binanceAccounts = binanceStore.getStore('accounts')
 
     let erc20AccountsCombined = ethStore.getStore('erc20AccountsCombined')
     let wrc20AccountsCombined = wanStore.getStore('wrc20AccountsCombined')
+    let bep2AccountsCombined = binanceStore.getStore('bep2AccountsCombined')
 
     let accountValue = this.props.transactAccount ? this.props.transactAccount : null
 
@@ -66,6 +72,12 @@ let Transact = createReactClass({
       switch(this.props.transactCurrency.type) {
         case "Aion" :
           accountValue = aionAccounts && aionAccounts.length ? aionAccounts.filter((account) => {
+            return account.isPrimary === true
+          })[0].address : ""
+        break;
+        case "BEP2" :
+        case "Binance" :
+          accountValue = binanceAccounts && binanceAccounts.length ? binanceAccounts.filter((account) => {
             return account.isPrimary === true
           })[0].address : ""
         break;
@@ -115,20 +127,32 @@ let Transact = createReactClass({
       }
     }) : []
 
+    let bep2 = bep2AccountsCombined ? bep2AccountsCombined.map((account) => {
+      return {
+        value: account.name,
+        description: account.name,
+        symbol: account.symbol,
+        gasSymbol: 'BNB'
+      }
+    }) : []
+
     return {
       aionAccounts: aionAccounts,
       bitcoinAccounts: bitcoinAccounts,
       ethAccounts: ethAccounts,
       wanAccounts: wanAccounts,
       tezosAccounts: tezosAccounts,
+      binanceAccounts: binanceAccounts,
       erc20AccountsCombined: erc20AccountsCombined,
       wrc20AccountsCombined: wrc20AccountsCombined,
+      bep2AccountsCombined: bep2AccountsCombined,
       contacts: contactsStore.getStore('contacts'),
       ethLoading: false,
       wanLoading: false,
       aionLoading: false,
       bitcoinLoading: false,
       tezosLoading: false,
+      binanceLoading: false,
       contactsLoading: true,
 
       loading: false,
@@ -147,13 +171,14 @@ let Transact = createReactClass({
       accountValue: accountValue,
       tokens: [
         { value: 'Aion', description: 'Aion', symbol: 'AION', gasSymbol: 'GAS' },
+        { value: 'Binance', description: 'Binance', symbol: 'BNB', gasSymbol: 'BNB' },
         { value: 'Bitcoin', description: 'Bitcoin', symbol: 'BTC', gasSymbol: 'GAS' },
         { value: 'Ethereum', description: 'Ethereum', symbol: 'ETH', gasSymbol: 'WEI' },
         { value: 'Wanchain', description: 'Wanchain', symbol: 'WAN', gasSymbol: 'GWEI' },
         { value: 'Tezos', description: 'Tezos', symbol: 'TXZ', gasSymbol: 'GAS' },
         ...wrc20,
-        ...erc20
-        //later on we will add ERC/WRC tokens to this list
+        ...erc20,
+        ...bep2
       ],
       tokenValue: this.props.transactCurrency ? this.props.transactCurrency.name : null,
       typeOptions: [
@@ -173,12 +198,14 @@ let Transact = createReactClass({
 
   componentWillMount() {
     aionEmitter.removeAllListeners('sendReturned')
+    binanceEmitter.removeAllListeners('sendReturned')
     bitcoinEmitter.removeAllListeners('sendReturned')
     ethEmitter.removeAllListeners('sendReturned')
     tezosEmitter.removeAllListeners('sendReturned')
     wanEmitter.removeAllListeners('sendReturned')
 
     aionEmitter.on('sendReturned', this.sendReturned)
+    binanceEmitter.on('sendReturned', this.sendReturned)
     bitcoinEmitter.on('sendReturned', this.sendReturned)
     ethEmitter.on('sendReturned', this.sendReturned)
     tezosEmitter.on('sendReturned', this.sendReturned)
@@ -194,10 +221,12 @@ let Transact = createReactClass({
       ethAccounts,
       wanAccounts,
       tezosAccounts,
+      binanceAccounts,
       aionLoading,
       bitcoinLoading,
       ethLoading,
       tezosLoading,
+      binanceLoading,
       wanLoading,
       tokenValue,
       tokenError,
@@ -229,24 +258,32 @@ let Transact = createReactClass({
       gasSymbol,
       erc20AccountsCombined,
       wrc20AccountsCombined,
+      bep2AccountsCombined,
     } = this.state
 
     let accountOptions = []
 
     let aValue = tokenValue
-    if(!['Aion', 'Bitcoin', 'Ethereum', 'Tezos', 'Wanchain'].includes(tokenValue)) {
-      let erc = erc20AccountsCombined.filter((account) => {
+    if(!['Aion', 'Binance', 'Bitcoin', 'Ethereum', 'Tezos', 'Wanchain'].includes(tokenValue)) {
+      let erc = erc20AccountsCombined ? erc20AccountsCombined.filter((account) => {
         return account.name === tokenValue
-      })
+      }) : null
       if(erc.length > 0) {
         aValue='ERC20'
       }
 
-      let wrc = wrc20AccountsCombined.filter((account) => {
+      let wrc = wrc20AccountsCombined ? wrc20AccountsCombined.filter((account) => {
         return account.name === tokenValue
-      })
+      }) : null
       if(wrc.length > 0) {
         aValue = 'WRC20'
+      }
+
+      let bep = bep2AccountsCombined ? bep2AccountsCombined.filter((account) => {
+        return account.name === tokenValue
+      }) : null
+      if(bep.length > 0) {
+        aValue = 'BEP2'
       }
     }
 
@@ -260,6 +297,30 @@ let Transact = createReactClass({
             symbol: 'Aion'
           }
         }) : null
+        break;
+      case 'Binance':
+        accountOptions = binanceAccounts ? binanceAccounts.map((account) => {
+          return {
+            description: account.name,
+            value: account.address,
+            balance: account.balance,
+            symbol: 'BNB'
+          }
+        }) : []
+        break;
+      case 'BEP2':
+        accountOptions = binanceAccounts ? binanceAccounts.map((account) => {
+          let token = account.balances.filter((tokenAccount) => {
+            return tokenAccount.symbol === tokenValue
+          })[0]
+
+          return {
+            description: account.name,
+            value: account.address,
+            balance: token?parseFloat(token.free):null,
+            symbol: token?token.symbol:null
+          }
+        }) : []
         break;
       case 'Bitcoin':
         accountOptions = bitcoinAccounts ? bitcoinAccounts.map((account) => {
@@ -345,7 +406,7 @@ let Transact = createReactClass({
         return (
           <ReceivePayment
             theme={ theme }
-            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading }
+            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading || binanceLoading }
 
             tokenOptions={ tokens }
             tokenValue={ tokenValue }
@@ -363,7 +424,7 @@ let Transact = createReactClass({
         return (
           <SetupPayment
             theme={ theme }
-            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading }
+            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading || binanceLoading }
 
             tokenOptions={ tokens }
             tokenValue={ tokenValue }
@@ -431,7 +492,7 @@ let Transact = createReactClass({
         return (
           <SetupPayment
             theme={ theme }
-            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading }
+            loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading || binanceLoading }
 
             tokenOptions={ tokens }
             tokenValue={ tokenValue }
@@ -730,6 +791,7 @@ let Transact = createReactClass({
     let { user, supportedERC20Tokens, supportedWRC20Tokens } = this.props
 
     let {
+      binanceAccounts,
       ethAccounts,
       wanAccounts,
       tokenValue,
@@ -772,6 +834,23 @@ let Transact = createReactClass({
           token: user.token
         });
         this.setState({chain: 'Aion'})
+        break
+      case 'Binance':
+        content.currency = 'BNB'
+        binanceDispatcher.dispatch({
+          type: 'sendBinance',
+          content,
+          token: user.token
+        });
+        this.setState({chain: 'Binance'})
+        break
+      case 'BEP2':
+        binanceDispatcher.dispatch({
+          type: 'sendBinance',
+          content,
+          token: user.token
+        });
+        this.setState({chain: 'Binance'})
         break
       case 'Bitcoin':
         bitcoinDispatcher.dispatch({
@@ -870,6 +949,24 @@ let Transact = createReactClass({
           return
         }
 
+        let bep = binanceAccounts.filter((account) => {
+          return account.address === accountValue
+        })
+
+        if(bep.length > 0) {
+
+          content.currency = tokenValue
+
+          this.setState({ chain: 'Binance'})
+
+          binanceDispatcher.dispatch({
+            type: 'sendBinance',
+            content,
+            token: user.token
+          });
+          return
+        }
+
         break;
     }
   },
@@ -927,43 +1024,44 @@ let Transact = createReactClass({
       bitcoinAccounts,
       ethAccounts,
       tezosAccounts,
+      binanceAccounts,
       wanAccounts,
     } = this.state
 
     let error = false
 
     if(!tokenValue) {
-      this.setState({ tokenError: true, tokenErrorMessage: 'Token is a require field' })
+      this.setState({ tokenError: true, tokenErrorMessage: 'Token is a required field' })
       error = true
     }
 
     if(!accountValue) {
-      this.setState({ accountError: true, accountErrorMessage: 'Account is a require field' })
+      this.setState({ accountError: true, accountErrorMessage: 'Account is a required field' })
       error = true
     }
 
     if(!typeValue) {
-      this.setState({ typeError: true, typeErrorMessage: 'Type is a require field' })
+      this.setState({ typeError: true, typeErrorMessage: 'Type is a required field' })
       error = true
     } else {
       if(typeValue === 'contact' && !contactValue) {
-        this.setState({ contactError: true, contactErrorMessage: 'Contact is a require field' })
+        this.setState({ contactError: true, contactErrorMessage: 'Contact is a required field' })
         error = true
       }
 
       if(typeValue === 'own' && !ownValue) {
-        this.setState({ ownError: true, ownErrorMessage: 'Own Account is a require field' })
+        this.setState({ ownError: true, ownErrorMessage: 'Own Account is a required field' })
         error = true
       }
 
       if(typeValue === 'public' && (!typeValue || typeValue === "")) {
-        this.setState({ typeError: true, typeErrorMessage: 'Public Address is a require field' })
+        this.setState({ typeError: true, typeErrorMessage: 'Public Address is a required field' })
         error = true
       }
     }
 
     if(!amountValue || amountValue === "" || amountValue <= 0) {
-      this.setState({ amountError: true, amountErrorMessage: 'Amount is a require field' })
+      this.setState({ amountError: true, amountErrorMessage: 'Amount is a required field' })
       error = true
     } else {
       if(!this.isNumeric(amountValue)) {
@@ -974,7 +1072,7 @@ let Transact = createReactClass({
 
 
     if(!gasValue || gasValue === "" || gasValue <= 0) {
-      this.setState({ gasError: true, gasErrorMessage: 'Gas is a require field' })
+      this.setState({ gasError: true, gasErrorMessage: 'Gas is a required field' })
       error = true
     } else {
       if(!this.isNumeric(gasValue)) {
@@ -993,6 +1091,11 @@ let Transact = createReactClass({
       switch(tokenValue) {
         case "Aion":
           accountBalance = aionAccounts.filter((account) => {
+            return account.address === accountValue
+          })[0].balance
+          break;
+        case "Binance":
+          accountBalance = binanceAccounts.filter((account) => {
             return account.address === accountValue
           })[0].balance
           break;
@@ -1032,6 +1135,23 @@ let Transact = createReactClass({
               return token.name === tokenValue
             })
             accountBalance = tok[0].balance
+          } else {
+            if(acc.length === 0) {
+              acc = binanceAccounts.filter((account) => {
+                return account.address === accountValue
+              })
+            }
+
+            if(acc.length > 0) {
+
+              let tok = acc[0].balances.filter((token) => {
+                return token.symbol === tokenValue
+              })
+
+              accountBalance = parseFloat(tok[0].free)
+
+              console.log(accountBalance)
+            }
           }
 
           break;

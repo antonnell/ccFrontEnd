@@ -82,7 +82,7 @@ class AppDrawer extends Component {
       <List style={ { height: "calc(100% - 173px)" } }>
         <ListSubheader disableSticky={ true }>MENU</ListSubheader>
         <ListItem
-          selected={ ['accounts', 'aionAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts'].includes(path) }
+          selected={ ['accounts', 'aionAccounts', 'binanceAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts'].includes(path) }
           button
           onClick={ event => {
             navClicked(event, 'accounts');

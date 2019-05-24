@@ -67,9 +67,8 @@ class Accounts extends Component {
       </Grid>)
     }
 
-    console.log(accounts)
     return accounts.map((account) => {
-      if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain"].includes(account.name) || account.balance > 0) {
+      if(["Aion", "Bitcoin", "Ethereum", "Tezos", "Wanchain", "Binance"].includes(account.name) || account.balance > 0) {
         if(viewMode === 'List') {
           return (
             <Grid item xs={12} key={account.type+'_'+account.name} style={{ padding: '0px 24px' }}>

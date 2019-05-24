@@ -84,13 +84,15 @@ class ViewTokensModal extends Component {
             <Grid item xs={6} align='left' style={bodyStyle}>
               <div style={divStyle}>
                 <Typography variant="body1" style={textStyle}>
-                  {token.name}
+                  {
+                    token.name != null ? token.name : token.symbol
+                  }
                 </Typography>
               </div>
             </Grid>
             <Grid item xs={3} align='left' style={bodyStyle}>
               <Typography variant="body1" style={textStyle}>
-                { token.balance + ' ' + token.symbol }
+                { parseFloat( token.balance != null ? token.balance : token.free ).toFixed(4) + ' ' + token.symbol }
               </Typography>
             </Grid>
             <Grid item xs={3} align='left' style={bodyStyle}>

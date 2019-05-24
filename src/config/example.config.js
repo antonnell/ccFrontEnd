@@ -4,7 +4,8 @@ const config = {
   apiUrl: "",
   etherscanUrl : "",
   wanscanURL: "",
-  aionscanURL: ""
+  aionscanURL: "",
+  binancescanURL: "",
 };
 
 export default config;

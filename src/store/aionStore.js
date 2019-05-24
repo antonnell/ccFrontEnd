@@ -15,10 +15,6 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
-    //INITIAL STORE DATA
-
-    // let dummyAccounts = [{"id":11,"address":"0xa084592ef3e475762b472bd9c008b8a44da7f3d257959b4071987b9d619b5124","name":"Jacob","isPrimary":true,"balance":0.02239,"usdBalance":0.003068963715000000000},{"id":9,"address":"0xa0c78c47319b0ae7e2b587328c71b57a785febd16883c91b08eec8521d4ef0e4","name":"Hello","isPrimary":false,"balance":0.02393,"usdBalance":0.003280049205000000000},{"id":29,"address":"0xa0cc55cbb4e32232841e70a3592bcd6942dec8493569ba4a95b3256fd81468de","name":"SOMEBODY THAT","isPrimary":false,"balance":0.002,"usdBalance":0.0002741370000000000}]
-
     this.store = {
       accounts: null,
       accountsCombined: null

@@ -16,10 +16,6 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
-    //INITIAL STORE DATA
-
-    // let dummyAccounts = [{"type":"bitcoin","id":4,"displayName":"OK?","balance":0.18652264,"unconfirmedBalance":0.0,"finalBalance":0.18652264,"isPrimary":true,"usdBalance":741.0544487200000000},{"type":"bitcoin","id":8,"displayName":"This is my second account","balance":0.003,"unconfirmedBalance":0.0,"finalBalance":0.003,"isPrimary":false,"usdBalance":11.91900000000}]
-
     this.store = {
       accounts: null,
       accountsCombined: null

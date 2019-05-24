@@ -245,7 +245,7 @@ class TokenAccounts extends Component {
                   >
                     <List component="nav">
                       {
-                        ["Ethereum", "Wanchain", "ERC20", "WRC20"].includes(token) && (<ListItem
+                        ["Ethereum", "Wanchain", "ERC20", "WRC20", "Binance", "BEP2"].includes(token) && (<ListItem
                           button
                           disabled={ !(account.tokens && account.tokens.length > 0) }
                           onClick={( ) => {

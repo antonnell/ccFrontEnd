@@ -47,9 +47,9 @@ class AddPopup extends Component {
       delegateValue,
       delegateError,
       delegateErrorMessage,
-      ownDelegateValue,
-      ownDelegateError,
-      ownDelegateErrorMessage,
+      // ownDelegateValue,
+      // ownDelegateError,
+      // ownDelegateErrorMessage,
     } = this.props
 
     return (

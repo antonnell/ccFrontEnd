@@ -15,42 +15,39 @@ let apiUrl = config.apiUrl;
 
 class Store {
   constructor() {
+
     this.store = {
       accounts: null,
-      stakingAccounts: null,
-      transactAccounts: null,
-      accountsCombined: null
+      accountsCombined: null,
+      bep2AccountsCombined: null
     }
 
     dispatcher.register(
       function (payload) {
         switch (payload.type) {
-          case 'getTezosAddress':
-            this.getTezosAddress(payload);
+          case 'getBinanceAddress':
+            this.getBinanceAddress(payload);
             break;
-          case 'createTezosAddress':
-            this.createTezosAddress(payload);
+          case 'createBinanceAddress':
+            this.createBinanceAddress(payload);
             break;
-          case 'importTezosAddress':
-            this.importTezosAddress(payload);
+          case 'importBinanceAddress':
+            this.importBinanceAddress(payload);
             break;
-          case 'updateTezosAddress':
-            this.updateTezosAddress(payload);
+          case 'updateBinanceAddress':
+            this.updateBinanceAddress(payload);
             break;
-          case 'deleteTezosAddress':
-            this.deleteTezosAddress(payload);
+          case 'deleteBinanceAddress':
+            this.deleteBinanceAddress(payload);
             break;
-          case 'sendTezos':
-            this.sendTezos(payload);
+          case 'sendBinance':
+            this.sendBinance(payload);
             break;
-          case 'exportTezosKey':
-            this.exportTezosKey(payload);
+          case 'exportBinanceKey':
+            this.exportBinanceKey(payload);
             break;
-          case 'getTezosTransactionHistory':
-            this.getTezosTransactionHistory(payload);
-            break;
-          case 'setDelegate':
-            this.setDelegate(payload)
+          case 'getBinanceTransactionHistory':
+            this.getBinanceTransactionHistory(payload);
             break;
           default: {
           }
@@ -69,8 +66,8 @@ class Store {
     return emitter.emit('StoreUpdated');
   };
 
-  getTezosAddress = function (payload) {
-    var url = 'tezos/getUserAddresses/' + payload.content.id;
+  getBinanceAddress = function (payload) {
+    var url = 'binance/getUserAddresses/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload, (err, data) => {
       if(err) {
@@ -80,25 +77,83 @@ class Store {
       }
 
       if(data && data.success) {
-        this.setStore({ accounts: [...data.tezosAddresses, ...data.tezosOriginatedAddresses], transactAccounts: data.tezosAddresses, stakingAccounts: data.tezosOriginatedAddresses })
 
-        let accountsCombined = data.tezosAddresses.reduce((total, currentVal) => {
+        const binAccount = data.binanceAddresses.map((acc) => {
 
-          total.balance = total.balance + currentVal.balance
-          total.usdBalance = total.usdBalance + currentVal.usdBalance
+          let bal = acc.balances.filter((balance) => {
+            return balance.symbol === 'BNB'
+          })
+
+          let balance = 0
+
+          if(bal.length > 0) {
+            balance = parseFloat(bal[0].free)
+          }
+
+          acc.tokens = acc.balances
+
+          acc.balance = balance
+          return acc
+        })
+
+        this.setStore({accounts: binAccount})
+
+        let accountsCombined = data.binanceAddresses.reduce((total, currentVal) => {
+
+          let bal = currentVal.balances.filter((balance) => {
+            return balance.symbol === 'BNB'
+          })
+
+          if(bal.length > 0) {
+            total.balance = parseFloat(total.balance) + parseFloat(bal[0].free)
+            total.usdBalance = total.usdBalance + 0 //TODO: GET USD BALANCE
+          }
 
           return total
         }, {
           balance: 0,
           usdBalance: 0,
-          type: 'Tezos',
-          name: 'Tezos',
-          symbol: 'XTZ'
+          type: 'Binance',
+          name: 'Binance',
+          symbol: 'BNB'
         })
 
-        this.setStore({accountsCombined: [accountsCombined]})
+        let totals = []
+
+        //itterate through the responses.
+        for(var i = 0; i < data.binanceAddresses.length; i++) {
+
+          //itterate through each of the sub sections
+          for(var j = 0; j < data.binanceAddresses[i].balances.length; j++) {
+
+            if(data.binanceAddresses[i].balances[j].symbol !== 'BNB') {
+              if(i === 0) {
+                totals.push({
+                  balance: parseFloat(data.binanceAddresses[i].balances[j].free),
+                  usdBalance: 0,
+                  type: 'BEP2',
+                  name: data.binanceAddresses[i].balances[j].symbol,
+                  symbol: data.binanceAddresses[i].balances[j].symbol,
+                  address: data.binanceAddresses[i].balances[j].symbol
+                })
+              } else {
+
+                //itterate through totals to add balance
+                for(var k = 0; k < totals.length; k++) {
+                  if(totals[k].symbol === data.binanceAddresses[i].balances[j].symbol) {
+                    totals[k].balance = parseFloat(totals[k].balance) + parseFloat(data.binanceAddresses[i].balances[j].free)
+                  }
+                }
+
+              }
+            }
+          }
+        }
+
+        this.setStore({accountsCombined: [accountsCombined], bep2AccountsCombined: totals })
 
         emitter.emit('accountsUpdated');
+        emitter.emit('bep2AccountsUpdated');
       } else {
         emitter.emit('error', data.errorMsg)
         emitter.emit('accountsUpdated')
@@ -106,44 +161,35 @@ class Store {
     });
   };
 
-  createTezosAddress = function (payload) {
-    var url = 'tezos/createAddress';
+  createBinanceAddress = function (payload) {
+    var url = 'binance/createAddress';
     var postJson = {
       username: payload.content.username,
       isPrimary: payload.content.isPrimary,
       name: payload.content.name
     };
 
-    if(payload.content.accountType === 'Staking') {
-      url = 'tezos/createStakingAccount'
-
-      postJson.managerAddress = payload.content.managerAddress
-      postJson.displayName = payload.content.name
-      postJson.delegateAddress = payload.content.delegateAddress
-      postJson.amount = payload.amount
-    }
-
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
-      this.getTezosAddress(payload)
+      this.getBinanceAddress(payload)
     });
   };
 
-  importTezosAddress = function (payload) {
-    var url = 'tezos/importAddress';
+  importBinanceAddress = function (payload) {
+    var url = 'binance/importAddress';
     var postJson = {
       name: payload.content.name,
       isPrimary: payload.content.isPrimary,
-      address: payload.content.publicAddress,
-      privateKey: payload.content.privateKey
+      privateKey: payload.content.privateKey,
+      phrase: payload.content.mnemonicPhrase
     };
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
-      this.getTezosAddress(payload)
+      this.getBinanceAddress(payload)
     });
   };
 
-  updateTezosAddress = function (payload) {
-    var url = 'tezos/updateAddress';
+  updateBinanceAddress = function (payload) {
+    var url = 'binance/updateAddress';
     var postJson = {
       name: payload.content.name,
       isPrimary: payload.content.isPrimary,
@@ -152,28 +198,29 @@ class Store {
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       payload.content.id = payload.content.userId
-      this.getTezosAddress(payload)
+      this.getBinanceAddress(payload)
     });
   };
 
-  deleteTezosAddress = function (payload) {
-    var url = 'tezos/deleteAddress';
+  deleteBinanceAddress = function (payload) {
+    var url = 'binance/deleteAddress';
     var postJson = {
       address: payload.content.address
     };
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       payload.content.id = payload.content.userId
-      this.getTezosAddress(payload)
+      this.getBinanceAddress(payload)
     });
   };
 
-  sendTezos = function (payload) {
-    var url = 'tezos/sendTezos';
+  sendBinance = function (payload) {
+    var url = 'binance/send';
     var postJson = {
       fromAddress: payload.content.fromAddress,
       amount: payload.content.amount,
-      gwei: payload.content.gwei
+      gwei: payload.content.gwei,
+      currency: payload.content.currency
     };
     if (payload.content.toAddress != null) {
       postJson.toAddress = payload.content.toAddress;
@@ -181,6 +228,8 @@ class Store {
     if (payload.content.contactUserName != null) {
       postJson.contactUsername = payload.content.contactUserName;
     }
+
+    console.log(postJson)
 
     this.callApi(url, 'POST', postJson, payload, (err, data) => {
       if(err) {
@@ -191,8 +240,8 @@ class Store {
     });
   };
 
-  exportTezosKey = function (payload) {
-    var url = 'tezos/exportAddress';
+  exportBinanceKey = function (payload) {
+    var url = 'binance/exportAddress';
     var postJson = {
       address: payload.content.address,
       mnemonic: payload.content.mnemonic
@@ -203,26 +252,14 @@ class Store {
     });
   };
 
-  getTezosTransactionHistory = function (payload) {
-    var url = 'tezos/getTransactionHistory/' + payload.content.id;
+  getBinanceTransactionHistory = function (payload) {
+    var url = 'binance/getTransactionHistory/' + payload.content.id;
 
     this.callApi(url, 'GET', null, payload, (err, data) => {
       if(data) {
         this.setStore({ transactions: data.transactions });
         emitter.emit('transactionsUpdated');
       }
-    });
-  };
-
-  setDelegate = function (payload) {
-    var url = 'tezos/setDelegate';
-    var postJson = {
-      address: payload.content.address,
-      delegateAddress: payload.content.delegateAddress
-    };
-
-    this.callApi(url, 'POST', postJson, payload, (err, data) => {
-      emitter.emit(payload.type, err, data);
     });
   };
 

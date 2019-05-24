@@ -17,7 +17,7 @@ import Contacts from './containers/contacts.jsx';
 import SetUsername from './containers/setUsername.jsx';
 import Settings from './containers/settings.jsx';
 import Pooling from './containers/Pooling/index';
-import Transact from './containers/transact'; 
+import Transact from './containers/transact';
 import TokenSwap from './containers/tokenSwap.jsx';
 
 import PoolCreate from './containers/PoolCreate/index';
@@ -60,6 +60,10 @@ let tezosStore = require("./store/tezosStore.js").default.store;
 let bitcoinEmitter = require('./store/bitcoinStore.js').default.emitter;
 let bitcoinDispatcher = require('./store/bitcoinStore.js').default.dispatcher;
 let bitcoinStore = require("./store/bitcoinStore.js").default.store;
+
+let binanceEmitter = require("./store/binanceStore.js").default.emitter;
+let binanceDispatcher = require('./store/binanceStore.js').default.dispatcher;
+let binanceStore = require("./store/binanceStore.js").default.store;
 
 let stakingDispatcher = require("./store/stakingStore.js").default.dispatcher;
 let stakingStore = require("./store/stakingStore.js").default.store;
@@ -206,6 +210,7 @@ class App extends Component {
     accountEmitter.removeAllListeners('Unauthorised');
     accountEmitter.removeAllListeners('verificationResult');
     poolingEmitter.removeAllListeners('getAvailableFundingPools');
+    binanceEmitter.removeAllListeners('Unauthorised');
 
     contactsEmitter.on('Unauthorised', this.logUserOut);
     ethEmitter.on('Unauthorised', this.logUserOut);
@@ -215,6 +220,7 @@ class App extends Component {
     bitcoinEmitter.on('Unauthorised', this.logUserOut);
     accountEmitter.on('Unauthorised', this.logUserOut);
     poolingEmitter.on('Unauthorised', this.logUserOut);
+    binanceEmitter.on('Unauthorised', this.logUserOut);
 
     contactsEmitter.on('contactsUpdated', this.contactsRefreshed);
     accountEmitter.on('verificationResult', this.verificationResultReturned);
@@ -336,6 +342,10 @@ class App extends Component {
       accounts: null,
       accountsCombined: null
     })
+    binanceStore.setStore({
+      accounts: null,
+      accountsCombined: null
+    })
     bitcoinStore.setStore({
       accounts: null,
       accountsCombined: null
@@ -427,7 +437,7 @@ class App extends Component {
       var content = {};
       const path = currentScreen.split('/')[0];
 
-      if (['accounts', 'aionAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts', 'staking'].includes(path) ) {
+      if (['accounts', 'aionAccounts', 'binanceAccounts', 'bitcoinAccounts', 'ethAccounts', 'tezosAccounts', 'wanAccounts', 'staking'].includes(path) ) {
         content = { id: this.state.user.id };
         contactsDispatcher.dispatch({
           type: "getContacts",
@@ -507,6 +517,11 @@ class App extends Component {
 
     aionDispatcher.dispatch({
       type: 'getAionAddress',
+      content,
+      token: user.token
+    });
+    binanceDispatcher.dispatch({
+      type: 'getBinanceAddress',
       content,
       token: user.token
     });
@@ -698,6 +713,8 @@ class App extends Component {
         return ( <Accounts token="Aion" theme={ this.state.theme } size={ this.state.size } user={ this.state.user } transactOpen={ this.state.transactOpen } transactClosed={ this.transactClosed } transactClicked={ this.transactClicked } transactCurrency={ this.state.transactCurrency } stakeClicked={ this.stakeClicked } /> )
       case "tezosAccounts":
         return ( <Accounts token="Tezos" theme={ this.state.theme } size={ this.state.size } user={ this.state.user } transactOpen={ this.state.transactOpen } transactClosed={ this.transactClosed } transactClicked={ this.transactClicked } transactCurrency={ this.state.transactCurrency } stakeClicked={ this.stakeClicked } /> )
+      case 'binanceAccounts':
+        return ( <Accounts token="Binance" theme={ this.state.theme } size={ this.state.size } user={ this.state.user } transactOpen={ this.state.transactOpen } transactClosed={ this.transactClosed } transactClicked={ this.transactClicked } transactCurrency={ this.state.transactCurrency } stakeClicked={ this.stakeClicked } /> )
       case 'bitcoinAccounts':
         return ( <Accounts token="Bitcoin" theme={ this.state.theme } size={ this.state.size } user={ this.state.user } transactOpen={ this.state.transactOpen } transactClosed={ this.transactClosed } transactClicked={ this.transactClicked } transactCurrency={ this.state.transactCurrency } stakeClicked={ this.stakeClicked } /> )
       case 'contacts':

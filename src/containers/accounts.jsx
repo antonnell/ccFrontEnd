@@ -26,6 +26,10 @@ let tezosEmitter = require("../store/tezosStore.js").default.emitter;
 let tezosDispatcher = require("../store/tezosStore.js").default.dispatcher;
 let tezosStore = require("../store/tezosStore.js").default.store;
 
+let binanceEmitter = require("../store/binanceStore.js").default.emitter;
+let binanceDispatcher = require("../store/binanceStore.js").default.dispatcher;
+let binanceStore = require("../store/binanceStore.js").default.store;
+
 let stakingEmitter = require("../store/stakingStore.js").default.emitter;
 let stakingStore = require("../store/stakingStore.js").default.store;
 
@@ -40,6 +44,14 @@ let Accounts = createReactClass({
       case 'Aion':
         aionDispatcher.dispatch({
           type: 'getAionTransactionHistory',
+          content,
+          token: user.token
+        });
+        break
+      case 'Binance':
+      case 'BEP2':
+        binanceDispatcher.dispatch({
+          type: 'getBinanceTransactionHistory',
           content,
           token: user.token
         });
@@ -88,20 +100,22 @@ let Accounts = createReactClass({
       aionAccountsCombined: aionStore.getStore('accountsCombined'),
       bitcoinAccountsCombined: bitcoinStore.getStore('accountsCombined'),
       tezosAccountsCombined: tezosStore.getStore('accountsCombined'),
+      binanceAccountsCombined: binanceStore.getStore('accountsCombined'),
+      bep2AccountsCombined: binanceStore.getStore('bep2AccountsCombined'),
 
       ethAccounts: ethStore.getStore('accounts'),
-      erc20Accounts: ethStore.getStore('erc20Accounts'),
       wanAccounts: wanStore.getStore('accounts'),
-      wrc20Accounts: ethStore.getStore('wrc20Accounts'),
       aionAccounts: aionStore.getStore('accounts'),
       bitcoinAccounts: bitcoinStore.getStore('accounts'),
       tezosAccounts: tezosStore.getStore('accounts'),
+      binanceAccounts: binanceStore.getStore('accounts'),
 
       ethTransactions: ethStore.getStore('transactions'),
       wanTransactions: wanStore.getStore('transactions'),
       aionTransactions: aionStore.getStore('transactions'),
       bitcoinTransactions: bitcoinStore.getStore('transactions'),
       tezosTransactions: tezosStore.getStore('transactions'),
+      binanceTransactions: binanceStore.getStore('transactions'),
 
       stakeableCurrencies: stakingStore.getStore('stakeableCurrencies'),
 
@@ -110,8 +124,10 @@ let Accounts = createReactClass({
       aionLoading: true,
       bitcoinLoading: true,
       tezosLoading: true,
+      binanceLoading: true,
       tokens: [
         { value: 'Aion', description: 'Aion' },
+        { value: 'Binance', description: 'Binance' },
         { value: 'Bitcoin', description: 'Bitcoin' },
         { value: 'Ethereum', description: 'Ethereum'},
         { value: 'Tezos', description: 'Tezos' },
@@ -166,6 +182,13 @@ let Accounts = createReactClass({
             token: user.token
           });
           break
+        case 'Binance':
+          binanceDispatcher.dispatch({
+            type: 'getBinanceTransactionHistory',
+            content,
+            token: user.token
+          });
+          break
         case 'Bitcoin':
           bitcoinDispatcher.dispatch({
             type: 'getBitcoinTransactionHistory',
@@ -205,6 +228,7 @@ let Accounts = createReactClass({
   render() {
     switch(this.props.token) {
       case "Aion":
+      case "Binance":
       case "Bitcoin":
       case "Ethereum":
       case "Tezos":
@@ -228,6 +252,7 @@ let Accounts = createReactClass({
       ethLoading,
       wanLoading,
       aionLoading,
+      binanceLoading,
       bitcoinLoading,
       tezosLoading,
       addressName,
@@ -243,11 +268,13 @@ let Accounts = createReactClass({
       mnemonicPhraseError,
       mnemonicPhraseErrorMessage,
       aionAccounts,
+      binanceAccounts,
       bitcoinAccounts,
       tezosAccounts,
       ethAccounts,
       wanAccounts,
       aionTransactions,
+      binanceTransactions,
       bitcoinTransactions,
       tezosTransactions,
       ethTransactions,
@@ -297,6 +324,10 @@ let Accounts = createReactClass({
         accounts = aionAccounts
         transactions = aionTransactions
         break;
+      case "Binance":
+        accounts = binanceAccounts
+        transactions = binanceTransactions
+        break;
       case "Bitcoin":
         accounts = bitcoinAccounts
         transactions = bitcoinTransactions
@@ -329,7 +360,7 @@ let Accounts = createReactClass({
         token={ token }
         accounts={ accounts }
         transactions={ transactions }
-        loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading }
+        loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading || binanceLoading }
         theme={ theme }
         user={ user }
         transactClicked={ transactClicked }
@@ -425,13 +456,16 @@ let Accounts = createReactClass({
       aionAccountsCombined,
       bitcoinAccountsCombined,
       tezosAccountsCombined,
+      binanceAccountsCombined,
       erc20AccountsCombined,
       wrc20AccountsCombined,
+      bep2AccountsCombined,
       ethLoading,
       wanLoading,
       aionLoading,
       bitcoinLoading,
       tezosLoading,
+      binanceLoading,
       createOpen,
       importOpen,
       tokens,
@@ -463,6 +497,8 @@ let Accounts = createReactClass({
 
     let accounts = [
       ...(aionAccountsCombined != null ? aionAccountsCombined : []),
+      ...(binanceAccountsCombined != null ? binanceAccountsCombined : []),
+      ...(bep2AccountsCombined != null ? bep2AccountsCombined : []),
       ...(bitcoinAccountsCombined != null ? bitcoinAccountsCombined : []),
       ...(ethAccountsCombined != null ? ethAccountsCombined : []),
       ...(erc20AccountsCombined != null ? erc20AccountsCombined : []),
@@ -470,8 +506,6 @@ let Accounts = createReactClass({
       ...(wanAccountsCombined != null ? wanAccountsCombined : []),
       ...(wrc20AccountsCombined != null ? wrc20AccountsCombined : [])
     ]
-
-    console.log(erc20AccountsCombined)
 
     let managerAddressOptions = tezosAccounts ? tezosAccounts.map((acc) => {
       return {
@@ -486,7 +520,7 @@ let Accounts = createReactClass({
         user={ user }
         theme={ theme }
         accounts={ accounts }
-        loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading }
+        loading={ ethLoading || wanLoading || aionLoading || bitcoinLoading || tezosLoading || binanceLoading }
         stakeClicked={ stakeClicked }
         transactClicked= { transactClicked }
         transactOpen={ transactOpen }
@@ -542,6 +576,17 @@ let Accounts = createReactClass({
     aionEmitter.on("error", this.showError);
     aionEmitter.on("exportAionKey", this.exportKeyReturned);
 
+    binanceEmitter.removeAllListeners('accountsUpdated');
+    binanceEmitter.removeAllListeners("transactionsUpdated");
+    binanceEmitter.removeAllListeners('error');
+    binanceEmitter.removeAllListeners('exportBinanceKey');
+    binanceEmitter.removeAllListeners('bep2AccountsUpdated');
+    binanceEmitter.on('accountsUpdated', this.binanceAccountsRefreshed);
+    binanceEmitter.on("transactionsUpdated", this.binanceTransactionsUpdated);
+    binanceEmitter.on("error", this.showError);
+    binanceEmitter.on("exportBinanceKey", this.exportKeyReturned);
+    binanceEmitter.on("bep2AccountsUpdated", this.bep2AccountsUpdated);
+
     bitcoinEmitter.removeAllListeners('accountsUpdated');
     bitcoinEmitter.removeAllListeners("transactionsUpdated");
     bitcoinEmitter.removeAllListeners('error');
@@ -555,6 +600,7 @@ let Accounts = createReactClass({
     ethEmitter.removeAllListeners("transactionsUpdated");
     ethEmitter.removeAllListeners('error');
     ethEmitter.removeAllListeners('exportEthereumKey');
+    ethEmitter.removeAllListeners('erc20AccountsUpdated');
     ethEmitter.on('accountsUpdated', this.ethAccountsRefreshed);
     ethEmitter.on("transactionsUpdated", this.ethTransactionsUpdated);
     ethEmitter.on("erc20AccountsUpdated", this.erc20AccountsUpdated);
@@ -574,6 +620,7 @@ let Accounts = createReactClass({
     wanEmitter.removeAllListeners('accountsUpdated');
     wanEmitter.removeAllListeners('error');
     wanEmitter.removeAllListeners('exportWanchainKey');
+    wanEmitter.removeAllListeners('wrc20AccountsUpdated');
     wanEmitter.on('accountsUpdated', this.wanAccountsRefreshed);
     wanEmitter.on("transactionsUpdated", this.wanTransactionsUpdated);
     wanEmitter.on("wrc20AccountsUpdated", this.wrc20AccountsUpdated);
@@ -625,6 +672,10 @@ let Accounts = createReactClass({
     this.setState({ aionTransactions: aionStore.getStore('transactions') })
   },
 
+  binanceTransactionsUpdated() {
+    this.setState({ binanceTransactions: binanceStore.getStore('transactions') })
+  },
+
   bitcoinTransactionsUpdated() {
     this.setState({ bitcoinTransactions: bitcoinStore.getStore('transactions') })
   },
@@ -656,7 +707,6 @@ let Accounts = createReactClass({
 
   erc20AccountsUpdated() {
     this.setState({
-      erc20Accounts: ethStore.getStore('erc20Accounts'),
       erc20AccountsCombined: ethStore.getStore('erc20AccountsCombined'),
     })
   },
@@ -665,6 +715,12 @@ let Accounts = createReactClass({
     this.setState({
       wrc20Accounts: wanStore.getStore('wrc20Accounts'),
       wrc20AccountsCombined: wanStore.getStore('wrc20AccountsCombined')
+    })
+  },
+
+  bep2AccountsUpdated() {
+    this.setState({
+      bep2AccountsCombined: binanceStore.getStore('bep2AccountsCombined')
     })
   },
 
@@ -686,6 +742,19 @@ let Accounts = createReactClass({
       aionAccounts: aionStore.getStore('accounts'),
       aionAccountsCombined: aionStore.getStore('accountsCombined'),
       aionLoading: false,
+      loadingAccount: null,
+      cardLoading: false,
+      deleteOpen: false,
+      editAccount: null,
+      editAddressName: null,
+    })
+  },
+
+  binanceAccountsRefreshed() {
+    this.setState({
+      binanceAccounts: binanceStore.getStore('accounts'),
+      binanceAccountsCombined: binanceStore.getStore('accountsCombined'),
+      binanceLoading: false,
       loadingAccount: null,
       cardLoading: false,
       deleteOpen: false,
@@ -848,6 +917,14 @@ let Accounts = createReactClass({
             token: user.token
           });
           break;
+        case 'Binance':
+          this.setState({ binanceLoading: true })
+          binanceDispatcher.dispatch({
+            type: "createBinanceAddress",
+            content,
+            token: user.token
+          });
+          break;
         case 'Bitcoin':
           this.setState({ bitcoinLoading: true })
           bitcoinDispatcher.dispatch({
@@ -929,7 +1006,7 @@ let Accounts = createReactClass({
       error = true
     }
 
-    if(tokenValue !== "Bitcoin") {
+    if(tokenValue !== "Bitcoin" && tokenValue !== "Binance") {
       if(publicAddress === null || publicAddress === "") {
         this.setState({ publicAddressError: true, publicAddressErrorMessage: 'Public Address is required' })
         error = true
@@ -941,7 +1018,7 @@ let Accounts = createReactClass({
       error = true
     }
 
-    if(tokenValue === 'Bitcoin') {
+    if(tokenValue === 'Bitcoin' || tokenValue === 'Binance') {
       if(mnemonicPhrase === null || mnemonicPhrase === "") {
         this.setState({ mnemonicPhraseError: true, mnemonicPhraseErrorMessage: 'Mnemonic Phrase is required' })
         error = true
@@ -977,6 +1054,14 @@ let Accounts = createReactClass({
           this.setState({ aionLoading: true })
           aionDispatcher.dispatch({
             type: "importAionAddress",
+            content,
+            token: user.token
+          });
+          break;
+        case 'Binance':
+          this.setState({ binanceLoading: true })
+          binanceDispatcher.dispatch({
+            type: "importBinanceAddress",
             content,
             token: user.token
           });
@@ -1062,6 +1147,13 @@ let Accounts = createReactClass({
           token: this.props.user.token
         });
         break;
+      case 'Binance':
+        binanceDispatcher.dispatch({
+          type: "updateBinanceAddress",
+          content,
+          token: this.props.user.token
+        });
+        break;
       case 'Bitcoin':
         bitcoinDispatcher.dispatch({
           type: "updateBitcoinAddress",
@@ -1113,6 +1205,13 @@ let Accounts = createReactClass({
       case 'Aion':
         aionDispatcher.dispatch({
           type: "updateAionAddress",
+          content,
+          token: this.props.user.token
+        });
+        break;
+      case 'Binance':
+        binanceDispatcher.dispatch({
+          type: "updateBinanceAddress",
           content,
           token: this.props.user.token
         });
@@ -1172,6 +1271,13 @@ let Accounts = createReactClass({
           token: this.props.user.token
         });
         break;
+      case 'Binance':
+        binanceDispatcher.dispatch({
+          type: "exportBinanceKey",
+          content,
+          token: this.props.user.token
+        });
+        break;
       case 'Bitcoin':
         bitcoinDispatcher.dispatch({
           type: "exportBitcoinKey",
@@ -1221,12 +1327,17 @@ let Accounts = createReactClass({
       userId: user.id
     };
 
-    console.log(content)
-
     switch(this.props.token) {
       case 'Aion':
         aionDispatcher.dispatch({
           type: "deleteAionAddress",
+          content,
+          token: this.props.user.token
+        });
+        break;
+      case 'Binance':
+        binanceDispatcher.dispatch({
+          type: "deleteBinanceAddress",
           content,
           token: this.props.user.token
         });

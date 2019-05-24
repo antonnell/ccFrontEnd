@@ -73,7 +73,7 @@ class ImportModal extends Component {
               <Grid item xs={11}>
                 { this.renderImput("Account Name", addressName, addressNameError, addressNameErrorMessage, handleChange, importLoading, 'addressName') }
               </Grid>
-              { tokenValue !=='Bitcoin' && (
+              { (tokenValue !== 'Bitcoin' && tokenValue !== 'Binance') && (
                 <Grid item xs={11}>
                   { this.renderImput("Public Address", publicAddress, publicAddressError, publicAddressErrorMessage, handleChange, importLoading, 'publicAddress') }
                 </Grid>)
@@ -81,7 +81,7 @@ class ImportModal extends Component {
               <Grid item xs={11}>
                 { this.renderImput("Private Key", privateKey, privateKeyError, privateKeyErrorMessage, handleChange, importLoading, 'privateKey') }
               </Grid>
-              { tokenValue ==='Bitcoin' && (
+              { (tokenValue ==='Bitcoin' || tokenValue === 'Binance') && (
                 <Grid item xs={11}>
                   { this.renderImput("Mnemonic Phrase", mnemonicPhrase, mnemonicPhraseError, mnemonicPhraseErrorMessage, handleChange, importLoading, 'mnemonicPhrase') }
                 </Grid>)
