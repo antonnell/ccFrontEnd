@@ -466,6 +466,9 @@ class EnhancedTable extends React.Component {
                     case 'Aion':
                       url = config.aionscanURL + n.transactionId;
                       break;
+                    case 'Binance':
+                      url = config.binancescanURL + n.transactionId;
+                      break;
                     case 'Bitcoin':
                       url = config.bitcoinscanURL + n.transactionId;
                       break;
