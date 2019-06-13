@@ -12,7 +12,9 @@ import {
   Input,
   InputAdornment,
   Tabs,
-  Tab
+  Tab,
+  Paper,
+  Avatar
 } from '@material-ui/core';
 import PageLoader from './pageLoader';
 import Snackbar from './snackbar';
@@ -36,23 +38,209 @@ class TokenSwap extends Component {
         >
           <PageTitle theme={theme} root={null} screen={{display: 'Token Swap', location: 'tokenSwap'}} />
         </Grid>
-        <Grid item xs={12} align='left' style={{paddingTop: '35px'}}>
-          <Tabs
-            value={ tabValue }
-            onChange={ handleTabChange }
-            indicatorColor="primary"
-            textColor="primary" >
-            <Tab label="ERC20 -> WRC20" />
-            <Tab label="WRC20 -> ERC20" />
-          </Tabs>
+        <Grid item xs={12} align='left'>
+          <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>CURV Token Swap</Typography>
         </Grid>
-        { tabValue === 0 && this.renderERCtoWRC() }
-        { tabValue === 1 && this.renderWRCtoERC() }
+        { this.renderSwap() }
+        { message && this.renderSnackBar('Information', message) }
         { loading && this.renderLoader() }
         { error && this.renderSnackBar('Error', error) }
-        { message && this.renderSnackBar('Information', message) }
       </Grid>
     );
+  }
+
+  renderSwap() {
+    const {
+      theme,
+      loading,
+      wanAccountValue,
+      wanAccountOptions,
+      wanAccountError,
+      wanAccountErrorMessage,
+      ethAccountValue,
+      ethAccountOptions,
+      ethAccountError,
+      ethAccountErrorMessage,
+      sendValue,
+      sendError,
+      sendErrorMessage,
+      receiveValue,
+      receiveError,
+      receiveErrorMessage,
+      handleSelectChange,
+      handleChange,
+      ethCurveBalance,
+      swapTokens,
+      sendToken,
+      receiveToken,
+      tokenOptions,
+      bnbAccountValue,
+      bnbAccountError,
+      bnbAccountErrorMessage,
+      bnbAccountOptions
+    } = this.props
+
+    return (<Grid item xs={12} xl={9} align='left' style={{paddingTop: '35px'}}>
+      <Paper style={{
+          backgroundColor: '#ffffff',
+          borderRadius: '20px'
+        }}>
+        <Grid
+          container
+          justify="space-around"
+          direction="row"
+        >
+          <Grid item xs={ 6 } align='left'
+            style={{
+              padding: '50px 30px'
+            }}>
+            {this.renderToken(sendToken, tokenOptions, handleSelectChange, loading, 'sendToken')}
+            <Typography>
+              You are swapping
+            </Typography>
+            { this.renderInput(sendValue, sendError, sendErrorMessage, handleChange, loading, 'send', 'CURV') }
+            <Typography style={{ marginTop: '24px'}}>
+              From your account
+            </Typography>
+            {
+              (() => {
+                switch (sendToken) {
+                  case 'Wanchain':
+                    return this.renderSelect("", wanAccountValue, wanAccountOptions, wanAccountError, wanAccountErrorMessage, handleSelectChange, loading, 'wanAccount')
+                  case 'Ethereum':
+                    return this.renderSelect("", ethAccountValue, ethAccountOptions, ethAccountError, ethAccountErrorMessage, handleSelectChange, loading, 'ethAccount')
+                  case 'Binance':
+                    return this.renderSelect("", bnbAccountValue, bnbAccountOptions, bnbAccountError, bnbAccountErrorMessage, handleSelectChange, loading, 'bnbAccount')
+                  default:
+                }
+              })()
+            }
+          </Grid>
+          <Grid item xs={ 6 } align='left'
+            style={{
+              padding: '50px 30px'
+            }}>
+            {this.renderToken(receiveToken, tokenOptions, handleSelectChange, loading, 'receiveToken')}
+            <Typography>
+              You get
+            </Typography>
+            { this.renderInput(receiveValue, receiveError, receiveErrorMessage, handleChange, true, 'receive', 'CURV') }
+            <Typography style={{ marginTop: '24px'}}>
+              In your account
+            </Typography>
+            {
+              (() => {
+                switch (receiveToken) {
+                  case 'Wanchain':
+                    return this.renderSelect("", wanAccountValue, wanAccountOptions, wanAccountError, wanAccountErrorMessage, handleSelectChange, loading, 'wanAccount')
+                  case 'Ethereum':
+                    return this.renderSelect("", ethAccountValue, ethAccountOptions, ethAccountError, ethAccountErrorMessage, handleSelectChange, loading, 'ethAccount')
+                  case 'Binance':
+                    return this.renderSelect("", bnbAccountValue, bnbAccountOptions, bnbAccountError, bnbAccountErrorMessage, handleSelectChange, loading, 'bnbAccount')
+                  default:
+                }
+              })()
+            }
+          </Grid>
+        </Grid>
+        <Button disabled={loading} variant='contained' size='small' onClick={swapTokens} color="primary" autoFocus style={{ borderRadius: '1px 1px 20px 20px', width: '100%' }}>
+          Swap
+        </Button>
+      </Paper>
+    </Grid>)
+  }
+
+  renderToken(value, options, onChange, disabled, name) {
+
+    const rootStyle = {
+      marginBottom: '24px'
+    }
+    const iconStyle = {
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      borderRadius: '25px',
+      background: '#dedede',
+      marginRight: '24px',
+      height: '50px',
+      width: '50px',
+      textAlign: 'center'
+    }
+    const nameStyle = {
+      verticalAlign: 'middle',
+      fontSize: '30px'
+    }
+    const selectNameStyle = {
+      verticalAlign: 'middle',
+      fontSize: '30px',
+      color: '#ffffff'
+    }
+
+    return (
+      <div style={rootStyle}>
+        <FormControl fullWidth={true} style={{marginTop: '12px', maxWidth: '400px'}} >
+          <Select name={name} value={value} onChange={onChange} disabled={disabled} renderValue={value => {
+
+              let selected = null
+              let val = ''
+              let icon = ''
+              selected = options && options.length > 0 && options.filter((option) => {
+                return option.value === value
+              })[0]
+              if(selected) {
+                val = selected.description
+                icon = selected.icon
+              }
+
+              return (
+                <React.Fragment>
+                  <div style={iconStyle}>
+                    <img
+                      alt=""
+                      src={ require('../assets/images/'+icon+'-logo.png') }
+                      height="50px"
+                    />
+                  </div>
+                  <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                    <Typography  variant='h5' style={nameStyle}>{val}</Typography>
+                  </div>
+                </React.Fragment>
+              );
+            }}
+          >
+            {options
+              ? options.filter((option) => {
+                if(name === 'receiveToken') {
+                  return option.value !== this.props.sendToken
+                }
+
+                if(name === 'sendToken') {
+                  return option.value !== this.props.receiveToken
+                }
+
+                return true
+              }).map(option => {
+                  return (
+                    <MenuItem key={option.value+'_'+option.description} value={option.value}>
+                      <React.Fragment>
+                        <div style={iconStyle}>
+                          <img
+                            alt=""
+                            src={ require('../assets/images/'+option.icon+'-logo.png') }
+                            height="50px"
+                          />
+                        </div>
+                        <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                          <Typography  variant='h5' style={selectNameStyle}>{option.description}</Typography>
+                        </div>
+                      </React.Fragment>
+                    </MenuItem>
+                  );
+                })
+              : ""}
+          </Select>
+        </FormControl>
+      </div>
+    )
   }
 
   renderERCtoWRC() {
@@ -216,7 +404,7 @@ class TokenSwap extends Component {
           ? options.map(option => {
               return (
                 <MenuItem key={option.value+'_'+option.description} value={option.value}>
-                  <ListItemText primary={option.description} />
+                  <ListItemText primary={option.description + (option.balance ? (' ('+option.balance.toFixed(4)+' '+option.symbol+')') : '')} />
                 </MenuItem>
               );
             })
@@ -246,6 +434,26 @@ class TokenSwap extends Component {
         <FormHelperText>{errorMessage}</FormHelperText>
       ) : null}
     </FormControl>)
+  }
+
+  renderInput(value, error, errorMessage, onChange, disabled, name, inputAdornment) {
+    return (<FormControl error={error} fullWidth={true} style={{marginTop: '12px', maxWidth: '400px'}} >
+      <Input
+        name={name}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        endAdornment={<InputAdornment position="end">{inputAdornment ? inputAdornment : ''}</InputAdornment>}
+        style={{ fontSize: '30px' }}
+      />
+      {error === true ? (
+        <FormHelperText>{errorMessage}</FormHelperText>
+      ) : null}
+    </FormControl>)
+  }
+
+  renderChainSelect(label, value, options, error, errorMessage, onChange, disabled, name) {
+
   }
 }
 

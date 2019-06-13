@@ -49,6 +49,9 @@ class Store {
           case 'getBinanceTransactionHistory':
             this.getBinanceTransactionHistory(payload);
             break;
+          case 'convertCurve':
+            this.convertCurve(payload);
+            break;
           default: {
           }
         }
@@ -78,6 +81,8 @@ class Store {
 
       if(data && data.success) {
 
+        console.log(data.binanceAddresses)
+
         const binAccount = data.binanceAddresses.map((acc) => {
 
           let bal = acc.balances.filter((balance) => {
@@ -93,6 +98,7 @@ class Store {
           acc.tokens = acc.balances
 
           acc.balance = balance
+          acc.usdBalance = acc.totalUsdValue
           return acc
         })
 
@@ -106,7 +112,7 @@ class Store {
 
           if(bal.length > 0) {
             total.balance = parseFloat(total.balance) + parseFloat(bal[0].free)
-            total.usdBalance = total.usdBalance + 0 //TODO: GET USD BALANCE
+            total.usdBalance = total.usdBalance + parseFloat(bal[0].usdValue)
           }
 
           return total
@@ -130,7 +136,7 @@ class Store {
               if(i === 0) {
                 totals.push({
                   balance: parseFloat(data.binanceAddresses[i].balances[j].free),
-                  usdBalance: 0,
+                  usdBalance: parseFloat(data.binanceAddresses[i].balances[j].usdValue),
                   type: 'BEP2',
                   name: data.binanceAddresses[i].balances[j].symbol,
                   symbol: data.binanceAddresses[i].balances[j].symbol,
@@ -142,6 +148,7 @@ class Store {
                 for(var k = 0; k < totals.length; k++) {
                   if(totals[k].symbol === data.binanceAddresses[i].balances[j].symbol) {
                     totals[k].balance = parseFloat(totals[k].balance) + parseFloat(data.binanceAddresses[i].balances[j].free)
+                    totals[k].usdBalance = parseFloat(totals[k].usdBalance) + parseFloat(data.binanceAddresses[i].balances[j].usdValue)
                   }
                 }
 
@@ -260,6 +267,17 @@ class Store {
         this.setStore({ transactions: data.transactions });
         emitter.emit('transactionsUpdated');
       }
+    });
+  };
+
+  convertCurve = function (payload) {
+    var url = 'binance/convertCurve';
+    var postJson = payload.content
+
+    console.log(postJson)
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      emitter.emit(payload.type, err, data);
+      this.getBinanceAddress(payload)
     });
   };
 
