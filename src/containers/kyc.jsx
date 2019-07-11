@@ -29,7 +29,7 @@ let KYC = createReactClass({
       state = "pending";
     }
 
-    if (state == null || state == "") {
+    if (state == null || state === "") {
       return (
         <KYCComponent
           KYC={this.KYC}
@@ -52,10 +52,10 @@ let KYC = createReactClass({
   },
 
   KYC() {
-    if(this.props.user && this.props.user.verificationUrl != null && this.props.user.verificationUrl != "") {
+    if(this.props.user && this.props.user.verificationUrl != null && this.props.user.verificationUrl !== "") {
       this.openKYC(this.props.user.verificationUrl)
     } else {
-      this.setState({ loading: true })
+      this.setState({ loading: true });
       accountDispatcher.dispatch({
         type: "allocateKycCode",
         content: { username: this.props.user.username },
@@ -65,7 +65,7 @@ let KYC = createReactClass({
   },
 
   allocateKycCodeReturned(error, data) {
-    this.setState({ loading: false })
+    this.setState({ loading: false });
     if (error) {
       return this.setState({ error: error.toString() });
     }
@@ -73,9 +73,9 @@ let KYC = createReactClass({
     if (data.success) {
 
       //save user new fields
-      let user = this.props.user
-      user.verificationUrl = data.verificationUrl
-      this.props.setUser(user)
+      let user = this.props.user;
+      user.verificationUrl = data.verificationUrl;
+      this.props.setUser(user);
 
       this.openKYC(data.verificationUrl)
     } else if (data.errorMsg) {

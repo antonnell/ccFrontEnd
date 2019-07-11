@@ -18,7 +18,7 @@ let Pooling = createReactClass({
       <PoolingComponent
         theme={this.props.theme}
         error={this.state.error}
-        pools={this.props.pools}
+        pools={this.props.whiteLists}
         whitelists={this.props.whitelists}
         handleNewPool={this.handleNewPool}
         optionsClicked={this.optionsClicked}

@@ -1,44 +1,75 @@
-import fetch from "node-fetch";
-var crypto = require("crypto");
-var bip39 = require("bip39");
-var sha256 = require("sha256");
+import fetch from 'node-fetch';
+import config from "../config";
 
-let Dispatcher = require("flux").Dispatcher;
-let Emitter = require("events").EventEmitter;
+var crypto = require('crypto');
+var bip39 = require('bip39');
+var sha256 = require('sha256');
+
+let Dispatcher = require('flux').Dispatcher;
+let Emitter = require('events').EventEmitter;
 
 let dispatcher = new Dispatcher();
 let emitter = new Emitter();
 
-let config = require("../config");
-
 let apiUrl = config.apiUrl;
 
-var Store = () => {
-  dispatcher.register(
-    function(payload) {
-      switch (payload.type) {
-        case "getContacts":
-          this.getContacts(payload);
-          break;
-        case "addContact":
-          this.addContact(payload);
-          break;
-        case "updateContact":
-          this.updateContact(payload);
-          break;
-        default: {}
-      }
-    }.bind(this)
-  );
+class Store {
+  constructor() {
 
-  this.getContacts = function(payload) {
-    var url = "contacts/getUserContacts/" + payload.content.id;
+    this.store = {
+      contacts: null
+    }
 
-    this.callApi(url, "GET", null, payload);
+    dispatcher.register(
+      function (payload) {
+        switch (payload.type) {
+          case 'getContacts':
+            this.getContacts(payload);
+            break;
+          case 'addContact':
+            this.addContact(payload);
+            break;
+          case 'updateContact':
+            this.updateContact(payload);
+            break;
+          default: {
+          }
+        }
+      }.bind(this)
+    );
+  }
+
+  //GETTER AND SETTER FOR CURRENT STORE DATA
+  getStore(index) {
+    return(this.store[index]);
   };
 
-  this.addContact = function(payload) {
-    var url = "contacts/addUserContact";
+  setStore(obj) {
+    this.store = {...this.store, ...obj}
+    return emitter.emit('StoreUpdated');
+  };
+
+  getContacts = function (payload) {
+    var url = 'contacts/getUserContacts/' + payload.content.id;
+
+    this.callApi(url, 'GET', null, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+
+      if(data && data.success) {
+        this.setStore({contacts: data.contacts})
+
+        emitter.emit('contactsUpdated');
+      } else {
+        emitter.emit('error', data.errorMsg)
+      }
+    });
+  };
+
+  addContact = function (payload) {
+    var url = 'contacts/addUserContact';
     var postJson = {
       emailOrUsername: payload.content.username,
       displayName: payload.content.displayName,
@@ -46,11 +77,27 @@ var Store = () => {
       ownerUsername: payload.content.ownerUsername
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      if(err) {
+        emitter.emit('error', err)
+        return
+      }
+
+      if(data.success) {
+        payload.content.id = payload.content.userId
+        this.getContacts(payload)
+
+        emitter.emit('addContactReturned');
+      } else {
+        emitter.emit('addContactReturned');
+        emitter.emit('error', data.errorMsg.toString())
+      }
+
+    });
   };
 
-  this.updateContact = function(payload) {
-    var url = "contacts/updateUserContact";
+  updateContact = function (payload) {
+    var url = 'contacts/updateUserContact';
     var postJson = {
       username: payload.content.username,
       displayName: payload.content.displayName,
@@ -58,13 +105,16 @@ var Store = () => {
       ownerUsername: payload.content.ownerUsername
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload, (err, data) => {
+      payload.content.id = payload.content.userId
+      this.getContacts(payload)
+    });
   };
 
-  this.callApi = function(url, method, postData, payload) {
+  callApi = function (url, method, postData, payload, callback) {
     //get X-curve-OTP from sessionStorage
-    var userString = sessionStorage.getItem("cc_user");
-    var authOTP = "";
+    var userString = sessionStorage.getItem('cc_user');
+    var authOTP = '';
     if (userString) {
       var user = JSON.parse(userString);
       authOTP = user.authOTP;
@@ -72,14 +122,14 @@ var Store = () => {
 
     var call = apiUrl + url;
 
-    if (method === "GET") {
+    if (method === 'GET') {
       postData = null;
     } else {
       const signJson = JSON.stringify(postData);
       const signMnemonic = bip39.generateMnemonic();
-      const cipher = crypto.createCipher("aes-256-cbc", signMnemonic);
+      const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
       const signEncrypted =
-        cipher.update(signJson, "utf8", "base64") + cipher.final("base64");
+        cipher.update(signJson, 'utf8', 'base64') + cipher.final('base64');
       var signData = {
         e: signEncrypted.hexEncode(),
         m: signMnemonic.hexEncode(),
@@ -97,17 +147,17 @@ var Store = () => {
       method: method,
       body: postData,
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + payload.token,
-        "X-curve-OTP": authOTP
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + payload.token,
+        'X-curve-OTP': authOTP
       }
     })
       .then(res => {
         if (res.status === 401) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
         if (res.status === 403) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
 
         if (res.ok) {
@@ -118,30 +168,30 @@ var Store = () => {
       })
       .then(res => res.json())
       .then(res => {
-        emitter.emit(payload.type, null, res);
+        callback(null, res)
       })
       .catch(error => {
-        emitter.emit(payload.type, error, null);
+        callback(error, null)
       });
   };
-};
+}
 
 var store = new Store();
 
 /* eslint-disable */
-String.prototype.hexEncode = function() {
+String.prototype.hexEncode = function () {
   var hex, i;
-  var result = "";
+  var result = '';
   for (i = 0; i < this.length; i++) {
     hex = this.charCodeAt(i).toString(16);
-    result += ("000" + hex).slice(-4);
+    result += ('000' + hex).slice(-4);
   }
   return result;
 };
-String.prototype.hexDecode = function() {
+String.prototype.hexDecode = function () {
   var j;
   var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
+  var back = '';
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }

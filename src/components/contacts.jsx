@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {
+  Grid,
+  Typography,
+  Button,
+  Tooltip,
+  Card,
+  CardContent
+} from "@material-ui/core";
 import AddModal from "./createContactModal";
+import PageTItle from "./pageTitle";
+import PageLoader from "./pageLoader";
+import Snackbar from './snackbar';
 
 class Contacts extends Component {
   renderContacts() {
@@ -19,16 +23,7 @@ class Contacts extends Component {
           align="left"
           style={{ minHeight: "190px", position: "relative" }}
         >
-          <CircularProgress
-            size={36}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: -12,
-              marginLeft: -12
-            }}
-          />
+          <PageLoader />
         </Grid>
       );
     }
@@ -42,7 +37,7 @@ class Contacts extends Component {
           align="center"
           style={{ minHeight: "190px", paddingTop: "100px" }}
         >
-          <Typography variant="h5">
+          <Typography variant="h2">
             Oh no, we couldn't find any contacts for you. Why don't you add one?
           </Typography>
         </Grid>
@@ -50,162 +45,46 @@ class Contacts extends Component {
     }
 
     return this.props.contacts.map(contact => {
+
       return (
-        <Grid item xs={12} xl={6} align="left" key={contact.userName}>
-          <Card style={{ margin: "12px" }}>
+        <Grid item xs={12} lg={6} xl={4} key={contact.userName} style={{ padding: '24px' }}>
+          <Card>
             <CardContent>
               <Grid
                 container
                 justify="flex-start"
                 alignItems="flex-start"
                 direction="row"
-                spacing={0}
               >
-                <Grid item xs={12} align="left">
+                <Grid item xs={6} align="left">
                   <Tooltip placement="top-start" title={contact.userName}>
                     <Typography
                       noWrap
                       variant="h3"
-                      style={{ minHeight: "32px" }}
+                      style={{ lineHeight: '33px' }}
                     >
                       {contact.displayName}
                     </Typography>
                   </Tooltip>
                 </Grid>
-                <Grid item xs={12} align="left" style={{ marginTop: "2px" }}>
-                  <Typography variant="body1">{contact.notes}</Typography>
-                </Grid>
-                <Grid item xs={12} align="center">
-                  <Grid
-                    container
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    direction="row"
-                    spacing={0}
-                    style={{ paddingTop: "12px" }}
-                  >
-                    <Grid item xs={4} sm={3} md={4} lg={3} align="left">
-                      <Typography variant="subtitle1">
-                        {"Aion Address"}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={8}
-                      sm={9}
-                      md={8}
-                      lg={9}
-                      align="left"
-                      style={{ marginTop: "2px" }}
-                    >
-                      <Typography variant="body1" noWrap>
-                        {contact.primaryAionAddress}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} align="center">
-                  <Grid
-                    container
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    direction="row"
-                    spacing={0}
-                    style={{ paddingTop: "12px" }}
-                  >
-                    <Grid item xs={4} sm={3} md={4} lg={3} align="left">
-                      <Typography variant="subtitle1">
-                        {"Ethereum Address"}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={8}
-                      sm={9}
-                      md={8}
-                      lg={9}
-                      align="left"
-                      style={{ marginTop: "2px" }}
-                    >
-                      <Typography variant="body1" noWrap>
-                        {contact.primaryEthAddress}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} align="center">
-                  <Grid
-                    container
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    direction="row"
-                    spacing={0}
-                    style={{ paddingTop: "12px" }}
-                  >
-                    <Grid item xs={4} sm={3} md={4} lg={3} align="left">
-                      <Typography variant="subtitle1">
-                        {"Wanchain Address"}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={8}
-                      sm={9}
-                      md={8}
-                      lg={9}
-                      align="left"
-                      style={{ marginTop: "2px" }}
-                    >
-                      <Typography variant="body1" noWrap>
-                        {contact.primaryWanAddress}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} align="right" style={{ marginTop: "12px" }}>
+                <Grid item xs={6} align="right">
                   <Button
-                    disabled={
-                      contact.primaryEthAddress === "No primary eth address set"
-                    }
                     size="small"
-                    variant="text"
-                    style={{ border: "1px solid #ccc", marginLeft: "12px" }}
+                    variant="contained"
                     color="primary"
-                    onClick={() => {
-                      this.props.sendEtherClicked(contact);
+                    onClick={e => {
+                      this.props.transactClicked(null, contact.userName);
                     }}
                   >
-                    Send Ether
+                    Transact
                   </Button>
-                  <Button
-                    disabled={
-                      contact.primaryWanAddress === "No primary wan address set"
-                    }
-                    size="small"
-                    variant="text"
-                    style={{ border: "1px solid #ccc", marginLeft: "12px" }}
-                    color="primary"
-                    onClick={() => {
-                      this.props.sendWanClicked(contact);
-                    }}
-                  >
-                    Send Wan
-                  </Button>
-                  <Button
-                    disabled={
-                      contact.primaryAionAddress ===
-                      "No primary aion address set"
-                    }
-                    size="small"
-                    variant="text"
-                    style={{ border: "1px solid #ccc", marginLeft: "12px" }}
-                    color="primary"
-                    onClick={() => {
-                      this.props.sendAionClicked(contact);
-                    }}
-                  >
-                    Send Aion
-                  </Button>
+                </Grid>
+                <Grid item xs={12} align="left">
+                  <Typography
+                  variant="subtitle1"
+                  color="textSecondary">
+                    {contact.notes}
+                  </Typography>
                 </Grid>
               </Grid>
             </CardContent>
@@ -216,6 +95,7 @@ class Contacts extends Component {
   }
 
   render() {
+    let { error, theme } = this.props
     return (
       <Grid
         container
@@ -229,27 +109,8 @@ class Contacts extends Component {
           item
           xs={12}
           align="left"
-          style={{
-            margin: "12px",
-            padding: "24px 0px",
-            borderBottom:
-              "2px solid " + this.props.theme.custom.headingBorder.color,
-            display: "flex"
-          }}
         >
-          <div style={{ flex: 1 }}>
-            <Typography variant="h5">Your contacts</Typography>
-          </div>
-          <div>
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={this.props.handleAddOpen}
-            >
-              Add Contact
-            </Button>
-          </div>
+          <PageTItle theme={this.props.theme} root={null} screen={{display: 'Contacts', location: 'contacts'}} />
         </Grid>
         <Grid item xs={12} align="center">
           <Grid
@@ -258,11 +119,35 @@ class Contacts extends Component {
             alignItems="flex-start"
             direction="row"
             spacing={0}
-            style={{ paddingTop: "24px" }}
+            style={ theme.custom.sectionTitle }
+          >
+            <Grid item xs={6} align='left' >
+              <Typography variant='h2' align='left' style={{ lineHeight: '37px' }}>Contacts</Typography>
+            </Grid>
+            <Grid item xs={6} align='right' >
+              <Button
+                size="small"
+                variant="contained"
+                color="secondary"
+                onClick={this.props.handleAddOpen}
+              >
+                Add
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Grid
+            container
+            justify="flex-start"
+            alignItems="flex-start"
+            direction="row"
+            style={ theme.custom.accountsContainer }
           >
             {this.renderContacts()}
           </Grid>
         </Grid>
+        { error && <Snackbar open={true} type={'Error'} message={error} /> }
         <AddModal
           isOpen={this.props.addOpen}
           handleClose={this.props.handleAddClose}

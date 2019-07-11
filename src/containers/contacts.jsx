@@ -22,14 +22,21 @@ let Contacts = createReactClass({
       notes: "",
       notesError: false,
       notesErrorMessage: "",
-      addOpen: false
+      addOpen: false,
+      optionsContact: null
     }
   },
 
   componentWillMount() {
-    contactsEmitter.removeAllListeners('addContact');
+    contactsEmitter.removeAllListeners('addContactReturned');
+    contactsEmitter.removeAllListeners('error');
 
-    contactsEmitter.on('addContact', this.addContactReturned);
+    contactsEmitter.on('addContactReturned', this.addContactReturned);
+    contactsEmitter.on('error', this.showError)
+  },
+
+  showError(error) {
+    this.setState({ error: error.toString() })
   },
 
   resetInputs() {
@@ -46,26 +53,13 @@ let Contacts = createReactClass({
       notes: "",
       notesError: false,
       notesErrorMessage: "",
+      addLoading: false
     })
   },
 
   addContactReturned(error, data) {
-    this.setState({addLoading: false});
-    if(error) {
-      return this.setState({error: error.toString()});
-    }
-
-    if(data.success) {
-      this.resetInputs();
-      var content = {id: this.props.user.id};
-      contactsDispatcher.dispatch({type: 'getContacts', content, token: this.props.user.token });
-
-      this.setState({addOpen: false})
-    } else if (data.errorMsg) {
-      this.setState({error: data.errorMsg});
-    } else {
-      this.setState({error: data.statusText})
-    }
+    this.handleAddClose()
+    this.resetInputs()
   },
 
   render() {
@@ -76,9 +70,7 @@ let Contacts = createReactClass({
         onAddKeyDown={this.onAddKeyDown}
         addClicked={this.addClicked}
         updateNavigateClicked={this.updateNavigateClicked}
-        sendEtherClicked={this.sendEtherClicked}
-        sendAionClicked={this.sendAionClicked}
-        sendWanClicked={this.sendWanClicked}
+        transactClicked={this.props.transactClicked}
         username={this.state.username}
         usernameError={this.state.usernameError}
         usernameErrorMessage={this.state.usernameErrorMessage}
@@ -98,7 +90,8 @@ let Contacts = createReactClass({
         handleAddOpen={this.handleAddOpen}
         addOpen={this.state.addOpen}
         handleAddClose={this.handleAddClose}
-        />
+        size={this.props.size}
+      />
     )
   },
 
@@ -118,25 +111,9 @@ let Contacts = createReactClass({
   addClicked() {
     if(this.validateUsername() & this.validateDisplayName() & this.validateNotes()) {
       this.setState({addLoading: true});
-      var content = { username: this.state.username, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username };
+      var content = { username: this.state.username, displayName: this.state.displayName, notes: this.state.notes, ownerUsername: this.props.user.username, userId: this.props.user.id };
       contactsDispatcher.dispatch({type: 'addContact', content, token: this.props.user.token });
     }
-  },
-
-  updateNavigateClicked() {
-    //ok?
-  },
-
-  sendEtherClicked(contact) {
-    this.props.openSendEther(contact)
-  },
-
-  sendWanClicked(contact) {
-    this.props.openSendWanchain(contact)
-  },
-
-  sendAionClicked(contact) {
-    this.props.openSendAion(contact)
   },
 
   handleChange (event, name) {

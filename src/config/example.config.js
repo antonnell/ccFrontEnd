@@ -1,10 +1,11 @@
-var config = {
+const config = {
   whitelistApiUrl: "",
   whitelistApiHeader: "",
   apiUrl: "",
   etherscanUrl : "",
   wanscanURL: "",
-  aionscanURL: ""
+  aionscanURL: "",
+  binancescanURL: "",
 };
 
-module.exports = config;
+export default config;

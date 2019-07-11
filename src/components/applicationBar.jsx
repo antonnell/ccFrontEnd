@@ -18,13 +18,14 @@ class ApplicationBar extends Component {
   render() {
     //<img src='account-logo.png' width='158px' height='24pox' alt='CRPTOCURVE.IO'/>
     if(this.props.size === 'xs' || this.props.size === 'sm') {
-      return (<div>
-        {this.props.menuClicked != null ? (<IconButton aria-label="Menu" onClick={this.props.menuClicked}>
-          <MenuIcon />
-        </IconButton>) : null}
-        <img style={{verticalAlign: 'middle',height:43,width:164}} src={require("../assets/images/cryptocurve-logo-white2.png")} alt="CryptoCurve.io" />
-      </div>
-          )
+      return (
+        <div style={this.props.theme.custom.appBar}>
+          {this.props.menuClicked != null ? (<IconButton aria-label="Menu" onClick={this.props.menuClicked}>
+            <MenuIcon />
+          </IconButton>) : null}
+          <img style={{verticalAlign: 'middle',height:43,width:164}} src={require("../assets/images/cryptocurve-logo-white2.png")} alt="CryptoCurve.io" />
+        </div>
+      )
     }
     return (
       <div />

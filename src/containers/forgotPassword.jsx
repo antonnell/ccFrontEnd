@@ -31,13 +31,13 @@ let ForgotPassword = createReactClass({
       <ForgotPasswordComponent
         handleChange={this.handleChange}
         submitReset={this.submitReset}
-        submitLoginNavigate={this.submitLoginNavigate}
         onResetKeyDown={this.onResetKeyDown}
         emailAddress={this.state.emailAddress}
         emailAddressError={this.state.emailAddressError}
         emailAddressErrorMessage={this.state.emailAddressErrorMessage}
         error={this.state.error}
         loading={this.state.loading}
+        theme={ this.props.theme }
       />
     );
   },
@@ -77,6 +77,9 @@ let ForgotPassword = createReactClass({
 
     if (!error) {
       this.setState({ loading: true });
+      this.props.setError(null)
+
+      this.props.startLoading();
       var content = { emailAddress: this.state.emailAddress };
       dispatcher.dispatch({ type: "sendResetPasswordEmail", content });
     }
@@ -84,21 +87,21 @@ let ForgotPassword = createReactClass({
 
   sendResetPasswordEmailReturned(error, data) {
     this.setState({ loading: false });
+    this.props.stopLoading();
     if (error) {
+      this.props.setError(error.toString())
       return this.setState({ error: error.toString() });
     }
 
     if (data.success) {
-      window.location.hash = "forgotPasswordDone"; //or show 'Your password has been updated'
+      this.props.navigate("forgotPasswordDone")
     } else if (data.errorMsg) {
       this.setState({ error: data.errorMsg });
+      this.props.setError(data.errorMsg)
     } else {
       this.setState({ error: data.statusText });
+      this.props.setError(data.statusText)
     }
-  },
-
-  submitLoginNavigate() {
-    window.location.hash = "welcome";
   }
 });
 

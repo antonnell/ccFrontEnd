@@ -1,11 +1,21 @@
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 export const colors = {
+  white: "#fff",
   dodgerBlue: "#3cabff",
-  dark: "#1a191d"
+  "robin-s-egg": "#6be6fd",
+  text: "#29292A",
+  dark: "#29292A",
+  black: '#000',
+  lightBlue: "#0FCEF3",
+  darkBlue: "#2B323C",
+  gray: "#ababab",
+  darkGray: "#888888",
+  orange: '#EF8D24',
+  green: '#21F14A',
+  red: '#EE144C'
 };
 
-const defaultTheme = createMuiTheme();
+// const defaultTheme = createMuiTheme();
 let customTheme =  {
   light: {
     typography: {
@@ -14,96 +24,230 @@ let customTheme =  {
     name: 'light',
     mui: {
       typography: {
-        fontFamily: ['ProximaNovaRegular', 'sans-serif'].join(","),
+        fontFamily: ['Montserrat-Medium', 'sans-serif'].join(","),
         useNextVariants: true,
-        button: {
-          fontWeight: 700
-        },
-        h4: {
-          color: '#1a191d',
-          fontSize: '22px',
-          fontWeight: 'bold'
-        },
-        h3: {
-          fontFamily: 'ProximaNovaSemiBold, sans-serif',
-          fontSize: '25px',
-          color: colors.dodgerBlue,
-          lineHeight: "30px",
-        },
-        h5: {
-          fontFamily: 'ProximaNovaSemiBold, sans-serif',
+        h1: {
+          letterSpacing: '0.5px',
           fontSize: 21,
-          color: colors.dark,
-          lineHeight: "25px"
+          color: colors.white,
+          lineHeight: "25px",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         h2: {
+          letterSpacing: '0.5px',
+          fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
+          fontSize: '18px',
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+        },
+        h3: {
+          letterSpacing: '0.5px',
+          fontFamily: ['Montserrat-Bold', 'sans-serif'].join(","),
+          fontSize: '18px',
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+          display: "inline-block"
+        },
+        h4: {
+          fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
+          letterSpacing: '0.5px',
+          color: colors.text,
+          fontSize: '15px',
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+        },
+        h5: {
+          letterSpacing: '0.5px',
+          fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
           fontSize: '20px',
-          color: '#3cabff'
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+        },
+        h6: {
+          letterSpacing: '0.5px',
+          fontSize: '14px',
+          fontWeight: '400',
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
         body1: {
-          color: '#888888',
-          fontSize: '16px'
+          letterSpacing: '0.5px',
+          fontSize: '14px'
         },
-        // body2: {
-        //   color: '#000',
-        //   fontSize: '16px'
-        // },
+        body2: {
+          letterSpacing: '0.5px',
+          color: colors.gray,
+          fontSize: '14px'
+        },
         subtitle1: {
-          color: '#1a191d'
+          fontSize: '14px',
+          letterSpacing: '0.5px',
+          color: colors.text
         },
+        subtitle2: {
+          fontSize: '12px',
+          color: colors.darkGray
+        }
       },
       type: 'light',
       overrides: {
+        MuiList: {
+          padding: {
+            padding: '24px',
+            paddingTop: '24px',
+            paddingBottom: '24px',
+          },
+          root: {
+            backgroundImage: "linear-gradient(#2B323C, #39495F)"
+          }
+        },
+        MuiListItem: {
+          root: {
+            paddingTop: '8px',
+            paddingBottom: '8px',
+            borderRadius: '5px'
+          },
+          gutters: {
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          },
+          selected: {
+            backgroundColor: '#1e849e !important'
+          }
+        },
+        MuiListItemText: {
+          primary: {
+            color: colors.white,
+            fontSize: '14px'
+          }
+        },
+        MuiListSubheader: {
+          root: {
+            fontFamily: 'Montserrat-SemiBold',
+            letterSpacing:  '1px',
+            color: colors.white,
+            paddingBottom: '12px',
+            fontSize: '14px'
+          }
+        },
+        MuiMenuItem: {
+          root: {
+            height: 'auto'
+          }
+        },
+        MuiDivider: {
+          root: {
+            height: '2px',
+            backgroundColor: colors.white,
+            marginTop: '42px',
+            marginBottom: '42px'
+          }
+        },
+        MuiStepConnector: {
+          lineVertical: {
+            minHeight: '50px',
+          },
+          vertical: {
+            padding: '0px'
+          }
+        },
+        MuiStepContent: {
+          root: {
+            marginTop: '0px'
+          }
+        },
         MuiStepIcon: {
           root: {
-            color: '#888888',
-            '&-active': {
-              color: "#3cabff"
-            }
+            color: colors.darkGray
           },
           active: {
-            color: "#3cabff !important"
+            color: colors.darkGray+"!important",
+            fontSize: '34px',
+            marginLeft: '-5px'
           },
           completed: {
-            color: "#3cabff !important"
+          },
+          text: {
+            fill: colors.darkGray
           }
         },
         MuiStepLabel: {
           label: {
-            color: '#000'
+            color: colors.white,
+            letterSpacing: '0.5px',
+            fontSize: '14px',
+            marginLeft: '12px'
+          },
+          active: {
+            marginLeft: '7px',
+            color: colors.white+' !important'
           }
         },
         MuiInput: {
           underline: {
             '&:before': { //underline color when textfield is inactive
-              backgroundColor: '#000',
+              backgroundColor: colors.black,
               height: '1px'
             },
             '&:hover:not($disabled):before': { //underline color when hovered
-              backgroundColor: '#000',
+              backgroundColor: colors.black,
+              height: '1px'
+            },
+            '&:after': { //underline color when textfield is inactive
+              backgroundColor: colors.lightBlue,
+              borderBottom: "2px solid "+colors.lightBlue,
               height: '1px'
             },
           }
         },
         MuiFormLabel: {
           root: {
-            color: '#c0c0c0'
+            color: '#c0c0c0',
+            fontSize: '15px',
+            letterSpacing: '0.5px'
           }
         },
         MuiInputBase: {
           root: {
-            color: '#000'
+            color: colors.black
+          },
+          input: {
+            letterSpacing: '0.5px'
+          }
+        },
+        MuiInputLabel: {
+          root: {
+            letterSpacing: '0.5px'
+          },
+          focused: {
+            color: colors.lightBlue+" !important"
           }
         },
         MuiButton: {
           root: {
-            borderRadius: '20px'
+            borderRadius: '4px'
+          },
+          contained: {
+            backgroundColor: colors.white
           },
           label: {
-            fontSize: '12px'
+            textTransform: 'none',
+            letterSpacing: '0.5px'
+          },
+          sizeLarge: {
+            fontSize: '16px',
+            padding: '12px 34px',
+            minWidth: '230px'
           },
           sizeSmall: {
-            padding: '10px 20px'
+            fontFamily: ['Montserrat-SemiBold', 'sans-serif'].join(","),
+            fontSize: '12px',
+            padding: '10px 12px',
+            minWidth: '100px'
+          },
+          text: {
+            border: '1px solid'
           }
         },
         MuiCard: {
@@ -113,15 +257,36 @@ let customTheme =  {
         },
         MuiTab: {
           textColorPrimary: {
-            color: '#000'
-          },
-          selected: {
-            color: '#000'
+            color: colors.black,
+            "&$selected": {
+              color: colors.black
+            }
+          }
+        },
+        MuiSnackbar : {
+          anchorOriginBottomLeft: {
+            bottom: '50px',
+            left: '80px',
+            '@media (min-width: 960px)': {
+              bottom: '50px',
+              left: '80px'
+            }
           }
         },
         MuiSnackbarContent: {
           root: {
-            backgroundColor: '#3cabff'
+            backgroundColor: colors.white,
+            padding: '0px',
+            minWidth: '450px',
+            '@media (min-width: 960px)': {
+              minWidth: '450px',
+            }
+          },
+          message: {
+            padding: '0px'
+          },
+          action: {
+            marginRight: '0px'
           }
         },
         MuiPaper: {
@@ -132,29 +297,138 @@ let customTheme =  {
             boxShadow: '1px 3px 5px 2px rgba(0, 0, 0, 0.2), 5px 4px 2px 0px rgba(0, 0, 0, 0.14), 3px 6px 2px 2px rgba(0, 0, 0, 0.12)'
           }
         },
+        MuiTable: {
+          root: {
+            borderSpacing: '0 15px',
+            borderCollapse: 'separate'
+          }
+        },
+        EnhancedTable: {
+          tableWrapper: {
+            overflowX: 'inherit'
+          }
+        },
         MuiTableCell: {
-          head: {
-            textAlign: "center",
-            padding: defaultTheme.spacing.unit
+          root: {
+            borderBottom: 'none',
+            padding: "12px 0px 12px 24px"
+          }
+        },
+        MuiTableHead: {
+          root: {
+            padding: '16px',
+            backgroundColor: '#2f3031'
+          }
+        },
+        MuiTableSortLabel: {
+          root: {
+            color: colors.white,
+            fontSize: '14px',
+            fontWeight: '600',
+            letterSpacing: '0.5px',
+            '&:hover': {
+              color: colors.white
+            },
+            '&:focus': {
+              color: colors.white
+            }
+          },
+          active: {
+            color: colors.white
+          }
+        },
+        MuiTableRow: {
+          root: {
+            marginTop: '8px',
+            marginBottom: '8px',
+            boxShadow: '1px 3px 5px 2px rgba(0, 0, 0, 0.2), 5px 4px 2px 0px rgba(0, 0, 0, 0.14), 3px 6px 2px 2px rgba(0, 0, 0, 0.12)'
+          }
+        },
+        MuiToolbar: {
+          gutters: {
+            padding: '0px',
+            paddingLeft: '0px',
+            '@media (min-width: 600px)': {
+              padding: '0px',
+              paddingLeft: '0px',
+            }
+          }
+        },
+        MuiCheckbox: {
+          root: {
+            color: colors.text
+          }
+        },
+        MuiFormControlLabel: {
+          label: {
+            color: colors.text,
+            letterSpacing: '0.5px',
+            fontSize: '12px'
+          },
+          outlined: {
+            borderWidth: 2,
+          },
+          outlinedSecondary: {
+            borderWidth: 2,
+            color: "white",
+          },
+          sizeSmall: {
+            padding: '10px 20px'
+          }
+        },
+        MuiDialogContent: {
+          root: {
+            padding: '0px 12px 12px 32px'
+          }
+        },
+        MuiCardContent: {
+          root: {
+            padding: '30px 40px'
+          }
+        },
+        MuiExpansionPanel: {
+          root: {
+            boxShadow: 'none',
+            '&:before': {
+              opacity: '0'
+            },
+          }
+        },
+        MuiExpansionPanelDetails: {
+          root: {
+            padding: '0px'
+          }
+        },
+        MuiExpansionPanelSummary: {
+          root: {
+            padding: '0px'
+          }
+        },
+        MuiDialog: {
+          paper: {
+            margin: '0px'
+          }
+        },
+        MuiPickersToolbar: {
+          toolbar: {
+            padding: 20
           }
         }
       },
-
       palette: {
         primary: {
-          main: '#3cabff',
-          contrastText: '#f6fbff'
+          main: colors.lightBlue,
+          contrastText: colors.white
         },
         secondary: {
-          main: '#95e2f1'
+          main: colors.text
         },
         background:{
-          paper: '#fff',
-          default: '#fff'
+          paper: colors.white,
         },
         text: {
-          primary: '#1a191d',
-          secondary: '#3cabff'
+          primary: colors.text,
+          secondary: colors.gray
         }
       }
     },
@@ -162,154 +436,128 @@ let customTheme =  {
       page: {
         padding: '0px'
       },
-      drawer: {
-        background: '#e8e9f3',
-        flex: '1'
+      drawerContainer:  {
+        display: 'flex'
       },
-      drawerIcon: {
-        color: '#333'
+      mainContainer: {
+        minHeight: "924px",
+        position: "relative",
+        flex: 1,
+        marginLeft: '100px',
+        marginRight: '24px'
+      },
+      drawer: {
+        background: colors.darkBlue,
+        flex: '1',
+        minWidth: '260px',
+        height: '100%'
       },
       headingBorder: {
-        color: '#3cabff'
+        color: colors.darkBlue
       },
       footer: {
         background: '#2b323c'
-      }
-    }
-  },
-  dark: {
-    typography: {
-      useNextVariants: true,
-    },
-    name: 'dark',
-    mui: {
-      type: 'dark',
-      overrides: {
-        MuiStepIcon: {
-          root: {
-            color: '#b5b5b5',
-            '&-active': {
-              color: "#6be6fd"
-            }
-          },
-          active: {
-            color: "#6be6fd !important"
-          },
-          completed: {
-            color: "#6be6fd !important"
-          }
-        },
-        MuiInput: {
-          underline: {
-            '&:before': { //underline color when textfield is inactive
-              backgroundColor: '#6be6fd',
-              height: '2px'
-            },
-            '&:hover:not($disabled):before': { //underline color when hovered
-              backgroundColor: '#6be6fd',
-              height: '2px'
-            },
-          }
-        },
-        MuiInputBase: {
-          root: {
-            color: '#fff'
-          }
-        },
-        MuiButton: {
-          root: {
-            borderRadius: '20px'
-          },
-          label: {
-            fontSize: '12px'
-          },
-          sizeSmall: {
-            padding: '10px 20px'
-          }
-        },
-        MuiCard: {
-          root: {
-            borderRadius: 0
-          }
-        },
-        MuiSnackbarContent: {
-          root: {
-            backgroundColor: '#6be6fd'
-          }
-        }
       },
-      typography: {
-        useNextVariants: true,
-        // Use the system font over Roboto.
-        fontFamily: ['ProximaNovaSemiBold', 'sans-serif'].join(","),
-        button: {
-          fontWeight: 700
-        },
-        h4: {
-          color: '#fff',
-          fontSize: '26px'
-        },
-        h3: {
-          fontSize: '26px',
-          color: '#6be6fd'
-        },
-        h2: {
-          fontSize: '20px',
-          color: '#6be6fd'
-        },
-        body1: {
-          color: '#b5b5b5',
-          fontSize: '16px'
-        },
-        // body2: {
-        //   color: '#fff',
-        //   fontSize: '16px'
-        // },
-        subtitle1: {
-          color: '#fff'
-        },
-        h5:  {
-          color: '#fff'
-        }
+      logout: {
+        border: '1px solid #1e849e',
+        marginTop: '60px'
       },
-      palette: {
-        primary: {
-          light: '#a3ffff',
-          main: '#6be6fd',
-          dark: '#27b4ca',
-          contrastText: '#000000',
-        },
-        secondary: {
-          light: '#bb93ff',
-          main: '#8864d8',
-          dark: '#5638a6',
-          contrastText: '#000000',
-        },
-        background:{
-          paper: '#30333a',
-          default: '#1a191d'
-        },
-        text: {
-          primary: '#6be6fd',
-          secondary: '#fff'
-        }
-      }
-    },
-    custom: {
-      page: {
-        padding: '24px'
+      logoutText: {
+        textAlign: 'center'
       },
-      drawer: {
-
+      pageTitle: {
+        flex: 1,
+        paddingTop: "48px",
+        paddingBottom: '60px',
+        display: "flex"
       },
-      drawerIcon: {
-        color: '#fff'
+      pageTitleRoot: {
+        color: colors.lightBlue,
+        cursor: 'pointer'
       },
-      headingBorder: {
-        color: '#6be6fd'
+      sectionTitle: {
+        marginTop: '60px',
+        marginBottom: '36px'
       },
-      footer: {
-        background: '#30333a'
+      accountsContainer: {
+        width: 'calc(100% + 48px)',
+        marginLeft: '-24px'
+      },
+      primaryText: {
+        background: colors.lightBlue,
+        fontSize: '10px',
+        padding: '2px 6px',
+        display: 'inline-block',
+        verticalAlign: 'top',
+        marginLeft: '12px',
+        borderRadius: '3px'
+      },
+      icon: {
+        color: colors.darkGray
+      },
+      appBar: {
+        background: colors.darkBlue,
+        padding: '12px'
+      },
+      welcomeBase: {
+        left: '0px',
+        right: '0px',
+        top: '0px',
+        bottom: '0px',
+        position: 'absolute'
+      },
+      welcomeCurve: {
+        fontSize: '40px',
+        letterSpacing: '2px',
+        color: colors.white,
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
+      },
+      welcomeText: {
+        fontSize: '35px',
+        letterSpacing: '2px',
+        color: colors.white,
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
+      },
+      welcomeContent: {
+        marginTop: 'calc(50vh - 213px)',
+        marginBottom: '24px'
+      },
+      forgotPassword: {
+        fontSize: "12px",
+        cursor: "pointer",
+        color: colors.lightBlue,
+        marginTop: '24px',
+        marginBottom: '24px'
+      },
+      resendConfirmationEmail: {
+        fontSize: "13px",
+        cursor: "pointer",
+        margin: '0 auto',
+        marginTop: "60px",
+        color: colors.text,
+        textAlign: "center",
+      },
+      tickIcon: {
+        color: colors.lightBlue,
+        fontSize: '60px'
+      },
+      inline: {
+        display: 'inline-block',
+        verticalAlign: 'middle'
+      },
+      positive: {
+        color: colors.green
+      },
+      tokenInfo: {
+        paddingTop: '24px'
+      },
+      tokenPair: {
+        padding: '8px 0px'
+      },
+      tokenValue: {
+        fontFamily: 'Montserrat-SemiBold'
       }
     }
   }

@@ -12,8 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 
-// let config = require('../config')
-
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -136,7 +134,7 @@ class EnhancedTable extends React.Component {
     order: "asc",
     orderBy: "timestamp",
     selected: [],
-    data: this.props.pools,
+    data: this.props.whiteLists,
     page: 0,
     rowsPerPage: 5,
     filtersVisible: false
@@ -168,7 +166,7 @@ class EnhancedTable extends React.Component {
   render() {
     const { classes } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
-    const data = this.props.pools;
+    const data = this.props.whiteLists;
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, data ? data.length : 0 - page * rowsPerPage);

@@ -1,151 +1,162 @@
-import fetch from "node-fetch";
-var crypto = require("crypto");
-var bip39 = require("bip39");
-var sha256 = require("sha256");
+import fetch from 'node-fetch';
+import config from '../config';
 
-let Dispatcher = require("flux").Dispatcher;
-let Emitter = require("events").EventEmitter;
+var crypto = require('crypto');
+var bip39 = require('bip39');
+var sha256 = require('sha256');
+
+let Dispatcher = require('flux').Dispatcher;
+let Emitter = require('events').EventEmitter;
 
 let dispatcher = new Dispatcher();
 let emitter = new Emitter();
 
-let config = require("../config");
 
 let apiUrl = config.apiUrl;
 
-var Store = () => {
-  dispatcher.register(
-    function(payload) {
-      switch (payload.type) {
-        case "login":
-          this.login(payload);
-          break;
-        case "register":
-          this.register(payload);
-          break;
-        case "updatePassword":
-          this.updatePassword(payload);
-          break;
-        case "resetPassword":
-          this.resetPassword(payload);
-          break;
-        case "sendResetPasswordEmail":
-          this.sendResetPasswordEmail(payload);
-          break;
-        case "sendWhitelistConfirmationEmail":
-          this.sendWhitelistConfirmationEmail(payload);
-          break;
-        case "generate2faKey":
-          this.generate2faKey(payload);
-          break;
-        case "enable2fa":
-          this.enable2fa(payload);
-          break;
-        case "disable2fa":
-          this.disable2fa(payload);
-          break;
-        case "sendPresaleEmail":
-          this.sendPresaleEmail(payload);
-          break;
-        case "updateUsername":
-          this.updateUsername(payload);
-          break;
-        case "verificationResult":
-          this.verificationResult(payload);
-          break;
-        case "updateEmail":
-          this.updateEmail(payload);
-          break;
-        case "uploadProfilePhoto":
-          this.uploadProfilePhoto(payload);
-          break;
-        case "getUserProfile":
-          this.getUserProfile(payload);
-          break;
-        case "allocateKycCode":
-          this.allocateKycCode(payload);
-          break;
-        default: {}
-      }
-    }.bind(this)
-  );
+class Store {
+  constructor() {
+    this.registerDispatchers();
+  }
 
-  this.verificationResult = function(payload) {
-    var url = "account/getVerificationResult/" + payload.content.userId;
-
-    this.callApi(url, "GET", null, payload);
+  registerDispatchers = () => {
+    dispatcher.register(
+      payload => {
+        switch (payload.type) {
+          case 'login':
+          case 'loginOTP':
+            this.login(payload);
+            break;
+          case 'register':
+            this.register(payload);
+            break;
+          case 'updatePassword':
+            this.updatePassword(payload);
+            break;
+          case 'resetPassword':
+            this.resetPassword(payload);
+            break;
+          case 'sendResetPasswordEmail':
+            this.sendResetPasswordEmail(payload);
+            break;
+          case 'sendWhitelistConfirmationEmail':
+            this.sendWhitelistConfirmationEmail(payload);
+            break;
+          case 'generate2faKey':
+            this.generate2faKey(payload);
+            break;
+          case 'enable2fa':
+            this.enable2fa(payload);
+            break;
+          case 'disable2fa':
+            this.disable2fa(payload);
+            break;
+          case 'sendPresaleEmail':
+            this.sendPresaleEmail(payload);
+            break;
+          case 'updateUsername':
+            this.updateUsername(payload);
+            break;
+          case 'verificationResult':
+            this.verificationResult(payload);
+            break;
+          case 'updateEmail':
+            this.updateEmail(payload);
+            break;
+          case 'uploadProfilePhoto':
+            this.uploadProfilePhoto(payload);
+            break;
+          case 'getUserProfile':
+            this.getUserProfile(payload);
+            break;
+          case "allocateKycCode":
+            this.allocateKycCode(payload);
+            break;
+          case "resendConfirmationEmail":
+            this.resendConfirmationEmail(payload);
+            break;
+          default: {
+          }
+        }
+      });
   };
 
-  this.login = function(payload) {
-    var url = "account/login";
-    var postJson = {
+  verificationResult = payload=> {
+    const url = 'account/getVerificationResult/' + payload.content.userId;
+
+    this.callApi(url, 'GET', null, payload);
+  };
+
+  login = payload=> {
+    const url = 'account/login';
+    const postJson = {
       usernameOrEmail: payload.content.username,
       password: payload.content.password
     };
-
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.register = function(payload) {
-    var url = "account/register";
-    var postJson = {
+  register = payload=> {
+    const url = 'account/register';
+    const postJson = {
       username: payload.content.username,
       email: payload.content.emailAddress,
-      password: payload.content.password
+      password: payload.content.password,
+      callbackUrl: `${ window.location.protocol }//${ window.location.host }/#verifyAccount`
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.updatePassword = function(payload) {
-    var url = "account/updatePassword";
-    var postJson = {
+  updatePassword = payload=> {
+    const url = 'account/updatePassword';
+    const postJson = {
       username: payload.content.username,
       password: payload.content.password
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.updateEmail = function(payload) {
-    var url = "account/updateEmail";
-    var postJson = {
+  updateEmail = payload=> {
+    const url = 'account/updateEmail';
+    const postJson = {
       username: payload.content.username,
       email: payload.content.emailAddress
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.uploadProfilePhoto = function(payload) {
-    var url = "account/uploadProfilePhoto";
-    var postJson = {
+  uploadProfilePhoto = payload=> {
+    const url = 'account/uploadProfilePhoto';
+    const postJson = {
       userId: payload.content.userId,
       imageData: payload.content.imageData,
       extension: payload.content.extension
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.getUserProfile = function(payload) {
-    var url = "account/getUserProfile/" + payload.content.userId;
+  getUserProfile = payload=> {
+    const url = 'account/getUserProfile/' + payload.content.userId;
 
-    this.callApi(url, "GET", null, payload);
+    this.callApi(url, 'GET', null, payload);
   };
 
-  this.resetPassword = function(payload) {
-    var url = "account/resetPassword";
-    var postJson = {
+  resetPassword = payload=> {
+    const url = 'account/resetPassword';
+    const postJson = {
       code: payload.content.code,
       token: payload.content.token,
       password: payload.content.password
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.allocateKycCode = function(payload) {
+  allocateKycCode = payload=> {
     var url = "account/allocateKycCode";
     var postJson = {
       username: payload.content.username
@@ -154,94 +165,104 @@ var Store = () => {
     this.callApi(url, "POST", postJson, payload);
   };
 
-  this.sendResetPasswordEmail = function(payload) {
-    var url = "account/sendResetPasswordEmail";
-    var postJson = {
-      email: payload.content.emailAddress,
-      callbackUrl: window.location.origin + "/#resetPassword"
-    };
+  resendConfirmationEmail = payload=> {
+    let url = "account/sendEmailConfirmationEmail";
+    let postJson = {
+      email: payload.content.email,
+      callbackUrl: `${ window.location.protocol }//${ window.location.host }/#verifyAccount`
+    }
 
     this.callApi(url, "POST", postJson, payload);
   };
 
-  this.sendWhitelistConfirmationEmail = function(payload) {
-    var url = "account/sendWhitelistConfirmationEmail";
-    var postJson = {
+  sendResetPasswordEmail = payload=> {
+    const url = 'account/sendResetPasswordEmail';
+    const postJson = {
+      email: payload.content.emailAddress,
+      callbackUrl: window.location.origin + '/#resetPassword'
+    };
+
+    this.callApi(url, 'POST', postJson, payload);
+  };
+
+  sendWhitelistConfirmationEmail = payload=> {
+    const url = 'account/sendWhitelistConfirmationEmail';
+    const postJson = {
       emailAddress: payload.content.emailAddress
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.generate2faKey = function(payload) {
-    var url = "account/generate2faKey/" + payload.content.id;
+  generate2faKey = payload=> {
+    const url = 'account/generate2faKey/' + payload.content.id;
 
-    this.callApi(url, "GET", null, payload);
+    this.callApi(url, 'GET', null, payload);
   };
 
-  this.enable2fa = function(payload) {
-    var url = "account/enable2fa";
-    var postJson = {
+  enable2fa = payload=> {
+    const url = 'account/enable2fa';
+    const postJson = {
       secretKey: payload.content.secretKey,
       code: payload.content.code,
       userId: payload.content.id
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.disable2fa = function(payload) {
-    var url = "account/disable2fa";
-    var postJson = {
+  disable2fa = payload=> {
+    const url = 'account/disable2fa';
+    const postJson = {
       userId: payload.content.id
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.sendPresaleEmail = function(payload) {
-    var url = "account/sendPresaleEmail";
-    var postJson = {
+  sendPresaleEmail = payload=> {
+    const url = 'account/sendPresaleEmail';
+    const postJson = {
       userId: payload.content.id
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.updateUsername = function(payload) {
-    var url = "account/updateUsername";
-    var postJson = {
+  updateUsername = payload=> {
+    const url = 'account/updateUsername';
+    const postJson = {
       username: payload.content.username,
       usernameNew: payload.content.usernameNew
     };
 
-    this.callApi(url, "POST", postJson, payload);
+    this.callApi(url, 'POST', postJson, payload);
   };
 
-  this.callApi = function(url, method, postData, payload) {
+  callApi = function (url, method, postData, payload) {
     //get X-curve-OTP from sessionStorage
-    var authOTP = "";
+    let authOTP = '';
     if (payload.authOTP != null) {
       authOTP = payload.authOTP;
     } else {
-      var userString = sessionStorage.getItem("cc_user");
+      const userString = sessionStorage.getItem('cc_user');
       if (userString) {
-        var user = JSON.parse(userString);
+        const user = JSON.parse(userString);
         authOTP = user.authOTP;
       }
     }
 
-    var call = apiUrl + url;
+    const call = apiUrl + url;
 
-    if (method === "GET") {
+    if (method === 'GET') {
       postData = null;
     } else {
       const signJson = JSON.stringify(postData);
       const signMnemonic = bip39.generateMnemonic();
-      const cipher = crypto.createCipher("aes-256-cbc", signMnemonic);
+      const cipher = crypto.createCipher('aes-256-cbc', signMnemonic);
       const signEncrypted =
-        cipher.update(signJson, "utf8", "base64") + cipher.final("base64");
-      var signData = {
+        cipher.update(signJson, 'utf8', 'base64') + cipher.final('base64');
+      const signData = {
         e: signEncrypted.hexEncode(),
         m: signMnemonic.hexEncode(),
         u: sha256(url.toLowerCase()),
@@ -249,8 +270,7 @@ var Store = () => {
         t: new Date().getTime()
       };
       const signSeed = JSON.stringify(signData);
-      const signSignature = sha256(signSeed);
-      signData.s = signSignature;
+      signData.s = sha256(signSeed);
       postData = JSON.stringify(signData);
     }
 
@@ -258,17 +278,17 @@ var Store = () => {
       method: method,
       body: postData,
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + payload.token,
-        "X-curve-OTP": authOTP
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + payload.token,
+        'X-curve-OTP': authOTP
       }
     })
       .then(res => {
         if (res.status === 401) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
         if (res.status === 403) {
-          return emitter.emit("Unauthorised", null, null);
+          return emitter.emit('Unauthorised', null, null);
         }
 
         if (res.ok) {
@@ -285,22 +305,22 @@ var Store = () => {
         emitter.emit(payload.type, error, null);
       });
   };
-};
+}
 
 /* eslint-disable */
-String.prototype.hexEncode = function() {
-  var hex, i;
-  var result = "";
+String.prototype.hexEncode = function () {
+  let hex, i;
+  let result = '';
   for (i = 0; i < this.length; i++) {
     hex = this.charCodeAt(i).toString(16);
-    result += ("000" + hex).slice(-4);
+    result += ('000' + hex).slice(-4);
   }
   return result;
 };
-String.prototype.hexDecode = function() {
-  var j;
-  var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
+String.prototype.hexDecode = function () {
+  let j;
+  const hexes = this.match(/.{1,4}/g) || [];
+  let back = '';
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
   }
@@ -310,7 +330,7 @@ String.prototype.hexDecode = function() {
 
 /* eslint-enable */
 
-var store = new Store();
+const store = new Store();
 
 export default {
   store: store,
