@@ -10,7 +10,7 @@
     "authenticator": "^1.1.5",
     "autosuggest-highlight": "^3.1.1",
     "bip39": "^2.5.0",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "create-react-class": "^15.6.3",
     "email-validator": "^2.0.4",
     "ethereumjs-util": "^5.2.0",
