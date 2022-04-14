@@ -6,7 +6,7 @@
     "@date-io/moment": "^1.1.0",
     "@material-ui/core": "^3.6.2",
     "@material-ui/icons": "^3.0.1",
-    "async": "^2.6.2",
+    "async": "^3.2.2",
     "authenticator": "^1.1.5",
     "autosuggest-highlight": "^3.1.1",
     "bip39": "^2.5.0",
